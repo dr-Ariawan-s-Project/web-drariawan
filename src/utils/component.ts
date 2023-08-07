@@ -1,3 +1,5 @@
+import React from "react";
+
 export interface ButtonProps {
     id: string,
     type: "blue" | "red";
@@ -13,3 +15,10 @@ export interface InputProps {
     placeholder?: string,
     onChange?: () => void
 }
+
+export interface ModalProps {
+    id: string,
+    isOpen?: boolean;
+    onClose?: () => void;
+    children?: React.ReactNode;
+  }
