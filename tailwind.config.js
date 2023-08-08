@@ -4,6 +4,7 @@ export default {
   theme: {
     extend: {
       colors: {
+        "health-blue-thin": "#76A6D7",
         "health-blue-light": "#9CCBFB",
         "health-blue-reguler": "#286DA8",
         "health-blue-medium": "#1F4E78",
