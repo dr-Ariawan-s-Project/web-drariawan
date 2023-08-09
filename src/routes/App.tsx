@@ -11,12 +11,14 @@ import LembarPersetujuan from '../pages/lembar_persetujuan'
 import Pertanyaan from '../pages/pertanyaan'
 import Sambutan from '../pages/sambutan'
 import Success from '../pages/success'
+import Splash from '../pages/splash'
 
 const App = () => {
   return (
     <BrowserRouter>
       <Routes>
-        <Route element={<Landing />} path='/' />
+        <Route element={<Splash />} path='/' />
+        <Route element={<Landing />} path='/landing' />
         <Route element={<Login />} path='/auth/option/login' />
         <Route element={<Register />} path='/auth/option/register' />
         <Route element={<OpsiAuth />} path='/auth/option' />
