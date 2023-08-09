@@ -1,10 +1,14 @@
-
+import { NavigateFunction, useNavigate } from "react-router-dom"
 
 import LandingIllustration from "../../assets/illustrations/ariawan_landing.svg"
-import Button from "../../components/Button"
 import data from '../../datas/landing/landing.json'
 
+import Button from "../../components/Button"
+
 const Landing = () => {
+
+    const navigate: NavigateFunction = useNavigate()
+
     return (
         <section className="flex justify-center w-screen min-h-screen bg-white">
             <div className="mx-auto lg:flex lg:flex-row-reverse">
@@ -21,7 +25,12 @@ const Landing = () => {
                         <p className="font-semibold">{data.faculty}</p>
                     </div>
                     <div className="mx-5 lg:mx-0 mt-10 font-semibold lg:mt-auto">
-                        <Button id="mulai" label="Mulai" type="blue" />
+                        <Button
+                            id="mulai"
+                            label="Mulai"
+                            type="blue"
+                            onClick={() => navigate('/home')}
+                        />
                     </div>
                 </div>
             </div>
