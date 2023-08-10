@@ -1,3 +1,4 @@
+import { useState, useEffect } from "react"
 import { NavigateFunction, useNavigate } from "react-router-dom"
 
 import LandingIllustration from "../../assets/illustrations/ariawan_landing.svg"
@@ -8,9 +9,21 @@ import Button from "../../components/Button"
 const Landing = () => {
 
     const navigate: NavigateFunction = useNavigate()
+    const [fadeIn, setFadeIn] = useState(false)
+
+    useEffect(() => {
+        const timeout = setTimeout(() => {
+            setFadeIn(true)
+        }, 300)
+
+        return () => {
+            clearTimeout(timeout)
+        }
+    }, [])
+
 
     return (
-        <section className="flex justify-center w-screen min-h-screen bg-white">
+        <section className={`flex justify-center w-screen min-h-screen bg-white ${fadeIn ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'} transition-opacity duration-500 transform`}>
             <div className="mx-auto lg:flex lg:flex-row-reverse">
                 <img
                     className="rounded-bb-left-right lg:w-screen lg:rounded-none lg:h-screen"

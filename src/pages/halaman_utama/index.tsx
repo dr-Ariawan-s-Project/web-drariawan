@@ -1,3 +1,5 @@
+import { useState, useEffect } from "react"
+
 import DoctorBlue from "../../assets/illustrations/ariawan_blue.svg"
 import DoctorWhite from "../../assets/illustrations/ariawan_white.svg"
 
@@ -5,6 +7,18 @@ import Card from "../../components/Card"
 import ProgressBar from "../../components/ProgressBar"
 
 const HalamanUtama = () => {
+
+    const [fadeIn, setFadeIn] = useState(false)
+
+    useEffect(() => {
+        const timeout = setTimeout(() => {
+            setFadeIn(true)
+        }, 300)
+
+        return () => {
+            clearTimeout(timeout)
+        }
+    }, [])
 
     const time = new Date()
     let greeting = ''
@@ -18,10 +32,10 @@ const HalamanUtama = () => {
         greeting = 'Good Night';
     }
 
+
     return (
-        <section className="flex justify-center w-screen min-h-screen bg-white grid grid-cols-1 content-center gap-y-20
-        lg:grid lg:grid-cols-1 lg:gap-y-10 my-10
-        ">
+        <section className={`flex justify-center w-screen min-h-screen bg-white grid grid-cols-1 content-center gap-y-20
+        lg:grid lg:grid-cols-1 lg:gap-y-10 my-10 ${fadeIn ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'} transition-opacity duration-500 transform`}>
             <div className="lg:mx-52 mr-40">
                 <h2 className="lg:absolute">{greeting}, User!</h2>
             </div>
