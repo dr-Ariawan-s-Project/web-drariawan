@@ -12,6 +12,16 @@ export default {
         "health-red-light": "#A82828",
         "health-red-dark": "#6F1C1C",
       },
+      fontFamily: {
+        regular: ["Poppins-Regular"],
+        medium: ["Poppins-Medium"],
+        italic_medium: ["Poppins-Medium-Italic"],
+        semibold: ["Poppins-Semibold"],
+        bold: ["Poppins-Bold"],
+      },
+      borderRadius: {
+        "bb-left-right": "0 0 50px 50px",
+      },
     },
   },
   plugins: [],

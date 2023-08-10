@@ -13,6 +13,11 @@
 }
 
 @font-face {
+  font-family: 'Poppins-Medium-Italic';
+  src: url("../src/assets/fonts/Poppins/Poppins-MediumItalic.ttf");
+}
+
+@font-face {
   font-family: 'Poppins-Semibold';
   src: url("../src/assets/fonts/Poppins/Poppins-SemiBold.ttf");
 }
@@ -20,6 +25,19 @@
 @font-face {
   font-family: 'Poppins-Bold';
   src: url("../src/assets/fonts/Poppins/Poppins-Bold.ttf");
+}
+
+.slide-in-right {
+  animation: slideInRight 1s ease-out forwards;
+}
+
+@keyframes slideInRight {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(0);
+  }
 }
 
 :root {
@@ -59,8 +77,14 @@ body {
 
 h1 {
   font-size: 3.2em;
-  line-height: 1.1;
+  font-family: 'Poppins-Bold';
 }
+
+h2 {
+  font-size: 1.6em;
+  font-family: 'Poppins-Bold';
+}
+
 
 button {
   border-radius: 8px;
