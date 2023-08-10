@@ -29,3 +29,9 @@ export interface CardProps {
     onClick?: React.MouseEventHandler,
     children?: React.ReactNode
 }
+
+export interface ProgressBarProps {
+    value: number;
+    maxValue: number;
+    type?: "primary" | "secondary"
+}
