@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react"
+import { NavigateFunction, useNavigate } from "react-router-dom"
 
 import DoctorBlue from "../../assets/illustrations/ariawan_blue.svg"
 import DoctorWhite from "../../assets/illustrations/ariawan_white.svg"
@@ -6,8 +7,10 @@ import DoctorWhite from "../../assets/illustrations/ariawan_white.svg"
 import Card from "../../components/Card"
 import ProgressBar from "../../components/ProgressBar"
 
+
 const HalamanUtama = () => {
 
+    const navigate: NavigateFunction = useNavigate()
     const [fadeIn, setFadeIn] = useState(false)
 
     useEffect(() => {
@@ -44,6 +47,7 @@ const HalamanUtama = () => {
                     <Card
                         id="card"
                         type="secondary"
+                        onClick={() => navigate(`/home/${'Kuisioner_1'}`)}
                     >
                         <div className="lg:grid lg:grid-cols-2">
                             <div className="text-left lg:grid lg:content-center">
@@ -64,6 +68,7 @@ const HalamanUtama = () => {
                     <Card
                         id="card"
                         type="primary"
+                        onClick={() => navigate(`/home/${'Kuisioner_1'}`)}
                     >
                         <div className="lg:grid lg:grid-cols-2">
                             <div className="text-left lg:grid lg:content-center">
@@ -84,6 +89,7 @@ const HalamanUtama = () => {
                     <Card
                         id="card"
                         type="primary"
+                        onClick={() => navigate(`/home/${'Kuisioner_1'}`)}
                     >
                         <div className="lg:grid lg:grid-cols-2">
                             <div className="text-left lg:grid lg:content-center">
@@ -104,6 +110,7 @@ const HalamanUtama = () => {
                     <Card
                         id="card"
                         type="secondary"
+                        onClick={() => navigate(`/home/${'Kuisioner_1'}`)}
                     >
                         <div className="lg:grid lg:grid-cols-2">
                             <div className="text-left lg:grid lg:content-center">
