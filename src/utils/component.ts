@@ -3,6 +3,7 @@ import React from "react";
 export interface ButtonProps {
     id: string,
     type: "blue" | "red";
+    active?: boolean;
     label?: string;
     onClick?: () => void;
 }
@@ -34,4 +35,12 @@ export interface ProgressBarProps {
     value: number;
     maxValue: number;
     type?: "primary" | "secondary"
+}
+
+export interface VideoPlayerProps {
+    src?: string;
+}
+
+export interface AudioRecorderProps {
+    onSave?: (blob: Blob) => void;
 }

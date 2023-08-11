@@ -9,7 +9,7 @@ import Button from "../../components/Button"
 const Landing = () => {
 
     const navigate: NavigateFunction = useNavigate()
-    const [fadeIn, setFadeIn] = useState(false)
+    const [fadeIn, setFadeIn] = useState<boolean>(false)
 
     useEffect(() => {
         const timeout = setTimeout(() => {

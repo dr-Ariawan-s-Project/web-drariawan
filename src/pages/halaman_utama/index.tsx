@@ -11,7 +11,7 @@ import ProgressBar from "../../components/ProgressBar"
 const HalamanUtama = () => {
 
     const navigate: NavigateFunction = useNavigate()
-    const [fadeIn, setFadeIn] = useState(false)
+    const [fadeIn, setFadeIn] = useState<boolean>(false)
 
     useEffect(() => {
         const timeout = setTimeout(() => {
