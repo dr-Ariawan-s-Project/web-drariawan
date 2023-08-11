@@ -6,7 +6,8 @@ import Button from "../../components/Button";
 
 const Pertanyaan = () => {
 
-    const [fadeIn, setFadeIn] = useState(false)
+    const [fadeIn, setFadeIn] = useState<boolean>(false)
+    const [text, setText] = useState<string>("")
 
     const handleSaveAudio = (blob: Blob) => {
         console.log('Audio blob:', blob);
@@ -22,7 +23,6 @@ const Pertanyaan = () => {
         }
     }, [])
 
-
     return (
         <section className={`lg:items-center w-screen min-h-screen bg-white ${fadeIn ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'} transition-opacity duration-500 transform`}>
             <div className="my-10 lg:mx-96">
@@ -36,11 +36,13 @@ const Pertanyaan = () => {
                 <div className="grid grid-cols-1 gap-y-5">
                     <p className="mx-10 mt-10 font-semibold">Jawaban</p>
                     <textarea
+                        value={text}
+                        onChange={(e) => setText(e.target.value)}
                         className="mx-10 p-5 h-60 rounded-md shadow-md focus:outline-none"></textarea>
                     <AudioRecorder onSave={handleSaveAudio} />
                 </div>
                 <div className="mx-10 h-10 mt-20">
-                    <Button id="lanjut" type="blue" label="Lanjut" />
+                    <Button id="lanjut" type="blue" label="Lanjut" active={text !== "" ? true : false} />
                 </div>
             </div>
         </section >
