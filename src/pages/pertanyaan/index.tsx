@@ -10,7 +10,8 @@ const Pertanyaan = () => {
     const [text, setText] = useState<string>("")
 
     const handleSaveAudio = (blob: Blob) => {
-        console.log('Audio blob:', blob);
+        const audioUrl = URL.createObjectURL(blob)
+        console.log("audio : ", audioUrl)
     };
 
     useEffect(() => {
