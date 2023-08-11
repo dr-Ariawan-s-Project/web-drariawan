@@ -35,3 +35,7 @@ export interface ProgressBarProps {
     maxValue: number;
     type?: "primary" | "secondary"
 }
+
+export interface VideoPlayerProps {
+    src?: string;
+}
