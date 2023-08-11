@@ -6,7 +6,7 @@ import StopMic from "../assets/icons/stop_video.png"
 import { AudioRecorderProps } from '../utils/component';
 
 const AudioRecorder: FC<AudioRecorderProps> = ({ onSave }) => {
-    const [isRecording, setIsRecording] = useState(false);
+    const [isRecording, setIsRecording] = useState<boolean>(false);
     const [mediaRecorder, setMediaRecorder] = useState<MediaRecorder | null>(null);
 
     const handleStartRecording = async () => {

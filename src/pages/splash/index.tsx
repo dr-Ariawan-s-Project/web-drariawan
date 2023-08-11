@@ -1,10 +1,10 @@
 import React, { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, NavigateFunction } from "react-router-dom";
 
 import DoctorWalk from '../../assets/animations/doctor_walking.gif'
 
 const Splash: React.FC = () => {
-    const navigate = useNavigate();
+    const navigate: NavigateFunction = useNavigate();
 
     useEffect(() => {
         const timeout = setTimeout(() => {

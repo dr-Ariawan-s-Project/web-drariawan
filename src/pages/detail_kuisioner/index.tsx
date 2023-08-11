@@ -9,7 +9,7 @@ import UnfillQuestionaire from "../../assets/icons/unfill_kuisioner.svg"
 const DetailKuisioner = () => {
 
     const navigate: NavigateFunction = useNavigate()
-    const [fadeIn, setFadeIn] = useState(false)
+    const [fadeIn, setFadeIn] = useState<boolean>(false)
 
     useEffect(() => {
         const timeout = setTimeout(() => {
