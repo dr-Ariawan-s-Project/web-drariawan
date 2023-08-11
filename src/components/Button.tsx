@@ -1,7 +1,7 @@
 import { FC } from 'react';
 import { ButtonProps } from '../utils/component';
 
-const Button: FC<ButtonProps> = ({ id, label, type, onClick }) => {
+const Button: FC<ButtonProps> = ({ id, label, type, active, onClick }) => {
     return (
         <>
             {
@@ -9,7 +9,7 @@ const Button: FC<ButtonProps> = ({ id, label, type, onClick }) => {
                     <button
                         id={id}
                         onClick={onClick}
-                        className={`w-full h-full transition-colors duration-300 ease-in-out bg-health-blue-reguler hover:bg-health-blue-medium text-white py-2 px-4 rounded-md`}
+                        className={`w-full h-full transition-colors duration-300 ease-in-out ${active === true ? 'bg-health-blue-dark text-white hover:bg-health-blue-medium' : 'bg-gray text-gray-400 hover:bg-gray hover:border-none focus:outline-none pointer-events-none'} py-2 px-4 rounded-md`}
                     >
                         {label}
                     </button> :
