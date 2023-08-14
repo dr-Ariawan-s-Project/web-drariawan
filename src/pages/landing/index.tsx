@@ -43,7 +43,7 @@ const Landing = () => {
                             label="Mulai"
                             type="blue"
                             active={true}
-                            onClick={() => navigate('/home')}
+                            onClick={() => navigate('/kuisioner')}
                         />
                     </div>
                 </div>

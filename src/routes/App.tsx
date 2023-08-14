@@ -4,7 +4,7 @@ import OpsiAuth from '../pages/auth/OpsiAuth'
 import Register from '../pages/auth/Register'
 import Login from '../pages/auth/Login'
 import DataDiri from '../pages/data_diri'
-import DetailKuisioner from '../pages/detail_kuisioner'
+import Kuisioner from '../pages/kuisioner'
 import HalamanUtama from '../pages/halaman_utama'
 import Landing from '../pages/landing'
 import LembarPersetujuan from '../pages/lembar_persetujuan'
@@ -23,10 +23,10 @@ const App = () => {
         <Route element={<Register />} path='/auth/option/register' />
         <Route element={<OpsiAuth />} path='/auth/option' />
         <Route element={<DataDiri />} path='/data_diri' />
-        <Route element={<HalamanUtama />} path='/home' />
-        <Route element={<DetailKuisioner />} path='/home/:detail_kuisioner' />
-        <Route element={<Pertanyaan />} path='/home/:detail_kuisioner/:pertanyaan' />
-        <Route element={<Success />} path='/home/:detail_kuisioner/:pertanyaan/success' />
+        <Route element={<HalamanUtama />} path='/admin' />
+        <Route element={<Kuisioner />} path='/kuisioner' />
+        <Route element={<Pertanyaan />} path='/kuisioner/:pertanyaan' />
+        <Route element={<Success />} path='/kuisioner/:pertanyaan/success' />
         <Route element={<Sambutan />} path='/main/sambutan' />
         <Route element={<LembarPersetujuan />} path='/main/lembar_persetujuan' />
       </Routes>
