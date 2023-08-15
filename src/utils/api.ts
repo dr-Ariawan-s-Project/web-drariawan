@@ -17,3 +17,10 @@ export type UserState = {
     postDeactivate: (data: any) => Promise<void>
     putUser: (data: any) => Promise<void>,
 }
+
+export type AuthState = {
+    data: any[],
+    loading: boolean;
+    error: string | null;
+    login: (data: any) => Promise<void>
+}
