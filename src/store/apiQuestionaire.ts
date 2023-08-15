@@ -13,7 +13,7 @@ export const useQuestionaire = create<QuestionaireState>((set) => ({
       const response = await axios.get('/questionaire');
       set({ data: response.data, loading: false });
     } catch (error) {
-      set({ loading: false, error: 'Error fetching data' });
+      set({ loading: false, error: 'error get questionaire' });
     }
   },
   postQuestionaire: async (newData) => {
@@ -23,7 +23,7 @@ export const useQuestionaire = create<QuestionaireState>((set) => ({
       set({ data: response.data, loading: false });
       return response.data;
     } catch (error) {
-      set({ loading: false, error: 'Error posting data' });
+      set({ loading: false, error: 'error post questionaire' });
       throw error;
     }
   },
@@ -34,7 +34,7 @@ export const useQuestionaire = create<QuestionaireState>((set) => ({
       set({ data: response.data, loading: false });
       return response.data;
     } catch (error) {
-      set({ loading: false, error: 'Error posting data' });
+      set({ loading: false, error: 'error validate questionaire' });
       throw error;
     }
   },

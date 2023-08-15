@@ -13,7 +13,7 @@ export const useUser = create<UserState>((set) => ({
         const response = await axios.get('/user');
         set({ data: response.data, loading: false });
       } catch (error) {
-        set({ loading: false, error: 'Error fetching data' });
+        set({ loading: false, error: 'error get user' });
       }
     },
     postUser: async (data) => {
@@ -23,7 +23,7 @@ export const useUser = create<UserState>((set) => ({
           set({ data: response.data, loading: false });
           return response.data;
         } catch (error) {
-          set({ loading: false, error: 'Error posting data' });
+          set({ loading: false, error: 'error post user' });
           throw error;
         }
     },
@@ -34,7 +34,7 @@ export const useUser = create<UserState>((set) => ({
           set({ data: response.data, loading: false });
           return response.data;
         } catch (error) {
-          set({ loading: false, error: 'Error edit data' });
+          set({ loading: false, error: 'error edit user' });
           throw error;
         }
     },
@@ -44,7 +44,7 @@ export const useUser = create<UserState>((set) => ({
           const response = await axios.get('/user/list');
           set({ data: response.data, loading: false });
         } catch (error) {
-          set({ loading: false, error: 'Error fetching data' });
+          set({ loading: false, error: 'error get user list' });
         }
     },
     postDeactivate: async(data) => {
@@ -54,7 +54,7 @@ export const useUser = create<UserState>((set) => ({
           set({ data: response.data, loading: false });
           return response.data;
         } catch (error) {
-          set({ loading: false, error: 'Error fetching data' });
+          set({ loading: false, error: 'error deactivate user' });
         }
     }
   }));

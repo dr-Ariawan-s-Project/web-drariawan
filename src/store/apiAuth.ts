@@ -14,7 +14,7 @@ export const useAuth = create<AuthState>((set) => ({
           set({ data: response.data, loading: false });
           return response.data
         } catch (error) {
-          set({ loading: false, error: 'Error login' });
+          set({ loading: false, error: 'error login' });
         }
     }
 }))
