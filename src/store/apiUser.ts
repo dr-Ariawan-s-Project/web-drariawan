@@ -3,7 +3,7 @@ import axios from 'axios'
 
 import { UserState } from '../utils/api'
 
-export const useQuestionaire = create<UserState>((set) => ({
+export const useUser = create<UserState>((set) => ({
     data: [],
     loading: false,
     error: null,
