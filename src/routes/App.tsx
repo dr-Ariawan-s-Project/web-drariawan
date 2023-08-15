@@ -1,4 +1,5 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import axios from 'axios'
 
 import OpsiAuth from '../pages/auth/OpsiAuth'
 import Register from '../pages/auth/Register'
@@ -14,6 +15,9 @@ import Success from '../pages/success'
 import Splash from '../pages/splash'
 
 const App = () => {
+
+  axios.defaults.baseURL = 'https://api.server.test/v1'
+
   return (
     <BrowserRouter>
       <Routes>
