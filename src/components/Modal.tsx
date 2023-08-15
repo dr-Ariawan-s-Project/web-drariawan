@@ -9,15 +9,9 @@ const Modal: FC<ModalProps> = ({ isOpen, onClose, children }) => {
     }
 
     return (
-        <div className={preferences.modalOverlay}>
+        <div className={preferences.modalOverlay} onClick={onClose}>
             <div className={preferences.modalContent}>
                 {children}
-                <button
-                    onClick={onClose}
-                    className="mt-4 px-4 py-2 bg-gray-300 text-gray-700 rounded-lg hover:bg-gray-400 focus:outline-none focus:ring focus:border-gray-500"
-                >
-                    Close
-                </button>
             </div>
         </div>
     );
