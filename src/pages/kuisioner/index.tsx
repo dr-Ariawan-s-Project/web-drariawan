@@ -7,15 +7,15 @@ import ListQuestionaire from "../../assets/icons/list_kuisioner.svg"
 import FillQuestionaire from "../../assets/icons/fill_kuisioner.svg"
 import UnfillQuestionaire from "../../assets/icons/unfill_kuisioner.svg"
 
-const backgroundStyle = {
-    backgroundImage: `url(${Background})`,
-    backgroundRepeat: "no-repeat",
-    backgroundSize: "cover",
-    backgroundPosition: "center",
-    backgroundAttachment: "fixed",
-};
-
 const Kuisioner = () => {
+
+    const backgroundStyle = {
+        backgroundImage: `url(${Background})`,
+        backgroundRepeat: "no-repeat",
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+        backgroundAttachment: "fixed",
+    };
 
     const navigate: NavigateFunction = useNavigate()
     const [fadeIn, setFadeIn] = useState<boolean>(false)

@@ -4,8 +4,8 @@ import { CardProps } from '../utils/component'
 const Card: FC<CardProps> = ({ id, type, children, onClick }) => {
 
     const preferences = {
-        primary: 'bg-white',
-        secondary: 'bg-health-blue-thin'
+        primary: 'bg-white w-full h-full focus:outline-none hover:border-transparent',
+        secondary: 'bg-health-blue-thin w-full h-full focus:outline-none hover:border-transparent'
     }
 
     return (
@@ -13,8 +13,7 @@ const Card: FC<CardProps> = ({ id, type, children, onClick }) => {
             <button
                 id={id}
                 onClick={onClick}
-                className={`w-full h-full focus:outline-none hover:border-transparent ${type === 'primary' ? preferences.primary :
-                    type === 'secondary' && preferences.secondary}`}
+                className={`${type === 'primary' ? preferences.primary : preferences.secondary}`}
             >
                 {children}
             </button>

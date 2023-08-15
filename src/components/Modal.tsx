@@ -2,12 +2,15 @@ import { FC } from 'react';
 import { ModalProps } from '../utils/component';
 
 const Modal: FC<ModalProps> = ({ isOpen, onClose, children }) => {
-    const modalOverlayClasses = isOpen ? 'fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50' : 'hidden';
-    const modalContentClasses = isOpen ? 'bg-white p-4 rounded-md shadow-md grid justify-items-center' : 'hidden';
+
+    const preferences = {
+        modalOverlay: isOpen ? 'fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50' : 'hidden',
+        modalContent: isOpen ? 'bg-white p-4 rounded-md shadow-md grid justify-items-center' : 'hidden'
+    }
 
     return (
-        <div className={modalOverlayClasses}>
-            <div className={modalContentClasses}>
+        <div className={preferences.modalOverlay}>
+            <div className={preferences.modalContent}>
                 {children}
                 <button
                     onClick={onClose}

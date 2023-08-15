@@ -38,21 +38,12 @@ const AudioRecorder: FC<AudioRecorderProps> = ({ onSave }) => {
 
     return (
         <div className="flex flex-col items-center">
-            {isRecording ? (
-                <button
-                    className='bg-transparent border-none hover:border-none focus:outline-none'
-                    onClick={handleStopRecording}
-                >
-                    <img src={StopMic} width={40} height={40} />
-                </button>
-            ) : (
-                <button
-                    className='bg-transparent border-none hover:border-none focus:outline-none'
-                    onClick={handleStartRecording}
-                >
-                    <img src={AudioMic} width={40} height={40} />
-                </button>
-            )}
+            <button
+                className='bg-transparent border-none hover:border-none focus:outline-none'
+                onClick={isRecording ? handleStopRecording : handleStartRecording}
+            >
+                <img src={isRecording ? StopMic : AudioMic} width={40} height={40} />
+            </button>
         </div>
     );
 };

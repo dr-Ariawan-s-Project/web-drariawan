@@ -7,16 +7,15 @@ import data from '../../datas/landing/landing.json'
 
 import Button from "../../components/Button"
 
-
-const backgroundStyle = {
-    backgroundImage: `url(${Background})`,
-    backgroundRepeat: "no-repeat",
-    backgroundSize: "cover",
-    backgroundPosition: "center",
-    backgroundAttachment: "fixed",
-};
-
 const Landing = () => {
+
+    const backgroundStyle = {
+        backgroundImage: `url(${Background})`,
+        backgroundRepeat: "no-repeat",
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+        backgroundAttachment: "fixed",
+    };
 
     const navigate: NavigateFunction = useNavigate()
     const [fadeIn, setFadeIn] = useState<boolean>(false)

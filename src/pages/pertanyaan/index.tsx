@@ -6,15 +6,15 @@ import VideoPlayer from "../../components/VideoPlayer"
 import AudioRecorder from "../../components/AudioRecorder";
 import Button from "../../components/Button";
 
-const backgroundStyle = {
-    backgroundImage: `url(${Background})`,
-    backgroundRepeat: "no-repeat",
-    backgroundSize: "cover",
-    backgroundPosition: "center",
-    backgroundAttachment: "fixed",
-};
-
 const Pertanyaan = () => {
+
+    const backgroundStyle = {
+        backgroundImage: `url(${Background})`,
+        backgroundRepeat: "no-repeat",
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+        backgroundAttachment: "fixed",
+    };
 
     const [fadeIn, setFadeIn] = useState<boolean>(false)
     const [text, setText] = useState<string>("")
