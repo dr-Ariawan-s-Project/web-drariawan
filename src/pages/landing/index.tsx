@@ -2,21 +2,12 @@ import { useState, useEffect } from "react"
 import { NavigateFunction, useNavigate } from "react-router-dom"
 
 import LandingIllustration from "../../assets/illustrations/ariawan_ai.png"
-import Background from "../../assets/illustrations/ariawan_background.jpg"
 import data from '../../datas/landing/landing.json'
 
 import Button from "../../components/Button"
 import AnimatedWrapper from "../../components/AnimatedWrapper"
 
 const Landing = () => {
-
-    const backgroundStyle = {
-        backgroundImage: `url(${Background})`,
-        backgroundRepeat: "no-repeat",
-        backgroundSize: "cover",
-        backgroundPosition: "center",
-        backgroundAttachment: "fixed",
-    };
 
     const navigate: NavigateFunction = useNavigate()
     const [transition, setTransition] = useState<boolean>(true)
@@ -44,8 +35,7 @@ const Landing = () => {
                 transition === true ?
                     <AnimatedWrapper>Loading ...</AnimatedWrapper> :
                     <section
-                        style={backgroundStyle}
-                        className={`flex justify-center w-screen min-h-screen bg-white ${fadeIn ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'} transition-opacity duration-500 transform`}>
+                        className={`flex justify-center w-screen min-h-screen bg-health-blue-thin ${fadeIn ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'} transition-opacity duration-500 transform`}>
                         <div className="mx-auto lg:flex lg:flex-row-reverse">
                             <div className="flex flex-col grid gap-y-5 text-center mx-10 bg-white rounded-md shadow-md lg:gap-y-20 lg:content-center lg:mx-20 my-10">
                                 <div className="lg:grid lg:grid-cols-2 lg:gap-y-20 m-10">

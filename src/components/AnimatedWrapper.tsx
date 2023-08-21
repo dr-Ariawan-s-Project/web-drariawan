@@ -18,7 +18,7 @@ const AnimatedWrapper: FC<AnimatedWrapperProps> = ({ children }) => {
             {children.split('').map((char, index) => (
                 <motion.span
                     key={index}
-                    className="snake-char"
+                    className="snake-char font-semibold"
                     initial={{ y: 0 }}
                     animate={{
                         y: [0, 10, 0],
