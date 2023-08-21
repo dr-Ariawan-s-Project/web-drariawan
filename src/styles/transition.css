@@ -1,0 +1,34 @@
+.snake-text-container {
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    background-color: #004A7C;
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+  }
+  
+  .snake-char {
+    display: inline-block;
+    font-size: 2rem;
+    color: white;
+    position: relative;
+  }
+  
+  .snake-char:before {
+    content: attr(data-char);
+    position: absolute;
+    left: 0;
+    opacity: 0.5;
+
+  }
+  
+  @keyframes sway {
+    0%, 100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-20px);
+    }
+  }
+  
