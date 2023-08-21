@@ -5,8 +5,10 @@ import DoctorBlue from "../../assets/illustrations/ariawan_blue.svg"
 import ListQuestionaire from "../../assets/icons/list_kuisioner.svg"
 import FillQuestionaire from "../../assets/icons/fill_kuisioner.svg"
 import UnfillQuestionaire from "../../assets/icons/unfill_kuisioner.svg"
+import DoctorCircle from "../../assets/illustrations/ariawan_ai.png"
 
 import AnimatedWrapper from "../../components/AnimatedWrapper"
+import RotatingCircle from "../../components/RotatingCircle"
 
 const Kuisioner = () => {
 
@@ -35,6 +37,7 @@ const Kuisioner = () => {
                     <AnimatedWrapper>Loading ...</AnimatedWrapper> :
                     <section
                         className={`flex justify-center lg:items-center w-screen min-h-screen bg-health-blue-thin ${fadeIn ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'} transition-opacity duration-500 transform`}>
+                        <RotatingCircle image={DoctorCircle} size={100} />
                         <div className="bg-white">
                             <div className="grid grid-cols-1 gap-y-3 m-10 lg:mx-20">
                                 <h2>Pertanyaan</h2>
@@ -81,6 +84,7 @@ const Kuisioner = () => {
                                 </div>
                             </div>
                         </div>
+                        <RotatingCircle image={DoctorCircle} size={100} />
                     </section>
             }
         </>
