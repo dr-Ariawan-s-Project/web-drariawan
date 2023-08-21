@@ -24,6 +24,11 @@ export interface ModalProps {
     children?: React.ReactNode;
 }
 
+export interface LoadingProps {
+    id: string,
+    isOpen?: boolean,
+}
+
 export interface CardProps {
     id: string,
     type?: "primary" | "secondary",
