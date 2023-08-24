@@ -1,0 +1,12 @@
+.heart {
+    width: 150px;
+    height: 150px;
+    background-color: white;
+    border-radius: 50%;
+    transition: transform 0.2s ease-in-out;
+  }
+  
+  .pulse {
+    transform: scale(1.2);
+  }
+  
