@@ -79,7 +79,7 @@ const Kuisioner = () => {
                       </div>
                     );
                   })}
-                  {error === null && <Loading id="loading" isOpen={true} />}
+                  {error && <Loading id="loading" isOpen={true} />}
                 </div>
               </div>
             </div>
