@@ -13,7 +13,7 @@ import Loading from '../../components/Loading';
 
 const Kuisioner = () => {
   const navigate: NavigateFunction = useNavigate();
-  const { data, error } = useQuestionaire() as any;
+  const { data, error, getQuestionaire } = useQuestionaire() as any;
 
   const [transition, setTransition] = useState<boolean>(true);
   const [fadeIn, setFadeIn] = useState<boolean>(false);
@@ -25,6 +25,8 @@ const Kuisioner = () => {
     const fadeIn = setTimeout(() => {
       setFadeIn(true);
     }, 1600);
+
+    getQuestionaire();
 
     return () => {
       clearTimeout(transition);
@@ -79,7 +81,7 @@ const Kuisioner = () => {
                       </div>
                     );
                   })}
-                  {error && <Loading id="loading" isOpen={true} />}
+                  <Loading id="loading" isOpen={error ? true : false} />
                 </div>
               </div>
             </div>
