@@ -60,7 +60,13 @@ const Kuisioner = () => {
                       <div
                         key={index}
                         className="flex mt-10 cursor-pointer hover:text-health-blue-thin"
-                        onClick={() => navigate(`/kuisioner/${'Pertanyaan_1'}`)}
+                        onClick={() =>
+                          navigate(`/kuisioner/${item?.id}`, {
+                            state: {
+                              data: item,
+                            },
+                          })
+                        }
                       >
                         <img
                           src={ListQuestionaire}

@@ -17,6 +17,12 @@ export interface InputProps {
     onChange?: () => void
 }
 
+export interface RadioButtonProps {
+    label?: string;
+    checked?: boolean;
+    onChange?: () => void;
+  }
+
 export interface ModalProps {
     id: string,
     isOpen?: boolean;
