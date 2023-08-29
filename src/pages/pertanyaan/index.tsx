@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate, NavigateFunction } from 'react-router-dom';
 
 import VideoPlayer from '../../components/VideoPlayer';
 import AudioRecorder from '../../components/AudioRecorder';
@@ -9,6 +9,7 @@ import RadioButton from '../../components/RadioButton';
 import Loading from '../../components/Loading';
 
 const Pertanyaan = () => {
+  const navigate: NavigateFunction = useNavigate();
   const location = useLocation();
   const data = location?.state?.data;
   const type = data?.type;
@@ -18,19 +19,27 @@ const Pertanyaan = () => {
   const [fadeIn, setFadeIn] = useState<boolean>(false);
   const [text, setText] = useState<string>('');
   const [check, setCheck] = useState<boolean>(false);
+  const [score, setScore] = useState<number>(0);
 
   const handleSaveAudio = (blob: Blob) => {
     const audioUrl = URL.createObjectURL(blob);
     console.log('audio : ', audioUrl);
   };
 
+  const handleChecked = (item: any) => {
+    setCheck(item?.id);
+    setScore(item?.score);
+  };
+
   const handleSubmit = () => {
     // for submit datas from questioner
     if (type === 'choices') {
-      console.log('check : ', check);
+      console.log('score : ', score);
       console.log('text : ', text);
+      navigate(`success/`);
     } else {
       console.log('text : ', text);
+      navigate(`success/`);
     }
   };
 
@@ -54,13 +63,15 @@ const Pertanyaan = () => {
         <AnimatedWrapper>Loading ...</AnimatedWrapper>
       ) : (
         <section
-          className={`lg:items-center w-screen min-h-screen bg-health-blue-thin ${
+          className={`lg:items-center w-screen min-h-screen lg:bg-health-blue-thin ${
             fadeIn ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
           } transition-opacity duration-500 transform`}
         >
-          <div className="shadow-md rounded-md lg:lg:bg-white lg:mx-96">
+          <div className="shadow-md rounded-md lg:bg-white lg:mx-96">
             <div className="grid grid-cols-1 gap-y-5">
-              <h2 className="mx-auto text-center my-10">{data?.description}</h2>
+              <h2 className="lg:mx-auto lg:text-center mx-10 my-10 text-left">
+                {data?.description}
+              </h2>
               {type === 'text' ? (
                 <div className="mx-10">
                   <VideoPlayer src={data?.question} />
@@ -72,7 +83,7 @@ const Pertanyaan = () => {
                       <RadioButton
                         label={item?.option}
                         checked={check === item?.id}
-                        onChange={() => setCheck(item?.id)}
+                        onChange={() => handleChecked(item)}
                       />
                     </div>
                   );
