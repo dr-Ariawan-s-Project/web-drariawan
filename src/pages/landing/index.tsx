@@ -37,13 +37,13 @@ const Landing = () => {
               />
             </div>
             <div className="lg:grid lg:gap-y-5 grid gap-y-10">
-              <h2 className="lg:text-left lg:mr-52">{data.title}</h2>
-              <p className="lg:text-justify">{data.description}</p>
+              <h2 className="text-left lg:mr-52">{data.title}</h2>
+              <p className="lg:text-justify text-left">{data.description}</p>
               <div className="grid gap-y-3 mt-10 lg:my-auto lg:text-left">
-                <p className="font-italic_medium">{data.name}</p>
-                <p className="font-semibold">{data.faculty}</p>
+                <p className="font-italic_medium text-left">{data.name}</p>
+                <p className="font-semibold text-left">{data.faculty}</p>
               </div>
-              <div className="mx-5 lg:mx-0 mt-10 font-semibold lg:mt-auto">
+              <div className="lg:mt-auto mt-10 font-semibold">
                 <Button
                   id="mulai"
                   label="Mulai"

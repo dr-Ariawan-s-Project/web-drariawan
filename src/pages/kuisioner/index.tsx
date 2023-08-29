@@ -34,8 +34,6 @@ const Kuisioner = () => {
     };
   }, []);
 
-  console.log(data);
-
   return (
     <>
       {transition === true ? (

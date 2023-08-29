@@ -66,6 +66,10 @@ label {
   font-family: "Poppins-Semibold";
 }
 
+section {
+  margin: 0px
+}
+
 body {
   margin: 0;
   display: flex;
