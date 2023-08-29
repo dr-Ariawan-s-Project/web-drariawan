@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react';
 import { useLocation, useNavigate, NavigateFunction } from 'react-router-dom';
 
+import { useScore } from '../../store/getScore';
+
 import VideoPlayer from '../../components/VideoPlayer';
 import AudioRecorder from '../../components/AudioRecorder';
 import Button from '../../components/Button';
@@ -15,11 +17,11 @@ const Pertanyaan = () => {
   const type = data?.type;
   const choices = data?.choices;
 
+  const { getScore } = useScore();
   const [transition, setTransition] = useState<boolean>(true);
   const [fadeIn, setFadeIn] = useState<boolean>(false);
   const [text, setText] = useState<string>('');
   const [check, setCheck] = useState<boolean>(false);
-  const [score, setScore] = useState<number>(0);
 
   const handleSaveAudio = (blob: Blob) => {
     const audioUrl = URL.createObjectURL(blob);
@@ -28,17 +30,16 @@ const Pertanyaan = () => {
 
   const handleChecked = (item: any) => {
     setCheck(item?.id);
-    setScore(item?.score);
+    getScore(item?.score, data?.id);
   };
 
   const handleSubmit = () => {
     // for submit datas from questioner
     if (type === 'choices') {
-      console.log('score : ', score);
-      console.log('text : ', text);
+      // type choices
       navigate(`success/`);
     } else {
-      console.log('text : ', text);
+      // type text
       navigate(`success/`);
     }
   };

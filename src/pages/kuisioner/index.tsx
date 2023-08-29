@@ -12,9 +12,15 @@ import AnimatedWrapper from '../../components/AnimatedWrapper';
 import Loading from '../../components/Loading';
 
 const Kuisioner = () => {
+  const id: any = localStorage.getItem('id');
+  const score: any = localStorage.getItem('score');
+  const store = {
+    id: parseInt(id),
+    score: parseInt(score),
+  };
+
   const navigate: NavigateFunction = useNavigate();
   const { data, error, getQuestionaire } = useQuestionaire() as any;
-
   const [transition, setTransition] = useState<boolean>(true);
   const [fadeIn, setFadeIn] = useState<boolean>(false);
 
@@ -77,7 +83,13 @@ const Kuisioner = () => {
                           <p>Tipe Kuisioner : {item?.type}</p>
                         </div>
                         <img
-                          src={UnfillQuestionaire}
+                          src={
+                            store.score === 0 && store.id === 0
+                              ? UnfillQuestionaire
+                              : store.id === item?.id
+                              ? FillQuestionaire
+                              : UnfillQuestionaire
+                          }
                           width={40}
                           height={40}
                           alt="Unfill Icon"
