@@ -1,6 +1,8 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import axios from 'axios';
 
+import Admin from '../pages/admin';
+import User from '../pages/user';
 import OpsiAuth from '../pages/auth/OpsiAuth';
 import Register from '../pages/auth/Register';
 import Login from '../pages/auth/Login';
@@ -26,7 +28,6 @@ const App = () => {
         <Route element={<Register />} path="/auth/option/register" />
         <Route element={<OpsiAuth />} path="/auth/option" />
         <Route element={<DataDiri />} path="/data_diri" />
-        <Route element={<HalamanUtama />} path="/admin" />
         <Route element={<Kuisioner />} path="/kuisioner" />
         <Route element={<Pertanyaan />} path="/kuisioner/:pertanyaan" />
         <Route element={<Success />} path="/kuisioner/:pertanyaan/success" />
@@ -35,6 +36,10 @@ const App = () => {
           element={<LembarPersetujuan />}
           path="/main/lembar_persetujuan"
         />
+        <Route element={<Admin />} path="/admin">
+          <Route element={<HalamanUtama />} path="/kuisioner" />
+          <Route element={<User />} path="/user_list" />
+        </Route>
       </Routes>
     </BrowserRouter>
   );
