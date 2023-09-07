@@ -1,6 +1,6 @@
 import { FC } from 'react';
 import { UserIcon } from '@heroicons/react/24/outline';
-import Swal from 'sweetalert2';
+import { useSwalAuth } from '../utils/swal/useSwalAuth';
 
 interface NavbarProps {
   page: string;
@@ -8,28 +8,7 @@ interface NavbarProps {
 
 const Navbar: FC<NavbarProps> = ({ page }) => {
   const handleLogout = () => {
-    Swal.fire({
-      title: 'Logout',
-      text: 'Apakah kamu ingin logout?',
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonText: 'Logout',
-      confirmButtonColor: '#004A7C',
-      cancelButtonText: 'Batal',
-      reverseButtons: true,
-    }).then((result) => {
-      if (result.isConfirmed) {
-        Swal.fire({
-          title: 'Sukses logout',
-          icon: 'success',
-          confirmButtonColor: '#004A7C',
-        }).then((result) => {
-          if (result.isConfirmed) {
-            console.log('Logout berhasil');
-          }
-        });
-      }
-    });
+    useSwalAuth('logout');
   };
 
   return (
