@@ -1,30 +1,32 @@
 import Swal from "sweetalert2";
+import { login, logout } from "../response";
 
 export const useSwalAuth = (type: 'login' | 'logout', data?: string ) => {
     type === 'login' ?
     Swal.fire({
-        title: 'Berhasil Login',
-        text: `Selamat datang, ${data}!`,
+        title: login.title,
+        text: `${login.text}, ${data}!`,
         icon: 'success',
-        confirmButtonColor: '#004A7C',
-        confirmButtonText: "OK"
+        confirmButtonColor: login.confirmButtonColor,
+        confirmButtonText: login.confirmButtonText
       }) : 
       Swal.fire({
-        title: 'Logout',
-        text: 'Apakah kamu ingin logout?',
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonText: 'Logout',
-        confirmButtonColor: '#004A7C',
-        cancelButtonText: 'Batal',
-        reverseButtons: true,
+        title: logout.title,
+        text: logout.text,
+        icon: logout.icon,
+        showCancelButton: logout.showCancelButton,
+        confirmButtonText: logout.confirmButtonText,
+        confirmButtonColor: logout.confirmButtonColor,
+        cancelButtonText: logout.cancelButtonText,
+        reverseButtons: logout.reverseButtons,
       }).then((result) => {
         if (result.isConfirmed) {
           Swal.fire({
-            title: 'Sukses Logout',
+            title: logout.isConfirmed.title,
             icon: 'success',
-            confirmButtonColor: '#004A7C',
+            confirmButtonColor: logout.isConfirmed.confirmButtonColor,
           })
         }
       })
 }
+
