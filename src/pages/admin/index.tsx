@@ -29,11 +29,11 @@ const Admin = () => {
   }, []);
 
   return (
-    <section className="w-screen h-screen flex flex-col items-center">
-      <div className="absolute left-0">
+    <section className="w-screen h-full flex flex-col items-center">
+      <div className="fixed left-0 h-full z-20">
         <Sidebar />
       </div>
-      <div className="w-full">
+      <div className="w-full fixed z-10">
         <Navbar page={page} />
       </div>
       <div className="my-auto">

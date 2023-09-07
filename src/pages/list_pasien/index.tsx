@@ -6,8 +6,8 @@ const ListPasien = () => {
 
   return (
     <section className="w-screen">
-      <div className="ml-60 mr-5">
-        <div className="flex justify-center gap-x-5 my-5">
+      <div className="lg:ml-60 mr-5 mt-32 flex flex-col gap-y-5">
+        <div className="flex flex-col md:flex-row justify-center items-center gap-5">
           <button
             className="w-20 h-10 bg-health-blue-dark border-none hover:bg-health-blue-reguler focus:outline-none rounded-md text-white font-semibold flex items-center justify-center"
             onClick={() => setPage(page - 1)}
@@ -20,7 +20,7 @@ const ListPasien = () => {
             onChange={(e: any) => setPage(e.target.value)}
           />
           <button
-            className="w-20 h-10 bg-health-blue-dark border-none hover:bg-health-blue-reguler focus:outline-none  rounded-md text-white font-semibold flex items-center justify-center"
+            className="w-20 h-10 bg-health-blue-dark border-none hover:bg-health-blue-reguler focus:outline-none rounded-md text-white font-semibold flex items-center justify-center"
             onClick={() => setPage(page + 1)}
           >
             Next
