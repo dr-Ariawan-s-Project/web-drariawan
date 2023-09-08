@@ -4,29 +4,44 @@
 
 @font-face {
   font-family: 'Poppins-Regular';
-  src: url("../src/assets/fonts/Poppins/Poppins-Regular.ttf");
+  src: url('../src/assets/fonts/Poppins/Poppins-Regular.ttf');
 }
 
 @font-face {
   font-family: 'Poppins-Medium';
-  src: url("../src/assets/fonts/Poppins/Poppins-Medium.ttf");
+  src: url('../src/assets/fonts/Poppins/Poppins-Medium.ttf');
 }
 
 @font-face {
   font-family: 'Poppins-Medium-Italic';
-  src: url("../src/assets/fonts/Poppins/Poppins-MediumItalic.ttf");
+  src: url('../src/assets/fonts/Poppins/Poppins-MediumItalic.ttf');
 }
 
 @font-face {
   font-family: 'Poppins-Semibold';
-  src: url("../src/assets/fonts/Poppins/Poppins-SemiBold.ttf");
+  src: url('../src/assets/fonts/Poppins/Poppins-SemiBold.ttf');
 }
 
 @font-face {
   font-family: 'Poppins-Bold';
-  src: url("../src/assets/fonts/Poppins/Poppins-Bold.ttf");
+  src: url('../src/assets/fonts/Poppins/Poppins-Bold.ttf');
 }
-
+@font-face {
+  font-family: 'Lato-Regular';
+  src: url('../src/assets/fonts/Lato/Lato-Regular.ttf');
+}
+@font-face {
+  font-family: 'Lato-Bold';
+  src: url('../src/assets/fonts/Lato/Lato-Bold.ttf');
+}
+@font-face {
+  font-family: 'Lato-Black';
+  src: url('../src/assets/fonts/Lato/Lato-Black.ttf');
+}
+@font-face {
+  font-family: 'Lato-Italic';
+  src: url('../src/assets/fonts/Lato/Lato-LightItalic.ttf');
+}
 .slide-in-right {
   animation: slideInRight 1s ease-out forwards;
 }
@@ -41,16 +56,28 @@
 }
 
 :root {
-  font-family: 'Poppins-Regular';
   line-height: 1.5;
   font-weight: 400;
-  color: #004A7C;
+  color: #004a7c;
   background-color: white;
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   -webkit-text-size-adjust: 100%;
+}
+phone-1 {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 2;
+}
+
+.landingbg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 1;
 }
 
 a {
@@ -63,29 +90,21 @@ a:hover {
 }
 
 label {
-  font-family: "Poppins-Semibold";
+  font-family: 'Poppins-Semibold';
 }
 
 section {
-  margin: 0px
-}
-
-body {
-  margin: 0;
-  display: flex;
-  place-items: center;
-}
-
-h1 {
-  font-size: 3.2em;
-  font-family: 'Poppins-Bold';
+  margin: 0px;
 }
 
 h2 {
-  font-size: 1.6em;
-  font-family: 'Poppins-Bold';
+  font-family: 'Poppins-Regular';
 }
 
+h1 {
+  font-family: 'Lato-Black';
+  font-weight: 700;
+}
 
 button {
   border-radius: 8px;

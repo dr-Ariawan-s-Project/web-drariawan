@@ -16,7 +16,9 @@ import Pertanyaan from '../pages/pertanyaan';
 import Sambutan from '../pages/sambutan';
 import Success from '../pages/success';
 import Splash from '../pages/splash';
-
+import VerifikasiEmail from '../pages/verifikasi_email';
+import LandingPertanyaan from '../pages/landing_pertanyaan';
+import KuisionerOption from '../pages/kuisioner_option';
 const App = () => {
   axios.defaults.baseURL = 'https://drariawan.altapro.online';
 
@@ -30,9 +32,13 @@ const App = () => {
         <Route element={<OpsiAuth />} path="/auth/option" />
         <Route element={<DataDiri />} path="/data_diri" />
         <Route element={<Kuisioner />} path="/kuisioner" />
-        <Route element={<Pertanyaan />} path="/kuisioner/:pertanyaan" />
-        <Route element={<Success />} path="/kuisioner/:pertanyaan/success" />
+        <Route element={<Pertanyaan />} path="/kuisioner/:questionId" />
+        <Route element={<Success />} path="/kuisioner/:pertanyaan/finish" />
         <Route element={<Sambutan />} path="/main/sambutan" />
+        <Route element={<LembarPersetujuan />} path="/lembar_persetujuan" />
+        <Route element={<VerifikasiEmail />} path="/verifikasi_email" />
+        <Route element={<LandingPertanyaan />} path="/landing_pertanyaan" />
+        <Route element={<KuisionerOption />} path="/kuisioner_option" />
         <Route
           element={<LembarPersetujuan />}
           path="/main/lembar_persetujuan"

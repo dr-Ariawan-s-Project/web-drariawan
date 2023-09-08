@@ -1,60 +1,56 @@
 import { useState, useEffect } from 'react';
-import { useNavigate, NavigateFunction } from 'react-router-dom';
-
-import '../../styles/ornamen.css';
-import Button from '../../components/Button';
+import data from '../../datas/success/success.json';
+import { motion } from 'framer-motion';
+import DoctorFinish from '../../assets/illustrations/doctor-finish.svg';
 
 const Success = () => {
-  const numOrnaments = 4;
-  const initialPositions = Array.from(
-    { length: numOrnaments },
-    (_, index) => index * 90
-  );
-  const navigate: NavigateFunction = useNavigate();
-  const [position, setPosition] = useState<Array<number>>(initialPositions);
-
+  const [showDoctorFinish, setShowDoctorFinish] = useState<boolean>(false);
   useEffect(() => {
-    const interval = setInterval(() => {
-      setPosition((prevPositions) =>
-        prevPositions.map((position: any) => (position + 1) % 360)
-      );
-    }, 10);
+    const showDoctorFinishTimeout = setTimeout(() => {
+      setShowDoctorFinish(true);
+    }, 900);
 
-    return () => clearInterval(interval);
+    return () => {
+      clearTimeout(showDoctorFinishTimeout);
+    };
   }, []);
 
   return (
     <section className="grid grid-cols-1 gap-y-10 lg:grid lg:grid-cols-2 lg:h-screen">
-      <div className="w-screen lg:w-full lg:h-full lg:rounded-none h-80 bg-health-blue-thin grid grid-cols-2 place-items-center rounded-bl-xl rounded-br-xl">
-        {position.map((position, index) => (
-          <div
-            key={index}
-            className="ornament bg-white p-2 w-20 lg:p-5 lg:w-40"
-            style={{
-              transform: `rotate(${position}deg)`,
-            }}
-          >
-            <p className="text-center my-5 font-semibold">Terima Kasih</p>
-          </div>
-        ))}
+      <div className="flex justify-center items-center mx-auto mt-20 ">
+        <motion.img
+          src={DoctorFinish}
+          alt="DoctorFinish"
+          className={`sm:w-full w-[50%] md:w-[50%] lg:w-[90%] h-auto ${
+            showDoctorFinish ? 'opacity-100' : 'opacity-0'
+          }`}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: showDoctorFinish ? 1 : 0 }}
+          transition={{ duration: 0.5 }}
+          whileHover={{ scale: 1.1 }}
+          style={{ maxWidth: '100%' }}
+        ></motion.img>
       </div>
-      <div className="grid grid-cols-1 gap-y-36 lg:flex lg:flex-col lg:justify-center lg:mx-20 text-center mx-5">
-        <h2>Selesai!</h2>
-        <div className="text-center lg:text-justify">
-          <p>
-            Terima kasih telah bersedia meluangkan waktu untuk mengisi kuisioner
-            ini. Jawaban dan informasi anda sangat dibutuhkan di dalam
-            penelitian ini
+
+      <div className="flex justify-center items-center ">
+        <div className="text-start w-2/3">
+          <h1 className="text-2xl lg:text-3xl xl:text-4xl mb-2 lg:mb-5 xl:mb-10">
+            {data.title}
+          </h1>
+          <p className="lg:text-justify text-lg lg:text-lg xl:text-base mb-2 lg:mb-5 xl:mb-10">
+            {data.description}
           </p>
-        </div>
-        <div className="mx-auto lg:h-14 lg:w-full">
-          <Button
-            id="back"
-            type="blue"
-            active={true}
-            onClick={() => navigate('/kuisioner')}
-            label="Kembali ke Kuisioner"
-          />
+          <div className="grid lg:my-auto lg:text-left mt-10">
+            <p className="font-lato_italic text-left text-base lg:text-sm xl:text-base text-health-blue-thin ">
+              Salam hangat,
+            </p>
+            <p className="font-italic_medium text-left text-sm lg:text-base xl:text-lg ">
+              {data.name}
+            </p>
+            <p className="font-semibold text-left text-sm lg:text-base xl:text-lg mb-2 lg:mb-5 xl:mb-10">
+              {data.faculty}
+            </p>
+          </div>
         </div>
       </div>
     </section>
