@@ -16,7 +16,11 @@
     "classnames": "^2.3.2",
     "framer-motion": "^10.16.0",
 <<<<<<< HEAD
+<<<<<<< HEAD
     "lottie-react": "^2.4.0",
+=======
+    "heroicons": "^2.0.18",
+>>>>>>> c4cc9a29a9e43800fc5d5497a4152e762303283e
 =======
     "heroicons": "^2.0.18",
 >>>>>>> c4cc9a29a9e43800fc5d5497a4152e762303283e
