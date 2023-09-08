@@ -30,7 +30,10 @@ export const useQuestionaire = create<QuestionaireState>((set) => ({
   validateQuestionaire: async (validateData) => {
     set({ loading: true, error: null });
     try {
-      const response = await axios.post('/v1/questioner/validate', validateData);
+      const response = await axios.post(
+        '/v1/questioner/validate',
+        validateData
+      );
       set({ data: response.data, loading: false });
       return response.data;
     } catch (error) {
