@@ -14,7 +14,7 @@ export interface InputProps {
   value?: string;
   type?: string;
   placeholder?: string;
-  onChange?: () => void;
+  onChange?: (e?:any) => void;
 }
 
 export interface RadioButtonProps {
