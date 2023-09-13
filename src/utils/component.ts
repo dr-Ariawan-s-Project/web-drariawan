@@ -67,3 +67,9 @@ export interface ModalInformationProps {
   onClose?: () => void;
   children?: React.ReactNode;
 }
+
+export interface LoginFormProps {
+  email?: string;
+  password?: string;
+  remember?: boolean;
+}

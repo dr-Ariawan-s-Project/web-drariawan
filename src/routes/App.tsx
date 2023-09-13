@@ -19,6 +19,7 @@ import Splash from '../pages/splash';
 import VerifikasiEmail from '../pages/verifikasi_email';
 import LandingPertanyaan from '../pages/landing_pertanyaan';
 import KuisionerOption from '../pages/kuisioner_option';
+import AdminLogin from '../pages/admin_login';
 const App = () => {
   axios.defaults.baseURL = 'https://drariawan.altapro.online';
 
@@ -43,6 +44,8 @@ const App = () => {
           element={<LembarPersetujuan />}
           path="/main/lembar_persetujuan"
         />
+        <Route element={<AdminLogin />} path="admin-login" />
+
         <Route element={<Admin />} path="/admin/">
           <Route element={<ListKuisioner />} path="list_kuisioner" />
           <Route element={<ListUser />} path="list_user" />
