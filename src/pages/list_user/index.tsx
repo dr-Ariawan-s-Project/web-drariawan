@@ -1,7 +1,9 @@
 import { useState, useRef } from 'react';
 import { UserPlusIcon } from '@heroicons/react/24/solid';
+import { useFormik } from 'formik';
 
 import { useSwalCreate } from '../../utils/swal/useSwalData';
+import { createUserSchema } from '../../utils/yup/createUser';
 
 import Table from '../../components/Table';
 import Modal from '../../components/Modal';
@@ -11,8 +13,22 @@ const ListUser = () => {
   const [page, setPage] = useState<number>(0);
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
-  const [selectedRole, setSelectedRole] = useState<string>('');
   const fileInputRef = useRef<HTMLInputElement | null>(null);
+
+  const formik = useFormik({
+    initialValues: {
+      name: '',
+      email: '',
+      specialization: '',
+      role: '',
+    },
+    validationSchema: createUserSchema,
+    onSubmit: (values: any) => {
+      values['image'] = selectedImage;
+      setIsOpen(false);
+      useSwalCreate('success');
+    },
+  });
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -20,11 +36,6 @@ const ListUser = () => {
     if (file) {
       setSelectedImage(file);
     }
-  };
-
-  const handleAddUser = () => {
-    setIsOpen(false);
-    useSwalCreate('success');
   };
 
   return (
@@ -61,7 +72,10 @@ const ListUser = () => {
       </div>
       <Modal id="add-new-user" isOpen={isOpen} onClose={() => setIsOpen(false)}>
         <div className="w-max h-max px-10 flex flex-col items-center transition-opacity duration-300 ease-in-out transform">
-          <div className="w-96 py-32 flex flex-col gap-y-7">
+          <form
+            className="w-96 py-32 flex flex-col gap-y-7"
+            onSubmit={formik.handleSubmit}
+          >
             {selectedImage ? (
               <label
                 htmlFor="file-input"
@@ -110,16 +124,36 @@ const ListUser = () => {
                 Remove Photo
               </button>
             )}
-            <Input id="name" placeholder="Name" />
-            <Input id="email" placeholder="Email" />
-            <Input id="specialization" placeholder="Specialization" />
+            <Input
+              value={formik.values.name}
+              onChange={formik.handleChange}
+              id="name"
+              name="name"
+              placeholder="Name"
+            />
+            <Input
+              value={formik.values.email}
+              onChange={formik.handleChange}
+              id="email"
+              name="email"
+              placeholder="Email"
+            />
+            <Input
+              value={formik.values.specialization}
+              onChange={formik.handleChange}
+              id="specialization"
+              name="specialization"
+              placeholder="Specialization"
+            />
             <label className="block text-gray-700 text-sm font-bold mb-2">
               Pilih Role:
             </label>
             <select
               className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-              value={selectedRole}
-              onChange={(e: any) => setSelectedRole(e.target.value)}
+              id="role"
+              name="role"
+              value={formik.values.role}
+              onChange={formik.handleChange}
             >
               <option value="">Pilih Role</option>
               <option value="dokter">Dokter</option>
@@ -128,11 +162,11 @@ const ListUser = () => {
             </select>
             <button
               className="my-5 w-96 h-10 rounded-md font-semibold text-white flex justify-center items-center bg-health-blue-dark border-none focus:outline-none hover:bg-health-blue-reguler cursor-pointer"
-              onClick={() => handleAddUser()}
+              type="submit"
             >
               Submit
             </button>
-          </div>
+          </form>
         </div>
       </Modal>
     </section>
