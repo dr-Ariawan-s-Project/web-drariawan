@@ -6,6 +6,7 @@ export interface ButtonProps {
   active?: boolean;
   label?: string;
   onClick?: () => void;
+  children?: React.ReactNode;
 }
 
 export interface InputProps {
@@ -69,7 +70,7 @@ export interface ModalInformationProps {
 }
 
 export interface LoginFormProps {
-  email?: string;
-  password?: string;
-  remember?: boolean;
+  email: string;
+  password: string;
+  remember: boolean;
 }

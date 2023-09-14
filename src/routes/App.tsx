@@ -44,7 +44,7 @@ const App = () => {
           element={<LembarPersetujuan />}
           path="/main/lembar_persetujuan"
         />
-        <Route element={<AdminLogin />} path="admin-login" />
+        <Route element={<AdminLogin />} path="/admin/login" />
 
         <Route element={<Admin />} path="/admin/">
           <Route element={<ListKuisioner />} path="list_kuisioner" />
