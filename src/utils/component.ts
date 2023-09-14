@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { InputHTMLAttributes } from 'react';
 
 export interface ButtonProps {
   id: string;
@@ -8,12 +8,15 @@ export interface ButtonProps {
   onClick?: () => void;
 }
 
-export interface InputProps {
+export interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   id: string;
   label?: string;
   value?: string;
   type?: string;
+  name?: string;
   placeholder?: string;
+  register?: any;
+  error?: string;
   onChange?: (e?:any) => void;
 }
 
