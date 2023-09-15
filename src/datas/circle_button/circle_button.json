@@ -1,0 +1,30 @@
+{
+ "datas" : [
+            { 
+             "type": "user",
+             "title": [
+                           {
+                               "type": "create",
+                               "label": "Create User"
+                           },
+                           {
+                               "type": "update",
+                               "label": "Update User" 
+                             }
+                      ]
+            },
+            { 
+             "type": "questioner",
+             "title": [
+                           {
+                               "type": "create",
+                               "label": "Create Questioner"
+                           },
+                           {
+                               "type": "update",
+                               "label": "Update Questioner" 
+                             }
+                      ]
+            }
+          ]
+}

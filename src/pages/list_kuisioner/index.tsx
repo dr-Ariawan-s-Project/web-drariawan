@@ -1,14 +1,20 @@
 import { useState, useEffect } from 'react';
 
+import { datas } from '../../datas/circle_button/circle_button.json';
+
 import DoctorBlue from '../../assets/illustrations/ariawan_blue.svg';
 import DoctorWhite from '../../assets/illustrations/ariawan_white.svg';
 import Card from '../../components/Card';
+import CircleButton from '../../components/CircleButton';
 
 import { useQuestionaire } from '../../store/apiQuestionaire';
 
 const ListKuisioner = () => {
   const { data, getQuestionaire } = useQuestionaire() as any;
   const [fadeIn, setFadeIn] = useState<boolean>(false);
+
+  const questionerLabels =
+    datas?.find((item: any) => item.type === 'questioner')?.title || [];
 
   useEffect(() => {
     const timeout = setTimeout(() => {
@@ -35,11 +41,11 @@ const ListKuisioner = () => {
                 type={item?.id % 2 === 0 ? 'primary' : 'secondary'}
               >
                 <div className="grid grid-cols-1 lg:grid-cols-2">
-                  <div className="text-left lg:text-center">
+                  <div className="text-left my-auto">
                     <p className="font-semibold">{item?.description}</p>
                     <p>
-                      Tipe Kuisioner :{' '}
-                      {item?.type === 'text' ? 'Teks' : 'Pilihan Ganda'}{' '}
+                      Questioner Type :{' '}
+                      {item?.type === 'text' ? 'Text' : 'Multiple Choice'}{' '}
                     </p>
                   </div>
                   <img
@@ -52,6 +58,9 @@ const ListKuisioner = () => {
             </div>
           ))}
         </div>
+      </div>
+      <div className="fixed right-5 bottom-5">
+        <CircleButton id="add-user" label={questionerLabels} />
       </div>
     </section>
   );

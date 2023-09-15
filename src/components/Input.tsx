@@ -8,14 +8,7 @@ const Input: FC<InputProps> = ({
   type,
   placeholder,
   onChange,
-}) => {
-  return (
-    <div id={id} className="w-full h-full grid grid-cols-1 gap-y-1">
-      <label>{label}</label>
-      <input
   name,
-  placeholder,
-  onChange,
   register,
   error,
   ...props
@@ -30,8 +23,6 @@ const Input: FC<InputProps> = ({
         onChange={onChange}
         type={type}
         placeholder={placeholder}
-        className="w-full h-full rounded-md shadow-md focus:outline-none p-3"
-      />
         className={`w-full h-full rounded-md shadow-md focus:outline-none p-3 ${
           error && 'border-red-500'
         }`}

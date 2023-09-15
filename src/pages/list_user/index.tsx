@@ -4,16 +4,20 @@ import { useFormik } from 'formik';
 
 import { useSwalCreate } from '../../utils/swal/useSwalData';
 import { createUserSchema } from '../../utils/yup/createUser';
+import { datas } from '../../datas/circle_button/circle_button.json';
 
 import Table from '../../components/Table';
 import Modal from '../../components/Modal';
 import Input from '../../components/Input';
+import CircleButton from '../../components/CircleButton';
 
 const ListUser = () => {
   const [page, setPage] = useState<number>(0);
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
+
+  const userLabels = datas?.find((item) => item.type === 'user')?.title || [];
 
   const formik = useFormik({
     initialValues: {
@@ -62,16 +66,15 @@ const ListUser = () => {
         >
           Next
         </button>
-        <div className="absolute right-5">
-            <button
-              className="w-40 h-10 rounded-md font-semibold text-white flex justify-center items-center bg-health-blue-dark border-none focus:outline-none hover:bg-health-blue-reguler cursor-pointer"
-              onClick={() => setIsOpen(true)}
-            >
-              Add New User
-            </button>
-          </div>
+        <div className="fixed right-5 bottom-5">
+          <CircleButton
+            id="add-user"
+            label={userLabels}
+            onClick={() => setIsOpen(true)}
+          />
+        </div>
       </div>
-       <Modal id="add-new-user" isOpen={isOpen} onClose={() => setIsOpen(false)}>
+      <Modal id="add-new-user" isOpen={isOpen} onClose={() => setIsOpen(false)}>
         <div className="w-max h-max px-10 flex flex-col items-center transition-opacity duration-300 ease-in-out transform">
           <form
             className="w-96 py-32 flex flex-col gap-y-7"
@@ -147,7 +150,7 @@ const ListUser = () => {
               placeholder="Specialization"
             />
             <label className="block text-gray-700 text-sm font-bold mb-2">
-              Pilih Role:
+              Choose Role:
             </label>
             <select
               className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
@@ -156,7 +159,7 @@ const ListUser = () => {
               value={formik.values.role}
               onChange={formik.handleChange}
             >
-              <option value="">Pilih Role</option>
+              <option value="">Choose Role</option>
               <option value="dokter">Dokter</option>
               <option value="perawat">Perawat</option>
               <option value="admin">Admin</option>
@@ -171,5 +174,7 @@ const ListUser = () => {
         </div>
       </Modal>
     </section>
+  );
+};
 
 export default ListUser;
