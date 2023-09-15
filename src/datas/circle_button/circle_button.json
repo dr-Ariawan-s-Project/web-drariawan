@@ -1,7 +1,7 @@
 {
- "data" : [
+ "datas" : [
             { 
-             "person": "user",
+             "type": "user",
              "title": [
                            {
                                "type": "create",
@@ -14,15 +14,15 @@
                       ]
             },
             { 
-             "person": "patient",
+             "type": "questioner",
              "title": [
                            {
                                "type": "create",
-                               "label": "Create Patient"
+                               "label": "Create Questioner"
                            },
                            {
                                "type": "update",
-                               "label": "Update Patient" 
+                               "label": "Update Questioner" 
                              }
                       ]
             }

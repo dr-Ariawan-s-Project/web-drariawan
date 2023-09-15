@@ -14,13 +14,13 @@ const Admin = () => {
 
   const getPage = () => {
     if (path.includes('list_user')) {
-      setPage('Daftar User');
+      setPage('List User');
     } else if (path.includes('list_kuisioner')) {
-      setPage('Daftar Kuisioner');
+      setPage('List Questioner');
     } else if (path.includes('list_pasien')) {
-      setPage('Daftar Pasien');
+      setPage('List Patient');
     } else {
-      setPage('Admin Dashboard');
+      setPage('Dashboard Admin');
     }
   };
 

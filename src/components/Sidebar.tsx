@@ -43,7 +43,7 @@ const Sidebar = () => {
               onClick={() => navigateTo('/admin/list_kuisioner')}
               className="text-white hover:bg-health-blue-reguler hover:font-semibold border-none focus:outline-none"
             >
-              Kuisioner
+              Questioner
             </button>
           </li>
           <li className="mb-2">
@@ -51,7 +51,7 @@ const Sidebar = () => {
               onClick={() => navigateTo('/admin/list_pasien')}
               className="text-white hover:bg-health-blue-reguler hover:font-semibold border-none focus:outline-none"
             >
-              Pasien
+              Patient
             </button>
           </li>
           <li className="mb-2">

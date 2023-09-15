@@ -4,7 +4,7 @@ import { useFormik } from 'formik';
 
 import { useSwalCreate } from '../../utils/swal/useSwalData';
 import { createUserSchema } from '../../utils/yup/createUser';
-import { data } from '../../datas/circle_button/circle_button.json';
+import { datas } from '../../datas/circle_button/circle_button.json';
 
 import Table from '../../components/Table';
 import Modal from '../../components/Modal';
@@ -17,7 +17,7 @@ const ListUser = () => {
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
 
-  const userLabels = data?.find((item) => item.person === 'user')?.title || [];
+  const userLabels = datas?.find((item) => item.type === 'user')?.title || [];
 
   const formik = useFormik({
     initialValues: {
@@ -150,7 +150,7 @@ const ListUser = () => {
               placeholder="Specialization"
             />
             <label className="block text-gray-700 text-sm font-bold mb-2">
-              Pilih Role:
+              Choose Role:
             </label>
             <select
               className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
@@ -159,7 +159,7 @@ const ListUser = () => {
               value={formik.values.role}
               onChange={formik.handleChange}
             >
-              <option value="">Pilih Role</option>
+              <option value="">Choose Role</option>
               <option value="dokter">Dokter</option>
               <option value="perawat">Perawat</option>
               <option value="admin">Admin</option>
