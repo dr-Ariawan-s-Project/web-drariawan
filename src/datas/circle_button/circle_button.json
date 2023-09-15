@@ -1,0 +1,30 @@
+{
+ "data" : [
+            { 
+             "person": "user",
+             "title": [
+                           {
+                               "type": "create",
+                               "label": "Create User"
+                           },
+                           {
+                               "type": "update",
+                               "label": "Update User" 
+                             }
+                      ]
+            },
+            { 
+             "person": "patient",
+             "title": [
+                           {
+                               "type": "create",
+                               "label": "Create Patient"
+                           },
+                           {
+                               "type": "update",
+                               "label": "Update Patient" 
+                             }
+                      ]
+            }
+          ]
+}

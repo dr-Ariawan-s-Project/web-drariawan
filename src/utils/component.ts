@@ -9,6 +9,12 @@ export interface ButtonProps {
   children?: React.ReactNode;
 }
 
+export interface CircleButtonProps {
+  id: string,
+  label?: any,
+  onClick?: () => void
+}
+
 export interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   id: string;
   label?: string;

@@ -4,16 +4,20 @@ import { useFormik } from 'formik';
 
 import { useSwalCreate } from '../../utils/swal/useSwalData';
 import { createUserSchema } from '../../utils/yup/createUser';
+import { data } from '../../datas/circle_button/circle_button.json';
 
 import Table from '../../components/Table';
 import Modal from '../../components/Modal';
 import Input from '../../components/Input';
+import CircleButton from '../../components/CircleButton';
 
 const ListUser = () => {
   const [page, setPage] = useState<number>(0);
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
+
+  const userLabels = data?.find((item) => item.person === 'user')?.title || [];
 
   const formik = useFormik({
     initialValues: {
@@ -62,13 +66,12 @@ const ListUser = () => {
         >
           Next
         </button>
-        <div className="absolute right-5">
-          <button
-            className="w-40 h-10 rounded-md font-semibold text-white flex justify-center items-center bg-health-blue-dark border-none focus:outline-none hover:bg-health-blue-reguler cursor-pointer"
+        <div className="fixed right-5 bottom-5">
+          <CircleButton
+            id="add-user"
+            label={userLabels}
             onClick={() => setIsOpen(true)}
-          >
-            Add New User
-          </button>
+          />
         </div>
       </div>
       <Modal id="add-new-user" isOpen={isOpen} onClose={() => setIsOpen(false)}>
