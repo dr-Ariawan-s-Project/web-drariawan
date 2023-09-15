@@ -1,5 +1,6 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import axios from 'axios';
+import swagger from 'axios';
 
 import Admin from '../pages/admin';
 import OpsiAuth from '../pages/auth/OpsiAuth';
@@ -22,6 +23,8 @@ import KuisionerOption from '../pages/kuisioner_option';
 import AdminLogin from '../pages/admin_login';
 const App = () => {
   axios.defaults.baseURL = 'https://drariawan.altapro.online';
+  swagger.defaults.baseURL =
+    'https://virtserver.swaggerhub.com/fauzilax/drariawanapi/1.0.0';
 
   return (
     <BrowserRouter>
