@@ -46,41 +46,43 @@ const Table = () => {
     });
 
   return (
-    <table {...getTableProps()} className="shadow-lg w-full">
-      <thead className="font-semibold bg-health-blue-reguler text-white h-14">
-        {headerGroups.map((headerGroup) => (
-          <tr {...headerGroup.getHeaderGroupProps()}>
-            {headerGroup.headers.map((column) => (
-              <th
-                {...column.getHeaderProps()}
-                className="border-b p-2 text-center"
-                style={{ width: column.width }}
-              >
-                {column.render('Header')}
-              </th>
-            ))}
-          </tr>
-        ))}
-      </thead>
-      <tbody {...getTableBodyProps()}>
-        {rows.map((row) => {
-          prepareRow(row);
-          return (
-            <tr {...row.getRowProps()} className="border-b text-left">
-              {row.cells.map((cell) => (
-                <td
-                  {...cell.getCellProps()}
-                  className="p-2"
-                  style={{ width: cell.column.width }}
+    <div className="overflow-x-auto">
+      <table {...getTableProps()} className="shadow-lg min-w-full">
+        <thead className="font-semibold bg-health-blue-reguler text-white h-14">
+          {headerGroups.map((headerGroup) => (
+            <tr {...headerGroup.getHeaderGroupProps()}>
+              {headerGroup.headers.map((column) => (
+                <th
+                  {...column.getHeaderProps()}
+                  className="border-b p-2 text-center"
+                  style={{ width: column.width }}
                 >
-                  {cell.render('Cell')}
-                </td>
+                  {column.render('Header')}
+                </th>
               ))}
             </tr>
-          );
-        })}
-      </tbody>
-    </table>
+          ))}
+        </thead>
+        <tbody {...getTableBodyProps()}>
+          {rows.map((row) => {
+            prepareRow(row);
+            return (
+              <tr {...row.getRowProps()} className="border-b text-left">
+                {row.cells.map((cell) => (
+                  <td
+                    {...cell.getCellProps()}
+                    className="p-2"
+                    style={{ width: cell.column.width }}
+                  >
+                    {cell.render('Cell')}
+                  </td>
+                ))}
+              </tr>
+            );
+          })}
+        </tbody>
+      </table>
+    </div>
   );
 };
 

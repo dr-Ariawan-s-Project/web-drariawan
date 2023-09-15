@@ -21,21 +21,21 @@ const ListKuisioner = () => {
   }, []);
 
   return (
-    <section
-      className={`flex justify-center ml-60 h-full mt-24 z-5 ${
-        fadeIn ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
-      } transition-opacity duration-500 transform`}
-    >
-      <div className="lg:grid lg:grid-cols-2 lg:gap-y-5 grid grid-cols-1 lg:content-center lg:mx-20 lg:mt-5">
-        {data?.data?.map((item: any) => {
-          return (
-            <div className=" lg:h-max mx-5 my-3 lg:my-0">
+    <section className="h-full mt-24 z-5">
+      <div className="container mx-auto px-4 lg:px-8">
+        <div
+          className={`grid grid-cols-1 md:grid-cols-2 gap-5 ${
+            fadeIn ? 'opacity-100' : 'opacity-0'
+          } transition-opacity duration-500 transform`}
+        >
+          {data?.data?.map((item: any) => (
+            <div key={item.id} className="my-3 lg:my-0">
               <Card
                 id="card"
                 type={item?.id % 2 === 0 ? 'primary' : 'secondary'}
               >
-                <div className="lg:grid lg:grid-cols-2">
-                  <div className="text-left lg:grid lg:content-center">
+                <div className="grid grid-cols-1 lg:grid-cols-2">
+                  <div className="text-left lg:text-center">
                     <p className="font-semibold">{item?.description}</p>
                     <p>
                       Tipe Kuisioner :{' '}
@@ -43,14 +43,15 @@ const ListKuisioner = () => {
                     </p>
                   </div>
                   <img
-                    className="my-5"
+                    className="my-5 mx-auto lg:mx-0"
                     src={item?.id % 2 === 0 ? DoctorWhite : DoctorBlue}
+                    alt={`Doctor ${item?.id % 2 === 0 ? 'White' : 'Blue'}`}
                   />
                 </div>
               </Card>
             </div>
-          );
-        })}
+          ))}
+        </div>
       </div>
     </section>
   );

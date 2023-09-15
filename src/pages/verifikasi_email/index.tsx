@@ -12,9 +12,10 @@ const VerifikasiEmail = () => {
       </h2>
       <div className="text-center mb-8">
         <p className="text-sm sm:text-base md:text-lg lg:text-xl">
-          Sebuah pesan berisi link kuisioner telah dikirim ke email Anda
-          {email}
+          Sebuah pesan berisi link kuisioner telah dikirim ke email anda :{' '}
+          <strong>{email}</strong>
         </p>
+
         <div className=" mt-6 lg:mt-12">
           <Lottie
             animationData={EmailAnimation2}

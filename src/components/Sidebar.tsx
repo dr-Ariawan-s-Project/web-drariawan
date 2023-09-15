@@ -14,20 +14,21 @@ const Sidebar = () => {
 
   return (
     <div className={`bg-health-blue-dark text-white h-full p-5 flex flex-col`}>
-      <div className="flex flex-row-reverse">
+      <div className="flex flex-row-reverse text-center">
         <h2
-          className={`text-2xl text-center p-4 cursor-pointer lg:block  ${
+          className={`text-xl sm:text-lg md:text-lg lg:text-2xl  md:p-0 p-4 cursor-pointer lg:block ${
             toggle === true ? 'block' : 'hidden'
           }`}
           onClick={() => navigateTo('/admin/')}
         >
           Dashboard
         </h2>
+
         <a
-          className="flex justify-center items-center lg:hidden block cursor-pointer"
+          className="flex justify-center items-center lg:hidden cursor-pointer"
           onClick={() => sidebarToggle()}
         >
-          <Bars3Icon color={'white'} width={40} height={40} />
+          <Bars3Icon color={'white'} width={24} height={24} />
         </a>
       </div>
 
