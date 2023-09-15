@@ -63,15 +63,15 @@ const ListUser = () => {
           Next
         </button>
         <div className="absolute right-5">
-            <button
-              className="w-40 h-10 rounded-md font-semibold text-white flex justify-center items-center bg-health-blue-dark border-none focus:outline-none hover:bg-health-blue-reguler cursor-pointer"
-              onClick={() => setIsOpen(true)}
-            >
-              Add New User
-            </button>
-          </div>
+          <button
+            className="w-40 h-10 rounded-md font-semibold text-white flex justify-center items-center bg-health-blue-dark border-none focus:outline-none hover:bg-health-blue-reguler cursor-pointer"
+            onClick={() => setIsOpen(true)}
+          >
+            Add New User
+          </button>
+        </div>
       </div>
-       <Modal id="add-new-user" isOpen={isOpen} onClose={() => setIsOpen(false)}>
+      <Modal id="add-new-user" isOpen={isOpen} onClose={() => setIsOpen(false)}>
         <div className="w-max h-max px-10 flex flex-col items-center transition-opacity duration-300 ease-in-out transform">
           <form
             className="w-96 py-32 flex flex-col gap-y-7"
@@ -171,5 +171,7 @@ const ListUser = () => {
         </div>
       </Modal>
     </section>
+  );
+};
 
 export default ListUser;

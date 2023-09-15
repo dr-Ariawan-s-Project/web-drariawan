@@ -19,7 +19,7 @@ const Navbar: FC<NavbarProps> = ({ page }) => {
           {page}
         </p>
       </div>
-      <div className="relative">
+      <div className="lg:fixed md:fixed lg:right-10 md:right-10 ml-auto mr-10">
         <div
           className="cursor-pointer"
           onClick={() => setIsDropdownOpen(!isDropdownOpen)}

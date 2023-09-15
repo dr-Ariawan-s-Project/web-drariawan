@@ -16,7 +16,7 @@ const Sidebar = () => {
     <div className={`bg-health-blue-dark text-white h-full p-5 flex flex-col`}>
       <div className="flex flex-row-reverse text-center">
         <h2
-          className={`text-xl sm:text-lg md:text-lg lg:text-2xl  md:p-0 p-4 cursor-pointer lg:block ${
+          className={`text-xl mx-auto sm:text-lg md:text-lg lg:text-2xl  md:p-0 p-4 cursor-pointer lg:block ${
             toggle === true ? 'block' : 'hidden'
           }`}
           onClick={() => navigateTo('/admin/')}
