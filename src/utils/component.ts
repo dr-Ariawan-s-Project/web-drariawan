@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { InputHTMLAttributes } from 'react';
 
 export interface ButtonProps {
   id: string;
@@ -9,13 +9,16 @@ export interface ButtonProps {
   children?: React.ReactNode;
 }
 
-export interface InputProps {
+export interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   id: string;
   label?: string;
   value?: string;
   type?: string;
+  name?: string;
   placeholder?: string;
-  onChange?: () => void;
+  register?: any;
+  error?: string;
+  onChange?: (e?:any) => void;
 }
 
 export interface RadioButtonProps {
