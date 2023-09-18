@@ -1,6 +1,6 @@
 import { FC, useState } from 'react';
 import { UserIcon } from '@heroicons/react/24/outline';
-import { useSwalAuth } from '../utils/swal/useSwalAuth';
+import { useSwalLogout } from '../utils/swal/useSwalAuth';
 
 interface NavbarProps {
   page: string;
@@ -9,7 +9,7 @@ interface NavbarProps {
 const Navbar: FC<NavbarProps> = ({ page }) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const handleLogout = () => {
-    useSwalAuth('logout');
+    useSwalLogout();
   };
 
   return (

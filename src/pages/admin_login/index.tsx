@@ -3,7 +3,7 @@ import swagger from 'axios';
 import { useNavigate } from 'react-router-dom';
 
 import { userLogin } from '../../utils/yup/login';
-import { useSwalAuth } from '../../utils/swal/useSwalAuth';
+import { useSwalLogin } from '../../utils/swal/useSwalAuth';
 
 const AdminLogin = () => {
   const navigate = useNavigate();
@@ -22,11 +22,11 @@ const AdminLogin = () => {
       const token = response?.data?.data?.token;
       console.log(token);
       if (token) {
-        useSwalAuth('login', values.email.split('@')[0]);
+        useSwalLogin('success', values.email.split('@')[0]);
         navigate('/admin/');
       }
     } catch (error) {
-      console.log(error);
+      useSwalLogin('failed');
     }
   };
 
