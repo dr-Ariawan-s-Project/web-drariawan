@@ -62,6 +62,14 @@ const Sidebar = () => {
               User
             </button>
           </li>
+          <li className="mb-2">
+            <button
+              onClick={() => navigateTo('/admin/jadwal_praktik')}
+              className="text-white hover:bg-health-blue-reguler hover:font-semibold border-none focus:outline-none"
+            >
+              Jadwal Praktik
+            </button>
+          </li>
         </ul>
       </nav>
     </div>

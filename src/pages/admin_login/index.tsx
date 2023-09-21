@@ -1,6 +1,8 @@
-import { Formik, Field, Form, ErrorMessage, FormikHelpers } from 'formik';
 import * as Yup from 'yup';
 import { useNavigate } from 'react-router-dom';
+import { Formik, Field, Form, ErrorMessage } from 'formik';
+import swagger from 'axios';
+import { useSwalAuth } from '../../utils/swal/useSwalAuth';
 
 const validationSchema = Yup.object().shape({
   email: Yup.string()
@@ -15,24 +17,26 @@ const validationSchema = Yup.object().shape({
 const AdminLogin = () => {
   const navigate = useNavigate();
 
-  const handleSubmit = async (
-    values: { email: string; password: string; remember: boolean },
-    {
-      setSubmitting,
-    }: FormikHelpers<{ email: string; password: string; remember: boolean }>
-  ) => {
-    const isEmailValid = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/.test(
-      values.email || ''
-    );
-    const isPasswordValid = (values.password || '').length >= 6;
-
-    if (isEmailValid && isPasswordValid) {
-      navigate('/admin/');
-    } else {
-      console.log('Login gagal. Email atau password tidak valid.');
+  const handleSubmit = async (values: {
+    email: string;
+    password: string;
+    remember: boolean;
+  }) => {
+    try {
+      const body = {
+        email: values.email,
+        password: values.password,
+      };
+      const response = await swagger.post('/login', body);
+      const token = response?.data?.data?.token;
+      console.log(token);
+      if (token) {
+        useSwalAuth('login', values.email.split('@')[0]);
+        navigate('/admin/');
+      }
+    } catch (error) {
+      console.log(error);
     }
-
-    setSubmitting(false);
   };
 
   return (

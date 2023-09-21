@@ -1,24 +1,32 @@
-import { useState, useRef } from 'react';
-import { UserPlusIcon } from '@heroicons/react/24/solid';
+import React, { useState, useRef } from 'react';
 import { useFormik } from 'formik';
-
-import { useSwalCreate } from '../../utils/swal/useSwalData';
-import { createUserSchema } from '../../utils/yup/createUser';
-import { datas } from '../../datas/circle_button/circle_button.json';
-
-import Table from '../../components/Table';
+import { UserPlusIcon } from '@heroicons/react/24/solid';
+import CircleButton from '../../components/CircleButton';
 import Modal from '../../components/Modal';
 import Input from '../../components/Input';
-import CircleButton from '../../components/CircleButton';
+import { createUserSchema } from '../../utils/yup/createUser';
+import { datas } from '../../datas/circle_button/circle_button.json';
+import { TrashIcon, PencilIcon } from '@heroicons/react/24/outline';
+import { useTable } from 'react-table';
+import { useSwalCreate } from '../../utils/swal/useSwalData';
 
-const ListUser = () => {
-  const [page, setPage] = useState<number>(0);
+interface DoctorData {
+  No: number;
+  Dokter: string;
+  Email: string;
+  Spesialis: string;
+  'No Handphone': string;
+  'Hari Praktik': string;
+  'Jam Praktik': string;
+}
+
+const JadwalPraktik: React.FC = () => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
+  const showSwalCreate = useSwalCreate();
 
   const userLabels = datas?.find((item) => item.type === 'user')?.title || [];
-
   const formik = useFormik({
     initialValues: {
       name: '',
@@ -30,10 +38,9 @@ const ListUser = () => {
     onSubmit: (values: any) => {
       values['image'] = selectedImage;
       setIsOpen(false);
-      useSwalCreate('success');
+      showSwalCreate('success');
     },
   });
-
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
 
@@ -41,38 +48,128 @@ const ListUser = () => {
       setSelectedImage(file);
     }
   };
+  const data = React.useMemo(() => {
+    const dummyData: DoctorData[] = [
+      {
+        No: 1,
+        Dokter: 'Dokter A',
+        Email: 'dokterA@example.com',
+        Spesialis: 'Obgyn',
+        'No Handphone': '081200000000',
+        'Hari Praktik': 'Senin-Jumat',
+        'Jam Praktik': '08:00 - 09:00',
+      },
+      {
+        No: 2,
+        Dokter: 'Dokter B',
+        Email: 'dokterB@example.com',
+        Spesialis: 'Obgyn',
+        'No Handphone': '081200000001',
+        'Hari Praktik': 'Senin-Jumat',
+        'Jam Praktik': '08:00 - 09:00',
+      },
+    ];
+    return dummyData;
+  }, []);
+
+  const columns = React.useMemo(
+    () => [
+      {
+        Header: 'No',
+        accessor: 'No',
+      },
+      {
+        Header: 'Dokter',
+        accessor: 'Dokter',
+      },
+      {
+        Header: 'Email',
+        accessor: 'Email',
+      },
+      {
+        Header: 'Spesialis',
+        accessor: 'Spesialis',
+      },
+      {
+        Header: 'No Handphone',
+        accessor: 'No Handphone',
+      },
+      {
+        Header: 'Hari Praktik',
+        accessor: 'Hari Praktik',
+      },
+      {
+        Header: 'Jam Praktik', // Update the accessor to match the property name
+        accessor: 'Jam Praktik', // Update the accessor to match the property name
+      },
+      {
+        Header: 'Actions',
+        accessor: 'actions',
+        Cell: () => (
+          <div className="flex items-center justify-center gap-x-2 my-4">
+            <TrashIcon className="cursor-pointer" width={20} height={20} />
+            <PencilIcon className="cursor-pointer" width={20} height={20} />
+          </div>
+        ),
+      },
+    ],
+    []
+  );
+
+  const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } =
+    useTable<DoctorData>({
+      columns,
+      data,
+    });
 
   return (
-    <section className="min-h-screen flex flex-col justify-center items-center">
-      <div className="w-11/12 md:w-3/4 lg:w-2/3 xl:w-1/2 mt-2 md:mt-20 lg:mt-20">
-        <Table />
+    <section>
+      <div className="relative overflow-x-auto mt-20">
+        <table
+          {...getTableProps()}
+          className="shadow-lg w-full  min-w-full sm:min-w-max"
+        >
+          <thead className="font-semibold bg-health-blue-reguler text-white h-14">
+            {headerGroups.map((headerGroup) => (
+              <tr {...headerGroup.getHeaderGroupProps()}>
+                {headerGroup.headers.map((column) => (
+                  <th
+                    {...column.getHeaderProps()}
+                    className="border-b p-2 text-center"
+                  >
+                    {column.render('Header')}
+                  </th>
+                ))}
+              </tr>
+            ))}
+          </thead>
+
+          <tbody {...getTableBodyProps()}>
+            {rows.map((row) => {
+              prepareRow(row);
+              return (
+                <tr {...row.getRowProps()} className="border-b text-left">
+                  {row.cells.map((cell) => (
+                    <td
+                      {...cell.getCellProps()}
+                      className="p-2"
+                      style={{ minWidth: '100px' }}
+                    >
+                      {cell.render('Cell')}
+                    </td>
+                  ))}
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
       </div>
-      <div className="flex  md:flex-row justify-center items-center mt-10 gap-5">
-        <button
-          className="w-full md:w-32 h-10 bg-health-blue-dark border-none hover:bg-health-blue-reguler focus:outline-none rounded-md text-white font-semibold flex items-center justify-center"
-          onClick={() => setPage(page - 1)}
-        >
-          Prev
-        </button>
-        <input
-          className="w-full md:w-32 h-10 p-3 rounded-sm border border-health-blue-dark text-center"
-          type="number"
-          value={page}
-          onChange={(e: any) => setPage(e.target.valueAsNumber)}
+      <div className="fixed right-5 bottom-5">
+        <CircleButton
+          id="add-user"
+          label={userLabels}
+          onClick={() => setIsOpen(true)}
         />
-        <button
-          className="w-full md:w-32 h-10 bg-health-blue-dark border-none hover:bg-health-blue-reguler focus:outline-none rounded-md text-white font-semibold flex items-center justify-center"
-          onClick={() => setPage(page + 1)}
-        >
-          Next
-        </button>
-        <div className="fixed right-5 bottom-5">
-          <CircleButton
-            id="add-user"
-            label={userLabels}
-            onClick={() => setIsOpen(true)}
-          />
-        </div>
       </div>
       <Modal id="add-new-user" isOpen={isOpen} onClose={() => setIsOpen(false)}>
         <div className="w-max h-max px-10 flex flex-col items-center transition-opacity duration-300 ease-in-out transform">
@@ -177,4 +274,4 @@ const ListUser = () => {
   );
 };
 
-export default ListUser;
+export default JadwalPraktik;
