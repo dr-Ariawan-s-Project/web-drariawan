@@ -7,7 +7,7 @@ import Navbar from '../../components/Navbar';
 import ListKuisioner from '../list_kuisioner';
 import ListUser from '../list_user';
 import ListPasien from '../list_pasien';
-
+import JadwalPraktik from '../jadwal_praktik';
 const Admin = () => {
   const path = window.location.href;
   const [page, setPage] = useState<string>('');
@@ -19,6 +19,8 @@ const Admin = () => {
       setPage('List Questioner');
     } else if (path.includes('list_pasien')) {
       setPage('List Patient');
+    } else if (path.includes('jadwal_praktik')) {
+      setPage('Jadwal Praktik');
     } else {
       setPage('Dashboard Admin');
     }
@@ -44,6 +46,8 @@ const Admin = () => {
             <ListKuisioner />
           ) : path.includes('list_pasien') ? (
             <ListPasien />
+          ) : path.includes('jadwal_praktik') ? (
+            <JadwalPraktik />
           ) : (
             <Chart />
           )}

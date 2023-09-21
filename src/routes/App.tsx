@@ -21,11 +21,13 @@ import VerifikasiEmail from '../pages/verifikasi_email';
 import LandingPertanyaan from '../pages/landing_pertanyaan';
 import KuisionerOption from '../pages/kuisioner_option';
 import AdminLogin from '../pages/admin_login';
-const App = () => {
-  axios.defaults.baseURL = 'https://drariawan.altapro.online';
-  swagger.defaults.baseURL =
-    'https://virtserver.swaggerhub.com/fauzilax/drariawanapi/1.0.0';
+import JadwalPraktik from '../pages/jadwal_praktik';
 
+const App = () => {
+  
+  axios.defaults.baseURL = 'https://drariawan.altapro.online';
+  swagger.defaults.baseURL = 'https://virtserver.swaggerhub.com/fauzilax/drariawanapi/1.0.0';
+  
   return (
     <BrowserRouter>
       <Routes>
@@ -53,6 +55,7 @@ const App = () => {
           <Route element={<ListKuisioner />} path="list_kuisioner" />
           <Route element={<ListUser />} path="list_user" />
           <Route element={<ListPasien />} path="list_pasien" />
+          <Route element={<JadwalPraktik />} path="jadwal_praktik" />
         </Route>
       </Routes>
     </BrowserRouter>

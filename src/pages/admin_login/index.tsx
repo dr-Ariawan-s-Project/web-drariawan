@@ -1,9 +1,9 @@
+import { useNavigate } from 'react-router-dom';
 import { Formik, Field, Form, ErrorMessage } from 'formik';
 import swagger from 'axios';
-import { useNavigate } from 'react-router-dom';
+import * as Yup from 'yup';
 
-import { userLogin } from '../../utils/yup/login';
-import { useSwalLogin } from '../../utils/swal/useSwalAuth';
+import { useSwalAuth } from '../../utils/swal/useSwalAuth';
 
 const AdminLogin = () => {
   const navigate = useNavigate();
@@ -22,11 +22,11 @@ const AdminLogin = () => {
       const token = response?.data?.data?.token;
       console.log(token);
       if (token) {
-        useSwalLogin('success', values.email.split('@')[0]);
+        useSwalAuth('login', values.email.split('@')[0]);
         navigate('/admin/');
       }
     } catch (error) {
-      useSwalLogin('failed');
+      console.log(error);
     }
   };
 
