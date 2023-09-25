@@ -1,6 +1,6 @@
 import { useState, useRef } from 'react';
 import { UserPlusIcon } from '@heroicons/react/24/solid';
-import { useFormik } from 'formik';
+import { Formik, Form, Field, ErrorMessage } from 'formik';
 
 import { useSwalCreate } from '../../utils/swal/useSwalData';
 import { createUserSchema } from '../../utils/yup/createUser';
@@ -18,30 +18,7 @@ const ListUser = () => {
   const fileInputRef = useRef<HTMLInputElement | null>(null);
 
   const userLabels = datas?.find((item) => item.type === 'user')?.title || [];
-
-  const formik = useFormik({
-    initialValues: {
-      name: '',
-      email: '',
-      specialization: '',
-      role: '',
-    },
-    validationSchema: createUserSchema,
-    onSubmit: (values: any) => {
-      values['image'] = selectedImage;
-      setIsOpen(false);
-      useSwalCreate('success');
-    },
-  });
-
-  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-
-    if (file) {
-      setSelectedImage(file);
-    }
-  };
-
+  const swalCreate = useSwalCreate();
   return (
     <section className="min-h-screen flex flex-col justify-center items-center">
       <div className="w-11/12 md:w-3/4 lg:w-2/3 xl:w-1/2 mt-2 md:mt-20 lg:mt-20">
@@ -76,101 +53,146 @@ const ListUser = () => {
       </div>
       <Modal id="add-new-user" isOpen={isOpen} onClose={() => setIsOpen(false)}>
         <div className="w-max h-max px-10 flex flex-col items-center transition-opacity duration-300 ease-in-out transform">
-          <form
-            className="w-96 py-32 flex flex-col gap-y-7"
-            onSubmit={formik.handleSubmit}
+          <Formik
+            initialValues={{
+              name: '',
+              email: '',
+              specialization: '',
+              role: '',
+            }}
+            validationSchema={createUserSchema}
+            onSubmit={(values) => {
+              values['image'] = selectedImage;
+              setIsOpen(false);
+              swalCreate('success');
+            }}
           >
-            {selectedImage ? (
-              <label
-                htmlFor="file-input"
-                className="cursor-pointer text-blue-500"
-              >
-                <img
-                  src={URL.createObjectURL(selectedImage)}
-                  alt="Selected Image"
-                  className="mx-auto rounded-full w-28 h-28"
-                />
-                <input
-                  type="file"
-                  id="file-input"
-                  accept="image/*"
-                  style={{ display: 'none' }}
-                  onChange={handleImageChange}
-                  ref={fileInputRef}
-                />
+            <Form className="w-96 py-32 flex flex-col gap-y-7">
+              {selectedImage ? (
+                <label
+                  htmlFor="file-input"
+                  className="cursor-pointer text-blue-500"
+                >
+                  <img
+                    src={URL.createObjectURL(selectedImage)}
+                    alt="Selected Image"
+                    className="mx-auto rounded-full w-28 h-28"
+                  />
+                  <input
+                    type="file"
+                    id="file-input"
+                    accept="image/*"
+                    style={{ display: 'none' }}
+                    onChange={(e) => {
+                      const file = e.target.files?.[0];
+                      if (file) {
+                        setSelectedImage(file);
+                      }
+                    }}
+                    ref={fileInputRef}
+                  />
+                </label>
+              ) : (
+                <label
+                  htmlFor="file-input"
+                  className="cursor-pointer text-blue-500"
+                >
+                  <UserPlusIcon
+                    className="mx-auto"
+                    color="#004878"
+                    width={100}
+                    height={100}
+                  />
+                  <input
+                    type="file"
+                    id="file-input"
+                    accept="image/*"
+                    style={{ display: 'none' }}
+                    onChange={(e) => {
+                      const file = e.target.files?.[0];
+                      if (file) {
+                        setSelectedImage(file);
+                      }
+                    }}
+                    ref={fileInputRef}
+                  />
+                </label>
+              )}
+              {selectedImage && (
+                <button
+                  className="w-40 h-10 text-health-blue-dark flex justify-center items-center mx-auto focus:outline-none border-none"
+                  onClick={() => setSelectedImage(null)}
+                >
+                  Remove Photo
+                </button>
+              )}
+              <Field
+                as={Input}
+                name="name"
+                id="name"
+                placeholder="Name"
+                className="text-gray-700"
+              />
+              <ErrorMessage
+                name="name"
+                component="div"
+                className="text-red-500"
+              />
+
+              <Field
+                as={Input}
+                name="email"
+                id="email"
+                placeholder="Email"
+                className="text-gray-700"
+              />
+              <ErrorMessage
+                name="email"
+                component="div"
+                className="text-red-500"
+              />
+
+              <Field
+                as={Input}
+                name="specialization"
+                id="specialization"
+                placeholder="Specialization"
+                className="text-gray-700"
+              />
+              <ErrorMessage
+                name="specialization"
+                component="div"
+                className="text-red-500"
+              />
+
+              <label className="block text-gray-700 text-sm font-bold mb-2">
+                Choose Role:
               </label>
-            ) : (
-              <label
-                htmlFor="file-input"
-                className="cursor-pointer text-blue-500"
+              <Field
+                as="select"
+                name="role"
+                id="role"
+                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
               >
-                <UserPlusIcon
-                  className="mx-auto"
-                  color="#004878"
-                  width={100}
-                  height={100}
-                />
-                <input
-                  type="file"
-                  id="file-input"
-                  accept="image/*"
-                  style={{ display: 'none' }}
-                  onChange={handleImageChange}
-                  ref={fileInputRef}
-                />
-              </label>
-            )}
-            {selectedImage && (
+                <option value="">Choose Role</option>
+                <option value="dokter">Dokter</option>
+                <option value="perawat">Perawat</option>
+                <option value="admin">Admin</option>
+              </Field>
+              <ErrorMessage
+                name="role"
+                component="div"
+                className="text-red-500"
+              />
+
               <button
-                className="w-40 h-10 text-health-blue-dark flex justify-center items-center mx-auto focus:outline-none border-none"
-                onClick={() => setSelectedImage(null)}
+                className="my-5 w-96 h-10 rounded-md font-semibold text-white flex justify-center items-center bg-health-blue-dark border-none focus:outline-none hover:bg-health-blue-reguler cursor-pointer"
+                type="submit"
               >
-                Remove Photo
+                Submit
               </button>
-            )}
-            <Input
-              value={formik.values.name}
-              onChange={formik.handleChange}
-              id="name"
-              name="name"
-              placeholder="Name"
-            />
-            <Input
-              value={formik.values.email}
-              onChange={formik.handleChange}
-              id="email"
-              name="email"
-              placeholder="Email"
-            />
-            <Input
-              value={formik.values.specialization}
-              onChange={formik.handleChange}
-              id="specialization"
-              name="specialization"
-              placeholder="Specialization"
-            />
-            <label className="block text-gray-700 text-sm font-bold mb-2">
-              Choose Role:
-            </label>
-            <select
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-              id="role"
-              name="role"
-              value={formik.values.role}
-              onChange={formik.handleChange}
-            >
-              <option value="">Choose Role</option>
-              <option value="dokter">Dokter</option>
-              <option value="perawat">Perawat</option>
-              <option value="admin">Admin</option>
-            </select>
-            <button
-              className="my-5 w-96 h-10 rounded-md font-semibold text-white flex justify-center items-center bg-health-blue-dark border-none focus:outline-none hover:bg-health-blue-reguler cursor-pointer"
-              type="submit"
-            >
-              Submit
-            </button>
-          </form>
+            </Form>
+          </Formik>
         </div>
       </Modal>
     </section>

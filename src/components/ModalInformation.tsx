@@ -10,9 +10,11 @@ const ModalInformation: FC<ModalInformationProps & { onClose: () => void }> = ({
   children,
 }) => {
   const message = (
-    <p>
-      1. Silahkan simak video hingga selesai. <br />
-      2. Checklist pada pilihan jawaban anda. <br />
+    <div>
+      <p>
+        1. Silahkan simak video hingga selesai. <br />
+        2. Checklist pada pilihan jawaban anda. <br />
+      </p>
       <div
         style={{
           display: 'flex',
@@ -25,8 +27,8 @@ const ModalInformation: FC<ModalInformationProps & { onClose: () => void }> = ({
         <p>untuk merekam</p>
         <br />
       </div>
-      4. Deskripsi lebih lanjut pernyataan anda tentang kebiasaan anda.
-    </p>
+      <p>4. Deskripsi lebih lanjut pernyataan anda tentang kebiasaan anda.</p>
+    </div>
   );
 
   return (

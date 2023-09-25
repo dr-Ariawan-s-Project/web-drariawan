@@ -99,8 +99,8 @@ const JadwalPraktik: React.FC = () => {
         accessor: 'Hari Praktik',
       },
       {
-        Header: 'Jam Praktik', // Update the accessor to match the property name
-        accessor: 'Jam Praktik', // Update the accessor to match the property name
+        Header: 'Jam Praktik',
+        accessor: 'Jam Praktik',
       },
       {
         Header: 'Actions',
