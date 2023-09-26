@@ -1,6 +1,7 @@
-import Swal from 'sweetalert2';
-import { login, logout } from '../response';
 import { NavigateFunction } from 'react-router-dom';
+import Swal from 'sweetalert2';
+
+import { login, logout } from '../response';
 
 export const useSwalAuth = (
   type: 'login' | 'logout',

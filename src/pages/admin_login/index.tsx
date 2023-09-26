@@ -1,18 +1,9 @@
-import * as Yup from 'yup';
 import { useNavigate } from 'react-router-dom';
 import { Formik, Field, Form, ErrorMessage } from 'formik';
 import swagger from 'axios';
-import { useSwalAuth } from '../../utils/swal/useSwalAuth';
+import * as Yup from 'yup';
 
-const validationSchema = Yup.object().shape({
-  email: Yup.string()
-    .required('Email wajib diisi')
-    .email('Alamat email tidak valid'),
-  password: Yup.string()
-    .required('Password wajib diisi')
-    .min(6, 'Password minimal 6 karakter'),
-  remember: Yup.boolean(),
-});
+import { useSwalAuth } from '../../utils/swal/useSwalAuth';
 
 const AdminLogin = () => {
   const navigate = useNavigate();
@@ -50,7 +41,7 @@ const AdminLogin = () => {
       <div className="max-w-md w-full mx-auto mt-4 bg-white p-8 border border-gray-200 shadow-md">
         <Formik
           initialValues={{ email: '', password: '', remember: false }}
-          validationSchema={validationSchema}
+          validationSchema={userLogin}
           onSubmit={handleSubmit}
         >
           {({ isSubmitting, isValid }) => (

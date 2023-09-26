@@ -7,11 +7,20 @@ export type ScoreState = {
 }
 
 export type LoginResponse = {
+  success : {
     title: string,
     text: string,
     icon: SweetAlertIcon,
     confirmButtonColor: string,
     confirmButtonText: string  
+  },
+  failed: {
+    title: string,
+    text: string,
+    icon: SweetAlertIcon,
+    confirmButtonColor: string,
+    confirmButtonText: string  
+  }
 }
 
 export type LogoutResponse = {

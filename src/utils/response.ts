@@ -1,11 +1,21 @@
 import { LoginResponse, LogoutResponse, ActionResponse } from "./data"
 
 export const login : LoginResponse = {
-    title: "Berhasil Login",
-    text: `Selamat datang`,
-    icon: 'success',
-    confirmButtonColor: '#004A7C',
-    confirmButtonText: "OK"
+    success : {
+        title: "Berhasil Login",
+        text: `Selamat datang`,
+        icon: 'success',
+        confirmButtonColor: '#004A7C',
+        confirmButtonText: "OK"
+    },
+    failed : {
+        title: "Gagal Login",
+        text: `Coba periksa email/password `,
+        icon: 'error',
+        confirmButtonColor: '#004A7C',
+        confirmButtonText: "OK"
+    }
+
 }
 
 export const logout: LogoutResponse = {
