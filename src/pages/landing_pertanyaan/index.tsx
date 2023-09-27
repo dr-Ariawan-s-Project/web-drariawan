@@ -28,7 +28,7 @@ const LandingPertanyaan = () => {
                     label="Mulai"
                     type="blue"
                     active={true}
-                    onClick={() => navigate('/lembar_persetujuan')}
+                    onClick={() => navigate('/kuisioner_option')}
                   />
                 </div>
               </div>

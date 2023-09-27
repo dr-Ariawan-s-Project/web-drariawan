@@ -24,7 +24,6 @@ import JadwalPraktik from '../pages/jadwal_praktik';
 
 const App = () => {
   axios.defaults.baseURL = 'https://drariawan.altapro.online';
-
   return (
     <BrowserRouter>
       <Routes>

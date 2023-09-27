@@ -13,6 +13,10 @@ const LembarPersetujuan = () => {
       setIsPageLoaded(true);
     }, 100);
   }, []);
+  const handleStartKuisioner = () => {
+    navigate('/kuisioner/1');
+  };
+
   return (
     <section
       className={`h-screen flex flex-col justify-center items-center transition-opacity ${
@@ -37,8 +41,7 @@ const LembarPersetujuan = () => {
                   label="Mulai"
                   type="blue"
                   active={true}
-                  onClick={() => navigate('/kuisioner')}
-                  textSize="text-base lg:text-lg xl:text-xl"
+                  onClick={handleStartKuisioner}
                 />
               </div>
             </div>
