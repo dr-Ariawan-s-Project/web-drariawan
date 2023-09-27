@@ -1,6 +1,5 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import axios from 'axios';
-import swagger from 'axios';
 
 import Admin from '../pages/admin';
 import OpsiAuth from '../pages/auth/OpsiAuth';

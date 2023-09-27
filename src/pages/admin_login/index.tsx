@@ -1,6 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import { Formik, Field, Form, ErrorMessage } from 'formik';
 import Swal from 'sweetalert2';
+import Cookies from 'js-cookie';
 
 import { useAuth } from '../../store/apiAuth';
 import { userLogin } from '../../utils/yup/login';
@@ -23,7 +24,7 @@ const AdminLogin = () => {
       };
       login(body.email, body.password);
       const token = data?.data?.token;
-      console.log(token);
+      Cookies.set('token', token);
       if (token) {
         useSwalAuth('login', values.email.split('@')[0]);
         navigate('/admin/');

@@ -1,4 +1,6 @@
 import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import Cookies from 'js-cookie';
 
 import Chart from '../../components/Chart';
 import Sidebar from '../../components/Sidebar';
@@ -10,6 +12,8 @@ import ListPasien from '../list_pasien';
 import JadwalPraktik from '../jadwal_praktik';
 const Admin = () => {
   const path = window.location.href;
+  const navigate = useNavigate();
+  const token = Cookies.get('token');
   const [page, setPage] = useState<string>('');
 
   const getPage = () => {
@@ -27,7 +31,11 @@ const Admin = () => {
   };
 
   useEffect(() => {
-    getPage();
+    if (token) {
+      getPage();
+    } else {
+      navigate('/admin/login');
+    }
   }, []);
 
   return (
