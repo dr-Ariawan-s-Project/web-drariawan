@@ -2,6 +2,7 @@ import { FC, useState } from 'react';
 import { UserIcon } from '@heroicons/react/24/outline';
 import { useNavigate } from 'react-router-dom';
 import moment from 'moment';
+import Cookies from 'js-cookie';
 
 import { useSwalAuth } from '../utils/swal/useSwalAuth';
 
@@ -21,6 +22,7 @@ const Navbar: FC<NavbarProps> = ({ page }) => {
   const handleLogout = () => {
     useSwalAuth('logout').then((result) => {
       if (result === true) {
+        Cookies.remove('token');
         navigate('/admin/login');
       }
     });

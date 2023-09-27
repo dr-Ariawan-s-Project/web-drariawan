@@ -1,12 +1,16 @@
 import { useNavigate } from 'react-router-dom';
 import { Formik, Field, Form, ErrorMessage } from 'formik';
-import swagger from 'axios';
-import * as Yup from 'yup';
+import Swal from 'sweetalert2';
+import Cookies from 'js-cookie';
 
+import { useAuth } from '../../store/apiAuth';
+import { userLogin } from '../../utils/yup/login';
 import { useSwalAuth } from '../../utils/swal/useSwalAuth';
 
 const AdminLogin = () => {
   const navigate = useNavigate();
+  const { login, data, error } = useAuth();
+  const errorMessage = error;
 
   const handleSubmit = async (values: {
     email: string;
@@ -18,18 +22,29 @@ const AdminLogin = () => {
         email: values.email,
         password: values.password,
       };
-      const response = await swagger.post('/login', body);
-      const token = response?.data?.data?.token;
-      console.log(token);
+      login(body.email, body.password);
+      const token = data?.data?.token;
+      Cookies.set('token', token);
       if (token) {
         useSwalAuth('login', values.email.split('@')[0]);
         navigate('/admin/');
+      } else if (errorMessage) {
+        Swal.fire({
+          icon: 'error',
+          title: 'Gagal Login',
+          text: `Pesan error : ${errorMessage}`,
+          confirmButtonText: 'OK',
+        });
       }
     } catch (error) {
-      console.log(error);
+      Swal.fire({
+        icon: 'error',
+        title: 'Gagal Login',
+        text: `Periksa email/password Anda`,
+        confirmButtonText: 'OK',
+      });
     }
   };
-
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col justify-center">
       <div className="max-w-md w-full mx-auto">
