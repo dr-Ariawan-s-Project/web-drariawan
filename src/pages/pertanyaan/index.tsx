@@ -16,7 +16,7 @@ const Pertanyaan = () => {
   const location = useLocation();
   const data = location?.state?.data;
   const type = data?.type;
-  const { questionId } = useParams();
+  const { questionId } = useParams() as any;
   console.log('Question ID from URL:', questionId);
 
   const { getScore } = useScore();
@@ -54,8 +54,8 @@ const Pertanyaan = () => {
     };
   }, []);
 
-  const currentQuestion = questionaireData?.data?.find(
-    (question) => question.id === parseInt(questionId)
+  const currentQuestion: any = questionaireData?.data?.find(
+    (question: any) => question.id === parseInt(questionId)
   );
   if (!currentQuestion) {
     if (loading) {
@@ -85,8 +85,8 @@ const Pertanyaan = () => {
 
   const handleSubmit = () => {
     const nextQuestionId = parseInt(questionId || '0') + 1;
-    const nextQuestion = questionaireData?.data?.find(
-      (question) => question.id === nextQuestionId
+    const nextQuestion: any = questionaireData?.data?.find(
+      (question: any) => question.id === nextQuestionId
     );
 
     if (nextQuestion) {

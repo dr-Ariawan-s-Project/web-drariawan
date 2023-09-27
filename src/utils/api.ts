@@ -1,5 +1,5 @@
 export type QuestionaireState = {
-  data: any[];
+  data: any;
   loading: boolean;
   error: string | null;
   getQuestionaire: () => Promise<void>;
