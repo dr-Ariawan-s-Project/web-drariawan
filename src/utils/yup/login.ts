@@ -1,10 +1,7 @@
-import * as yup from 'yup';
+import * as yup from 'yup'
 
 const shape = {
-  email: yup
-    .string()
-    .required('Email wajib diisi')
-    .email('Alamat email tidak valid'),
+  email: yup.string().required('Email wajib diisi').email('Alamat email tidak valid'),
   password: yup.string().required('Password wajib diisi'),
   remember: yup.boolean(),
 };

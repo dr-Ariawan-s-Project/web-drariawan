@@ -1,8 +1,9 @@
 import { FC, useState } from 'react';
 import { UserIcon } from '@heroicons/react/24/outline';
-import { useSwalAuth } from '../utils/swal/useSwalAuth';
-import moment from 'moment';
 import { useNavigate } from 'react-router-dom';
+import moment from 'moment';
+
+import { useSwalAuth } from '../utils/swal/useSwalAuth';
 
 interface NavbarProps {
   page: string;
