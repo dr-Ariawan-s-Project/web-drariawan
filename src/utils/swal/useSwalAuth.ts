@@ -11,11 +11,11 @@ export const useSwalAuth = (
   return new Promise((resolve) => {
     if (type === 'login') {
       Swal.fire({
-        title: login.title,
-        text: `${login.text}, ${data}!`,
+        title: login.success.title,
+        text: `${login.success.text}, ${data}!`,
         icon: 'success',
-        confirmButtonColor: login.confirmButtonColor,
-        confirmButtonText: login.confirmButtonText,
+        confirmButtonColor: login.success.confirmButtonColor,
+        confirmButtonText: login.success.confirmButtonText,
       }).then((result) => {
         if (result.isConfirmed) {
           resolve(true);
