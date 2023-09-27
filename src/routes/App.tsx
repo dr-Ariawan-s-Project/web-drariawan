@@ -24,10 +24,8 @@ import AdminLogin from '../pages/admin_login';
 import JadwalPraktik from '../pages/jadwal_praktik';
 
 const App = () => {
-  
   axios.defaults.baseURL = 'https://drariawan.altapro.online';
-  swagger.defaults.baseURL = 'https://virtserver.swaggerhub.com/fauzilax/drariawanapi/1.0.0';
-  
+
   return (
     <BrowserRouter>
       <Routes>
