@@ -9,53 +9,36 @@ import RadioButton from '../../components/RadioButton';
 import Loading from '../../components/Loading';
 import ModalInformation from '../../components/ModalInformation';
 import IconInfo from '../../assets/icons/information.svg';
+import { useQuestionaire } from '../../store/apiQuestionaire';
 
 const Pertanyaan = () => {
   const navigate = useNavigate();
-  const { questionId } = useParams();
   const location = useLocation();
   const data = location?.state?.data;
   const type = data?.type;
-  const choices = data?.choices;
+  const { questionId } = useParams();
+  console.log('Question ID from URL:', questionId);
 
   const { getScore } = useScore();
   const [transition, setTransition] = useState<boolean>(true);
   const [fadeIn, setFadeIn] = useState<boolean>(false);
   const [text, setText] = useState<string>('');
-  const [check, setCheck] = useState<boolean>(false);
-  const [modalIsOpen, setModalIsOpen] = useState(false);
+  const [check, setCheck] = useState<number | null>(null);
+  const [modalIsOpen, setModalIsOpen] = useState<boolean>(false);
 
-  const handleSaveAudio = (blob: Blob) => {
-    const audioUrl = URL.createObjectURL(blob);
-    console.log('audio : ', audioUrl);
-  };
+  const {
+    data: questionaireData,
+    loading,
+    error,
+    getQuestionaire,
+  } = useQuestionaire();
+  console.log('questionaireData:', questionaireData);
 
-  const handleChecked = (item: any) => {
-    setCheck(item?.id);
-    getScore(item?.score, data?.id);
-  };
-
-  const handleSubmit = () => {
-    if (type === 'choices') {
-      navigate(`success/`);
-    } else {
-      if (typeof questionId === 'string') {
-        const nextQuestionId = parseInt(questionId) + 1;
-        navigate(`/kuisioner/${nextQuestionId}`, {
-          state: {
-            data: data,
-          },
-        });
-      }
-    }
-  };
-
-  const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    const textarea = e.target;
-    textarea.style.height = 'auto';
-    textarea.style.height = `${textarea.scrollHeight}px`;
-    setText(e.target.value);
-  };
+  useEffect(() => {
+    getQuestionaire().then((response) => {
+      console.log('Data from API:', response);
+    });
+  }, []);
 
   useEffect(() => {
     const transitionTimeout = setTimeout(() => {
@@ -71,6 +54,57 @@ const Pertanyaan = () => {
     };
   }, []);
 
+  const currentQuestion = questionaireData?.data?.find(
+    (question) => question.id === parseInt(questionId)
+  );
+  if (!currentQuestion) {
+    if (loading) {
+      return;
+    } else if (error) {
+      return <div>Error: {error}</div>;
+    } else {
+      navigate(`/kuisioner/${questionId}/finish`);
+      return null;
+    }
+  }
+
+  console.log('Current Question:', currentQuestion);
+
+  const handleSaveAudio = (blob: Blob) => {
+    const audioUrl = URL.createObjectURL(blob);
+    console.log('audio : ', audioUrl);
+  };
+
+  const handleChecked = (
+    item: { id: number; score: number },
+    dataId: number
+  ) => {
+    setCheck(item?.id);
+    getScore(item?.score, dataId);
+  };
+
+  const handleSubmit = () => {
+    const nextQuestionId = parseInt(questionId || '0') + 1;
+    const nextQuestion = questionaireData?.data?.find(
+      (question) => question.id === nextQuestionId
+    );
+
+    if (nextQuestion) {
+      navigate(`/kuisioner/${nextQuestionId}`);
+    } else {
+      navigate(`/kuisioner/finish`);
+    }
+
+    setText('');
+  };
+
+  const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    const textarea = e.target;
+    textarea.style.height = 'auto';
+    textarea.style.height = `${textarea.scrollHeight}px`;
+    setText(e.target.value);
+  };
+
   return (
     <>
       {transition === true ? (
@@ -83,7 +117,7 @@ const Pertanyaan = () => {
         >
           <div className="flex">
             <h2 className="text-center font-lato_black text-xl sm:text-base md:text-xl lg:text-2xl mb-4 ">
-              {data?.description}
+              {currentQuestion?.description}
             </h2>
             <div>
               <button onClick={() => setModalIsOpen(true)}>
@@ -99,16 +133,16 @@ const Pertanyaan = () => {
           <div className="my-4">
             {type === 'text' ? (
               <div className="mx-10">
-                <VideoPlayer src={data?.question} />
+                <VideoPlayer src={currentQuestion?.question} />
               </div>
-            ) : choices !== null ? (
-              choices?.map((item: any, index: any) => {
+            ) : currentQuestion.choices !== null ? (
+              currentQuestion.choices.map((item: any, index: any) => {
                 return (
                   <div className="mx-10" key={index}>
                     <RadioButton
                       label={item?.option}
                       checked={check === item?.id}
-                      onChange={() => handleChecked(item)}
+                      onChange={() => handleChecked(item, currentQuestion.id)}
                     />
                   </div>
                 );
@@ -117,6 +151,7 @@ const Pertanyaan = () => {
               <Loading id="loading" isOpen={true} />
             )}
           </div>
+
           <div className="grid grid-cols-1 gap-y-5 mt-10">
             <div className="flex items-center border-b border-gray-400 py-2">
               <textarea

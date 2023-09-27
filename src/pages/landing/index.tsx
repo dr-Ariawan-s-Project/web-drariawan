@@ -95,7 +95,7 @@ const Landing = () => {
                   label="Mulai"
                   type="blue"
                   active={true}
-                  onClick={() => navigate('/lembar_persetujuan')}
+                  onClick={() => navigate('/data_diri')}
                 />
               </div>
             </div>

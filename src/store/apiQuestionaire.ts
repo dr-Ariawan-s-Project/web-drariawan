@@ -3,6 +3,10 @@ import axios from 'axios';
 
 import { QuestionaireState } from '../utils/api';
 
+const axiosInstance = axios.create({
+  baseURL: 'https://drariawan.altapro.online',
+});
+
 export const useQuestionaire = create<QuestionaireState>((set) => ({
   data: [],
   loading: false,
@@ -10,16 +14,22 @@ export const useQuestionaire = create<QuestionaireState>((set) => ({
   getQuestionaire: async () => {
     set({ loading: true, error: null });
     try {
-      const response = await axios.get('/v1/questioner');
+      const response = await axiosInstance.get('/v1/questioner');
+      console.log('Response from API:', response.data);
       set({ data: response.data, loading: false });
     } catch (error) {
-      set({ loading: false, error: 'error get questioner' });
+      console.error('Error fetching questionaire:', error);
+      set({
+        loading: false,
+        error: 'Terjadi kesalahan saat mengambil data questionaire',
+      });
     }
   },
+
   postQuestionaire: async (newData) => {
     set({ loading: true, error: null });
     try {
-      const response = await axios.post('/v1/questioner', newData);
+      const response = await axiosInstance.post('/v1/questioner', newData);
       set({ data: response.data, loading: false });
       return response.data;
     } catch (error) {
@@ -30,7 +40,7 @@ export const useQuestionaire = create<QuestionaireState>((set) => ({
   validateQuestionaire: async (validateData) => {
     set({ loading: true, error: null });
     try {
-      const response = await axios.post(
+      const response = await axiosInstance.post(
         '/v1/questioner/validate',
         validateData
       );
