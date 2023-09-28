@@ -11,7 +11,7 @@ import Button from '../../components/Button';
 const DataDiri = () => {
   const navigate: NavigateFunction = useNavigate();
   const { setEmail: setEmailInStore } = useEmailStore();
-  const { validateQuestionaire } = useQuestionaire();
+  const { validateQuestionaire, data } = useQuestionaire();
 
   const formik = useFormik({
     initialValues: {
@@ -32,7 +32,11 @@ const DataDiri = () => {
           partner_email: values.patientEmail,
         };
         validateQuestionaire(body);
-        navigate('/verifikasi_email');
+        navigate('/verifikasi_email', {
+          state: {
+            code_attempt: data?.data?.code_attempt,
+          },
+        });
       } catch (error) {
         useSwalCreate('failed');
       }
