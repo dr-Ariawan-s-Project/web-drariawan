@@ -1,6 +1,7 @@
+import { useNavigate } from 'react-router-dom';
+
 import DiriSendiri from '../../assets/icons/card_light.svg';
 import Pasangan from '../../assets/icons/card_bold.svg';
-import { useNavigate } from 'react-router-dom';
 
 const KuisionerOption = () => {
   const navigate = useNavigate();

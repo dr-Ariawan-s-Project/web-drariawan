@@ -10,6 +10,7 @@ import ListKuisioner from '../list_kuisioner';
 import ListUser from '../list_user';
 import ListPasien from '../list_pasien';
 import JadwalPraktik from '../jadwal_praktik';
+
 const Admin = () => {
   const path = window.location.href;
   const navigate = useNavigate();

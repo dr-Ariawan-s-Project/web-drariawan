@@ -1,7 +1,8 @@
+import { NavigateFunction, useNavigate } from 'react-router-dom';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
+
 import Button from '../../components/Button';
-import { NavigateFunction, useNavigate } from 'react-router-dom';
 import { useEmailStore } from '../../store/getEmail';
 
 const DataDiri = () => {
