@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useLocation, useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { useScore } from '../../store/getScore';
 import VideoPlayer from '../../components/VideoPlayer';
 import AudioRecorder from '../../components/AudioRecorder';
@@ -12,32 +12,23 @@ import IconInfo from '../../assets/icons/information.svg';
 import { useQuestionaire } from '../../store/apiQuestionaire';
 
 const Pertanyaan = () => {
+  const { data, loading, error, getQuestionaire } = useQuestionaire();
   const navigate = useNavigate();
-  const location = useLocation();
-  const data = location?.state?.data;
-  const type = data?.type;
   const { questionId } = useParams() as any;
-  console.log('Question ID from URL:', questionId);
-
   const { getScore } = useScore();
+
   const [transition, setTransition] = useState<boolean>(true);
   const [fadeIn, setFadeIn] = useState<boolean>(false);
   const [text, setText] = useState<string>('');
   const [check, setCheck] = useState<number | null>(null);
   const [modalIsOpen, setModalIsOpen] = useState<boolean>(false);
 
-  const {
-    data: questionaireData,
-    loading,
-    error,
-    getQuestionaire,
-  } = useQuestionaire();
-  console.log('questionaireData:', questionaireData);
+  const currentQuestion: any = data?.data?.find(
+    (question: any) => question.id === parseInt(questionId)
+  );
 
   useEffect(() => {
-    getQuestionaire().then((response) => {
-      console.log('Data from API:', response);
-    });
+    getQuestionaire();
   }, []);
 
   useEffect(() => {
@@ -54,9 +45,6 @@ const Pertanyaan = () => {
     };
   }, []);
 
-  const currentQuestion: any = questionaireData?.data?.find(
-    (question: any) => question.id === parseInt(questionId)
-  );
   if (!currentQuestion) {
     if (loading) {
       return;
@@ -67,8 +55,6 @@ const Pertanyaan = () => {
       return null;
     }
   }
-
-  console.log('Current Question:', currentQuestion);
 
   const handleSaveAudio = (blob: Blob) => {
     const audioUrl = URL.createObjectURL(blob);
@@ -85,7 +71,7 @@ const Pertanyaan = () => {
 
   const handleSubmit = () => {
     const nextQuestionId = parseInt(questionId || '0') + 1;
-    const nextQuestion: any = questionaireData?.data?.find(
+    const nextQuestion: any = data?.data?.find(
       (question: any) => question.id === nextQuestionId
     );
 
@@ -94,7 +80,6 @@ const Pertanyaan = () => {
     } else {
       navigate(`/kuisioner/finish`);
     }
-
     setText('');
   };
 
@@ -131,7 +116,7 @@ const Pertanyaan = () => {
             </div>
           </div>
           <div className="my-4">
-            {type === 'text' ? (
+            {data ? (
               <div className="mx-10">
                 <VideoPlayer src={currentQuestion?.question} />
               </div>

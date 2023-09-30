@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { NavigateFunction, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
+
 import LandingIllustration from '../../assets/illustrations/landing_bg.svg';
 import IllustrationPhoneDoctor from '../../assets/illustrations/phone-doctor.svg';
 import IllustrationPhonePatient from '../../assets/illustrations/phone-patient.svg';
@@ -10,14 +11,10 @@ import Button from '../../components/Button';
 
 const Landing = () => {
   const navigate: NavigateFunction = useNavigate();
-  // const [fadeIn, setFadeIn] = useState<boolean>(false);
   const [showPhoneDoctor, setShowPhoneDoctor] = useState<boolean>(false);
   const [showPhonePatient, setShowPhonePatient] = useState<boolean>(false);
-  useEffect(() => {
-    // const fadeInTimeout = setTimeout(() => {
-    //   setFadeIn(true);
-    // }, 1600);
 
+  useEffect(() => {
     const showPhoneDoctorTimeout = setTimeout(() => {
       setShowPhoneDoctor(true);
     }, 900);
@@ -27,7 +24,6 @@ const Landing = () => {
     }, 1000);
 
     return () => {
-      // clearTimeout(fadeInTimeout);
       clearTimeout(showPhoneDoctorTimeout);
       clearTimeout(showPhonePatientTimeout);
     };

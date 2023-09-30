@@ -1,36 +1,45 @@
-import { useFormik } from 'formik';
-import * as Yup from 'yup';
-import Button from '../../components/Button';
 import { NavigateFunction, useNavigate } from 'react-router-dom';
+import { useFormik } from 'formik';
+
 import { useEmailStore } from '../../store/getEmail';
+import { useQuestionaire } from '../../store/apiQuestionaire';
+import { createDataDiri } from '../../utils/yup/data_diri';
+import { useSwalCreate } from '../../utils/swal/useSwalData';
+
+import Button from '../../components/Button';
 
 const DataDiri = () => {
   const navigate: NavigateFunction = useNavigate();
   const { setEmail: setEmailInStore } = useEmailStore();
-
-  const emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
-  const phonePattern = /^\d{10,}$/;
+  const { validateQuestionaire, data } = useQuestionaire();
 
   const formik = useFormik({
     initialValues: {
       email: '',
       phoneNumber: '',
+      patientStatus: '',
+      patientEmail: '',
     },
-    validationSchema: Yup.object({
-      email: Yup.string()
-        .required('Email wajib diisi')
-        .matches(emailPattern, 'Email tidak valid'),
-      phoneNumber: Yup.string()
-        .required('No Handphone wajib diisi')
-        .matches(
-          phonePattern,
-          'Masukkan nomor handphone yang valid (minimal 10 angka)'
-        ),
-    }),
-    onSubmit: (values) => {
+    validationSchema: createDataDiri,
+    onSubmit: async (values) => {
       setEmailInStore(values.email);
       localStorage.setItem('userEmail', values.email);
-      navigate('/verifikasi_email');
+      try {
+        const body = {
+          email: values.email,
+          phone: values.phoneNumber,
+          as: values.patientStatus,
+          partner_email: values.patientEmail,
+        };
+        validateQuestionaire(body);
+        navigate('/verifikasi_email', {
+          state: {
+            code_attempt: data?.data?.code_attempt,
+          },
+        });
+      } catch (error) {
+        useSwalCreate('failed');
+      }
     },
   });
 
@@ -92,6 +101,55 @@ const DataDiri = () => {
             <p className="text-red-500">{formik.errors.phoneNumber}</p>
           )}
         </div>
+        <div className="mb-4">
+          <label
+            className="block text-gray-700 text-sm font-bold mb-2"
+            htmlFor="user-type"
+          >
+            Pilih Status<span className="text-red-500 ml-1">*</span>
+          </label>
+          <select
+            className={`bg-gray-100 appearance-none border-2 border-gray-100 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500 ${
+              formik.touched.patientStatus && formik.errors.patientStatus
+                ? 'border-red-500'
+                : ''
+            }`}
+            id="pilih-status"
+            {...formik.getFieldProps('patientStatus')}
+          >
+            <option value="">Pilih Status</option>
+            <option value="myself">Myself</option>
+            <option value="patient">Patient</option>
+          </select>
+          {formik.touched.patientStatus && formik.errors.patientStatus && (
+            <p className="text-red-500">{formik.errors.patientStatus}</p>
+          )}
+        </div>
+        {formik.values.patientStatus === 'patient' && (
+          <div className="mb-4">
+            <label
+              className="block text-gray-700 text-sm font-bold mb-2"
+              htmlFor="patient-email"
+            >
+              Patient Email<span className="text-red-500 ml-1">*</span>
+            </label>
+            <input
+              className={`bg-gray-100 appearance-none border-2 border-gray-100 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500 ${
+                formik.touched.patientEmail && formik.errors.patientEmail
+                  ? 'border-red-500'
+                  : ''
+              }`}
+              id="patient-email"
+              type="email"
+              placeholder="Patient Email"
+              {...formik.getFieldProps('patientEmail')}
+            />
+            {formik.touched.patientEmail && formik.errors.patientEmail && (
+              <p className="text-red-500">{formik.errors.patientEmail}</p>
+            )}
+          </div>
+        )}
+
         <div className="flex justify-end mt-20">
           <div className="font-semibold">
             <Button

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { TrashIcon, PencilIcon } from '@heroicons/react/24/outline';
 import { faker } from '@faker-js/faker';
 
-const TableRow = ({ data, index }) => (
+const TableRow = ({ data, index }: any) => (
   <tr className="border-b text-left">
     <td className="p-2">{index + 1}</td>
     <td className="p-2">{data.col1}</td>
@@ -22,7 +22,7 @@ const TableRow = ({ data, index }) => (
 const ListPasien = () => {
   const [page, setPage] = useState<number>(0);
 
-  const data = React.useMemo(() => {
+  const data: any = React.useMemo(() => {
     const fakeData = [];
     for (let i = 0; i < 10; i++) {
       const tanggalPraktik = faker.date.weekday();
@@ -52,7 +52,7 @@ const ListPasien = () => {
               </tr>
             </thead>
             <tbody>
-              {data.map((rowData, index) => (
+              {data.map((rowData: [], index: any) => (
                 <TableRow key={index} data={rowData} index={index} />
               ))}
             </tbody>

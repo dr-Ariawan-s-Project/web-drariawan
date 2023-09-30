@@ -48,7 +48,7 @@ const JadwalPraktik: React.FC = () => {
       setSelectedImage(file);
     }
   };
-  const data = React.useMemo(() => {
+  const data: any = React.useMemo(() => {
     const dummyData: DoctorData[] = [
       {
         No: 1,
@@ -72,7 +72,7 @@ const JadwalPraktik: React.FC = () => {
     return dummyData;
   }, []);
 
-  const columns = React.useMemo(
+  const columns: any = React.useMemo(
     () => [
       {
         Header: 'No',
