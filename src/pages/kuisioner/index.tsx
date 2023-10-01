@@ -37,7 +37,6 @@ const LembarPersetujuan = () => {
               <Checkbox label={data.agree} />
 
               <div className="lg:mt-auto mt-3 font-semibold">
-                {/* Tambahkan argument questionId pada onClick */}
                 <Button
                   id="mulai"
                   label="Mulai"
