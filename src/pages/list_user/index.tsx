@@ -61,7 +61,7 @@ const ListUser = () => {
               role: '',
             }}
             validationSchema={createUserSchema}
-            onSubmit={(values) => {
+            onSubmit={(values: any) => {
               values['image'] = selectedImage;
               setIsOpen(false);
               swalCreate('success');

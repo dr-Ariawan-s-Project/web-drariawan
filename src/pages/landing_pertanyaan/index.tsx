@@ -1,5 +1,6 @@
-import Lottie from 'lottie-react';
 import { NavigateFunction, useNavigate } from 'react-router-dom';
+import Lottie from 'lottie-react';
+
 import PatientExamination from '../../assets/animations/PatientExamination.json';
 import data from '../../datas/landing_pertanyaan/landing_pertanyaan.json';
 

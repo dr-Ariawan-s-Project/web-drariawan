@@ -1,5 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
+
 import data from '../../datas/lembar_persetujuan/lembar_persetujuan.json';
 import Button from '../../components/Button';
 import Checkbox from '../../components/Checkbox';
@@ -14,7 +15,7 @@ const LembarPersetujuan = () => {
     }, 100);
   }, []);
 
-  const handleStartKuisioner = (questionId) => {
+  const handleStartKuisioner = (questionId: string | number) => {
     navigate(`/kuisioner/${questionId}`);
   };
 
