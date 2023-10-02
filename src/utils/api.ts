@@ -24,3 +24,14 @@ export type AuthState = {
   error: string | null;
   login: (email: string, password: string) => Promise<void>;
 };
+
+export type PatientState = {
+  data: any[];
+  loading: boolean;
+  error: string | null;
+  getPatient: () => Promise<void>;
+  getList: () => Promise<void>;
+  postPatient: (data: any) => Promise<void>;
+  putPatient: (id: number, data: any) => Promise<void>;
+  deletePatient: (id: number) => Promise<void>;
+};
