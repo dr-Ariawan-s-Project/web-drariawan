@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
 import { TrashIcon, PencilIcon } from '@heroicons/react/24/outline';
-import faker from '@faker-js/faker'
 
 import { usePatient } from '../../store/apiPatient';
 import { PatientState } from '../../utils/api';
@@ -27,23 +26,11 @@ const TableRow: React.FC<{ data: PatientState['data'][0]; index: number }> = ({
 
 const ListPasien = () => {
   const [page, setPage] = useState<number>(0);
-  const { data: patients, getPatient } = usePatient();
+  const { data: patients, getPatient } = usePatient() as any;
 
   useEffect(() => {
     getPatient();
   }, [getPatient]);
-  const data: any = React.useMemo(() => {
-    const fakeData = [];
-    for (let i = 0; i < 10; i++) {
-      const tanggalPraktik = faker.date.weekday();
-      fakeData.push({
-        col1: faker.person.firstName(),
-        col4: faker.person.firstName(),
-        col5: tanggalPraktik,
-      });
-    }
-    return fakeData;
-  }, []);
 
   return (
     <section className="min-h-screen flex flex-col justify-center items-center">
@@ -62,9 +49,9 @@ const ListPasien = () => {
               </tr>
             </thead>
             <tbody>
-              {patients.map((rowData, index) => (
-                <TableRow key={index} data={rowData} index={index} />
-              ))}
+              {patients?.data?.map((rowData: any, index: any) => {
+                return <TableRow key={index} data={rowData} index={index} />;
+              })}
             </tbody>
           </table>
         </div>
