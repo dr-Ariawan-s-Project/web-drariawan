@@ -11,7 +11,7 @@ import Button from '../../components/Button';
 const DataDiri = () => {
   const navigate: NavigateFunction = useNavigate();
   const { setEmail: setEmailInStore } = useEmailStore();
-  const { validateQuestionaire, data } = useQuestionaire();
+  const { validateQuestionaire, data, error } = useQuestionaire() as any;
 
   const formik = useFormik({
     initialValues: {
@@ -31,17 +31,23 @@ const DataDiri = () => {
           as: values.patientStatus,
           partner_email: values.patientEmail,
         };
-        validateQuestionaire(body);
+        await validateQuestionaire(body);
+        console.log('error : ', error?.response);
         navigate('/verifikasi_email', {
           state: {
             code_attempt: data?.data?.code_attempt,
           },
         });
       } catch (error) {
-        useSwalCreate('failed');
+        useSwalCreate(
+          'failed',
+          'Pengguna ini sudah mengambil test, silahkan pakai akun lain'
+        );
       }
     },
   });
+
+  console.log('data', data);
 
   return (
     <section className="flex flex-col justify-center items-center min-h-screen px-4 sm:px-6 md:px-8 lg:px-12 mt-18">

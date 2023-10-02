@@ -41,7 +41,10 @@ export const useQuestionaire = create<QuestionaireState>((set) => ({
     set({ loading: true, error: null });
     try {
       const response = await axiosInstance.post('/v1/questioner/validate', {
-        validateData,
+        email: validateData.email,
+        phone: validateData.phone,
+        as: validateData.as,
+        partner_email: validateData.partner_email,
       });
       set({ data: response.data, loading: false });
       return response.data;
