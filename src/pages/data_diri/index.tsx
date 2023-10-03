@@ -119,7 +119,7 @@ const DataDiri = () => {
           >
             <option value="">Pilih Status</option>
             <option value="myself">Myself</option>
-            <option value="patient">Patient</option>
+            <option value="patient">Partner</option>
           </select>
           {formik.touched.patientStatus && formik.errors.patientStatus && (
             <p className="text-red-500">{formik.errors.patientStatus}</p>
@@ -131,7 +131,7 @@ const DataDiri = () => {
               className="block text-gray-700 text-sm font-bold mb-2"
               htmlFor="patient-email"
             >
-              Patient Email<span className="text-red-500 ml-1">*</span>
+              Partner Email<span className="text-red-500 ml-1">*</span>
             </label>
             <input
               className={`bg-gray-100 appearance-none border-2 border-gray-100 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500 ${
@@ -141,7 +141,7 @@ const DataDiri = () => {
               }`}
               id="patient-email"
               type="email"
-              placeholder="Patient Email"
+              placeholder="Partner Email"
               {...formik.getFieldProps('patientEmail')}
             />
             {formik.touched.patientEmail && formik.errors.patientEmail && (
