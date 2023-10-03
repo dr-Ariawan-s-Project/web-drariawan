@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 
 interface Checkbox {
   label: string;
-  initialChecked: boolean;
+  initialChecked?: boolean;
 }
 
 const Checkbox: FC<Checkbox> = ({ label, initialChecked }) => {

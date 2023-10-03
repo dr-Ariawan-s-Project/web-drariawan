@@ -36,7 +36,6 @@ const LembarPersetujuan = () => {
                 {data.description}
               </p>
               <Checkbox label={data.agree} />
-
               <div className="lg:mt-auto mt-3 font-semibold">
                 <Button
                   id="mulai"
