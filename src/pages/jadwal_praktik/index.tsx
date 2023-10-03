@@ -1,13 +1,16 @@
 import React, { useState, useRef } from 'react';
+import { TrashIcon, PencilIcon } from '@heroicons/react/24/outline';
+import { useTable } from 'react-table';
 import { useFormik } from 'formik';
 import { UserPlusIcon } from '@heroicons/react/24/solid';
+
 import CircleButton from '../../components/CircleButton';
 import Modal from '../../components/Modal';
 import Input from '../../components/Input';
-import { createUserSchema } from '../../utils/yup/createUser';
+
 import { datas } from '../../datas/circle_button/circle_button.json';
-import { TrashIcon, PencilIcon } from '@heroicons/react/24/outline';
-import { useTable } from 'react-table';
+
+import { createUserSchema } from '../../utils/yup/createUser';
 import { useSwalCreate } from '../../utils/swal/useSwalData';
 
 interface DoctorData {
@@ -20,11 +23,10 @@ interface DoctorData {
   'Jam Praktik': string;
 }
 
-const JadwalPraktik: React.FC = () => {
+const JadwalPraktik = () => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
-  const showSwalCreate = useSwalCreate();
 
   const userLabels = datas?.find((item) => item.type === 'user')?.title || [];
   const formik = useFormik({
@@ -38,7 +40,7 @@ const JadwalPraktik: React.FC = () => {
     onSubmit: (values: any) => {
       values['image'] = selectedImage;
       setIsOpen(false);
-      showSwalCreate('success');
+      useSwalCreate('success');
     },
   });
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
