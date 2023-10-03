@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { useScore } from '../../store/getScore';
+import Cookies from 'js-cookie';
+
 import VideoPlayer from '../../components/VideoPlayer';
 import AudioRecorder from '../../components/AudioRecorder';
 import Button from '../../components/Button';
@@ -9,11 +10,14 @@ import RadioButton from '../../components/RadioButton';
 import Loading from '../../components/Loading';
 import ModalInformation from '../../components/ModalInformation';
 import IconInfo from '../../assets/icons/information.svg';
+
+import { useScore } from '../../store/getScore';
 import { useQuestionaire } from '../../store/apiQuestionaire';
 
 const Pertanyaan = () => {
-  const { data, loading, error, getQuestionaire } = useQuestionaire();
   const navigate = useNavigate();
+  const code_attempt = Cookies.get('code_attempt');
+  const { data, loading, error, getQuestionaire } = useQuestionaire() as any;
   const { questionId } = useParams() as any;
   const { getScore } = useScore();
 
@@ -23,9 +27,9 @@ const Pertanyaan = () => {
   const [check, setCheck] = useState<number | null>(null);
   const [modalIsOpen, setModalIsOpen] = useState<boolean>(false);
 
-  const currentQuestion: any = data?.data?.find(
-    (question: any) => question.id === parseInt(questionId)
-  );
+  const currentQuestion: any = code_attempt
+    ? data?.data?.find((question: any) => question.id === parseInt(questionId))
+    : null;
 
   useEffect(() => {
     getQuestionaire();
@@ -52,7 +56,6 @@ const Pertanyaan = () => {
       return <div>Error: {error}</div>;
     } else {
       navigate(`/kuisioner/${questionId}/finish`);
-      return null;
     }
   }
 

@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react';
 import { NavigateFunction, useNavigate } from 'react-router-dom';
 import { useFormik } from 'formik';
 
@@ -11,7 +12,7 @@ import Button from '../../components/Button';
 const DataDiri = () => {
   const navigate: NavigateFunction = useNavigate();
   const { setEmail: setEmailInStore } = useEmailStore();
-  const { validateQuestionaire, data, error } = useQuestionaire() as any;
+  const { validateQuestionaire, data } = useQuestionaire() as any;
 
   const formik = useFormik({
     initialValues: {
@@ -32,12 +33,6 @@ const DataDiri = () => {
           partner_email: values.patientEmail,
         };
         await validateQuestionaire(body);
-        console.log('error : ', error?.response);
-        navigate('/verifikasi_email', {
-          state: {
-            code_attempt: data?.data?.code_attempt,
-          },
-        });
       } catch (error) {
         useSwalCreate(
           'failed',
@@ -47,7 +42,17 @@ const DataDiri = () => {
     },
   });
 
-  console.log('data', data);
+  useEffect(() => {
+    const code_attempt = data?.data?.code_attempt;
+    console.log('code att : ', code_attempt);
+    if (code_attempt) {
+      navigate('/verifikasi_email', {
+        state: {
+          code_attempt: code_attempt,
+        },
+      });
+    }
+  }, [data]);
 
   return (
     <section className="flex flex-col justify-center items-center min-h-screen px-4 sm:px-6 md:px-8 lg:px-12 mt-18">
