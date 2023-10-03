@@ -17,8 +17,9 @@ const ListUser = () => {
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
 
-  const userLabels = datas?.find((item) => item.type === 'user')?.title || [];
-  const swalCreate = useSwalCreate();
+  const userLabels: any =
+    datas?.find((item) => item.type === 'user')?.title || [];
+
   return (
     <section className="min-h-screen flex flex-col justify-center items-center">
       <div className="w-11/12 md:w-3/4 lg:w-2/3 xl:w-1/2 mt-2 md:mt-20 lg:mt-20">
@@ -64,7 +65,7 @@ const ListUser = () => {
             onSubmit={(values: any) => {
               values['image'] = selectedImage;
               setIsOpen(false);
-              swalCreate('success');
+              useSwalCreate('success');
             }}
           >
             <Form className="w-96 py-32 flex flex-col gap-y-7">

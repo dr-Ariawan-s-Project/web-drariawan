@@ -1,7 +1,12 @@
-import { useState } from 'react';
+import { useState, FC } from 'react';
 import { motion } from 'framer-motion';
 
-const Checkbox = ({ label, initialChecked = false }) => {
+interface Checkbox {
+  label: string;
+  initialChecked: boolean;
+}
+
+const Checkbox: FC<Checkbox> = ({ label, initialChecked }) => {
   const [isChecked, setIsChecked] = useState(initialChecked);
 
   const toggleCheckbox = () => {
