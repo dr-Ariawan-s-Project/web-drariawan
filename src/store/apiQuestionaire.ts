@@ -29,7 +29,10 @@ export const useQuestionaire = create<QuestionaireState>((set) => ({
   postQuestionaire: async (newData) => {
     set({ loading: true, error: null });
     try {
-      const response = await axiosInstance.post('/v1/questioner', newData);
+      const response = await axiosInstance.post('/v1/questioner', {
+        code_attempt: newData.code_attempt,
+        answer: newData.answer,
+      });
       set({ data: response.data, loading: false });
       return response.data;
     } catch (error) {
@@ -41,7 +44,10 @@ export const useQuestionaire = create<QuestionaireState>((set) => ({
     set({ loading: true, error: null });
     try {
       const response = await axiosInstance.post('/v1/questioner/validate', {
-        validateData,
+        email: validateData.email,
+        phone: validateData.phone,
+        as: validateData.as,
+        partner_email: validateData.partner_email,
       });
       set({ data: response.data, loading: false });
       return response.data;

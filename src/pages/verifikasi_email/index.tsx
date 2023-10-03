@@ -1,24 +1,9 @@
 import Lottie from 'lottie-react';
-import { useEffect } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
-import Cookies from 'js-cookie';
-
 import EmailAnimation2 from '../../assets/animations/EmailAnimation2.json';
 import { useEmailStore } from '../../store/getEmail';
 
 const VerifikasiEmail = () => {
-  const location = useLocation();
-  const navigate = useNavigate();
   const { email } = useEmailStore();
-
-  const codeAttempt = location?.state?.code_attempt;
-
-  useEffect(() => {
-    if (codeAttempt) {
-      Cookies.set('code_attempt', codeAttempt);
-      navigate(`/kuisioner/1`);
-    }
-  }, []);
 
   return (
     <section className="flex flex-col justify-center items-center min-h-screen px-4 sm:px-6 md:px-8 lg:px-12 mt-22">
