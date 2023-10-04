@@ -35,7 +35,7 @@ const App = () => {
         <Route element={<DataDiri />} path="/data_diri" />
         <Route element={<Kuisioner />} path="/kuisioner" />
         <Route element={<Pertanyaan />} path="/kuisioner/:questionId" />
-        <Route element={<Success />} path="/kuisioner/:pertanyaan/finish" />
+        <Route element={<Success />} path="/kuisioner/finish" />
         <Route element={<Sambutan />} path="/main/sambutan" />
         <Route element={<LembarPersetujuan />} path="/lembar_persetujuan" />
         <Route element={<VerifikasiEmail />} path="/verifikasi_email" />

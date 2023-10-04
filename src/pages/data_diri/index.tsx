@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 import { NavigateFunction, useNavigate } from 'react-router-dom';
 import { useFormik } from 'formik';
+import Cookies from 'js-cookie';
 
 import { useEmailStore } from '../../store/getEmail';
 import { useQuestionaire } from '../../store/apiQuestionaire';
@@ -44,13 +45,9 @@ const DataDiri = () => {
 
   useEffect(() => {
     const code_attempt = data?.data?.code_attempt;
-    console.log('code att : ', code_attempt);
+    Cookies.set('code_attempt', code_attempt);
     if (code_attempt) {
-      navigate('/verifikasi_email', {
-        state: {
-          code_attempt: code_attempt,
-        },
-      });
+      navigate('/verifikasi_email');
     }
   }, [data]);
 
