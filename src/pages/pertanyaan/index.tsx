@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import Cookies from 'js-cookie';
 
 import VideoPlayer from '../../components/VideoPlayer';
 import AudioRecorder from '../../components/AudioRecorder';
@@ -16,7 +15,6 @@ import { useQuestionaire } from '../../store/apiQuestionaire';
 
 const Pertanyaan = () => {
   const navigate = useNavigate();
-  const code_attempt = Cookies.get('code_attempt');
   const { data, loading, error, getQuestionaire } = useQuestionaire() as any;
   const { questionId } = useParams() as any;
   const { getScore } = useScore();
@@ -27,9 +25,9 @@ const Pertanyaan = () => {
   const [check, setCheck] = useState<number | null>(null);
   const [modalIsOpen, setModalIsOpen] = useState<boolean>(false);
 
-  const currentQuestion: any = code_attempt
-    ? data?.data?.find((question: any) => question.id === parseInt(questionId))
-    : null;
+  const currentQuestion: any = data?.data?.find(
+    (question: any) => question.id === parseInt(questionId)
+  );
 
   useEffect(() => {
     getQuestionaire();

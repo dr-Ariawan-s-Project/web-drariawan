@@ -1,22 +1,28 @@
 import { useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 
-import data from '../../datas/lembar_persetujuan/lembar_persetujuan.json';
+import item from '../../datas/lembar_persetujuan/lembar_persetujuan.json';
+import { useQuestionaire } from '../../store/apiQuestionaire';
+
 import Button from '../../components/Button';
 import Checkbox from '../../components/Checkbox';
 
 const LembarPersetujuan = () => {
   const navigate = useNavigate();
+  const { getQuestionaire, data } = useQuestionaire();
   const [isPageLoaded, setIsPageLoaded] = useState(false);
 
   useEffect(() => {
     setTimeout(() => {
       setIsPageLoaded(true);
     }, 100);
+    getQuestionaire();
   }, []);
 
-  const handleStartKuisioner = (questionId: string | number) => {
-    navigate(`/kuisioner/${questionId}`);
+  const id = data?.data?.map((item: any) => item?.id);
+
+  const handleStartKuisioner = () => {
+    navigate(`/kuisioner/${id[0]}`);
   };
 
   return (
@@ -30,19 +36,19 @@ const LembarPersetujuan = () => {
           <div className="lg:grid lg:grid-cols-2 lg:gap-y-20 m-10">
             <div className="w-auto ml-2 lg:ml-20">
               <h1 className="text-left text-2xl lg:text-3xl xl:text-4xl mb-2 lg:mb-5 xl:mb-10">
-                {data.title}
+                {item.title}
               </h1>
               <p className="lg:text-justify text-left text-lg lg:text-lg xl:text-base mb-2 lg:mb-5 xl:mb-10">
-                {data.description}
+                {item.description}
               </p>
-              <Checkbox label={data.agree} />
+              <Checkbox label={item.agree} />
               <div className="lg:mt-auto mt-3 font-semibold">
                 <Button
                   id="mulai"
                   label="Mulai"
                   type="blue"
                   active={true}
-                  onClick={() => handleStartKuisioner(1)}
+                  onClick={() => handleStartKuisioner()}
                 />
               </div>
             </div>
