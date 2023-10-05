@@ -49,15 +49,13 @@ const Pertanyaan = () => {
     };
   }, []);
 
-  if (!currentQuestion) {
-    if (loading) {
-      return;
-    } else if (error) {
-      return <div>Error: {error}</div>;
-    } else {
-      navigate(`/kuisioner/${questionId}/finish`);
+  useEffect(() => {
+    if (!currentQuestion) {
+      if (!loading && !error) {
+        navigate(`/kuisioner/${questionId}/finish`);
+      }
     }
-  }
+  }, [currentQuestion, loading, error, navigate, questionId]);
 
   const handleSaveAudio = (blob: Blob) => {
     const audioUrl = URL.createObjectURL(blob);

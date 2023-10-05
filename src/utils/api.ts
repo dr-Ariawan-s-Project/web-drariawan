@@ -29,7 +29,7 @@ export type PatientState = {
   data: any[];
   loading: boolean;
   error: string | null;
-  getPatient: () => Promise<void>;
+  getPatient: (page: number, limit: number) => Promise<void>;
   getList: () => Promise<void>;
   postPatient: (data: any) => Promise<void>;
   putPatient: (id: number, data: any) => Promise<void>;

@@ -40,6 +40,7 @@ const JadwalPraktik = () => {
     onSubmit: (values: any) => {
       values['image'] = selectedImage;
       setIsOpen(false);
+      // eslint-disable-next-line react-hooks/rules-of-hooks
       useSwalCreate('success');
     },
   });

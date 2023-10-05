@@ -7,10 +7,12 @@ export const usePatient = create<PatientState>((set) => ({
   data: [],
   loading: false,
   error: null,
-  getPatient: async () => {
+  getPatient: async (page, limit) => {
     set({ loading: true, error: null });
     try {
-      const response = await axios.get('/v1/patients');
+      const response = await axios.get('/v1/patients', {
+        params: { page, limit },
+      });
       set({ data: response.data, loading: false, error: null });
     } catch (error) {
       set({ loading: false, error: 'error get patient' });
@@ -33,13 +35,19 @@ export const usePatient = create<PatientState>((set) => ({
         `/v1/patients/${patientId}`,
         patientData
       );
+
       set((prevState) => {
+        if (!Array.isArray(prevState.data)) {
+          return prevState;
+        }
+
         const updatedData = prevState.data.map((patient) => {
           if (patient.id === patientId) {
             return response.data;
           }
           return patient;
         });
+
         return { data: updatedData, loading: false, error: null };
       });
     } catch (error) {
