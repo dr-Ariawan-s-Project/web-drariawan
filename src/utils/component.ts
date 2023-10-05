@@ -64,6 +64,7 @@ export interface VideoPlayerProps {
 
 export interface AudioRecorderProps {
   isRecording: boolean;
+  handleReset: () => void;
   handleStartRecording: () => void;
   handleStopRecording: () => void;
 }

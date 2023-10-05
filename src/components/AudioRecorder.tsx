@@ -1,10 +1,13 @@
 import { FC } from 'react';
 import StopMic from '../assets/icons/stop_video.png';
-import { AudioRecorderProps } from '../utils/component';
 import Microphone from '../assets/icons/microphone.svg';
+import DeleteRecord from '../assets/icons/record_delete.svg';
+
+import { AudioRecorderProps } from '../utils/component';
 
 const AudioRecorder: FC<AudioRecorderProps> = ({
   isRecording,
+  handleReset,
   handleStartRecording,
   handleStopRecording,
 }) => {
@@ -20,6 +23,12 @@ const AudioRecorder: FC<AudioRecorderProps> = ({
             width={33}
             height={33}
           />
+        </button>
+        <button
+          className="bg-transparent border-none hover:border-none focus:outline-none relative"
+          onClick={handleReset}
+        >
+          <img src={DeleteRecord} width={33} height={33} alt="Delete Record" />
         </button>
       </div>
       <div className="mt-4 text-gray-600 font-lato_regular ">
