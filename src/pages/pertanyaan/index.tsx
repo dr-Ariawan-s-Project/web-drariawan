@@ -1,6 +1,10 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
+import 'regenerator-runtime/runtime';
 import Cookies from 'js-cookie';
+import SpeechRecognition, {
+  useSpeechRecognition,
+} from 'react-speech-recognition';
 
 import VideoPlayer from '../../components/VideoPlayer';
 import AudioRecorder from '../../components/AudioRecorder';
@@ -17,12 +21,18 @@ const Pertanyaan = () => {
   const navigate = useNavigate();
   const code_attempt = Cookies.get('code_attempt');
   const { data, getQuestionaire, postQuestionaire } = useQuestionaire() as any;
+  const {
+    transcript,
+    listening,
+    resetTranscript,
+    browserSupportsSpeechRecognition,
+  } = useSpeechRecognition();
   const { questionId } = useParams() as any;
 
   const [transition, setTransition] = useState<boolean>(true);
   const [fadeIn, setFadeIn] = useState<boolean>(false);
-  const [text, setText] = useState<string>('');
   const [check, setCheck] = useState<number | null>(null);
+  const [score, setScore] = useState<number | null>(null);
   const [answer, setAnswer] = useState<any>({ items: [] });
   const [modalIsOpen, setModalIsOpen] = useState<boolean>(false);
 
@@ -30,21 +40,32 @@ const Pertanyaan = () => {
     (question: any) => question.id === parseInt(questionId)
   );
 
-  const handleSaveAudio = (blob: Blob) => {
-    const audioUrl = URL.createObjectURL(blob);
+  const startListening = () => {
+    if (browserSupportsSpeechRecognition) {
+      SpeechRecognition.getRecognition()?.continuous;
+      SpeechRecognition.startListening({ language: 'id', continuous: true });
+      SpeechRecognition.startListening();
+    }
+  };
+
+  const stopListening = () => {
+    if (browserSupportsSpeechRecognition) {
+      SpeechRecognition.stopListening();
+    }
   };
 
   const handleChecked = (item: any) => {
     setCheck(item?.id);
-    const newAnswerItem = {
-      id: item?.id,
-      description: item?.slugs,
-      score: item?.score,
-    };
-    setAnswer((prevAnswer: any) => ({
-      ...prevAnswer,
-      items: [...prevAnswer.items, newAnswerItem],
-    }));
+    setScore(item?.score);
+    // const newAnswerItem = {
+    //   question_id: item?.id,
+    //   description: transcript,
+    //   score: item?.score,
+    // };
+    // setAnswer((prevAnswer: any) => ({
+    //   ...prevAnswer,
+    //   items: [...prevAnswer.items, newAnswerItem],
+    // }));
   };
 
   const handleSubmit = () => {
@@ -53,21 +74,27 @@ const Pertanyaan = () => {
       (question: any) => question.id === nextQuestionId
     );
 
+    const newAnswerItem = {
+      question_id: currentQuestion?.id,
+      description: transcript,
+      score: score ? score : 0,
+    };
+    setAnswer((prevAnswer: any) => ({
+      ...prevAnswer,
+      items: [...prevAnswer.items, newAnswerItem],
+    }));
+
     if (nextQuestion) {
       navigate(`/kuisioner/${nextQuestionId}`);
+      resetTranscript();
     } else {
-      const code = code_attempt;
-      const results = answer;
-      postQuestionaire(code, results);
+      const body = {
+        code_attempt: code_attempt,
+        answer: answer?.items,
+      };
+      postQuestionaire(body.code_attempt, body.answer);
+      navigate(`/kuisioner/finish`);
     }
-    setText('');
-  };
-
-  const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    const textarea = e.target;
-    textarea.style.height = 'auto';
-    textarea.style.height = `${textarea.scrollHeight}px`;
-    setText(e.target.value);
   };
 
   useEffect(() => {
@@ -121,8 +148,8 @@ const Pertanyaan = () => {
             ) : (
               <Loading id="loading" isOpen={true} />
             )}
-            {currentQuestion.choices !== null &&
-              currentQuestion.choices.map((item: any, index: any) => {
+            {currentQuestion?.choices !== null &&
+              currentQuestion?.choices?.map((item: any, index: any) => {
                 return (
                   <div className="mx-10" key={index}>
                     <RadioButton
@@ -138,21 +165,25 @@ const Pertanyaan = () => {
             <div className="flex items-center border-b border-gray-400 py-2">
               <textarea
                 className="appearance-none bg-transparent border-none w-full text-gray-700 font-lato_italic mr-3 py-1 px-2 leading-tight focus:outline-none resize-none"
-                value={text}
-                onChange={handleChange}
+                value={transcript}
                 placeholder="Rekaman jawaban anda akan otomatis ditampilkan disini"
                 aria-label="Full name"
                 style={{ minHeight: '40px' }}
               />
             </div>
 
-            <AudioRecorder onSave={handleSaveAudio} />
+            <AudioRecorder
+              isRecording={listening}
+              handleReset={resetTranscript}
+              handleStartRecording={startListening}
+              handleStopRecording={stopListening}
+            />
             <div className="mx-10 h-10 my-10">
               <Button
                 id="Selanjutnya-1"
                 type="blue"
                 label="Selanjutnya"
-                active={text !== '' ? true : false}
+                active={transcript !== '' ? true : false}
                 onClick={handleSubmit}
               />
             </div>

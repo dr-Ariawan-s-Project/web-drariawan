@@ -34,6 +34,7 @@ export const useQuestionaire = create<QuestionaireState>((set) => ({
         answer: answer,
       });
       set({ data: response.data, loading: false });
+      console.log('res ', response?.data);
       return response.data;
     } catch (error) {
       set({ loading: false, error: 'error post questioner' });
