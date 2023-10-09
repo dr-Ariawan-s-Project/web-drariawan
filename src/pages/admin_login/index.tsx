@@ -26,7 +26,6 @@ const AdminLogin = () => {
       const token = data?.data?.token;
       Cookies.set('token', token);
       if (token) {
-        // eslint-disable-next-line react-hooks/rules-of-hooks
         useSwalAuth('login', values.email.split('@')[0]);
         navigate('/admin/');
       } else if (errorMessage) {
