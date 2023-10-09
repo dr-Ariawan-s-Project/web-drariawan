@@ -5,6 +5,7 @@ import { useSwalUpdate } from '../../utils/swal/useSwalData';
 
 import { usePatient } from '../../store/apiPatient';
 import { PatientState } from '../../utils/api';
+import SearchBar from '../../components/SearchBar';
 
 const TableRow: React.FC<{
   data: PatientState['data'][0];
@@ -50,7 +51,7 @@ const TableRow: React.FC<{
             onClick={handleDeleteClick}
           />
           <PencilIcon
-            className="cursor-pointer mx-2"
+            className="cursor-pointer hover:text-health-blue-light mx-2"
             width={20}
             height={20}
             onClick={handleEditClick}
@@ -85,25 +86,54 @@ const TableRow: React.FC<{
 const ListPasien = () => {
   const [page, setPage] = useState<number>(1);
   const [startNumber, setStartNumber] = useState<number>(1);
+
   const {
-    data: patients,
+    data: patientData,
     getPatient,
     deletePatient,
     putPatient,
+    getPatientById,
   } = usePatient() as any;
+
   const [editingPatient, setEditingPatient] = useState<any>(null);
   const [isEditModalOpen, setEditModalOpen] = useState(false);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [searchedPatientData, setSearchedPatientData] =
+    useState<PatientState | null>(null);
+  const patientDataToShow = searchedPatientData || patientData;
 
   const handleDeletePatient = async (id: string) => {
     try {
       await deletePatient(id);
-      // eslint-disable-next-line react-hooks/rules-of-hooks
       useSwalDeleteData('success');
-      getPatient(page, 10);
-    } catch (error) {
+      setPage(1);
+    } catch (error: any) {
       console.error('Gagal menghapus data: ', error);
-      // eslint-disable-next-line react-hooks/rules-of-hooks
       useSwalDeleteData('failed', error.message);
+    }
+  };
+
+  const handleNextPage = () => {
+    const nextPage = page + 1;
+    setPage(nextPage);
+    getPatient(nextPage, 10);
+  };
+
+  const handleSearch = async () => {
+    if (searchTerm.trim() !== '') {
+      try {
+        const result = await getPatientById(searchTerm);
+        if (result && result.data) {
+          setSearchedPatientData(result.data);
+        } else {
+          setSearchedPatientData(null);
+        }
+      } catch (error) {
+        console.error('Error searching for patient:', error);
+        setSearchedPatientData(null);
+      }
+    } else {
+      setSearchedPatientData(null);
     }
   };
 
@@ -115,17 +145,14 @@ const ListPasien = () => {
   const handleEditSubmit = async (updatedPatient: any) => {
     try {
       await putPatient(updatedPatient.id, updatedPatient);
-      // eslint-disable-next-line react-hooks/rules-of-hooks
       useSwalUpdate('success');
       setEditModalOpen(false);
       getPatient(page, 10);
-    } catch (error) {
+    } catch (error: any) {
       console.error('Gagal mengedit data: ', error);
-      // eslint-disable-next-line react-hooks/rules-of-hooks
       useSwalUpdate('failed', error.message);
     }
   };
-
   useEffect(() => {
     getPatient(page, 10);
     setStartNumber((page - 1) * 10);
@@ -240,9 +267,14 @@ const ListPasien = () => {
           </div>
         </div>
       )}
-
       <div className="overflow-x-auto mx-auto w-full mt-2 sm:mt-20">
         <div className="relative overflow-x-auto h-[80vh] overflow-y-scroll">
+          <SearchBar
+            onSearch={handleSearch}
+            searchTerm={searchTerm}
+            setSearchTerm={setSearchTerm}
+          />
+
           <table className="w-full table-auto">
             <thead className="font-semibold bg-health-blue-reguler text-white">
               <tr>
@@ -256,8 +288,9 @@ const ListPasien = () => {
               </tr>
             </thead>
             <tbody>
-              {Array.isArray(patients?.data) && patients.data.length > 0 ? (
-                patients.data.map((rowData: any, index: any) => (
+              {Array.isArray(patientDataToShow?.data) &&
+              patientDataToShow.data.length > 0 ? (
+                patientDataToShow.data.map((rowData: any, index: any) => (
                   <TableRow
                     key={index}
                     data={rowData}
@@ -269,7 +302,9 @@ const ListPasien = () => {
               ) : (
                 <tr>
                   <td colSpan={8} className="text-center py-2">
-                    No data available
+                    {searchedPatientData
+                      ? 'No data matching the search criteria'
+                      : 'No data available'}
                   </td>
                 </tr>
               )}
@@ -277,7 +312,6 @@ const ListPasien = () => {
           </table>
         </div>
       </div>
-
       <div className="flex flex-col md:flex-row justify-center items-center mt-10 gap-5">
         <button
           className="w-full md:w-32 h-10 bg-health-blue-dark border-none hover:bg-health-blue-reguler focus:outline-none rounded-md text-white font-semibold flex items-center justify-center"
@@ -298,11 +332,8 @@ const ListPasien = () => {
         </div>
         <button
           className="w-full md:w-32 h-10 bg-health-blue-dark border-none hover:bg-health-blue-reguler focus:outline-none rounded-md text-white font-semibold flex items-center justify-center"
-          onClick={() => {
-            setPage(page + 1);
-            getPatient(page + 1);
-          }}
-          disabled={!patients?.data || patients.data.length === 0}
+          onClick={handleNextPage}
+          disabled={!patientData?.data || patientData.data.length === 0}
         >
           Next
         </button>
