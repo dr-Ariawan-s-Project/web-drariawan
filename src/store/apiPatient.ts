@@ -7,54 +7,88 @@ export const usePatient = create<PatientState>((set) => ({
   data: [],
   loading: false,
   error: null,
-  getPatient: async () => {
-    set({ loading: true, error: null });
+  getPatient: async (page: number, limit: number) => {
+    set({ loading: true, error: null, data: [] });
     try {
-      const response = await axios.get('/v1/patients');
+      const response = await axios.get('/v1/patients', {
+        params: { page, limit },
+      });
       set({ data: response.data, loading: false, error: null });
-    } catch (error) {
-      set({ loading: false, error: 'error get patient' });
+    } catch (error: any) {
+      set({
+        loading: false,
+        error: `Failed to retrieve patient data: ${error.message}`,
+      });
     }
   },
   postPatient: async (patientData) => {
-    set({ loading: true, error: null });
+    set({ loading: true, error: null, data: [] });
     try {
       const response = await axios.post('/v1/patients', patientData);
       set({ data: [...response.data], loading: false, error: null });
-    } catch (error) {
-      set({ loading: false, error: 'error post patient' });
+    } catch (error: any) {
+      set({
+        loading: false,
+        error: `Failed to post patient data: ${error.message}`,
+      });
       throw error;
     }
   },
-  putPatient: async (patientId, patientData) => {
+  putPatient: async (patientId: number, patientData: any) => {
     set({ loading: true, error: null });
     try {
       const response = await axios.put(
         `/v1/patients/${patientId}`,
         patientData
       );
+
       set((prevState) => {
+        if (!Array.isArray(prevState.data)) {
+          return prevState;
+        }
+
         const updatedData = prevState.data.map((patient) => {
           if (patient.id === patientId) {
             return response.data;
           }
           return patient;
         });
-        return { data: updatedData, loading: false, error: null };
+
+        return { ...prevState, data: updatedData, loading: false, error: null };
       });
-    } catch (error) {
-      set({ loading: false, error: 'error edit patient' });
+    } catch (error: any) {
+      set({
+        loading: false,
+        error: `Failed to edit patient data: ${error.message}`,
+      });
+      throw error;
+    }
+  },
+  getPatientById: async (patientId: string) => {
+    set({ loading: true, error: null });
+    try {
+      const response = await axios.get(`/v1/patients/${patientId}`);
+      set({ data: [response.data], loading: false, error: null });
+      return response.data;
+    } catch (error: any) {
+      set({
+        loading: false,
+        error: `Failed to retrieve patient data: ${error.message}`,
+      });
       throw error;
     }
   },
 
   getList: async () => {
-    set({ loading: true, error: null });
+    set({ loading: true, error: null, data: [] });
     try {
       const response = await axios.get('/v1/patients');
       set({ data: response.data, loading: false, error: null });
-    } catch (error) {
-      set({ loading: false, error: 'error get patient list' });
+    } catch (error: any) {
+      set({
+        loading: false,
+        error: `Failed to retrieve patient list: ${error.message}`,
+      });
     }
   },
   deletePatient: async (patientId) => {
@@ -78,12 +112,12 @@ export const usePatient = create<PatientState>((set) => ({
           error: null,
         };
       });
-    } catch (error) {
+    } catch (error: any) {
       set((prevState) => {
         return {
           ...prevState,
           loading: false,
-          error: 'error delete patient',
+          error: `Failed to delete patient data: ${error.message}`,
         };
       });
     }

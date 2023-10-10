@@ -10,9 +10,9 @@ export interface ButtonProps {
 }
 
 export interface CircleButtonProps {
-  id: string,
-  label?: any,
-  onClick?: () => void
+  id: string;
+  label?: any;
+  onClick?: () => void;
 }
 
 export interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
@@ -24,7 +24,7 @@ export interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   placeholder?: string;
   register?: any;
   error?: string;
-  onChange?: (e?:any) => void;
+  onChange?: (e?: any) => void;
 }
 
 export interface RadioButtonProps {
@@ -82,4 +82,10 @@ export interface LoginFormProps {
   email: string;
   password: string;
   remember: boolean;
+}
+
+export interface SearchBarProps {
+  onSearch: (searchTerm: string) => void;
+  searchTerm?: string;
+  setSearchTerm: (term: string) => void;
 }
