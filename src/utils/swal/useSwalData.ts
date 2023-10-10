@@ -41,7 +41,7 @@ export const useSwalUpdate = (type: string, message?: string | null) => {
   }
 };
 
-export const useSwalDelete = (type: string, message?: string | null) => {
+export const useSwalDeleteData = (type: string, message?: string | null) => {
   if (type === 'success') {
     Swal.fire({
       title: deleteData.success.title,

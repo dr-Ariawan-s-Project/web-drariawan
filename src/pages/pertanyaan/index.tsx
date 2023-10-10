@@ -57,15 +57,6 @@ const Pertanyaan = () => {
   const handleChecked = (item: any) => {
     setCheck(item?.id);
     setScore(item?.score);
-    // const newAnswerItem = {
-    //   question_id: item?.id,
-    //   description: transcript,
-    //   score: item?.score,
-    // };
-    // setAnswer((prevAnswer: any) => ({
-    //   ...prevAnswer,
-    //   items: [...prevAnswer.items, newAnswerItem],
-    // }));
   };
 
   const handleSubmit = () => {

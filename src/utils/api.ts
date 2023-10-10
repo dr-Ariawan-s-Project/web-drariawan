@@ -29,9 +29,10 @@ export type PatientState = {
   data: any[];
   loading: boolean;
   error: string | null;
-  getPatient: () => Promise<void>;
+  getPatient: (page: number, limit: number) => Promise<void>;
+  postPatient: (patientData: any) => Promise<void>;
+  putPatient: (patientId: number, patientData: any) => Promise<void>;
+  getPatientById: (patientId: string) => Promise<any>;
   getList: () => Promise<void>;
-  postPatient: (data: any) => Promise<void>;
-  putPatient: (id: number, data: any) => Promise<void>;
-  deletePatient: (id: number) => Promise<void>;
+  deletePatient: (patientId: number) => Promise<void>;
 };

@@ -86,3 +86,9 @@ export interface LoginFormProps {
   password: string;
   remember: boolean;
 }
+
+export interface SearchBarProps {
+  onSearch: (searchTerm: string) => void;
+  searchTerm?: string;
+  setSearchTerm: (term: string) => void;
+}
