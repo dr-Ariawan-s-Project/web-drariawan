@@ -63,7 +63,10 @@ export interface VideoPlayerProps {
 }
 
 export interface AudioRecorderProps {
-  onSave?: (blob: Blob) => void;
+  isRecording: boolean;
+  handleReset: () => void;
+  handleStartRecording: () => void;
+  handleStopRecording: () => void;
 }
 
 export interface PageInfoProps {

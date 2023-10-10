@@ -26,14 +26,15 @@ export const useQuestionaire = create<QuestionaireState>((set) => ({
     }
   },
 
-  postQuestionaire: async (newData) => {
+  postQuestionaire: async (code_attempt: string, answer: []) => {
     set({ loading: true, error: null });
     try {
       const response = await axiosInstance.post('/v1/questioner', {
-        code_attempt: newData.code_attempt,
-        answer: newData.answer,
+        code_attempt: code_attempt,
+        answer: answer,
       });
       set({ data: response.data, loading: false });
+      console.log('res ', response?.data);
       return response.data;
     } catch (error) {
       set({ loading: false, error: 'error post questioner' });

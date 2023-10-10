@@ -3,7 +3,7 @@ export type QuestionaireState = {
   loading: boolean;
   error: string | null;
   getQuestionaire: () => Promise<void>;
-  postQuestionaire: (newData: any) => Promise<void>;
+  postQuestionaire: (code_attempt: string, answer: []) => Promise<void>;
   validateQuestionaire: (validateData: any) => Promise<void>;
 };
 

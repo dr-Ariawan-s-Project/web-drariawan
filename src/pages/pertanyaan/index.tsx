@@ -1,6 +1,10 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
+import 'regenerator-runtime/runtime';
 import Cookies from 'js-cookie';
+import SpeechRecognition, {
+  useSpeechRecognition,
+} from 'react-speech-recognition';
 
 import VideoPlayer from '../../components/VideoPlayer';
 import AudioRecorder from '../../components/AudioRecorder';
@@ -11,25 +15,78 @@ import Loading from '../../components/Loading';
 import ModalInformation from '../../components/ModalInformation';
 import IconInfo from '../../assets/icons/information.svg';
 
-import { useScore } from '../../store/getScore';
 import { useQuestionaire } from '../../store/apiQuestionaire';
 
 const Pertanyaan = () => {
   const navigate = useNavigate();
   const code_attempt = Cookies.get('code_attempt');
-  const { data, loading, error, getQuestionaire } = useQuestionaire() as any;
+  const { data, getQuestionaire, postQuestionaire } = useQuestionaire() as any;
+  const {
+    transcript,
+    listening,
+    resetTranscript,
+    browserSupportsSpeechRecognition,
+  } = useSpeechRecognition();
   const { questionId } = useParams() as any;
-  const { getScore } = useScore();
 
   const [transition, setTransition] = useState<boolean>(true);
   const [fadeIn, setFadeIn] = useState<boolean>(false);
-  const [text, setText] = useState<string>('');
   const [check, setCheck] = useState<number | null>(null);
+  const [score, setScore] = useState<number | null>(null);
+  const [answer, setAnswer] = useState<any>({ items: [] });
   const [modalIsOpen, setModalIsOpen] = useState<boolean>(false);
 
-  const currentQuestion: any = code_attempt
-    ? data?.data?.find((question: any) => question.id === parseInt(questionId))
-    : null;
+  const currentQuestion: any = data?.data?.find(
+    (question: any) => question.id === parseInt(questionId)
+  );
+
+  const startListening = () => {
+    if (browserSupportsSpeechRecognition) {
+      SpeechRecognition.getRecognition()?.continuous;
+      SpeechRecognition.startListening({ language: 'id', continuous: true });
+      SpeechRecognition.startListening();
+    }
+  };
+
+  const stopListening = () => {
+    if (browserSupportsSpeechRecognition) {
+      SpeechRecognition.stopListening();
+    }
+  };
+
+  const handleChecked = (item: any) => {
+    setCheck(item?.id);
+    setScore(item?.score);
+  };
+
+  const handleSubmit = () => {
+    const nextQuestionId = parseInt(questionId || '0') + 1;
+    const nextQuestion: any = data?.data?.find(
+      (question: any) => question.id === nextQuestionId
+    );
+
+    const newAnswerItem = {
+      question_id: currentQuestion?.id,
+      description: transcript,
+      score: score ? score : 0,
+    };
+    setAnswer((prevAnswer: any) => ({
+      ...prevAnswer,
+      items: [...prevAnswer.items, newAnswerItem],
+    }));
+
+    if (nextQuestion) {
+      navigate(`/kuisioner/${nextQuestionId}`);
+      resetTranscript();
+    } else {
+      const body = {
+        code_attempt: code_attempt,
+        answer: answer?.items,
+      };
+      postQuestionaire(body.code_attempt, body.answer);
+      navigate(`/kuisioner/finish`);
+    }
+  };
 
   useEffect(() => {
     getQuestionaire();
@@ -49,48 +106,6 @@ const Pertanyaan = () => {
     };
   }, []);
 
-  useEffect(() => {
-    if (!currentQuestion) {
-      if (!loading && !error) {
-        navigate(`/kuisioner/${questionId}/finish`);
-      }
-    }
-  }, [currentQuestion, loading, error, navigate, questionId]);
-
-  const handleSaveAudio = (blob: Blob) => {
-    const audioUrl = URL.createObjectURL(blob);
-    console.log('audio : ', audioUrl);
-  };
-
-  const handleChecked = (
-    item: { id: number; score: number },
-    dataId: number
-  ) => {
-    setCheck(item?.id);
-    getScore(item?.score, dataId);
-  };
-
-  const handleSubmit = () => {
-    const nextQuestionId = parseInt(questionId || '0') + 1;
-    const nextQuestion: any = data?.data?.find(
-      (question: any) => question.id === nextQuestionId
-    );
-
-    if (nextQuestion) {
-      navigate(`/kuisioner/${nextQuestionId}`);
-    } else {
-      navigate(`/kuisioner/finish`);
-    }
-    setText('');
-  };
-
-  const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    const textarea = e.target;
-    textarea.style.height = 'auto';
-    textarea.style.height = `${textarea.scrollHeight}px`;
-    setText(e.target.value);
-  };
-
   return (
     <>
       {transition === true ? (
@@ -102,7 +117,7 @@ const Pertanyaan = () => {
           } transition-opacity duration-500 transform`}
         >
           <div className="flex">
-            <h2 className="text-center font-lato_black text-xl sm:text-base md:text-xl lg:text-2xl mb-4 ">
+            <h2 className="text-center font-lato_black text-xl sm:text-base md:text-xl lg:text-2xl mb-4">
               {currentQuestion?.description}
             </h2>
             <div>
@@ -116,47 +131,50 @@ const Pertanyaan = () => {
               ></ModalInformation>
             </div>
           </div>
-          <div className="my-4">
+          <div className="flex flex-col gap-y-5">
             {data ? (
               <div className="mx-10">
                 <VideoPlayer src={currentQuestion?.question} />
               </div>
-            ) : currentQuestion.choices !== null ? (
-              currentQuestion.choices.map((item: any, index: any) => {
+            ) : (
+              <Loading id="loading" isOpen={true} />
+            )}
+            {currentQuestion?.choices !== null &&
+              currentQuestion?.choices?.map((item: any, index: any) => {
                 return (
                   <div className="mx-10" key={index}>
                     <RadioButton
                       label={item?.option}
                       checked={check === item?.id}
-                      onChange={() => handleChecked(item, currentQuestion.id)}
+                      onChange={() => handleChecked(item)}
                     />
                   </div>
                 );
-              })
-            ) : (
-              <Loading id="loading" isOpen={true} />
-            )}
+              })}
           </div>
-
           <div className="grid grid-cols-1 gap-y-5 mt-10">
             <div className="flex items-center border-b border-gray-400 py-2">
               <textarea
                 className="appearance-none bg-transparent border-none w-full text-gray-700 font-lato_italic mr-3 py-1 px-2 leading-tight focus:outline-none resize-none"
-                value={text}
-                onChange={handleChange}
+                value={transcript}
                 placeholder="Rekaman jawaban anda akan otomatis ditampilkan disini"
                 aria-label="Full name"
                 style={{ minHeight: '40px' }}
               />
             </div>
 
-            <AudioRecorder onSave={handleSaveAudio} />
+            <AudioRecorder
+              isRecording={listening}
+              handleReset={resetTranscript}
+              handleStartRecording={startListening}
+              handleStopRecording={stopListening}
+            />
             <div className="mx-10 h-10 my-10">
               <Button
                 id="Selanjutnya-1"
                 type="blue"
                 label="Selanjutnya"
-                active={text !== '' ? true : false}
+                active={transcript !== '' ? true : false}
                 onClick={handleSubmit}
               />
             </div>
