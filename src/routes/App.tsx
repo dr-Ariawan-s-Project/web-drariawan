@@ -14,10 +14,10 @@ import Pertanyaan from '../pages/pertanyaan';
 import Success from '../pages/success';
 import Splash from '../pages/splash';
 import VerifikasiEmail from '../pages/verifikasi_email';
-import LandingPertanyaan from '../pages/landing_pertanyaan';
-import KuisionerOption from '../pages/kuisioner_option';
 import AdminLogin from '../pages/admin_login';
 import JadwalPraktik from '../pages/jadwal_praktik';
+import Scheduling from '../pages/kuisioner_option';
+import Main from '../pages/main';
 
 const App = () => {
   axios.defaults.baseURL = 'https://drariawan.altapro.online';
@@ -33,8 +33,8 @@ const App = () => {
         <Route element={<Pertanyaan />} path="/kuisioner/:questionId" />
         <Route element={<Success />} path="/kuisioner/finish" />
         <Route element={<VerifikasiEmail />} path="/verifikasi_email" />
-        <Route element={<LandingPertanyaan />} path="/landing_pertanyaan" />
-        <Route element={<KuisionerOption />} path="/kuisioner_option" />
+        <Route element={<Main />} path="/main" />
+        <Route element={<Scheduling />} path="/scheduling" />
         <Route element={<AdminLogin />} path="/admin/login" />
 
         <Route element={<Admin />} path="/admin/">
