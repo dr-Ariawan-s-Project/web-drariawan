@@ -1,7 +1,11 @@
+import { useNavigate } from 'react-router-dom';
+
 import Navbar from '../../components/Navbar';
 import Background from '../../assets/illustrations/main-background.jpeg';
 
 const Main = () => {
+  const navigate = useNavigate();
+
   return (
     <section
       className="w-max h-screen relative"
@@ -25,10 +29,16 @@ const Main = () => {
             diperlukan.
           </p>
           <div className="flex gap-x-7 mt-20">
-            <button className="bg-slate-200 bg-opacity-70 rounded-md w-36 border-none focus:outline-none hover:text-white hover:bg-health-blue-dark">
+            <button
+              onClick={() => navigate('/landing')}
+              className="bg-slate-200 bg-opacity-70 rounded-md w-36 border-none focus:outline-none hover:text-white hover:bg-health-blue-dark"
+            >
               Isi Kuisioner
             </button>
-            <button className="bg-slate-200 bg-opacity-70 rounded-md w-36 border-none focus:outline-none hover:text-white hover:bg-health-blue-dark">
+            <button
+              onClick={() => navigate('/auth/option/register')}
+              className="bg-slate-200 bg-opacity-70 rounded-md w-36 border-none focus:outline-none hover:text-white hover:bg-health-blue-dark"
+            >
               Daftar Pasien
             </button>
           </div>
