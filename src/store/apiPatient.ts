@@ -21,11 +21,35 @@ export const usePatient = create<PatientState>((set) => ({
       });
     }
   },
-  postPatient: async (patientData) => {
+  postPatient: async (
+    name: string,
+    email: string,
+    password: string,
+    nik: string | number,
+    dob: string,
+    phone: string | number,
+    gender: string,
+    marriage_status: string,
+    nationality: string,
+    partner_option: string,
+    partner_email: string
+  ) => {
     set({ loading: true, error: null, data: [] });
     try {
-      const response = await axios.post('/v1/patients', patientData);
-      set({ data: [...response.data], loading: false, error: null });
+      const response = await axios.post('/v1/patients', {
+        name: name,
+        email: email,
+        password: password,
+        nik: nik,
+        dob: dob,
+        phone: phone,
+        gender: gender,
+        marriage_status: marriage_status,
+        nationality: nationality,
+        partner_option: partner_option,
+        partner_email: partner_email,
+      });
+      set({ data: [response.data], loading: false, error: null });
     } catch (error: any) {
       set({
         loading: false,

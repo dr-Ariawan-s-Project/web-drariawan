@@ -10,7 +10,7 @@ const shape = {
   gender: yup.string().required('Jenis kelamin wajib diisi'),
   marriage_status: yup.string().required('Status pernikahan wajib diisi'),
   nationality: yup.string().required('Kewarganegaraan wajib diisi'),
-  partner_option: yup.string().required('Partner wajib diisi'),
+  partner_option: yup.string(),
   partner_email: yup.string(),
 };
 

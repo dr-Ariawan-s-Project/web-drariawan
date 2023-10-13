@@ -30,7 +30,19 @@ export type PatientState = {
   loading: boolean;
   error: string | null;
   getPatient: (page: number, limit: number) => Promise<void>;
-  postPatient: (patientData: any) => Promise<void>;
+  postPatient: (
+    name: string,
+    email: string,
+    password: string,
+    nik: string | number,
+    dob: string,
+    phone: string | number,
+    gender: string,
+    marriage_status: string,
+    nationality: string,
+    partner_option: string,
+    partner_email: string
+  ) => Promise<void>;
   putPatient: (patientId: number, patientData: any) => Promise<void>;
   getPatientById: (patientId: string) => Promise<any>;
   getList: () => Promise<void>;
