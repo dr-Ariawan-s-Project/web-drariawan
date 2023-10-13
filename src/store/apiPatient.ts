@@ -7,6 +7,23 @@ export const usePatient = create<PatientState>((set) => ({
   data: [],
   loading: false,
   error: null,
+  loginPatient: async (email: string, password: string) => {
+    set({ loading: true, error: null, data: [] });
+    try {
+      const response = await axios.post('/v1/patients/login', {
+        email: email,
+        password: password,
+      });
+      console.log('res ', response.data);
+      set({ data: [response.data], loading: false, error: null });
+    } catch (error: any) {
+      set({
+        loading: false,
+        error: `Failed to post patient data: ${error.message}`,
+      });
+      throw error;
+    }
+  },
   getPatient: async (page: number, limit: number) => {
     set({ loading: true, error: null, data: [] });
     try {

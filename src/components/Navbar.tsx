@@ -76,7 +76,10 @@ const Navbar: FC<NavbarProps> = ({ page, type }) => {
         <li className="w-max h-10 px-5 py-5 rounded-md flex items-center cursor-pointer font-semibold text-slate-200 hover:bg-health-blue-dark">
           Kontak Kami
         </li>
-        <li className="w-max h-10 px-5 py-6 rounded-md flex gap-x-5 items-center cursor-pointer font-semibold text-slate-200 hover:bg-health-blue-dark">
+        <li
+          className="w-max h-10 px-5 py-6 rounded-md flex gap-x-5 items-center cursor-pointer font-semibold text-slate-200 hover:bg-health-blue-dark"
+          onClick={() => navigate('/admin/')}
+        >
           Login sebagai Admin
           <UserIcon className="h-6 w-6 md:h-8 md:w-8" />
         </li>
