@@ -16,7 +16,7 @@ import Splash from '../pages/splash';
 import VerifikasiEmail from '../pages/verifikasi_email';
 import AdminLogin from '../pages/admin_login';
 import JadwalPraktik from '../pages/jadwal_praktik';
-import Scheduling from '../pages/kuisioner_option';
+import Scheduling from '../pages/scheduling';
 import Main from '../pages/main';
 
 const App = () => {

@@ -3,14 +3,13 @@ import Swal from 'sweetalert2';
 import { useFormik } from 'formik';
 
 import { loginPasien } from '../../utils/yup/login_pasien';
-
 import { usePatient } from '../../store/apiPatient';
 
 import Button from '../../components/Button';
 
 const Login = () => {
   const navigate: NavigateFunction = useNavigate();
-  const { loginPatient, data } = usePatient();
+  const { loginPatient } = usePatient();
 
   const formik = useFormik({
     initialValues: {
@@ -21,6 +20,7 @@ const Login = () => {
     onSubmit: async (values) => {
       try {
         loginPatient(values.email, values.password);
+        navigate('/scheduling');
       } catch (error) {
         Swal.fire({
           icon: 'error',
