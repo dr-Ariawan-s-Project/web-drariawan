@@ -1,7 +1,11 @@
+import { useNavigate } from 'react-router-dom';
+
 import VerificationImage from '../../assets/illustrations/verification.png';
 import Button from '../../components/Button';
 
 const KonfirmasiPraktik = () => {
+  const navigate = useNavigate();
+
   return (
     <section className="w-screen h-screen flex justify-center items-center">
       <div className="flex flex-col gap-y-5 text-center">
@@ -23,6 +27,7 @@ const KonfirmasiPraktik = () => {
             type="blue"
             label="Isi Kuisioner"
             active={true}
+            onClick={() => navigate('/landing')}
           />
         </div>
       </div>
