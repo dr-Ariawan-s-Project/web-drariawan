@@ -7,10 +7,11 @@ import Cookies from 'js-cookie';
 import { useSwalAuth } from '../utils/swal/useSwalAuth';
 
 interface NavbarProps {
-  page: string;
+  page?: string;
+  type?: string;
 }
 
-const Navbar: FC<NavbarProps> = ({ page }) => {
+const Navbar: FC<NavbarProps> = ({ page, type }) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const currentDate = moment().format('ll');
   const navigate = useNavigate();
@@ -28,8 +29,8 @@ const Navbar: FC<NavbarProps> = ({ page }) => {
     });
   };
 
-  return (
-    <div className="bg-white shadow-md h-20 flex items-center">
+  return type === 'admin' ? (
+    <nav className="bg-white shadow-md h-20 flex items-center">
       <div className="flex items-center">
         <p className="font-semibold px-6  md:text-xl text-lg text-start">
           {page}
@@ -68,7 +69,22 @@ const Navbar: FC<NavbarProps> = ({ page }) => {
           )}
         </div>
       </div>
-    </div>
+    </nav>
+  ) : (
+    <nav className="h-20 w-screen flex items-center justify-end top-0 z-10 sticky absolute">
+      <ul className="flex gap-x-5 mr-10 items-center">
+        <li className="w-max h-10 px-5 py-5 rounded-md flex items-center cursor-pointer font-semibold text-slate-200 hover:bg-health-blue-dark">
+          Kontak Kami
+        </li>
+        <li
+          className="w-max h-10 px-5 py-6 rounded-md flex gap-x-5 items-center cursor-pointer font-semibold text-slate-200 hover:bg-health-blue-dark"
+          onClick={() => navigate('/admin/')}
+        >
+          Login sebagai Admin
+          <UserIcon className="h-6 w-6 md:h-8 md:w-8" />
+        </li>
+      </ul>
+    </nav>
   );
 };
 

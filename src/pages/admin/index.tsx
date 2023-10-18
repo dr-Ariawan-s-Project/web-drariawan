@@ -46,7 +46,7 @@ const Admin = () => {
       </div>
       <div className="w-full md:w-5/6">
         <div className="lg:fixed md:fixed w-full z-10">
-          <Navbar page={page} />
+          <Navbar type="admin" page={page} />
         </div>
         <div className="my-auto p-4 mt-20 md:mt-0">
           {path.includes('list_user') ? (
