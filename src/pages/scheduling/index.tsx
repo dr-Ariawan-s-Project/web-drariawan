@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 
-const Calendar: React.FC = () => {
+const Scheduling: React.FC = () => {
   const [selectedStartDate, setSelectedStartDate] = useState<any>(new Date());
   const daysOfWeek = [
     'Senin',
@@ -32,7 +32,19 @@ const Calendar: React.FC = () => {
   selectedEndDate.setDate(selectedEndDate.getDate() + 6);
 
   const handleSelectSchedule = (day: string, time: string) => {
-    // logic
+    // Handle selection logic
+  };
+
+  const bookedSchedules = [
+    { day: 'Senin', time: '08:00' },
+    { day: 'Rabu', time: '12:00' },
+    // Add more booked schedules as needed
+  ];
+
+  const isScheduleBooked = (day: string, time: string) => {
+    return bookedSchedules.some(
+      (schedule) => schedule.day === day && schedule.time === time
+    );
   };
 
   return (
@@ -78,9 +90,13 @@ const Calendar: React.FC = () => {
           {daysOfWeek.map((day) => (
             <div
               key={day + time}
-              className="w-24 p-2 border border-health-blue-thin cursor-pointer hover:bg-gray-200"
+              className={`w-24 p-2 justify-center border border-health-blue-thin cursor-pointer hover:bg-gray-200 ${
+                isScheduleBooked(day, time) ? 'bg-green-300' : ''
+              }`}
               onClick={() => handleSelectSchedule(day, time)}
-            ></div>
+            >
+              {isScheduleBooked(day, time) ? 'Sudah dipesan' : 'Tersedia'}
+            </div>
           ))}
         </div>
       ))}
@@ -88,4 +104,4 @@ const Calendar: React.FC = () => {
   );
 };
 
-export default Calendar;
+export default Scheduling;
