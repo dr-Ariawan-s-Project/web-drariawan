@@ -10,7 +10,7 @@ import { useSwalCreate } from '../../utils/swal/useSwalData';
 
 const Register = () => {
   const navigate = useNavigate();
-  const { postPatient, data } = usePatient();
+  const { postPatient } = usePatient();
   const [currentFieldGroup, setCurrentFieldGroup] = useState<number>(0);
   const fieldGroups = [
     ['name', 'email', 'password'],

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
+import Swal from 'sweetalert2';
 
 const Scheduling: React.FC = () => {
   const [selectedStartDate, setSelectedStartDate] = useState<any>(new Date());
@@ -32,7 +33,11 @@ const Scheduling: React.FC = () => {
   selectedEndDate.setDate(selectedEndDate.getDate() + 6);
 
   const handleSelectSchedule = (day: string, time: string) => {
-    // Handle selection logic
+    Swal.fire({
+      title: 'Sukses',
+      text: `Sukses menambahkan jadwal, giliran anda ${day} dan ${time}`,
+      confirmButtonText: 'OK',
+    });
   };
 
   const bookedSchedules = [
