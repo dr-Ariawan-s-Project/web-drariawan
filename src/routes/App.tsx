@@ -16,15 +16,12 @@ import Splash from '../pages/splash';
 import VerifikasiEmail from '../pages/verifikasi_email';
 import AdminLogin from '../pages/admin_login';
 import JadwalPraktik from '../pages/jadwal_praktik';
-<<<<<<< HEAD
 import Dashboard from '../pages/dashboard';
-=======
 import Scheduling from '../pages/scheduling';
 import Main from '../pages/main';
 import KonfirmasiPraktik from '../pages/konfirmasi_praktik';
 import ResumePraktik from '../pages/resume_praktik';
 
->>>>>>> 7c6c8743ee5d22ac2b83e28a3f1a6be776ccb667
 const App = () => {
   axios.defaults.baseURL = 'https://drariawan.altapro.online';
   return (

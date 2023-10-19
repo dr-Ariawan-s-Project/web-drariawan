@@ -5,7 +5,7 @@ const LineChart = () => {
   const chartRef = useRef(null);
 
   useEffect(() => {
-    const canvas = document.getElementById('chart-line'); // Gunakan ID yang unik seperti 'chart-line-line'
+    const canvas = document.getElementById('chart-line');
     if (!canvas) {
       return;
     }
