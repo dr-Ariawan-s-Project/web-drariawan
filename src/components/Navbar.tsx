@@ -29,9 +29,9 @@ const Navbar: FC<NavbarProps> = ({ page }) => {
   };
 
   return (
-    <div className="bg-white shadow-md h-20 flex items-center">
+    <div className="bg-white border h-20 flex items-center">
       <div className="flex items-center">
-        <p className="font-semibold px-6  md:text-xl text-lg text-start">
+        <p className="font-lato_regular px-6  md:text-xl text-lg text-start">
           {page}
         </p>
       </div>
@@ -49,7 +49,7 @@ const Navbar: FC<NavbarProps> = ({ page }) => {
         <div className="cursor-pointer ml-4" onClick={toggleDropdown}>
           <UserIcon className="h-6 w-6 md:h-8 md:w-8" />
           {isDropdownOpen && (
-            <div className="absolute right-0 mt-2 bg-white border border-gray-300 shadow-md w-40">
+            <div className="absolute right-0 mt-2 bg-white border border-gray-300 shadow-sm w-40">
               <ul className="py-2">
                 <li
                   className="cursor-pointer hover:bg-gray-100 px-4 py-2"

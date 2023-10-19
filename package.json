@@ -17,7 +17,6 @@
     "classnames": "^2.3.2",
     "formik": "^2.4.4",
     "framer-motion": "^10.16.0",
-    "heroicons": "^2.0.18",
     "js-cookie": "^3.0.5",
     "lottie-react": "^2.4.0",
     "moment": "^2.29.4",
@@ -28,11 +27,13 @@
     "react-speech-recognition": "^3.10.0",
     "react-table": "^7.8.0",
     "regenerator-runtime": "^0.14.0",
+    "remixicon": "^3.5.0",
     "sweetalert2": "^11.7.27",
     "yup": "^1.2.0",
     "zustand": "^4.4.1"
   },
   "devDependencies": {
+    "@iconify/react": "^4.1.1",
     "@types/js-cookie": "^3.0.4",
     "@types/react": "^18.2.15",
     "@types/react-dom": "^18.2.7",

@@ -67,8 +67,12 @@ const Chart = () => {
   });
 
   return (
-    <div className="w-full flex justify-center items-center h-screen">
-      <Line options={options} data={data} />
+    <div className="w-full max-w-full mt-0 lg:w-1/2 lg:flex-none">
+      <div className="border-black/12.5 dark:bg-slate-850 dark:shadow-dark-xl shadow-xl relative z-20 flex min-w-0 flex-col break-words rounded-2xl border-0 border-solid bg-white bg-clip-border">
+        <div className="border-black/12.5 mb-0 rounded-t-2xl border-b-0 border-solid p-6 pt-4 pb-0">
+          <Line options={options} data={data} />
+        </div>
+      </div>
     </div>
   );
 };
