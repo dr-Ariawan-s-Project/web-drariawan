@@ -6,12 +6,10 @@ import SpeechRecognition, {
   useSpeechRecognition,
 } from 'react-speech-recognition';
 
-import VideoPlayer from '../../components/VideoPlayer';
 import AudioRecorder from '../../components/AudioRecorder';
 import Button from '../../components/Button';
 import AnimatedWrapper from '../../components/AnimatedWrapper';
 import RadioButton from '../../components/RadioButton';
-import Loading from '../../components/Loading';
 import ModalInformation from '../../components/ModalInformation';
 import IconInfo from '../../assets/icons/information.svg';
 
@@ -34,6 +32,7 @@ const Pertanyaan = () => {
   const [check, setCheck] = useState<number | null>(null);
   const [score, setScore] = useState<number | null>(null);
   const [answer, setAnswer] = useState<any>({ items: [] });
+  const [goto, setGoto] = useState<number | null>(null);
   const [modalIsOpen, setModalIsOpen] = useState<boolean>(false);
 
   const currentQuestion: any = data?.data?.find(
@@ -57,32 +56,62 @@ const Pertanyaan = () => {
   const handleChecked = (item: any) => {
     setCheck(item?.id);
     setScore(item?.score);
+    setGoto(item?.goto);
   };
+
+  const transcripts: Array<string> = new Array(70).fill('');
 
   const handleSubmit = () => {
     const nextQuestionId = parseInt(questionId || '0') + 1;
-    const nextQuestion: any = data?.data?.find(
+    const nextQuestion = data?.data?.find(
       (question: any) => question.id === nextQuestionId
     );
 
-    const newAnswerItem = {
+    transcripts[currentQuestion?.id - 1] = transcript;
+
+    const newAnswerItem: any = {
       question_id: currentQuestion?.id,
       description: transcript,
       score: score ? score : 0,
     };
+
     setAnswer((prevAnswer: any) => ({
       ...prevAnswer,
       items: [...prevAnswer.items, newAnswerItem],
     }));
 
     if (nextQuestion) {
-      navigate(`/kuisioner/${nextQuestionId}`);
-      resetTranscript();
+      if (currentQuestion?.goto !== null) {
+        navigate(`/kuisioner/${currentQuestion?.goto}`);
+        resetTranscript();
+      } else if (goto) {
+        navigate(`/kuisioner/${goto}`);
+        resetTranscript();
+      } else {
+        navigate(`/kuisioner/${nextQuestionId}`);
+        resetTranscript();
+      }
     } else {
+      const maxItems = 70;
+      const answerItems = Array.from({ length: maxItems }, (_, index) => ({
+        question_id: index + 1,
+        description: transcripts[index] || '',
+        score: index < answer.items.length ? answer.items[index].score : 0,
+      }));
+
+      for (let i = 0; i < answer.items.length; i++) {
+        answerItems[i] = {
+          ...answerItems[i],
+          description: answer.items[i].description,
+          score: answer.items[i].score,
+        };
+      }
+
       const body = {
         code_attempt: code_attempt,
-        answer: answer?.items,
+        answer: answerItems,
       };
+
       postQuestionaire(body.code_attempt, body.answer);
       navigate(`/kuisioner/finish`);
     }
@@ -116,9 +145,9 @@ const Pertanyaan = () => {
             fadeIn ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
           } transition-opacity duration-500 transform`}
         >
-          <div className="flex">
+          <div className="flex flex-col gap-y-5 mx-36">
             <h2 className="text-center font-lato_black text-xl sm:text-base md:text-xl lg:text-2xl mb-4">
-              {currentQuestion?.description}
+              {currentQuestion?.question}
             </h2>
             <div>
               <button onClick={() => setModalIsOpen(true)}>
@@ -132,13 +161,6 @@ const Pertanyaan = () => {
             </div>
           </div>
           <div className="flex flex-col gap-y-5">
-            {data ? (
-              <div className="mx-10">
-                <VideoPlayer src={currentQuestion?.question} />
-              </div>
-            ) : (
-              <Loading id="loading" isOpen={true} />
-            )}
             {currentQuestion?.choices !== null &&
               currentQuestion?.choices?.map((item: any, index: any) => {
                 return (
