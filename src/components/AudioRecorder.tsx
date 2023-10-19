@@ -13,7 +13,7 @@ const AudioRecorder: FC<AudioRecorderProps> = ({
 }) => {
   return (
     <div className="flex flex-col items-center ">
-      <div className="border border-blue-950 flex mx-auto rounded-full px-12 lg:px-17">
+      <div className="border border-blue-950 flex flex-row-reverse mx-auto rounded-full px-12 lg:px-17">
         <button
           className="bg-transparent border-none hover:border-none focus:outline-none"
           onClick={isRecording ? handleStopRecording : handleStartRecording}
@@ -24,12 +24,21 @@ const AudioRecorder: FC<AudioRecorderProps> = ({
             height={33}
           />
         </button>
-        <button
-          className="bg-transparent border-none hover:border-none focus:outline-none relative"
-          onClick={handleReset}
-        >
-          <img src={DeleteRecord} width={33} height={33} alt="Delete Record" />
-        </button>
+        {isRecording === true ? (
+          <button
+            className="bg-transparent border-none hover:border-none focus:outline-none relative"
+            onClick={handleReset}
+          >
+            <img
+              src={DeleteRecord}
+              width={33}
+              height={33}
+              alt="Delete Record"
+            />
+          </button>
+        ) : (
+          <></>
+        )}
       </div>
       <div className="mt-4 text-gray-600 font-lato_regular ">
         <div className={isRecording ? 'block' : 'hidden'}>

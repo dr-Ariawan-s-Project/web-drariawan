@@ -45,8 +45,13 @@ const Admin = () => {
         <Sidebar />
       </div>
       <div className="w-full md:w-5/6">
+<<<<<<< HEAD
         <div className="lg:fixed md:fixed w-full z-20">
           <Navbar page={page} />
+=======
+        <div className="lg:fixed md:fixed w-full z-10">
+          <Navbar type="admin" page={page} />
+>>>>>>> 7c6c8743ee5d22ac2b83e28a3f1a6be776ccb667
         </div>
         <div className="relative my-auto p-4 mt-20 md:mt-0 bg-gray-50">
           {location.pathname.includes('list_user') ? (

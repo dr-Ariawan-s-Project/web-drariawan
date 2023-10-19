@@ -2,7 +2,6 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import axios from 'axios';
 
 import Admin from '../pages/admin';
-import OpsiAuth from '../pages/auth/OpsiAuth';
 import Register from '../pages/auth/Register';
 import Login from '../pages/auth/Login';
 import DataDiri from '../pages/data_diri';
@@ -11,17 +10,21 @@ import ListUser from '../pages/list_user';
 import ListKuisioner from '../pages/list_kuisioner';
 import ListPasien from '../pages/list_pasien';
 import Landing from '../pages/landing';
-import LembarPersetujuan from '../pages/lembar_persetujuan';
 import Pertanyaan from '../pages/pertanyaan';
-import Sambutan from '../pages/sambutan';
 import Success from '../pages/success';
 import Splash from '../pages/splash';
 import VerifikasiEmail from '../pages/verifikasi_email';
-import LandingPertanyaan from '../pages/landing_pertanyaan';
-import KuisionerOption from '../pages/kuisioner_option';
 import AdminLogin from '../pages/admin_login';
 import JadwalPraktik from '../pages/jadwal_praktik';
+<<<<<<< HEAD
 import Dashboard from '../pages/dashboard';
+=======
+import Scheduling from '../pages/scheduling';
+import Main from '../pages/main';
+import KonfirmasiPraktik from '../pages/konfirmasi_praktik';
+import ResumePraktik from '../pages/resume_praktik';
+
+>>>>>>> 7c6c8743ee5d22ac2b83e28a3f1a6be776ccb667
 const App = () => {
   axios.defaults.baseURL = 'https://drariawan.altapro.online';
   return (
@@ -31,22 +34,16 @@ const App = () => {
         <Route element={<Landing />} path="/landing" />
         <Route element={<Login />} path="/auth/option/login" />
         <Route element={<Register />} path="/auth/option/register" />
-        <Route element={<OpsiAuth />} path="/auth/option" />
         <Route element={<DataDiri />} path="/data_diri" />
         <Route element={<Kuisioner />} path="/kuisioner" />
         <Route element={<Pertanyaan />} path="/kuisioner/:questionId" />
         <Route element={<Success />} path="/kuisioner/finish" />
-        <Route element={<Sambutan />} path="/main/sambutan" />
-        <Route element={<LembarPersetujuan />} path="/lembar_persetujuan" />
         <Route element={<VerifikasiEmail />} path="/verifikasi_email" />
-        <Route element={<LandingPertanyaan />} path="/landing_pertanyaan" />
-        <Route element={<KuisionerOption />} path="/kuisioner_option" />
-        <Route
-          element={<LembarPersetujuan />}
-          path="/main/lembar_persetujuan"
-        />
+        <Route element={<Main />} path="/main" />
+        <Route element={<Scheduling />} path="/scheduling" />
+        <Route element={<KonfirmasiPraktik />} path="/scheduling/success" />
+        <Route element={<ResumePraktik />} path="/scheduling/resume_praktik" />
         <Route element={<AdminLogin />} path="/admin/login" />
-
         <Route element={<Admin />} path="/admin/">
           <Route element={<ListKuisioner />} path="list_kuisioner" />
           <Route element={<ListUser />} path="list_user" />
