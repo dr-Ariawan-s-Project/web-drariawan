@@ -59,17 +59,22 @@ const Pertanyaan = () => {
     setGoto(item?.goto);
   };
 
+  const transcripts: Array<string> = new Array(70).fill('');
+
   const handleSubmit = () => {
     const nextQuestionId = parseInt(questionId || '0') + 1;
-    const nextQuestion: any = data?.data?.find(
+    const nextQuestion = data?.data?.find(
       (question: any) => question.id === nextQuestionId
     );
 
-    const newAnswerItem = {
+    transcripts[currentQuestion?.id - 1] = transcript;
+
+    const newAnswerItem: any = {
       question_id: currentQuestion?.id,
       description: transcript,
       score: score ? score : 0,
     };
+
     setAnswer((prevAnswer: any) => ({
       ...prevAnswer,
       items: [...prevAnswer.items, newAnswerItem],
@@ -79,20 +84,34 @@ const Pertanyaan = () => {
       if (currentQuestion?.goto !== null) {
         navigate(`/kuisioner/${currentQuestion?.goto}`);
         resetTranscript();
+      } else if (goto) {
+        navigate(`/kuisioner/${goto}`);
+        resetTranscript();
       } else {
-        if (goto) {
-          navigate(`/kuisioner/${goto}`);
-          resetTranscript();
-        } else {
-          navigate(`/kuisioner/${nextQuestionId}`);
-          resetTranscript();
-        }
+        navigate(`/kuisioner/${nextQuestionId}`);
+        resetTranscript();
       }
     } else {
+      const maxItems = 70;
+      const answerItems = Array.from({ length: maxItems }, (_, index) => ({
+        question_id: index + 1,
+        description: transcripts[index] || '',
+        score: index < answer.items.length ? answer.items[index].score : 0,
+      }));
+
+      for (let i = 0; i < answer.items.length; i++) {
+        answerItems[i] = {
+          ...answerItems[i],
+          description: answer.items[i].description,
+          score: answer.items[i].score,
+        };
+      }
+
       const body = {
         code_attempt: code_attempt,
-        answer: answer?.items,
+        answer: answerItems,
       };
+
       postQuestionaire(body.code_attempt, body.answer);
       navigate(`/kuisioner/finish`);
     }
