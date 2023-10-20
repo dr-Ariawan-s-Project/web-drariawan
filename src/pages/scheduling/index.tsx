@@ -1,14 +1,17 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import Swal from 'sweetalert2';
+import axios from 'axios';
 import Cookies from 'js-cookie';
 
-const Scheduling: React.FC = () => {
+const Scheduling = () => {
   const navigate = useNavigate();
   const token = Cookies.get('token');
+  const [reserve, setReserve] = useState([]);
   const [selectedStartDate, setSelectedStartDate] = useState<any>(new Date());
+
   const daysOfWeek = [
     'Senin',
     'Selasa',
@@ -27,7 +30,27 @@ const Scheduling: React.FC = () => {
     '13:00',
     '14:00',
     '15:00',
+    '16:00',
+    '17:00',
+    '18.00',
   ];
+
+  const getBookedSchedule = async () => {
+    try {
+      const response = await axios.get('/v1/schedule/list');
+      setReserve(response?.data?.data?.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const isScheduleBooked = (day: string, time: string) => {
+    return reserve.some((schedule: any) => {
+      const start = schedule.time_start;
+      const end = schedule.time_end;
+      return schedule.day === day && time >= start && time < end;
+    });
+  };
 
   const handleStartDateChange = (date: Date | null) => {
     setSelectedStartDate(date);
@@ -44,25 +67,18 @@ const Scheduling: React.FC = () => {
     });
   };
 
-  const bookedSchedules = [
-    { day: 'Senin', time: '08:00' },
-    { day: 'Rabu', time: '12:00' },
-  ];
-
-  const isScheduleBooked = (day: string, time: string) => {
-    return bookedSchedules.some(
-      (schedule) => schedule.day === day && schedule.time === time
-    );
-  };
-
   useEffect(() => {
     if (!token) {
       navigate('/auth/option/login');
     }
   }, []);
 
+  useEffect(() => {
+    getBookedSchedule();
+  }, []);
+
   return (
-    <section className="w-screen h-screen flex flex-col justify-center items-center">
+    <section className="w-screen h-max my-10 flex flex-col justify-center items-center">
       <div className="text-center mb-20 flex flex-col gap-y-4">
         <h2 className="font-semibold text-2xl">Pilih Jadwal Praktik Dokter</h2>
         <p>Silahkan pilih rentang tanggal untuk konsultasi atau berobat</p>
@@ -104,7 +120,7 @@ const Scheduling: React.FC = () => {
           {daysOfWeek.map((day) => (
             <div
               key={day + time}
-              className={`w-24 p-2 justify-center border border-health-blue-thin cursor-pointer hover:bg-gray-200 ${
+              className={`w-24 p-2 justify-center border border-health-blue-thin cursor-pointer hover-bg-gray-200 ${
                 isScheduleBooked(day, time) ? 'bg-green-300' : ''
               }`}
               onClick={() => handleSelectSchedule(day, time)}
