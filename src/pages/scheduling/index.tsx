@@ -1,9 +1,13 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import Swal from 'sweetalert2';
+import Cookies from 'js-cookie';
 
 const Scheduling: React.FC = () => {
+  const navigate = useNavigate();
+  const token = Cookies.get('token');
   const [selectedStartDate, setSelectedStartDate] = useState<any>(new Date());
   const daysOfWeek = [
     'Senin',
@@ -43,7 +47,6 @@ const Scheduling: React.FC = () => {
   const bookedSchedules = [
     { day: 'Senin', time: '08:00' },
     { day: 'Rabu', time: '12:00' },
-    // Add more booked schedules as needed
   ];
 
   const isScheduleBooked = (day: string, time: string) => {
@@ -51,6 +54,12 @@ const Scheduling: React.FC = () => {
       (schedule) => schedule.day === day && schedule.time === time
     );
   };
+
+  useEffect(() => {
+    if (!token) {
+      navigate('/auth/option/login');
+    }
+  }, []);
 
   return (
     <section className="w-screen h-screen flex flex-col justify-center items-center">
