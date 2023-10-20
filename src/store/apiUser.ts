@@ -46,11 +46,11 @@ export const useUser = create<UserState>((set) => ({
       throw error;
     }
   },
-  getList: async (page: number, rp: number) => {
+  getList: async (page: number, limit: number) => {
     set({ loading: true, error: null });
     try {
       const response = await axios.get('/v1/user/list', {
-        params: { search: '', page, rp },
+        params: { search: '', page, limit },
       });
       set({ data: response.data.data, loading: false, error: null });
     } catch (error: any) {
