@@ -1,8 +1,17 @@
+import { useNavigate } from 'react-router-dom';
 import Button from '../../components/Button';
 
 const ResumePraktik = () => {
+  const navigate = useNavigate();
+  const handleConfirmation = () => {
+    navigate('/scheduling/success');
+  };
+
   return (
-    <section className="w-screen h-screen flex flex-col gap-y-5 justify-center items-center">
+    <section
+      className="w-screen h-screen flex flex-col gap-y-5 justify-center items-center
+     lg:py-0 lg:px-0 px-5 py-10 lg:my-0 my-5"
+    >
       <div className="flex flex-col gap-y-3">
         <h2 className="font-semibold text-2xl text-center">
           Konfirmasi Pendaftaran Pasien
@@ -12,7 +21,7 @@ const ResumePraktik = () => {
           <br /> yang anda pilih sudah benar.
         </p>
       </div>
-      <div className="w-max h-max shadow-md rounded-md">
+      <div className="lg:w-max lg:h-max shadow-md rounded-md">
         <div className="flex flex-col justify-center items-center">
           <h2 className="font-semibold my-10">Pendaftaran Pasien</h2>
           <div className="h-0 w-full border-t-2 border-slate-200" />
@@ -45,7 +54,13 @@ const ResumePraktik = () => {
         </div>
       </div>
       <div className="flex flex-row-reverse items-center gap-x-5 my-5">
-        <Button id="konfirmasi" label="Konfirmasi" type="blue" active={true} />
+        <Button
+          id="konfirmasi"
+          label="Konfirmasi"
+          type="blue"
+          active={true}
+          onClick={() => handleConfirmation()}
+        />
         <a className="cursor-pointer text-slate-300 hover:text-slate-400">
           Kembali
         </a>
