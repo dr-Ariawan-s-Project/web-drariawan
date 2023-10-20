@@ -16,6 +16,7 @@ import Splash from '../pages/splash';
 import VerifikasiEmail from '../pages/verifikasi_email';
 import AdminLogin from '../pages/admin_login';
 import JadwalPraktik from '../pages/jadwal_praktik';
+import Dashboard from '../pages/dashboard';
 import Scheduling from '../pages/scheduling';
 import Main from '../pages/main';
 import KonfirmasiPraktik from '../pages/konfirmasi_praktik';
@@ -45,6 +46,7 @@ const App = () => {
           <Route element={<ListUser />} path="list_user" />
           <Route element={<ListPasien />} path="list_pasien" />
           <Route element={<JadwalPraktik />} path="jadwal_praktik" />
+          <Route element={<Dashboard />} path="dashboard" />
         </Route>
       </Routes>
     </BrowserRouter>

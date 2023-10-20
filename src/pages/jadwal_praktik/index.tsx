@@ -1,278 +1,582 @@
-import React, { useState, useRef } from 'react';
+import { useState, useEffect, Key } from 'react';
 import { TrashIcon, PencilIcon } from '@heroicons/react/24/outline';
-import { useTable } from 'react-table';
-import { useFormik } from 'formik';
-import { UserPlusIcon } from '@heroicons/react/24/solid';
+import { useSchedule } from '../../store/apiSchedule';
+import { useSwalDeleteData } from '../../utils/swal/useSwalData';
+import { useSwalUpdate } from '../../utils/swal/useSwalData';
+import { ScheduleState } from '../../utils/api';
+import { Icon } from '@iconify/react';
+import { useUser } from '../../store/apiUser';
 
-import CircleButton from '../../components/CircleButton';
-import Modal from '../../components/Modal';
-import Input from '../../components/Input';
+const TableRow: React.FC<{
+  data: {
+    schedule_id: number;
+    user_id: number;
+    health_care_address: string;
+    day: string;
+    time_start: string;
+    time_end: string;
+  };
+  index: number;
+  onDelete: (id: number) => void;
+  onEdit: (data: any) => void;
+  doctorName: string;
+  editingSchedule: any;
+}> = ({ data, index, onDelete, onEdit, doctorName }) => {
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [idToDelete, setIdToDelete] = useState<number | null>();
 
-import { datas } from '../../datas/circle_button/circle_button.json';
+  const handleDeleteClick = () => {
+    setIdToDelete(data.schedule_id);
+    setIsDeleteModalOpen(true);
+  };
 
-import { createUserSchema } from '../../utils/yup/createUser';
-import { useSwalCreate } from '../../utils/swal/useSwalData';
-
-interface DoctorData {
-  No: number;
-  Dokter: string;
-  Email: string;
-  Spesialis: string;
-  'No Handphone': string;
-  'Hari Praktik': string;
-  'Jam Praktik': string;
-}
-
-const JadwalPraktik = () => {
-  const [isOpen, setIsOpen] = useState<boolean>(false);
-  const [selectedImage, setSelectedImage] = useState<File | null>(null);
-  const fileInputRef = useRef<HTMLInputElement | null>(null);
-
-  const userLabels = datas?.find((item) => item.type === 'user')?.title || [];
-  const formik = useFormik({
-    initialValues: {
-      name: '',
-      email: '',
-      specialization: '',
-      role: '',
-    },
-    validationSchema: createUserSchema,
-    onSubmit: (values: any) => {
-      values['image'] = selectedImage;
-      setIsOpen(false);
-      // eslint-disable-next-line react-hooks/rules-of-hooks
-      useSwalCreate('success');
-    },
-  });
-  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-
-    if (file) {
-      setSelectedImage(file);
+  const handleConfirmDelete = () => {
+    if (idToDelete !== null && idToDelete !== undefined) {
+      onDelete(idToDelete);
+      setIsDeleteModalOpen(false);
     }
   };
-  const data: any = React.useMemo(() => {
-    const dummyData: DoctorData[] = [
-      {
-        No: 1,
-        Dokter: 'Dokter A',
-        Email: 'dokterA@example.com',
-        Spesialis: 'Obgyn',
-        'No Handphone': '081200000000',
-        'Hari Praktik': 'Senin-Jumat',
-        'Jam Praktik': '08:00 - 09:00',
-      },
-      {
-        No: 2,
-        Dokter: 'Dokter B',
-        Email: 'dokterB@example.com',
-        Spesialis: 'Obgyn',
-        'No Handphone': '081200000001',
-        'Hari Praktik': 'Senin-Jumat',
-        'Jam Praktik': '08:00 - 09:00',
-      },
-    ];
-    return dummyData;
-  }, []);
 
-  const columns: any = React.useMemo(
-    () => [
-      {
-        Header: 'No',
-        accessor: 'No',
-      },
-      {
-        Header: 'Dokter',
-        accessor: 'Dokter',
-      },
-      {
-        Header: 'Email',
-        accessor: 'Email',
-      },
-      {
-        Header: 'Spesialis',
-        accessor: 'Spesialis',
-      },
-      {
-        Header: 'No Handphone',
-        accessor: 'No Handphone',
-      },
-      {
-        Header: 'Hari Praktik',
-        accessor: 'Hari Praktik',
-      },
-      {
-        Header: 'Jam Praktik',
-        accessor: 'Jam Praktik',
-      },
-      {
-        Header: 'Actions',
-        accessor: 'actions',
-        Cell: () => (
-          <div className="flex items-center justify-center gap-x-2 my-4">
-            <TrashIcon className="cursor-pointer" width={20} height={20} />
-            <PencilIcon className="cursor-pointer" width={20} height={20} />
-          </div>
-        ),
-      },
-    ],
-    []
-  );
+  const handleCancelDelete = () => {
+    setIsDeleteModalOpen(false);
+  };
 
-  const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } =
-    useTable<DoctorData>({
-      columns,
-      data,
-    });
+  const handleEditClick = () => {
+    onEdit(data);
+  };
 
   return (
-    <section>
-      <div className="relative overflow-x-auto mt-20">
-        <table
-          {...getTableProps()}
-          className="shadow-lg w-full  min-w-full sm:min-w-max"
-        >
-          <thead className="font-semibold bg-health-blue-reguler text-white h-14">
-            {headerGroups.map((headerGroup) => (
-              <tr {...headerGroup.getHeaderGroupProps()}>
-                {headerGroup.headers.map((column) => (
-                  <th
-                    {...column.getHeaderProps()}
-                    className="border-b p-2 text-center"
-                  >
-                    {column.render('Header')}
-                  </th>
-                ))}
-              </tr>
-            ))}
-          </thead>
+    <tr className="border-b text-left">
+      <td className="p-2">{index + 1}</td>
+      <td className="p-2">{doctorName}</td>
+      <td className="p-2">{data.health_care_address}</td>
+      <td className="p-2">{data.day}</td>
+      <td className="p-2">{data.time_start}</td>
+      <td className="p-2">{data.time_end}</td>
+      <td className="p-2">
+        <div className="flex items-center justify-center gap-x-2">
+          <TrashIcon
+            className="cursor-pointer hover:text-red-500"
+            width={20}
+            height={20}
+            onClick={handleDeleteClick}
+          />
 
-          <tbody {...getTableBodyProps()}>
-            {rows.map((row) => {
-              prepareRow(row);
-              return (
-                <tr {...row.getRowProps()} className="border-b text-left">
-                  {row.cells.map((cell) => (
-                    <td
-                      {...cell.getCellProps()}
-                      className="p-2"
-                      style={{ minWidth: '100px' }}
-                    >
-                      {cell.render('Cell')}
-                    </td>
-                  ))}
-                </tr>
-              );
-            })}
-          </tbody>
-        </table>
-      </div>
-      <div className="fixed right-5 bottom-5">
-        <CircleButton
-          id="add-user"
-          label={userLabels}
-          onClick={() => setIsOpen(true)}
-        />
-      </div>
-      <Modal id="add-new-user" isOpen={isOpen} onClose={() => setIsOpen(false)}>
-        <div className="w-max h-max px-10 flex flex-col items-center transition-opacity duration-300 ease-in-out transform">
-          <form
-            className="w-96 py-32 flex flex-col gap-y-7"
-            onSubmit={formik.handleSubmit}
-          >
-            {selectedImage ? (
-              <label
-                htmlFor="file-input"
-                className="cursor-pointer text-blue-500"
-              >
-                <img
-                  src={URL.createObjectURL(selectedImage)}
-                  alt="Selected Image"
-                  className="mx-auto rounded-full w-28 h-28"
-                />
-                <input
-                  type="file"
-                  id="file-input"
-                  accept="image/*"
-                  style={{ display: 'none' }}
-                  onChange={handleImageChange}
-                  ref={fileInputRef}
-                />
-              </label>
-            ) : (
-              <label
-                htmlFor="file-input"
-                className="cursor-pointer text-blue-500"
-              >
-                <UserPlusIcon
-                  className="mx-auto"
-                  color="#004878"
-                  width={100}
-                  height={100}
-                />
-                <input
-                  type="file"
-                  id="file-input"
-                  accept="image/*"
-                  style={{ display: 'none' }}
-                  onChange={handleImageChange}
-                  ref={fileInputRef}
-                />
-              </label>
-            )}
-            {selectedImage && (
-              <button
-                className="w-40 h-10 text-health-blue-dark flex justify-center items-center mx-auto focus:outline-none border-none"
-                onClick={() => setSelectedImage(null)}
-              >
-                Remove Photo
-              </button>
-            )}
-            <Input
-              value={formik.values.name}
-              onChange={formik.handleChange}
-              id="name"
-              name="name"
-              placeholder="Name"
-            />
-            <Input
-              value={formik.values.email}
-              onChange={formik.handleChange}
-              id="email"
-              name="email"
-              placeholder="Email"
-            />
-            <Input
-              value={formik.values.specialization}
-              onChange={formik.handleChange}
-              id="specialization"
-              name="specialization"
-              placeholder="Specialization"
-            />
-            <label className="block text-gray-700 text-sm font-bold mb-2">
-              Choose Role:
-            </label>
-            <select
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-              id="role"
-              name="role"
-              value={formik.values.role}
-              onChange={formik.handleChange}
-            >
-              <option value="">Choose Role</option>
-              <option value="dokter">Dokter</option>
-              <option value="perawat">Perawat</option>
-              <option value="admin">Admin</option>
-            </select>
-            <button
-              className="my-5 w-96 h-10 rounded-md font-semibold text-white flex justify-center items-center bg-health-blue-dark border-none focus:outline-none hover:bg-health-blue-reguler cursor-pointer"
-              type="submit"
-            >
-              Submit
-            </button>
-          </form>
+          <PencilIcon
+            className="cursor-pointer hover:text-health-blue-light mx-2"
+            width={20}
+            height={20}
+            onClick={handleEditClick}
+          />
         </div>
-      </Modal>
+      </td>
+      {isDeleteModalOpen && (
+        <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center bg-gray-900 bg-opacity-50 z-50">
+          <div className="bg-white p-4 rounded-lg shadow-md">
+            <p>Apakah Anda yakin ingin menghapus data ini?</p>
+            <div className="flex justify-end mt-4">
+              <button
+                className="bg-red-500 text-white px-4 py-2 mr-2 rounded"
+                onClick={handleConfirmDelete}
+              >
+                Ya
+              </button>
+              <button
+                className="bg-gray-300 px-4 py-2 rounded"
+                onClick={handleCancelDelete}
+              >
+                Tidak
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+    </tr>
+  );
+};
+
+const JadwalPraktik = () => {
+  const [page, setPage] = useState<number>(1);
+  const [startNumber, setStartNumber] = useState<number>(1);
+  const {
+    data: scheduleData,
+    getSchedules,
+    postSchedule,
+    putSchedule,
+    deleteSchedule,
+  } = useSchedule() as ScheduleState as any;
+
+  const [selectedUserId, setSelectedUserId] = useState('');
+  const { data: userData } = useUser();
+  const { getList } = useUser() as any;
+
+  useEffect(() => {
+    getSchedules(page, 10);
+  }, [page]);
+
+  useEffect(() => {
+    getList(page, 10);
+  }, [page]);
+
+  const [editingSchedule, setEditingSchedule] = useState<any>(null);
+  const [isEditModalOpen, setEditModalOpen] = useState(false);
+  const [isAddModalOpen, setAddModalOpen] = useState(false);
+  const [addScheduleData, setAddScheduleData] = useState({
+    doctorName: '',
+    health_care_address: '',
+    day: '',
+    time_start: '',
+    time_end: '',
+  });
+  const handleDeleteSchedule = async (id: number | null | undefined) => {
+    if (id !== null && id !== undefined) {
+      try {
+        await deleteSchedule(id);
+        useSwalDeleteData('success');
+        setPage(1);
+      } catch (error: any) {
+        console.error('Gagal menghapus data: ', error);
+        useSwalDeleteData('failed', error.message);
+      }
+    }
+  };
+  const handleNextPage = () => {
+    const nextPage = page + 1;
+    setPage(nextPage);
+    getSchedules(nextPage, 10);
+    setStartNumber((nextPage - 1) * 10);
+  };
+
+  const handleEditSchedule = (schedule: any) => {
+    setEditingSchedule(schedule);
+    setEditModalOpen(true);
+  };
+
+  const handleAddModalClose = () => {
+    setAddModalOpen(false);
+    setAddScheduleData({
+      doctorName: '',
+      health_care_address: '',
+      day: '',
+      time_start: '',
+      time_end: '',
+    });
+  };
+  const handleAddScheduleSubmit = async () => {
+    try {
+      if (selectedUserId && addScheduleData) {
+        const selectedUser = userData.data.find(
+          (user) => user.id === parseInt(selectedUserId)
+        );
+        if (selectedUser) {
+          const scheduleData = {
+            user_id: selectedUser.id,
+            health_care_address: addScheduleData.health_care_address,
+            day: addScheduleData.day,
+            time_start: addScheduleData.time_start,
+            time_end: addScheduleData.time_end,
+          };
+
+          const response = await postSchedule(scheduleData, selectedUser);
+
+          if (response.status === 'success') {
+            useSwalUpdate('success');
+            handleAddModalClose();
+          } else {
+            console.error('Failed to post Schedule data:', response.message);
+            useSwalUpdate('failed', response.message);
+          }
+        } else {
+          console.error('Selected user not found in userData.data.');
+          useSwalUpdate('failed', 'Selected user not found in userData.data.');
+        }
+      } else {
+        console.error('Invalid data for adding a schedule.');
+        useSwalUpdate('failed', 'Invalid data for adding a schedule.');
+      }
+    } catch (error: any) {
+      console.error('Failed to post Schedule data:', error);
+      useSwalUpdate('failed', error.message);
+    }
+  };
+
+  const handleEditSubmit = async (updatedSchedule: any) => {
+    try {
+      if (updatedSchedule && updatedSchedule.schedule_id) {
+        await putSchedule(updatedSchedule.schedule_id, updatedSchedule);
+        useSwalUpdate('success');
+        setEditModalOpen(false);
+        getSchedules(page, 10);
+      } else {
+        console.error('Gagal mengedit data: Invalid or missing schedule_id');
+        useSwalUpdate('failed', 'Invalid or missing schedule_id');
+      }
+    } catch (error: any) {
+      console.error('Gagal mengedit data: ', error);
+      useSwalUpdate('failed', error.message);
+    }
+  };
+
+  return (
+    <section className="min-h-screen flex flex-col justify-center items-center">
+      {isEditModalOpen && (
+        <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center bg-gray-900 bg-opacity-50 z-50">
+          <div className="w-full max-w-xs">
+            <form
+              className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4"
+              onSubmit={(e) => {
+                e.preventDefault();
+                handleEditSubmit(editingSchedule);
+              }}
+            >
+              <div className="mb-4">
+                <label
+                  className="block text-gray-500 text-sm font-thin mb-2"
+                  htmlFor="name"
+                >
+                  Dokter
+                </label>
+                <input
+                  className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                  type="text"
+                  name="name"
+                  value={editingSchedule?.doctorName || ''}
+                  onChange={(e) =>
+                    setEditingSchedule({
+                      ...editingSchedule,
+                      doctorName: e.target.value,
+                    })
+                  }
+                  placeholder="Nama Dokter"
+                />
+                <label
+                  className="block text-gray-500 text-sm font-thin my-2"
+                  htmlFor="field2"
+                >
+                  Klinik
+                </label>
+                <input
+                  className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                  type="text"
+                  name="health_care_address"
+                  value={editingSchedule?.health_care_address || ''}
+                  onChange={(e) =>
+                    setEditingSchedule({
+                      ...editingSchedule,
+                      health_care_address: e.target.value,
+                    })
+                  }
+                  placeholder="Klinik"
+                />
+                <label
+                  className="block text-gray-500 text-sm font-thin my-2"
+                  htmlFor="day"
+                >
+                  Hari{' '}
+                </label>
+                <input
+                  className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                  type="text"
+                  name="day"
+                  value={editingSchedule?.day || ''}
+                  onChange={(e) =>
+                    setEditingSchedule({
+                      ...editingSchedule,
+                      day: e.target.value,
+                    })
+                  }
+                  placeholder="Hari"
+                />
+                <label
+                  className="block text-gray-500 text-sm font-thin my-2"
+                  htmlFor="time_start"
+                >
+                  Jam Mulai{' '}
+                </label>
+                <input
+                  className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                  type="text"
+                  name="time_start"
+                  value={editingSchedule?.time_start || ''}
+                  onChange={(e) =>
+                    setEditingSchedule({
+                      ...editingSchedule,
+                      time_start: e.target.value,
+                    })
+                  }
+                  placeholder="Jam Mulai"
+                />
+                <label
+                  className="block text-gray-500 text-sm font-thin my-2"
+                  htmlFor="time_end"
+                >
+                  Jam Selesai
+                </label>
+                <input
+                  className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                  type="text"
+                  name="time_end"
+                  value={editingSchedule?.time_end || ''}
+                  onChange={(e) =>
+                    setEditingSchedule({
+                      ...editingSchedule,
+                      time_end: e.target.value,
+                    })
+                  }
+                  placeholder="Jam Selesai"
+                />
+                <div className=" flex justify-end mt-5">
+                  <button
+                    type="submit"
+                    className="bg-blue-500 text-white px-4 py-2 mr-2 rounded"
+                  >
+                    Simpan
+                  </button>
+                  <button
+                    type="button"
+                    className="bg-gray-300 px-4 py-2 rounded"
+                    onClick={() => setEditModalOpen(false)}
+                  >
+                    Batal
+                  </button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+      {isAddModalOpen && (
+        <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center bg-gray-900 bg-opacity-50 z-50">
+          <div className="w-full max-w-xs">
+            <form
+              className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4"
+              onSubmit={(e) => {
+                e.preventDefault();
+                handleAddScheduleSubmit();
+              }}
+            >
+              <div className="mb-4">
+                <label
+                  className="block text-gray-500 text-sm font-thin my-2"
+                  htmlFor="user_id"
+                >
+                  Dokter
+                </label>
+                <select
+                  id="user_id"
+                  name="user_id"
+                  value={selectedUserId}
+                  onChange={(e) => setSelectedUserId(e.target.value)}
+                >
+                  <option value="">Pilih Dokter</option>
+                  {Array.isArray(userData?.data) &&
+                    userData.data.map((user: any) => (
+                      <option key={user.id} value={user.id}>
+                        {user.name}
+                      </option>
+                    ))}
+                </select>
+
+                <label
+                  className="block text-gray-500 text-sm font-thin my-2"
+                  htmlFor="health_care_address"
+                >
+                  Klinik
+                </label>
+                <input
+                  className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                  type="text"
+                  name="health_care_address"
+                  value={addScheduleData?.health_care_address || ''}
+                  onChange={(e) =>
+                    setAddScheduleData({
+                      ...addScheduleData,
+                      health_care_address: e.target.value,
+                    })
+                  }
+                  placeholder="Klinik"
+                />
+                <label
+                  className="block text-gray-500 text-sm font-thin my-2"
+                  htmlFor="day"
+                >
+                  Hari
+                </label>
+                <input
+                  className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                  type="text"
+                  name="day"
+                  value={addScheduleData?.day || ''}
+                  onChange={(e) =>
+                    setAddScheduleData({
+                      ...addScheduleData,
+                      day: e.target.value,
+                    })
+                  }
+                  placeholder="Hari"
+                />
+                <label
+                  className="block text-gray-500 text-sm font-thin my-2"
+                  htmlFor="time_start"
+                >
+                  Jam Mulai
+                </label>
+                <input
+                  className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                  type="text"
+                  name="time_start"
+                  value={addScheduleData?.time_start || ''}
+                  onChange={(e) =>
+                    setAddScheduleData({
+                      ...addScheduleData,
+                      time_start: e.target.value,
+                    })
+                  }
+                  placeholder="Jam Mulai"
+                />
+                <label
+                  className="block text-gray-500 text-sm font-thin my-2"
+                  htmlFor="time_end"
+                >
+                  Jam Selesai
+                </label>
+                <input
+                  className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                  type="text"
+                  name="time_end"
+                  value={addScheduleData?.time_end || ''}
+                  onChange={(e) =>
+                    setAddScheduleData({
+                      ...addScheduleData,
+                      time_end: e.target.value,
+                    })
+                  }
+                  placeholder="Jam Selesai"
+                />
+                <div className=" flex justify-end mt-5">
+                  <button
+                    type="submit"
+                    className="bg-blue-500 text-white px-4 py-2 mr-2 rounded"
+                  >
+                    Simpan
+                  </button>
+                  <button
+                    type="button"
+                    className="bg-gray-300 px-4 py-2 rounded"
+                    onClick={() => {
+                      setAddModalOpen(false);
+                      setAddScheduleData({
+                        doctorName: '',
+                        health_care_address: '',
+                        day: '',
+                        time_start: '',
+                        time_end: '',
+                      });
+                    }}
+                  >
+                    Batal
+                  </button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      <div className="overflow-x-auto mx-auto w-full mt-2 sm:mt-20">
+        <div className="relative overflow-x-auto h-[80vh] overflow-y-scroll">
+          <div className="flex justify-end my-4 mr-10">
+            <div className="flex justify-end my-4 mr-10">
+              <button
+                className="text-health-blue-dark bg-white hover:bg-health-blue-dark text-sm hover:text-white font-lato_regular border-health-blue-dark focus:outline-none flex items-center"
+                onClick={() => setAddModalOpen(true)}
+              >
+                <Icon
+                  icon="material-symbols:add-ad-sharp"
+                  width="18"
+                  height="18"
+                />
+                <span className="ml-2">Tambah Jadwal</span>
+              </button>
+            </div>
+          </div>
+          <table className="w-full table-auto bg-white">
+            <thead className="text-health-blue-dark font-lato_regular">
+              <tr>
+                <th className="border-b p-3 text-center">No</th>
+                <th className="border-b p-3 text-center">Dokter</th>
+                <th className="border-b p-3 text-center">Klinik</th>
+                <th className="border-b p-3 text-center">Hari</th>
+                <th className="border-b p-3 text-center">Jam Mulai</th>
+                <th className="border-b p-3 text-center">Jam Selesai</th>
+                <th className="border-b p-3 text-center">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {Array.isArray(scheduleData?.data) &&
+              scheduleData.data.length > 0 ? (
+                scheduleData.data.map(
+                  (
+                    rowData: {
+                      User?: any;
+                      schedule_id?: number;
+                      user_id?: number;
+                      health_care_address?: string;
+                      day?: string;
+                      time_start?: string;
+                      time_end?: string;
+                    },
+                    index: Key | null | undefined
+                  ) => (
+                    <TableRow
+                      key={index}
+                      data={rowData}
+                      index={index + startNumber}
+                      doctorName={rowData.User?.Name || ''}
+                      onEdit={handleEditSchedule}
+                      editingSchedule={editingSchedule}
+                      onDelete={handleDeleteSchedule}
+                    />
+                  )
+                )
+              ) : (
+                <tr>
+                  <td colSpan={6} className="text-center py-2">
+                    No data available
+                  </td>
+                </tr>
+              )}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div className="flex flex-col md:flex-row justify-center items-center mt-10 gap-5">
+        <button
+          className="w-full md:w-32 h-10 bg-health-blue-dark border-none hover-bg-health-blue-reguler focus:outline-none rounded-md text-white font-semibold flex items-center justify-center"
+          onClick={() => setPage(page - 1)}
+          disabled={page === 1}
+        >
+          Prev
+        </button>
+        <div className="w-full md:w-32 mt-3 md:mt-0">
+          <input
+            className="w-full h-10 p-3 rounded-sm border border-health-blue-dark text-center"
+            type="number"
+            value={page}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+              setPage(parseInt(e.target.value))
+            }
+          />
+        </div>
+        <button
+          className="w-full md:w-32 h-10 bg-health-blue-dark border-none hover-bg-health-blue-reguler focus:outline-none rounded-md text-white font-semibold flex items-center justify-center"
+          onClick={handleNextPage}
+          disabled={!scheduleData?.data || scheduleData.data.length === 0}
+        >
+          Next
+        </button>
+      </div>
     </section>
   );
 };

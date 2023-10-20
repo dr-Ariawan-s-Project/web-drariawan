@@ -1,201 +1,302 @@
-import { useState, useRef } from 'react';
-import { UserPlusIcon } from '@heroicons/react/24/solid';
-import { Formik, Form, Field, ErrorMessage } from 'formik';
+import { useState, useEffect } from 'react';
+import { TrashIcon, PencilIcon } from '@heroicons/react/24/outline';
+import { useUser } from '../../store/apiUser';
+import { UserState } from '../../utils/api';
+import { useSwalDeleteData } from '../../utils/swal/useSwalData';
+import { useSwalUpdate } from '../../utils/swal/useSwalData';
 
-import { useSwalCreate } from '../../utils/swal/useSwalData';
-import { createUserSchema } from '../../utils/yup/createUser';
-import { datas } from '../../datas/circle_button/circle_button.json';
+const TableRow: React.FC<{
+  data: UserState['data'][0];
+  index: number;
+  onDelete: (id: string) => void;
+  onEdit: (data: UserState['data'][0]) => void;
+}> = ({ data, index, onDelete, onEdit }) => {
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [idToDelete, setIdToDelete] = useState<string>('');
 
-import Table from '../../components/Table';
-import Modal from '../../components/Modal';
-import Input from '../../components/Input';
-import CircleButton from '../../components/CircleButton';
+  const handleDeleteClick = () => {
+    setIdToDelete(data.id);
+    setIsDeleteModalOpen(true);
+  };
+
+  const handleConfirmDelete = () => {
+    onDelete(idToDelete);
+    setIsDeleteModalOpen(false);
+  };
+
+  const handleCancelDelete = () => {
+    setIsDeleteModalOpen(false);
+  };
+
+  const handleEditClick = () => {
+    onEdit(data);
+  };
+
+  return (
+    <tr className="border-b text-left">
+      <td className="p-2">{index + 1}</td>
+      <td className="p-2">{data.name}</td>
+      <td className="p-2">{data.email}</td>
+      <td className="p-2">{data.phone}</td>
+      <td className="p-2">{data.role}</td>
+      <td className="p-2">
+        <div className="flex items-center justify-center gap-x-2">
+          <TrashIcon
+            className="cursor-pointer hover:text-red-500"
+            width={20}
+            height={20}
+            onClick={handleDeleteClick}
+          />
+          <PencilIcon
+            className="cursor-pointer hover:text-health-blue-light mx-2"
+            width={20}
+            height={20}
+            onClick={handleEditClick}
+          />
+        </div>
+      </td>
+      {isDeleteModalOpen && (
+        <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center bg-gray-900 bg-opacity-50 z-50">
+          <div className="bg-white p-4 rounded-lg shadow-md">
+            <p>Apakah Anda yakin ingin menghapus data ini?</p>
+            <div className="flex justify-end mt-4">
+              <button
+                className="bg-red-500 text-white px-4 py-2 mr-2 rounded"
+                onClick={handleConfirmDelete}
+              >
+                Ya
+              </button>
+              <button
+                className="bg-gray-300 px-4 py-2 rounded"
+                onClick={handleCancelDelete}
+              >
+                Tidak
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+    </tr>
+  );
+};
 
 const ListUser = () => {
-  const [page, setPage] = useState<number>(0);
-  const [isOpen, setIsOpen] = useState<boolean>(false);
-  const [selectedImage, setSelectedImage] = useState<File | null>(null);
-  const fileInputRef = useRef<HTMLInputElement | null>(null);
+  const [page, setPage] = useState<number>(1);
+  const [startNumber, setStartNumber] = useState<number>(1);
+  const { data: userData } = useUser() as any;
+  const { getList, deleteUser, putUser } = useUser() as any;
 
-  const userLabels: any =
-    datas?.find((item) => item.type === 'user')?.title || [];
+  useEffect(() => {
+    getList(page, 10);
+  }, [getList, page]);
+  const [editingUser, setEditingUser] = useState<any>(null);
+  const [isEditModalOpen, setEditModalOpen] = useState(false);
+
+  const handleDeleteUser = async (id: string) => {
+    try {
+      await deleteUser(id);
+      useSwalDeleteData('success');
+      setPage(1);
+    } catch (error: any) {
+      console.error('Gagal menghapus data: ', error);
+      useSwalDeleteData('failed', error.message);
+    }
+  };
+
+  const handleNextPage = () => {
+    const nextPage = page + 1;
+    setPage(nextPage);
+    getList(nextPage, 10);
+    setStartNumber((nextPage - 1) * 10);
+  };
+
+  const handleEditUser = (user: any) => {
+    setEditingUser(user);
+    setEditModalOpen(true);
+  };
+
+  const handleEditSubmit = async (updatedUser: any) => {
+    try {
+      await putUser(updatedUser);
+      setEditModalOpen(false);
+    } catch (error: any) {
+      console.error('Gagal mengedit data: ', error);
+    }
+  };
+
+  useEffect(() => {
+    getList(page, 10);
+    setStartNumber((page - 1) * 10);
+  }, [getList, page]);
 
   return (
     <section className="min-h-screen flex flex-col justify-center items-center">
-      <div className="w-11/12 md:w-3/4 lg:w-2/3 xl:w-1/2 mt-2 md:mt-20 lg:mt-20">
-        <Table />
+      {isEditModalOpen && (
+        <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center bg-gray-900 bg-opacity-50 z-50">
+          <div className="w-full max-w-xs">
+            <form
+              className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4"
+              onSubmit={(e) => {
+                e.preventDefault();
+                handleEditSubmit(editingUser);
+              }}
+            >
+              <div className="mb-4">
+                <label
+                  className="block text-gray-500 text-sm font-thin mb-2"
+                  htmlFor="name"
+                >
+                  Name
+                </label>
+                <input
+                  className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                  type="text"
+                  name="name"
+                  value={editingUser?.name || ''}
+                  onChange={(e) =>
+                    setEditingUser({
+                      ...editingUser,
+                      name: e.target.value,
+                    })
+                  }
+                  placeholder="Nama"
+                />
+                <label
+                  className="block text-gray-500 text-sm font-thin my-2"
+                  htmlFor="Email"
+                >
+                  Email
+                </label>
+                <input
+                  className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                  type="text"
+                  name="email"
+                  value={editingUser?.email || ''}
+                  onChange={(e) =>
+                    setEditingUser({
+                      ...editingUser,
+                      email: e.target.value,
+                    })
+                  }
+                  placeholder="Email"
+                />
+                <label
+                  className="block text-gray-500 text-sm font-thin my-2"
+                  htmlFor="Phone"
+                >
+                  Phone
+                </label>
+                <input
+                  className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                  type="text"
+                  name="phone"
+                  value={editingUser?.phone || ''}
+                  onChange={(e) =>
+                    setEditingUser({
+                      ...editingUser,
+                      phone: e.target.value,
+                    })
+                  }
+                  placeholder="Nomor Telepon"
+                />
+                <label
+                  className="block text-gray-500 text-sm font-light my-2"
+                  htmlFor="Phone"
+                >
+                  Role
+                </label>
+                <input
+                  className="shadow appearance-none border rounded w-full mb-10 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                  type="text"
+                  name="partner_id"
+                  value={editingUser?.role || ''}
+                  onChange={(e) =>
+                    setEditingUser({
+                      ...editingUser,
+                      role: e.target.value,
+                    })
+                  }
+                  placeholder="Role"
+                />
+                <div className=" flex justify-end">
+                  <button
+                    type="submit"
+                    className="bg-blue-500 text-white px-4 py-2 mr-2 rounded"
+                  >
+                    Simpan
+                  </button>
+                  <button
+                    type="button"
+                    className="bg-gray-300 px-4 py-2 rounded"
+                    onClick={() => setEditModalOpen(false)}
+                  >
+                    Batal
+                  </button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+      <div className="overflow-x-auto mx-auto w-full mt-2 sm:mt-20">
+        <div className="relative overflow-x-auto h-[80vh] overflow-y-scroll">
+          <table className="w-full table-auto bg-white">
+            <thead className="  text-health-blue-dark font-lato_regular  ">
+              <tr>
+                <th className="border-b p-3 text-center">No</th>
+                <th className="border-b p-3 text-center">Name</th>
+                <th className="border-b p-3 text-center">Email</th>
+                <th className="border-b p-3 text-center">Phone</th>
+                <th className="border-b p-3 text-center">Role</th>
+                <th className="border-b p-3 text-center">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {Array.isArray(userData?.data) && userData.data.length > 0 ? (
+                userData.data.map((rowData: any, index: any) => (
+                  <TableRow
+                    key={index}
+                    data={rowData}
+                    index={index + startNumber}
+                    onDelete={handleDeleteUser}
+                    onEdit={handleEditUser}
+                  />
+                ))
+              ) : (
+                <tr>
+                  <td colSpan={8} className="text-center py-2"></td>
+                </tr>
+              )}
+            </tbody>
+          </table>
+        </div>
       </div>
-      <div className="flex  md:flex-row justify-center items-center mt-10 gap-5">
+      <div className="flex flex-col md:flex-row justify-center items-center mt-10 gap-5">
         <button
           className="w-full md:w-32 h-10 bg-health-blue-dark border-none hover:bg-health-blue-reguler focus:outline-none rounded-md text-white font-semibold flex items-center justify-center"
           onClick={() => setPage(page - 1)}
+          disabled={page === 1}
         >
           Prev
         </button>
-        <input
-          className="w-full md:w-32 h-10 p-3 rounded-sm border border-health-blue-dark text-center"
-          type="number"
-          value={page}
-          onChange={(e: any) => setPage(e.target.valueAsNumber)}
-        />
+        <div className="w-full md:w-32 mt-3 md:mt-0">
+          <input
+            className="w-full h-10 p-3 rounded-sm border border-health-blue-dark text-center"
+            type="number"
+            value={page}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+              setPage(parseInt(e.target.value))
+            }
+          />
+        </div>
         <button
           className="w-full md:w-32 h-10 bg-health-blue-dark border-none hover:bg-health-blue-reguler focus:outline-none rounded-md text-white font-semibold flex items-center justify-center"
-          onClick={() => setPage(page + 1)}
+          onClick={handleNextPage}
+          disabled={!userData?.data || userData.data.length === 0}
         >
           Next
         </button>
-        <div className="fixed right-5 bottom-5">
-          <CircleButton
-            id="add-user"
-            label={userLabels}
-            onClick={() => setIsOpen(true)}
-          />
-        </div>
       </div>
-      <Modal id="add-new-user" isOpen={isOpen} onClose={() => setIsOpen(false)}>
-        <div className="w-max h-max px-10 flex flex-col items-center transition-opacity duration-300 ease-in-out transform">
-          <Formik
-            initialValues={{
-              name: '',
-              email: '',
-              specialization: '',
-              role: '',
-            }}
-            validationSchema={createUserSchema}
-            onSubmit={(values: any) => {
-              values['image'] = selectedImage;
-              setIsOpen(false);
-              useSwalCreate('success');
-            }}
-          >
-            <Form className="w-96 py-32 flex flex-col gap-y-7">
-              {selectedImage ? (
-                <label
-                  htmlFor="file-input"
-                  className="cursor-pointer text-blue-500"
-                >
-                  <img
-                    src={URL.createObjectURL(selectedImage)}
-                    alt="Selected Image"
-                    className="mx-auto rounded-full w-28 h-28"
-                  />
-                  <input
-                    type="file"
-                    id="file-input"
-                    accept="image/*"
-                    style={{ display: 'none' }}
-                    onChange={(e) => {
-                      const file = e.target.files?.[0];
-                      if (file) {
-                        setSelectedImage(file);
-                      }
-                    }}
-                    ref={fileInputRef}
-                  />
-                </label>
-              ) : (
-                <label
-                  htmlFor="file-input"
-                  className="cursor-pointer text-blue-500"
-                >
-                  <UserPlusIcon
-                    className="mx-auto"
-                    color="#004878"
-                    width={100}
-                    height={100}
-                  />
-                  <input
-                    type="file"
-                    id="file-input"
-                    accept="image/*"
-                    style={{ display: 'none' }}
-                    onChange={(e) => {
-                      const file = e.target.files?.[0];
-                      if (file) {
-                        setSelectedImage(file);
-                      }
-                    }}
-                    ref={fileInputRef}
-                  />
-                </label>
-              )}
-              {selectedImage && (
-                <button
-                  className="w-40 h-10 text-health-blue-dark flex justify-center items-center mx-auto focus:outline-none border-none"
-                  onClick={() => setSelectedImage(null)}
-                >
-                  Remove Photo
-                </button>
-              )}
-              <Field
-                as={Input}
-                name="name"
-                id="name"
-                placeholder="Name"
-                className="text-gray-700"
-              />
-              <ErrorMessage
-                name="name"
-                component="div"
-                className="text-red-500"
-              />
-
-              <Field
-                as={Input}
-                name="email"
-                id="email"
-                placeholder="Email"
-                className="text-gray-700"
-              />
-              <ErrorMessage
-                name="email"
-                component="div"
-                className="text-red-500"
-              />
-
-              <Field
-                as={Input}
-                name="specialization"
-                id="specialization"
-                placeholder="Specialization"
-                className="text-gray-700"
-              />
-              <ErrorMessage
-                name="specialization"
-                component="div"
-                className="text-red-500"
-              />
-
-              <label className="block text-gray-700 text-sm font-bold mb-2">
-                Choose Role:
-              </label>
-              <Field
-                as="select"
-                name="role"
-                id="role"
-                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-              >
-                <option value="">Choose Role</option>
-                <option value="dokter">Dokter</option>
-                <option value="perawat">Perawat</option>
-                <option value="admin">Admin</option>
-              </Field>
-              <ErrorMessage
-                name="role"
-                component="div"
-                className="text-red-500"
-              />
-
-              <button
-                className="my-5 w-96 h-10 rounded-md font-semibold text-white flex justify-center items-center bg-health-blue-dark border-none focus:outline-none hover:bg-health-blue-reguler cursor-pointer"
-                type="submit"
-              >
-                Submit
-              </button>
-            </Form>
-          </Formik>
-        </div>
-      </Modal>
     </section>
   );
 };

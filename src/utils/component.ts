@@ -92,3 +92,16 @@ export interface SearchBarProps {
   searchTerm?: string;
   setSearchTerm: (term: string) => void;
 }
+
+export interface ScheduleData {
+  schedule_id: number;
+  user_id: number;
+  health_care_address: string;
+  day: string;
+  time_start: string;
+  time_end: string;
+}
+
+export interface UserData {
+  id: number;
+}

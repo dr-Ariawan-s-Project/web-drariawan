@@ -1,9 +1,9 @@
 import { Bars3Icon } from '@heroicons/react/24/outline';
 import { useState } from 'react';
+import { Icon } from '@iconify/react';
 
 const Sidebar = () => {
   const [toggle, setToggle] = useState<boolean>(false);
-
   const sidebarToggle = () => {
     setToggle(!toggle);
   };
@@ -11,63 +11,85 @@ const Sidebar = () => {
   const navigateTo = (path: any) => {
     window.location.href = path;
   };
-
   return (
-    <div className={`bg-health-blue-dark text-white h-full p-5 flex flex-col`}>
+    <div
+      className={`bg-white h-full p-5 flex flex-col border-r w-auto max-h-screen overflow-auto `}
+    >
       <div className="flex flex-row-reverse text-center">
-        <h2
-          className={`text-xl mx-auto sm:text-lg md:text-lg lg:text-2xl  md:p-0 p-4 cursor-pointer lg:block ${
-            toggle === true ? 'block' : 'hidden'
-          }`}
-          onClick={() => navigateTo('/admin/')}
-        >
-          Dashboard
-        </h2>
-
         <a
           className="flex justify-center items-center lg:hidden cursor-pointer"
           onClick={() => sidebarToggle()}
         >
-          <Bars3Icon color={'white'} width={24} height={24} />
+          <Bars3Icon
+            color={toggle ? 'health-blue-dark' : 'health-blue-dark'}
+            width={36}
+            height={36}
+          />
         </a>
       </div>
 
       <nav
-        className={`flex-1 transition-all duration-300 ease-in-out lg:block ${
+        className={` flex-1 transition-all duration-300 ease-in-out lg:block ${
           toggle === true ? 'block' : 'hidden'
         }`}
       >
-        <ul className="p-4">
+        <div className="pb-8 border-b flex justify-center items-center">
+          <img className="w-32 sm:w-40" src="/klinik_sehat.svg" alt="logo" />
+        </div>
+
+        <ul className="p-4  ">
+          <li className="mb-2 ">
+            <button
+              onClick={() => navigateTo('/admin/')}
+              className="text-health-blue-dark  bg-white hover:bg-health-blue-dark text-sm hover:text-white font-lato_regular border-none focus:outline-none flex items-center"
+            >
+              <Icon
+                icon="ant-design:pie-chart-outlined"
+                width="24"
+                height="24"
+              />{' '}
+              <span className="ml-2">Dashboard</span>
+            </button>
+          </li>
+
           <li className="mb-2">
             <button
               onClick={() => navigateTo('/admin/list_kuisioner')}
-              className="text-white hover:bg-health-blue-reguler hover:font-semibold border-none focus:outline-none"
+              className="text-health-blue-dark bg-white hover:bg-health-blue-dark hover:text-white  text-sm font-lato_regular border-none focus:outline-none flex itemns-center"
             >
-              Questioner
+              <Icon icon="heroicons:pencil-square" width="24" height="24" />{' '}
+              <span className="ml-2"> Questioner</span>
             </button>
           </li>
           <li className="mb-2">
             <button
               onClick={() => navigateTo('/admin/list_pasien')}
-              className="text-white hover:bg-health-blue-reguler hover:font-semibold border-none focus:outline-none"
+              className="text-health-blue-dark bg-white hover:bg-health-blue-dark hover:text-white  text-sm font-lato_regular border-none focus:outline-none flex items-center"
             >
-              Patient
+              <Icon
+                icon="medical-icon:i-accessibility"
+                width="24"
+                height="24"
+              />{' '}
+              <span className="ml-2">Patient</span>
             </button>
           </li>
-          <li className="mb-2">
+          <li className="mb-2 ">
             <button
               onClick={() => navigateTo('/admin/list_user')}
-              className="text-white hover:bg-health-blue-reguler hover:font-semibold border-none focus:outline-none"
+              className="text-health-blue-dark bg-white hover:bg-health-blue-dark hover:text-white  text-sm font-lato_regular border-none focus:outline-none flex items-center "
             >
-              User
+              <Icon icon="heroicons:user" width="24" height="24" />
+              <span className="ml-2"></span> User
             </button>
           </li>
           <li className="mb-2">
             <button
               onClick={() => navigateTo('/admin/jadwal_praktik')}
-              className="text-white hover:bg-health-blue-reguler hover:font-semibold border-none focus:outline-none"
+              className="text-health-blue-dark bg-white hover:bg-health-blue-dark hover:text-white  text-sm font-lato_regular border-none focus:outline-none flex items-center"
             >
-              Jadwal Praktik
+              <Icon icon="heroicons:briefcase" width="24" height="24" />{' '}
+              <span className="ml-2 hover:text-white"> Praktik</span>
             </button>
           </li>
         </ul>

@@ -1,3 +1,4 @@
+import { ScheduleData, UserData } from '../utils/component';
 export type QuestionaireState = {
   data: any;
   loading: boolean;
@@ -11,11 +12,14 @@ export type UserState = {
   data: any[];
   loading: boolean;
   error: string | null;
-  getUser: () => Promise<void>;
-  getList: () => Promise<void>;
-  postUser: (data: any) => Promise<void>;
+  getUser: (page: number, limit: number) => Promise<void>;
+  getList: (page: number, limit: number) => Promise<any[]>;
+  postUser: (
+    userData: any,
+    selectedUser: { id: any; name: any }
+  ) => Promise<void>;
   postDeactivate: (data: any) => Promise<void>;
-  putUser: (data: any) => Promise<void>;
+  putUser: (userData: any) => Promise<void>;
 };
 
 export type AuthState = {
@@ -48,4 +52,28 @@ export type PatientState = {
   getPatientById: (patientId: string) => Promise<any>;
   getList: () => Promise<void>;
   deletePatient: (patientId: number) => Promise<void>;
+};
+
+export type DashboardState = {
+  data: {
+    questioner_all: number;
+    questioner_need_assess: number;
+    questioner_this_month: number;
+  };
+  loading: boolean;
+  error: string | null;
+  getDashboard: () => Promise<void>;
+};
+
+export type ScheduleState = {
+  data: any[];
+  loading: boolean;
+  error: string | null;
+  getSchedules: (page: number, limit: number) => Promise<void>;
+  postSchedule: (
+    scheduleData: ScheduleData,
+    selectedUser: UserData
+  ) => Promise<any>;
+  putSchedule: (scheduleId: number, scheduleData: any) => Promise<void>;
+  deleteSchedule: (scheduleId: number) => Promise<any>;
 };

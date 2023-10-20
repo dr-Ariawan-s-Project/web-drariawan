@@ -37,11 +37,9 @@ const TableRow: React.FC<{
   return (
     <tr className="border-b text-left">
       <td className="p-2">{index + 1}</td>
-      <td className="p-2">{data.id}</td>
       <td className="p-2">{data.name}</td>
       <td className="p-2">{data.email}</td>
       <td className="p-2">{data.phone}</td>
-      <td className="p-2">{data.partner_id}</td>
       <td className="p-2">
         <div className="flex items-center justify-center gap-x-2">
           <TrashIcon
@@ -247,7 +245,7 @@ const ListPasien = () => {
                   }
                   placeholder="Partner's Id"
                 />
-                <div className=" flex justify-end">
+                <div className=" flex justify-end mt-5">
                   <button
                     type="submit"
                     className="bg-blue-500 text-white px-4 py-2 mr-2 rounded"
@@ -275,16 +273,14 @@ const ListPasien = () => {
             setSearchTerm={setSearchTerm}
           />
 
-          <table className="w-full table-auto">
-            <thead className="font-semibold bg-health-blue-reguler text-white">
+          <table className="w-full table-auto bg-white">
+            <thead className="  text-health-blue-dark font-lato_regular  ">
               <tr>
-                <th className="border-b p-2 text-center">No</th>
-                <th className="border-b p-2 text-center">Id</th>
-                <th className="border-b p-2 text-center">Name</th>
-                <th className="border-b p-2 text-center">Email</th>
-                <th className="border-b p-2 text-center">Phone</th>
-                <th className="border-b p-2 text-center">Partner's ID</th>
-                <th className="border-b p-2 text-center">Actions</th>
+                <th className="border-b p-3 text-center">No</th>
+                <th className="border-b p-3 text-center">Name</th>
+                <th className="border-b p-3 text-center">Email</th>
+                <th className="border-b p-3 text-center">Phone</th>
+                <th className="border-b p-3 text-center">Actions</th>
               </tr>
             </thead>
             <tbody>
