@@ -3,7 +3,6 @@ import { TrashIcon, PencilIcon } from '@heroicons/react/24/outline';
 import { useUser } from '../../store/apiUser';
 import { UserState } from '../../utils/api';
 import { useSwalDeleteData } from '../../utils/swal/useSwalData';
-import { useSwalUpdate } from '../../utils/swal/useSwalData';
 
 const TableRow: React.FC<{
   data: UserState['data'][0];

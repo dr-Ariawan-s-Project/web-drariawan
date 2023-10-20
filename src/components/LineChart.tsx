@@ -2,10 +2,10 @@ import { useEffect, useRef } from 'react';
 import Chart from 'chart.js/auto';
 
 const LineChart = () => {
-  const chartRef = useRef(null);
+  const chartRef: any = useRef(null);
 
   useEffect(() => {
-    const canvas = document.getElementById('chart-line');
+    const canvas: any = document.getElementById('chart-line');
     if (!canvas) {
       return;
     }

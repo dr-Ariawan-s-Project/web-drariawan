@@ -9,12 +9,13 @@ import { useUser } from '../../store/apiUser';
 
 const TableRow: React.FC<{
   data: {
-    schedule_id: number;
-    user_id: number;
-    health_care_address: string;
-    day: string;
-    time_start: string;
-    time_end: string;
+    user?: any;
+    schedule_id?: number | undefined;
+    user_id?: number | undefined;
+    health_care_address?: string | undefined;
+    day?: string | undefined;
+    time_start?: string | undefined;
+    time_end?: string | undefined;
   };
   index: number;
   onDelete: (id: number) => void;
@@ -97,7 +98,7 @@ const TableRow: React.FC<{
 
 const JadwalPraktik = () => {
   const [page, setPage] = useState<number>(1);
-  const [startNumber, setStartNumber] = useState<number>(1);
+  const [startNumber, setStartNumber] = useState<any>(1);
   const {
     data: scheduleData,
     getSchedules,
@@ -107,7 +108,7 @@ const JadwalPraktik = () => {
   } = useSchedule() as ScheduleState as any;
 
   const [selectedUserId, setSelectedUserId] = useState('');
-  const { data: userData } = useUser();
+  const { data: userData } = useUser() as any;
   const { getList } = useUser() as any;
 
   useEffect(() => {
@@ -166,7 +167,7 @@ const JadwalPraktik = () => {
     try {
       if (selectedUserId && addScheduleData) {
         const selectedUser = userData.data.find(
-          (user) => user.id === parseInt(selectedUserId)
+          (user: any) => user.id === parseInt(selectedUserId)
         );
         if (selectedUser) {
           const scheduleData = {
@@ -518,7 +519,7 @@ const JadwalPraktik = () => {
                 scheduleData.data.map(
                   (
                     rowData: {
-                      User?: any;
+                      user?: any;
                       schedule_id?: number;
                       user_id?: number;
                       health_care_address?: string;
@@ -532,7 +533,7 @@ const JadwalPraktik = () => {
                       key={index}
                       data={rowData}
                       index={index + startNumber}
-                      doctorName={rowData.User?.Name || ''}
+                      doctorName={rowData.user?.Name || ''}
                       onEdit={handleEditSchedule}
                       editingSchedule={editingSchedule}
                       onDelete={handleDeleteSchedule}
