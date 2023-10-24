@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { useFormik } from 'formik';
-import { NavigateFunction, useNavigate } from 'react-router-dom';
+import { NavigateFunction, useNavigate, Link } from 'react-router-dom';
 import Swal from 'sweetalert2';
 import Cookies from 'js-cookie';
 
@@ -104,7 +104,13 @@ const Login = () => {
             <p className="text-red-500">{formik.errors.password}</p>
           )}
         </div>
-        <div className="flex justify-end mt-20">
+        <div className="flex flex-col-reverse gap-y-5 mt-20">
+          <Link
+            className="cursor-pointer underline mx-auto"
+            to={'/auth/option/register'}
+          >
+            Belum buat akun? silakan klik disini!
+          </Link>
           <div className="font-semibold">
             <Button
               id="submit"
