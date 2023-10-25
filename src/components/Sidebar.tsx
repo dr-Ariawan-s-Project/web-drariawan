@@ -54,7 +54,7 @@ const Sidebar = () => {
 
           <li className="mb-2">
             <button
-              onClick={() => navigateTo('/admin/list_kuisioner')}
+              onClick={() => navigateTo('/admin/landing_kuisioner')}
               className="text-health-blue-dark bg-white hover:bg-health-blue-dark hover:text-white  text-sm font-lato_regular border-none focus:outline-none flex itemns-center"
             >
               <Icon icon="heroicons:pencil-square" width="24" height="24" />{' '}

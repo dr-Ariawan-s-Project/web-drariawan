@@ -1,6 +1,6 @@
-import BarChart from '../../components/BarChart';
 import InformationCard from '../../components/InformationCard';
-import LineChart from '../../components/LineChart';
+import ListAppoinment from '../../components/ListAppoinment';
+import ListResponden from '../../components/ListResponden';
 import { useDashboard } from '../../store/apiDashboard';
 import { useEffect } from 'react';
 const Dashboard = () => {
@@ -8,7 +8,7 @@ const Dashboard = () => {
 
   useEffect(() => {
     getDashboard();
-  }, []);
+  }, [getDashboard]);
 
   if (error) {
     return <p>Error: {error}</p>;
@@ -48,9 +48,9 @@ const Dashboard = () => {
         </div>
       </div>
 
-      <div className="flex flex-wrap gap-4 mt-10">
-        <LineChart />
-        <BarChart />
+      <div className="flex flex-col md:flex-row gap-4 ">
+        <ListResponden />
+        <ListAppoinment />
       </div>
     </div>
   );
