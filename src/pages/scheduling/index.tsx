@@ -7,6 +7,7 @@ import Swal from 'sweetalert2';
 import axios from 'axios';
 
 import Modal from '../../components/Modal';
+import Button from '../../components/Button';
 
 const Scheduling = () => {
   const navigate = useNavigate();
@@ -15,6 +16,24 @@ const Scheduling = () => {
   const [open, setOpen] = useState<boolean>(false);
   const [schedule, setSchedule] = useState<any>();
   const [selectedStartDate, setSelectedStartDate] = useState<any>(new Date());
+
+  const getRandomColor = (): string => {
+    const colorClasses = [
+      'bg-blue-300',
+      'bg-green-500',
+      'bg-yellow-300',
+      'bg-pink-300',
+      'bg-purple-300',
+      'bg-indigo-300',
+      'bg-teal-300',
+      'bg-orange-300',
+      'bg-cyan-300',
+      'bg-gray-300',
+    ];
+    const randomIndex = Math.floor(Math.random() * colorClasses.length);
+
+    return colorClasses[randomIndex];
+  };
 
   const daysOfWeek = [
     'Senin',
@@ -42,7 +61,7 @@ const Scheduling = () => {
   const getBookedSchedule = async () => {
     try {
       const response = await axios.get('/v1/schedule/list');
-      setReserve(response?.data?.data?.data);
+      setReserve(response?.data?.data);
     } catch (error) {
       Swal.fire({
         title: 'Gagal',
@@ -53,10 +72,10 @@ const Scheduling = () => {
   };
 
   const isScheduleBooked = (day: string, time: string) => {
-    return reserve.some((schedule: any) => {
-      const start = schedule.time_start;
-      const end = schedule.time_end;
-      return schedule.day === day && time >= start && time < end;
+    return reserve?.some((schedule: any) => {
+      const start = schedule?.time_start;
+      const end = schedule?.time_end;
+      return schedule?.day === day && time >= start && time < end;
     });
   };
 
@@ -68,7 +87,7 @@ const Scheduling = () => {
   selectedEndDate.setDate(selectedEndDate.getDate() + 6);
 
   const handleSelectSchedule = (day: string, time: string) => {
-    const selectedData: any = reserve.find((schedule: any) => {
+    const selectedData: any = reserve?.find((schedule: any) => {
       return (
         schedule.day === day &&
         time >= schedule.time_start &&
@@ -96,6 +115,8 @@ const Scheduling = () => {
   useEffect(() => {
     getBookedSchedule();
   }, []);
+
+  console.log(getRandomColor());
 
   return (
     <section className="w-screen h-max my-10 flex flex-col justify-center items-center">
@@ -128,36 +149,28 @@ const Scheduling = () => {
         />
       </div>
       <div className="flex relative left-10 gap-x-7 relative">
-        {daysOfWeek.map((day) => (
+        {daysOfWeek?.map((day) => (
           <div key={day} className="w-1/7 p-2 font-semibold">
             {day}
           </div>
         ))}
       </div>
-      {timeSlots.map((time) => (
+      {timeSlots?.map((time) => (
         <div key={time} className="flex mx-auto">
           <div className="w-20 p-2">{time}</div>
-          {daysOfWeek.map((day) => {
-            const selectedData: any = reserve.find((schedule: any) => {
+          {daysOfWeek?.map((day) => {
+            const selectedData: any = reserve?.find((schedule: any) => {
               return (
                 schedule.day === day &&
                 time >= schedule.time_start &&
                 time < schedule.time_end
               );
             });
-
-            const doctorColorClass = selectedData
-              ? selectedData.User.Specialization === 'obgyn'
-                ? 'bg-green-300'
-                : 'bg-blue-300'
-              : '';
-
+            const doctorColorClass = selectedData ? getRandomColor() : '';
             return (
               <div
                 key={day + time}
-                className={`w-24 p-2 justify-center border border-health-blue-thin cursor-pointer hover-bg-gray-200 ${
-                  isScheduleBooked(day, time) ? doctorColorClass : ''
-                }`}
+                className={`w-24 p-2 justify-center border border-health-blue-thin cursor-pointer hover-bg-gray-200 ${doctorColorClass}`}
                 onClick={() => handleSelectSchedule(day, time)}
               >
                 {isScheduleBooked(day, time) ? 'Tersedia' : ''}
@@ -197,6 +210,9 @@ const Scheduling = () => {
               <p className="w-2/3">
                 {schedule?.time_start} - {schedule?.time_end}
               </p>
+            </div>
+            <div className="mt-5">
+              <Button id="booking" label="Booking" type="blue" active={true} />
             </div>
           </div>
         </div>
