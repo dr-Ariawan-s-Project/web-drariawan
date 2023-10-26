@@ -21,7 +21,9 @@ import Scheduling from '../pages/scheduling';
 import Main from '../pages/main';
 import KonfirmasiPraktik from '../pages/konfirmasi_praktik';
 import ResumePraktik from '../pages/resume_praktik';
-
+import LandingKuisioner from '../pages/landing_kuisioner';
+import Responden from '../pages/responden';
+import DetailResponden from '../pages/detail_responden';
 const App = () => {
   axios.defaults.baseURL = 'https://drariawan.altapro.online';
   return (
@@ -47,6 +49,9 @@ const App = () => {
           <Route element={<ListPasien />} path="list_pasien" />
           <Route element={<JadwalPraktik />} path="jadwal_praktik" />
           <Route element={<Dashboard />} path="dashboard" />
+          <Route element={<LandingKuisioner />} path="landing_kuisioner" />
+          <Route element={<Responden />} path="responden" />
+          <Route element={<DetailResponden />} path="detail/responden" />
         </Route>
       </Routes>
     </BrowserRouter>

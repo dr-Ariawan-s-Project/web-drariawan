@@ -105,3 +105,12 @@ export interface ScheduleData {
 export interface UserData {
   id: number;
 }
+export interface RespondenDataProps {
+  type: string;
+  question: string;
+  answer: string;
+}
+export interface DateInfoProps {
+  date: string;
+  time?: string;
+}
