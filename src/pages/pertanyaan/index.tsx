@@ -135,6 +135,27 @@ const Pertanyaan = () => {
     };
   }, []);
 
+  useEffect(() => {
+    const allSlugs =
+      currentQuestion?.choices?.map((choice: any) => choice.slugs).flat() || [];
+    const transcriptLowerCase = transcript.toLowerCase();
+    const checkTranscript = () => {
+      const isMatch = allSlugs.some((slug: any) => {
+        const slugParts = slug.split(';');
+        return slugParts.some((part: any) =>
+          transcriptLowerCase.includes(part)
+        );
+      });
+      if (isMatch && transcriptLowerCase !== '') {
+        setTimeout(() => {
+          handleSubmit();
+        }, 5000);
+      }
+    };
+
+    checkTranscript();
+  }, [transcript, currentQuestion, questionId, data, resetTranscript]);
+
   return (
     <>
       {transition === true ? (
