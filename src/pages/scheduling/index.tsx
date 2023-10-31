@@ -12,30 +12,14 @@ import Button from '../../components/Button';
 const Scheduling = () => {
   const navigate = useNavigate();
   const token = Cookies.get('token');
-  const [reserve, setReserve] = useState<[]>([]);
+  const [reserve, setReserve] = useState<any[]>([]);
   const [open, setOpen] = useState<boolean>(false);
-  const [schedule, setSchedule] = useState<any>();
-  const [selectedStartDate, setSelectedStartDate] = useState<any>(new Date());
+  const [schedule, setSchedule] = useState<any | null>(null);
+  const [selectedStartDate, setSelectedStartDate] = useState<Date | null>(
+    new Date()
+  );
 
-  const getRandomColor = (): string => {
-    const colorClasses = [
-      'bg-blue-300',
-      'bg-green-500',
-      'bg-yellow-300',
-      'bg-pink-300',
-      'bg-purple-300',
-      'bg-indigo-300',
-      'bg-teal-300',
-      'bg-orange-300',
-      'bg-cyan-300',
-      'bg-gray-300',
-    ];
-    const randomIndex = Math.floor(Math.random() * colorClasses.length);
-
-    return colorClasses[randomIndex];
-  };
-
-  const daysOfWeek = [
+  const daysOfWeek: string[] = [
     'Senin',
     'Selasa',
     'Rabu',
@@ -44,65 +28,54 @@ const Scheduling = () => {
     'Sabtu',
     'Minggu',
   ];
-  const timeSlots = [
-    '08:00',
-    '09:00',
-    '10:00',
-    '11:00',
-    '12:00',
-    '13:00',
-    '14:00',
-    '15:00',
-    '16:00',
-    '17:00',
-    '18.00',
-  ];
 
   const getBookedSchedule = async () => {
     try {
-      const response = await axios.get('/v1/schedule/list');
+      const response: any = await axios.get('/v1/schedule/list', {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
       setReserve(response?.data?.data);
     } catch (error) {
       Swal.fire({
         title: 'Gagal',
-        text: `Gagal mengambil data, silahkan refresh halaman ini`,
+        text: 'Gagal mengambil data jadwal, silahkan refresh halaman ini',
         confirmButtonText: 'OK',
       });
     }
   };
 
-  const isScheduleBooked = (day: string, time: string) => {
-    return reserve?.some((schedule: any) => {
-      const start = schedule?.time_start;
-      const end = schedule?.time_end;
-      return schedule?.day === day && time >= start && time < end;
-    });
+  const getProfile = async () => {
+    try {
+      const response = await axios.get('/v1/patients/profile', {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      console.log(response.data);
+    } catch (error) {
+      Swal.fire({
+        title: 'Gagal',
+        text: 'Gagal mengambil data profile, silahkan refresh halaman ini',
+        confirmButtonText: 'OK',
+      });
+    }
   };
 
   const handleStartDateChange = (date: Date | null) => {
     setSelectedStartDate(date);
   };
 
-  const selectedEndDate = new Date(selectedStartDate);
+  const selectedEndDate = new Date(selectedStartDate as Date);
   selectedEndDate.setDate(selectedEndDate.getDate() + 6);
 
-  const handleSelectSchedule = (day: string, time: string) => {
-    const selectedData: any = reserve?.find((schedule: any) => {
-      return (
-        schedule.day === day &&
-        time >= schedule.time_start &&
-        time < schedule.time_end
-      );
-    });
-    const schedule = {
-      day: selectedData?.day,
-      time_start: selectedData?.time_start,
-      time_end: selectedData?.time_end,
-      health_care_address: selectedData?.health_care_address,
-      doctor_name: selectedData?.User?.Name,
-      doctor_specialization: selectedData?.User?.Specialization,
-    };
-    setSchedule(schedule);
+  const getDoctorScheduleForDay = (day: string) => {
+    return reserve?.filter((schedule: any) => schedule.day === day);
+  };
+
+  const handleSelectSchedule = (selectedSchedule: any) => {
+    setSchedule(selectedSchedule);
     setOpen(true);
   };
 
@@ -110,13 +83,12 @@ const Scheduling = () => {
     if (!token) {
       navigate('/auth/option/login');
     }
-  }, []);
+  }, [token]);
 
   useEffect(() => {
     getBookedSchedule();
+    getProfile();
   }, []);
-
-  console.log(getRandomColor());
 
   return (
     <section className="w-screen h-max my-10 flex flex-col justify-center items-center">
@@ -148,38 +120,37 @@ const Scheduling = () => {
           disabled
         />
       </div>
-      <div className="flex relative left-10 gap-x-7 relative">
-        {daysOfWeek?.map((day) => (
-          <div key={day} className="w-1/7 p-2 font-semibold">
-            {day}
+      <div className="grid grid-cols-7 gap-4 mx-20 my-10">
+        {daysOfWeek.map((day) => (
+          <div key={day} className="text-center">
+            <div className="font-semibold mb-2">{day}</div>
+            {getDoctorScheduleForDay(day).map((doctorSchedule: any) => {
+              return (
+                <div
+                  key={doctorSchedule.id}
+                  className="border rounded-md cursor-pointer mb-4 text-left px-5 py-3"
+                  onClick={() => handleSelectSchedule(doctorSchedule)}
+                >
+                  <div className="text-md font-semibold">
+                    {doctorSchedule.User.Name}
+                  </div>
+                  <div className="text-sm text-gray-500">
+                    {doctorSchedule.time_start} - {doctorSchedule.time_end}
+                  </div>
+                  <div className="mt-2 text-sm">
+                    {doctorSchedule.health_care_address}
+                  </div>
+                </div>
+              );
+            })}
+            {!getDoctorScheduleForDay(day).length && (
+              <div className="flex items-center justify-center h-20 cursor-not-allowed">
+                Tidak ada jadwal dokter tersedia untuk hari ini.
+              </div>
+            )}
           </div>
         ))}
       </div>
-      {timeSlots?.map((time) => (
-        <div key={time} className="flex mx-auto">
-          <div className="w-20 p-2">{time}</div>
-          {daysOfWeek?.map((day) => {
-            const selectedData: any = reserve?.find((schedule: any) => {
-              return (
-                schedule.day === day &&
-                time >= schedule.time_start &&
-                time < schedule.time_end
-              );
-            });
-            const doctorColorClass = selectedData ? getRandomColor() : '';
-            return (
-              <div
-                key={day + time}
-                className={`w-24 p-2 justify-center border border-health-blue-thin cursor-pointer hover-bg-gray-200 ${doctorColorClass}`}
-                onClick={() => handleSelectSchedule(day, time)}
-              >
-                {isScheduleBooked(day, time) ? 'Tersedia' : ''}
-              </div>
-            );
-          })}
-        </div>
-      ))}
-
       <Modal id="schedule" isOpen={open} onClose={() => setOpen(false)}>
         <div className="flex flex-col justify-center items-center">
           <h2 className="font-semibold my-10">Detail Jadwal</h2>
@@ -187,13 +158,13 @@ const Scheduling = () => {
           <div className="flex flex-col my-10 gap-y-5 px-4">
             <div className="flex gap-x-40">
               <p className="w-1/3">Nama Dokter</p>
-              <p className="w-2/3">{schedule?.doctor_name}</p>
+              <p className="w-2/3">{schedule?.User?.Name}</p>
             </div>
             <div className="flex gap-x-40">
               <p className="w-1/3">Spesialis</p>
               <p className="w-2/3">
-                {schedule?.doctor_specialization
-                  ? schedule?.doctor_specialization
+                {schedule?.User?.Specialization
+                  ? schedule?.User?.Specialization
                   : 'N/A'}
               </p>
             </div>
