@@ -7,7 +7,7 @@ const KonfirmasiPraktik = () => {
   const navigate = useNavigate();
 
   return (
-    <section className="w-screen h-screen flex justify-center items-center">
+    <section className="w-screen h-screen flex justify-center items-center lg:px-0 px-5">
       <div className="flex flex-col gap-y-5 text-center">
         <h2 className="font-semibold text-2xl">
           Pendaftaran Anda Terverifikasi!

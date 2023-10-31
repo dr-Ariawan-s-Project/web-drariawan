@@ -14,8 +14,8 @@ export const usePatient = create<PatientState>((set) => ({
         email: email,
         password: password,
       });
-      console.log('res ', response.data);
       set({ data: [response.data], loading: false, error: null });
+      return response.data;
     } catch (error: any) {
       set({
         loading: false,
