@@ -38,10 +38,10 @@ const Admin = () => {
   }, [location.pathname, setPage]);
 
   useEffect(() => {
-    if (token) {
-      getPage();
-    } else {
+    if (!token) {
       navigate('/admin/login');
+    } else {
+      getPage();
     }
   }, [getPage, location.pathname, navigate, token]);
 

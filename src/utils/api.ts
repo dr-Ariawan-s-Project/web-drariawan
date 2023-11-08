@@ -12,8 +12,8 @@ export type UserState = {
   data: any[];
   loading: boolean;
   error: string | null;
-  getUser: (page: number, limit: number) => Promise<void>;
-  getList: (page: number, limit: number) => Promise<void>;
+  getUser: (page: number, limit: number, token: string) => Promise<void>;
+  getList: (page: number, limit: number, token: string) => Promise<void>;
   postUser: (
     userData: any,
     selectedUser: { id: any; name: any }
@@ -34,7 +34,7 @@ export type PatientState = {
   loading: boolean;
   error: string | null;
   loginPatient: (email: string, password: string) => void;
-  getPatient: (page: number, limit: number) => Promise<void>;
+  getPatient: (page: number, limit: number, token: string) => Promise<void>;
   postPatient: (
     name: string,
     email: string,
@@ -62,14 +62,14 @@ export type DashboardState = {
   };
   loading: boolean;
   error: string | null;
-  getDashboard: () => Promise<void>;
+  getDashboard: (token: string | undefined) => Promise<void>;
 };
 
 export type ScheduleState = {
   data: any[];
   loading: boolean;
   error: string | null;
-  getSchedules: (page: number, limit: number) => Promise<void>;
+  getSchedules: (page: number, limit: number, token: string) => Promise<void>;
   postSchedule: (
     scheduleData: ScheduleData,
     selectedUser: UserData

@@ -24,10 +24,13 @@ export const usePatient = create<PatientState>((set) => ({
       throw error;
     }
   },
-  getPatient: async (page: number, limit: number) => {
+  getPatient: async (page: number, limit: number, token: string) => {
     set({ loading: true, error: null, data: [] });
     try {
       const response = await axios.get('/v1/patients', {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
         params: { page, limit },
       });
       set({ data: response.data, loading: false, error: null });
