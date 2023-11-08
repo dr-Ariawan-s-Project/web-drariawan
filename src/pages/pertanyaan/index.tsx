@@ -93,7 +93,7 @@ const Pertanyaan = () => {
         resetTranscript();
       }
     } else {
-      const maxItems = 70;
+      const maxItems = data?.data?.length;
       const answerItems = Array.from({ length: maxItems }, (_, index) => ({
         question_id: index + 1,
         description: transcripts[index] || '',

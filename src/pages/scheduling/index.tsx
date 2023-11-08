@@ -165,7 +165,7 @@ const Scheduling = () => {
                   onClick={() => handleSelectSchedule(doctorSchedule)}
                 >
                   <div className="text-md font-semibold">
-                    {doctorSchedule.User.Name}
+                    {doctorSchedule.User.name}
                   </div>
                   <div className="text-sm text-gray-500">
                     {doctorSchedule.time_start} - {doctorSchedule.time_end}
