@@ -69,7 +69,7 @@ export type ScheduleState = {
   data: any[];
   loading: boolean;
   error: string | null;
-  getSchedules: (page: number, limit: number) => Promise<void>;
+  getSchedules: (page: number, limit: number, token: string) => Promise<void>;
   postSchedule: (
     scheduleData: ScheduleData,
     selectedUser: UserData

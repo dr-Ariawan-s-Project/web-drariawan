@@ -7,10 +7,13 @@ export const useSchedule = create<ScheduleState>((set) => ({
   data: [],
   loading: false,
   error: null,
-  getSchedules: async (page: number, limit: number) => {
+  getSchedules: async (page: number, limit: number, token: string) => {
     set({ loading: true, error: null });
     try {
       const response = await axios.get('/v1/schedule/list', {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
         params: { page, limit },
       });
       set({ data: response.data.data, loading: false, error: null });
