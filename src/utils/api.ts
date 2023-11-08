@@ -62,7 +62,7 @@ export type DashboardState = {
   };
   loading: boolean;
   error: string | null;
-  getDashboard: () => Promise<void>;
+  getDashboard: (token: string | undefined) => Promise<void>;
 };
 
 export type ScheduleState = {
