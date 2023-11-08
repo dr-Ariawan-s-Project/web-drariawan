@@ -15,6 +15,7 @@ const ListKuisioner = () => {
 
   const questionerLabels =
     datas?.find((item: any) => item.type === 'questioner')?.title || [];
+    
 
   useEffect(() => {
     const timeout = setTimeout(() => {
@@ -24,7 +25,7 @@ const ListKuisioner = () => {
     return () => {
       clearTimeout(timeout);
     };
-  }, []);
+  }, [getQuestionaire]);
 
   return (
     <section className="h-full mt-24 z-5">

@@ -82,7 +82,7 @@ const Scheduling: React.FC = () => {
           disabled
         />
       </div>
-      <div className="flex relative left-10 gap-x-7 relative">
+      <div className="flex left-10 gap-x-7 relative">
         {daysOfWeek.map((day) => (
           <div key={day} className="w-1/7 p-2 font-semibold">
             {day}

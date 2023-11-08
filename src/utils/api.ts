@@ -1,4 +1,5 @@
-import { ScheduleData, UserData } from '../utils/component';
+import { ScheduleData, UserData, PatientDataProps } from '../utils/component';
+import { Answer } from './data';
 export type QuestionaireState = {
   data: any;
   loading: boolean;
@@ -6,6 +7,8 @@ export type QuestionaireState = {
   getQuestionaire: () => Promise<void>;
   postQuestionaire: (code_attempt: string, answer: []) => Promise<void>;
   validateQuestionaire: (validateData: any) => Promise<void>;
+  getAttempts: () => Promise<void>;
+  getAnswers: (attempt_id: string) => Promise<Answer[]>;
 };
 
 export type UserState = {
@@ -23,7 +26,7 @@ export type UserState = {
 };
 
 export type AuthState = {
-  data: [] | any;
+  data: any;
   loading: boolean;
   error: string | null;
   login: (email: string, password: string) => Promise<void>;
@@ -35,19 +38,7 @@ export type PatientState = {
   error: string | null;
   loginPatient: (email: string, password: string) => void;
   getPatient: (page: number, limit: number) => Promise<void>;
-  postPatient: (
-    name: string,
-    email: string,
-    password: string,
-    nik: string | number,
-    dob: string,
-    phone: string | number,
-    gender: string,
-    marriage_status: string,
-    nationality: string,
-    partner_option: string,
-    partner_email: string
-  ) => Promise<void>;
+  postPatient: (patientData: PatientDataProps) => Promise<void>;
   putPatient: (patientId: number, patientData: any) => Promise<void>;
   getPatientById: (patientId: string) => Promise<any>;
   getList: () => Promise<void>;

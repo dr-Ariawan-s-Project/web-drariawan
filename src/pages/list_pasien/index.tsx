@@ -96,6 +96,7 @@ const ListPasien = () => {
   const [editingPatient, setEditingPatient] = useState<any>(null);
   const [isEditModalOpen, setEditModalOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
+
   const [searchedPatientData, setSearchedPatientData] =
     useState<PatientState | null>(null);
   const patientDataToShow = searchedPatientData || patientData;
@@ -226,25 +227,7 @@ const ListPasien = () => {
                   }
                   placeholder="Nomor Telepon"
                 />
-                <label
-                  className="block text-gray-500 text-sm font-light my-2"
-                  htmlFor="Phone"
-                >
-                  Partner's Id
-                </label>
-                <input
-                  className="shadow appearance-none border rounded w-full mb-10 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                  type="text"
-                  name="partner_id"
-                  value={editingPatient?.partner_id || ''}
-                  onChange={(e) =>
-                    setEditingPatient({
-                      ...editingPatient,
-                      partner_id: e.target.value,
-                    })
-                  }
-                  placeholder="Partner's Id"
-                />
+
                 <div className=" flex justify-end mt-5">
                   <button
                     type="submit"

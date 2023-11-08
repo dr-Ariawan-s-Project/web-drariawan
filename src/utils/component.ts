@@ -80,6 +80,20 @@ export interface ModalInformationProps {
   onClose?: () => void;
   children?: React.ReactNode;
 }
+export interface PatientDataProps {
+  id: number;
+  name: string;
+  email: string;
+  password: string;
+  nik: string | number;
+  dob: string;
+  phone: string | number;
+  gender: string;
+  marriage_status: string;
+  nationality: string;
+  partner_option: string;
+  partner_email: string;
+}
 
 export interface LoginFormProps {
   email: string;
@@ -88,7 +102,7 @@ export interface LoginFormProps {
 }
 
 export interface SearchBarProps {
-  onSearch: (searchTerm: string) => void;
+  onSearch: (searchTerms: string[] | string) => void;
   searchTerm?: string;
   setSearchTerm: (term: string) => void;
 }

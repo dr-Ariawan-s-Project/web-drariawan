@@ -26,7 +26,7 @@ const Dashboard = () => {
           />
 
           <InformationCard
-            title="Pertanyaan yang perlu di Asessmen"
+            title="Kuisioner yang perlu di Asessmen"
             value={data.questioner_need_assess}
             gradientColors="from-red-600 to-orange-600"
             iconClass="ic:baseline-medical-services"
@@ -41,7 +41,7 @@ const Dashboard = () => {
 
           <InformationCard
             title="Patient baru bulan ini"
-            value={data.questioner_this_month}
+            value={data.patient_all}
             gradientColors="from-orange-500 to-yellow-500"
             iconClass="healthicons:default"
           />

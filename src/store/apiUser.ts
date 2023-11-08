@@ -46,21 +46,25 @@ export const useUser = create<UserState>((set) => ({
       throw error;
     }
   },
-  getList: async (page: number, limit: number) => {
+  getList: async () => {
     set({ loading: true, error: null });
     try {
       const response = await axios.get('/v1/user/list', {
-        params: { search: '', page, limit },
+        params: {
+          search: '',
+          rp: 10,
+          page: 1,
+        },
       });
       set({ data: response.data.data, loading: false, error: null });
     } catch (error: any) {
       set({
         loading: false,
-        error: `Failed to retrieve User list: ${error.message}`,
+        error: `Gagal mengambil daftar Pengguna: ${error.message}`,
       });
     }
   },
-
+  
   postDeactivate: async (data) => {
     set({ loading: true, error: null });
     try {

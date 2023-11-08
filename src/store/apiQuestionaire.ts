@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import axios from 'axios';
-
+import { Answer } from '../utils/data';
 import { QuestionaireState } from '../utils/api';
 
 const axiosInstance = axios.create({
@@ -57,4 +57,37 @@ export const useQuestionaire = create<QuestionaireState>((set) => ({
       throw error;
     }
   },
+
+  getAttempts: async () => {
+    set({ loading: true, error: null });
+    try {
+      const response = await axiosInstance.get('/v1/questioner/attempts');
+      console.log('Response from GET attempts:', response.data);
+      set({ data: response.data, loading: false });
+    } catch (error) {
+      console.error('Error fetching attempts:', error);
+      set({
+        loading: false,
+        error: 'Terjadi kesalahan saat mengambil data attempts',
+      });
+    }
+  },
+  getAnswers: async (attempt_id: any): Promise<Answer[]> => {
+    set({ loading: true, error: null });
+    try {
+      const response = await axiosInstance.get(`/v1/questioner/attempts/${attempt_id}/answers`);
+      console.log('Response from GET answers:', response.data);
+      set({ data: response.data, loading: false });
+      return response.data; 
+    } catch (error) {
+      console.error('Error fetching attempts:', error);
+      set({
+        loading: false,
+        error: 'Terjadi kesalahan saat mengambil data list all answers',
+      });
+      throw error; 
+    }
+  }
+  
 }));
+

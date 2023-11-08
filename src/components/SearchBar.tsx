@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
-import { SearchBarProps } from '../utils/component';
+import { PatientDataProps, SearchBarProps } from '../utils/component';
 import { usePatient } from '../store/apiPatient';
 
 const SearchBar: React.FC<SearchBarProps> = ({ onSearch }) => {
-  const { getPatientById } = usePatient();
+  const { getPatient } = usePatient();
 
   const [inputValue, setInputValue] = useState('');
 
@@ -14,14 +14,20 @@ const SearchBar: React.FC<SearchBarProps> = ({ onSearch }) => {
   const handleSearch = async () => {
     if (inputValue.trim() !== '') {
       try {
-        const patientData = await getPatientById(inputValue);
-        if (patientData) {
-          onSearch(patientData);
+        const patientData = await getPatient(1, 5);
+        if (Array.isArray(patientData)) {
+          const filteredPatients = patientData
+            .filter((patient: PatientDataProps) =>
+              patient.name.toLowerCase().includes(inputValue.toLowerCase())
+            )
+            .map((patient: PatientDataProps) => patient.name);
+
+          onSearch(filteredPatients);
         } else {
-          console.error('Patient not found.');
+          console.error('No patient data found.');
         }
       } catch (error) {
-        console.error('Error searching for patient:', error);
+        console.error('Error searching for patients:', error);
       }
     }
   };
@@ -32,13 +38,13 @@ const SearchBar: React.FC<SearchBarProps> = ({ onSearch }) => {
         <input
           className="border-2 rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none"
           type="text"
-          placeholder="Search by Patient ID"
+          placeholder="Search by Patient Name"
           value={inputValue}
           onChange={handleInputChange}
         />
 
         <button
-          className="relative z-[2] flex items-center bg-health-blue-medium px-6 py-2.5 text-xs ml-2 font-medium uppercase leading-tight text-white shadow-md transition duration-150 ease-in-out hover:bg-primary-700 hover:shadow-lg focus:bg-primary-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-primary-800 active:shadow-lg"
+          className="relative z-[2] flex items-center bg-health-blue-medium px-6 py-2.5 text-xs ml-2 font-medium uppercase leading-tight text-white shadow-md transition duration-150 ease-in-out hover:bg-primary-700 hover:shadow-lg focus:bg-primary-700 focus:shadow-lg focus:outline-none focus:ring-0 active-bg-primary-800 active:shadow-lg"
           type="button"
           id="button-addon1"
           data-te-ripple-init

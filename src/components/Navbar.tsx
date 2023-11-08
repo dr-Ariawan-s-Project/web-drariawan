@@ -3,7 +3,6 @@ import { UserIcon } from '@heroicons/react/24/outline';
 import { useNavigate } from 'react-router-dom';
 import moment from 'moment';
 import Cookies from 'js-cookie';
-
 import { useSwalAuth } from '../utils/swal/useSwalAuth';
 
 interface NavbarProps {

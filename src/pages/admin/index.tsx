@@ -4,7 +4,6 @@ import Cookies from 'js-cookie';
 
 import Sidebar from '../../components/Sidebar';
 import Navbar from '../../components/Navbar';
-
 import ListUser from '../list_user';
 import ListPasien from '../list_pasien';
 import JadwalPraktik from '../jadwal_praktik';
@@ -13,6 +12,8 @@ import LandingKuisioner from '../landing_kuisioner';
 import ListKuisioner from '../list_kuisioner';
 import Responden from '../responden';
 import { useCallback } from 'react';
+import DetailResponden from '../detail_responden';
+import Appointment from '../appointment';
 const Admin = () => {
   const location = useLocation();
   const navigate = useNavigate();
@@ -32,6 +33,10 @@ const Admin = () => {
       setPage('List Questioner');
     } else if (location.pathname.includes('responden')) {
       setPage('List Responden');
+    } else if (location.pathname.includes('appointment')) {
+      setPage('List Appointment');    
+    } else if (location.pathname.includes('detail_responden')) {
+      setPage('Detail Responden');
     } else {
       setPage('Dashboard Admin');
     }
@@ -63,6 +68,10 @@ const Admin = () => {
             <ListKuisioner />
           ) : location.pathname.includes('responden') ? (
             <Responden />
+          ) : location.pathname.includes('detail_responden')? (
+            <DetailResponden />
+          ) : location.pathname.includes('appoinment') ? (
+              <Appointment />
           ) : location.pathname.includes('list_pasien') ? (
             <ListPasien />
           ) : location.pathname.includes('jadwal_praktik') ? (

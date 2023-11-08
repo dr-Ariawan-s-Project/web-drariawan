@@ -17,7 +17,7 @@ const LembarPersetujuan = () => {
       setIsPageLoaded(true);
     }, 100);
     getQuestionaire();
-  }, []);
+  }, [getQuestionaire]);
 
   const id = data?.data?.map((item: any) => item?.id);
 

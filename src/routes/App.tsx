@@ -24,6 +24,7 @@ import ResumePraktik from '../pages/resume_praktik';
 import LandingKuisioner from '../pages/landing_kuisioner';
 import Responden from '../pages/responden';
 import DetailResponden from '../pages/detail_responden';
+import Appointment from '../pages/appointment';
 const App = () => {
   axios.defaults.baseURL = 'https://drariawan.altapro.online';
   return (
@@ -51,7 +52,8 @@ const App = () => {
           <Route element={<Dashboard />} path="dashboard" />
           <Route element={<LandingKuisioner />} path="landing_kuisioner" />
           <Route element={<Responden />} path="responden" />
-          <Route element={<DetailResponden />} path="detail/responden" />
+          <Route element={<DetailResponden />} path="detail_responden/:attempt_id" />
+          <Route element={<Appointment />} path="appoinment" />
         </Route>
       </Routes>
     </BrowserRouter>

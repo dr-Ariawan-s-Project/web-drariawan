@@ -113,11 +113,11 @@ const JadwalPraktik = () => {
 
   useEffect(() => {
     getSchedules(page, 10);
-  }, [page]);
+  }, [getSchedules, page]);
 
   useEffect(() => {
     getList(page, 10);
-  }, [page]);
+  }, [getList, page]);
 
   const [editingSchedule, setEditingSchedule] = useState<any>(null);
   const [isEditModalOpen, setEditModalOpen] = useState(false);

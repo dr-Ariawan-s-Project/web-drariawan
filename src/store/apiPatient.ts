@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 import axios from 'axios';
-
 import { PatientState } from '../utils/api';
+import { PatientDataProps } from '../utils/component';
 
 export const usePatient = create<PatientState>((set) => ({
   data: [],
@@ -38,34 +38,11 @@ export const usePatient = create<PatientState>((set) => ({
       });
     }
   },
-  postPatient: async (
-    name: string,
-    email: string,
-    password: string,
-    nik: string | number,
-    dob: string,
-    phone: string | number,
-    gender: string,
-    marriage_status: string,
-    nationality: string,
-    partner_option: string,
-    partner_email: string
-  ) => {
+
+  postPatient: async (patientData: PatientDataProps) => {
     set({ loading: true, error: null, data: [] });
     try {
-      const response = await axios.post('/v1/patients', {
-        name: name,
-        email: email,
-        password: password,
-        nik: nik,
-        dob: dob,
-        phone: phone,
-        gender: gender,
-        marriage_status: marriage_status,
-        nationality: nationality,
-        partner_option: partner_option,
-        partner_email: partner_email,
-      });
+      const response = await axios.post('/v1/patients', patientData);
       set({ data: [response.data], loading: false, error: null });
     } catch (error: any) {
       set({
@@ -75,7 +52,8 @@ export const usePatient = create<PatientState>((set) => ({
       throw error;
     }
   },
-  putPatient: async (patientId: number, patientData: any) => {
+
+  putPatient: async (patientId: number, patientData: PatientDataProps) => {
     set({ loading: true, error: null });
     try {
       const response = await axios.put(
@@ -90,7 +68,7 @@ export const usePatient = create<PatientState>((set) => ({
 
         const updatedData = prevState.data.map((patient) => {
           if (patient.id === patientId) {
-            return response.data;
+            return { ...patient, ...response.data };
           }
           return patient;
         });
@@ -98,13 +76,15 @@ export const usePatient = create<PatientState>((set) => ({
         return { ...prevState, data: updatedData, loading: false, error: null };
       });
     } catch (error: any) {
+      const errorMessage = error.response?.data || error.message;
       set({
         loading: false,
-        error: `Failed to edit patient data: ${error.message}`,
+        error: `Failed to edit patient data: ${errorMessage}`,
       });
       throw error;
     }
   },
+
   getPatientById: async (patientId: string) => {
     set({ loading: true, error: null });
     try {
@@ -132,7 +112,7 @@ export const usePatient = create<PatientState>((set) => ({
       });
     }
   },
-  deletePatient: async (patientId) => {
+  deletePatient: async (patientId: number) => {
     set((prevState) => {
       return {
         ...prevState,
@@ -144,7 +124,7 @@ export const usePatient = create<PatientState>((set) => ({
       await axios.delete(`/v1/patients/${patientId}`);
       set((prevState) => {
         const updatedData = prevState.data.filter(
-          (patient) => patient.id !== patientId
+          (patient: { id: number }) => patient.id !== patientId
         );
         return {
           ...prevState,

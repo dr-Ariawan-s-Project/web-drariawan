@@ -3,7 +3,7 @@ import { TrashIcon, PencilIcon } from '@heroicons/react/24/outline';
 import { useUser } from '../../store/apiUser';
 import { UserState } from '../../utils/api';
 import { useSwalDeleteData } from '../../utils/swal/useSwalData';
-
+import { useSwalUpdate } from '../../utils/swal/useSwalData';
 const TableRow: React.FC<{
   data: UserState['data'][0];
   index: number;
@@ -82,20 +82,19 @@ const TableRow: React.FC<{
 const ListUser = () => {
   const [page, setPage] = useState<number>(1);
   const [startNumber, setStartNumber] = useState<number>(1);
-  const { data: userData } = useUser() as any;
-  const { getList, deleteUser, putUser } = useUser() as any;
+  const { data: userData, getList, deleteUser, putUser } = useUser() as any;
 
-  useEffect(() => {
-    getList(page, 10);
-  }, [getList, page]);
   const [editingUser, setEditingUser] = useState<any>(null);
   const [isEditModalOpen, setEditModalOpen] = useState(false);
 
   const handleDeleteUser = async (id: string) => {
     try {
       await deleteUser(id);
+      userData((prevData: { data: any[] }) => ({
+        ...prevData,
+        data: prevData.data.filter((user: { id: string }) => user.id !== id),
+      }));
       useSwalDeleteData('success');
-      setPage(1);
     } catch (error: any) {
       console.error('Gagal menghapus data: ', error);
       useSwalDeleteData('failed', error.message);
@@ -106,7 +105,6 @@ const ListUser = () => {
     const nextPage = page + 1;
     setPage(nextPage);
     getList(nextPage, 10);
-    setStartNumber((nextPage - 1) * 10);
   };
 
   const handleEditUser = (user: any) => {
@@ -118,8 +116,16 @@ const ListUser = () => {
     try {
       await putUser(updatedUser);
       setEditModalOpen(false);
+      userData((prevData: { data: any[]; }) => ({
+        ...prevData,
+        data: prevData.data.map((user) =>
+          user.id === updatedUser.id ? updatedUser : user
+        ),
+      }));
+      useSwalUpdate('success');
     } catch (error: any) {
       console.error('Gagal mengedit data: ', error);
+      useSwalUpdate('failed', error.message);
     }
   };
 
@@ -254,7 +260,7 @@ const ListUser = () => {
               {Array.isArray(userData?.data) && userData.data.length > 0 ? (
                 userData.data.map((rowData: any, index: any) => (
                   <TableRow
-                    key={index}
+                    key={rowData.id} 
                     data={rowData}
                     index={index + startNumber}
                     onDelete={handleDeleteUser}
@@ -263,7 +269,9 @@ const ListUser = () => {
                 ))
               ) : (
                 <tr>
-                  <td colSpan={8} className="text-center py-2"></td>
+                  <td colSpan={6} className="text-center py-2">
+                    No data found.
+                  </td>
                 </tr>
               )}
             </tbody>
