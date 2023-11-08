@@ -12,8 +12,8 @@ export type UserState = {
   data: any[];
   loading: boolean;
   error: string | null;
-  getUser: (page: number, limit: number) => Promise<void>;
-  getList: (page: number, limit: number) => Promise<void>;
+  getUser: (page: number, limit: number, token: string) => Promise<void>;
+  getList: (page: number, limit: number, token: string) => Promise<void>;
   postUser: (
     userData: any,
     selectedUser: { id: any; name: any }

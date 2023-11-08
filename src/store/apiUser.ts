@@ -7,10 +7,13 @@ export const useUser = create<UserState>((set) => ({
   data: [],
   loading: false,
   error: null,
-  getUser: async (page: number, limit: number) => {
+  getUser: async (page: number, limit: number, token: string) => {
     set({ loading: true, error: null, data: [] });
     try {
       const response = await axios.get('/v1/user?id=', {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
         params: { page, limit },
       });
       set({ data: response.data, loading: false, error: null });
@@ -46,10 +49,13 @@ export const useUser = create<UserState>((set) => ({
       throw error;
     }
   },
-  getList: async (page: number, limit: number) => {
+  getList: async (page: number, limit: number, token: string) => {
     set({ loading: true, error: null });
     try {
       const response = await axios.get('/v1/user/list', {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
         params: { search: '', page, limit },
       });
       set({ data: response.data.data, loading: false, error: null });
