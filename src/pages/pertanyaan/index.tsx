@@ -94,24 +94,33 @@ const Pertanyaan = () => {
       }
     } else {
       const maxItems = data?.data?.length;
-      const answerItems = Array.from({ length: maxItems }, (_, index) => ({
-        question_id: index + 1,
-        description: transcripts[index] || '',
-        score: index < answer.items.length ? answer.items[index].score : 0,
-      }));
+      const answerItems = [];
 
-      for (let i = 0; i < answer.items.length; i++) {
-        answerItems[i] = {
-          ...answerItems[i],
-          description: answer.items[i].description,
-          score: answer.items[i].score,
-        };
+      for (let i = 0; i < maxItems; i++) {
+        const question = data?.data[i];
+        const transcript = transcripts[i] || '';
+        const existingAnswer = answer.items.find(
+          (item: any) => item.question_id === question.id
+        );
+
+        if (existingAnswer) {
+          answerItems.push(existingAnswer);
+        } else {
+          const newAnswerItem = {
+            question_id: question.id,
+            description: transcript,
+            score: 0,
+          };
+          answerItems.push(newAnswerItem);
+        }
       }
 
       const body = {
         code_attempt: code_attempt,
         answer: answerItems,
       };
+
+      console.log('body : ', body);
 
       postQuestionaire(body.code_attempt, body.answer);
       navigate(`/kuisioner/finish`);
