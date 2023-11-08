@@ -5,9 +5,12 @@ import { motion } from 'framer-motion';
 import LandingIllustration from '../../assets/illustrations/landing_bg.svg';
 import IllustrationPhoneDoctor from '../../assets/illustrations/phone-doctor.svg';
 import IllustrationPhonePatient from '../../assets/illustrations/phone-patient.svg';
+
+import item from '../../datas/lembar_persetujuan/lembar_persetujuan.json';
 import data from '../../datas/landing/landing.json';
 
 import Button from '../../components/Button';
+import Checkbox from '../../components/Checkbox';
 
 const Landing = () => {
   const navigate: NavigateFunction = useNavigate();
@@ -66,25 +69,17 @@ const Landing = () => {
                 alt="Landing Illustration"
               />
             </div>
-
             <div className="w-auto ml-2 lg:ml-20">
-              <h2 className="text-left text-lg lg:text-base xl:text-sm mb-2 lg:mb-5 ">
+              <h1 className="font-medium text-left text-xl mb-2 lg:mb-5 xl:mb-10">
                 {data.welcome}
-              </h2>
+              </h1>
               <h1 className="text-left text-2xl lg:text-3xl xl:text-4xl mb-2 lg:mb-5 xl:mb-10">
                 {data.title}
               </h1>
-              <p className="lg:text-justify text-left text-lg md:text-2xl lg:text-base mb-2 lg:mb-5 xl:mb-10">
-                {data.description}
+              <p className="lg:text-justify text-left text-lg lg:text-lg xl:text-base mb-2 lg:mb-5 xl:mb-10">
+                {item.description}
               </p>
-              <div className="grid lg:my-auto lg:text-left mt-10">
-                <p className="font-italic_medium text-left text-sm lg:text-base xl:text-lg ">
-                  {data.name}
-                </p>
-                <p className="font-semibold text-left text-sm lg:text-base xl:text-lg mb-2 lg:mb-5 xl:mb-10">
-                  {data.faculty}
-                </p>
-              </div>
+              <Checkbox label={item.agree} />
               <div className="lg:mt-auto mt-3 font-semibold">
                 <Button
                   id="mulai"

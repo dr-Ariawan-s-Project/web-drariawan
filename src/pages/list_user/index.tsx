@@ -1,5 +1,7 @@
 import { useState, useEffect } from 'react';
 import { TrashIcon, PencilIcon } from '@heroicons/react/24/outline';
+import Cookies from 'js-cookie';
+
 import { useUser } from '../../store/apiUser';
 import { UserState } from '../../utils/api';
 import { useSwalDeleteData } from '../../utils/swal/useSwalData';
@@ -80,10 +82,15 @@ const TableRow: React.FC<{
 };
 
 const ListUser = () => {
+  const token = Cookies.get('token');
   const [page, setPage] = useState<number>(1);
   const [startNumber, setStartNumber] = useState<number>(1);
   const { data: userData, getList, deleteUser, putUser } = useUser() as any;
 
+  useEffect(() => {
+    getList(page, 10, token);
+  }, [getList, page]);
+  
   const [editingUser, setEditingUser] = useState<any>(null);
   const [isEditModalOpen, setEditModalOpen] = useState(false);
 
@@ -130,7 +137,7 @@ const ListUser = () => {
   };
 
   useEffect(() => {
-    getList(page, 10);
+    getList(page, 10, token);
     setStartNumber((page - 1) * 10);
   }, [getList, page]);
 
@@ -269,8 +276,8 @@ const ListUser = () => {
                 ))
               ) : (
                 <tr>
-                  <td colSpan={6} className="text-center py-2">
-                    No data found.
+                  <td colSpan={8} className="text-center py-2">
+                    No data available
                   </td>
                 </tr>
               )}

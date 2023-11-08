@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useFormik } from 'formik';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 
 import Button from '../../components/Button';
@@ -227,9 +227,14 @@ const Register = () => {
           ))}
         </AnimatePresence>
 
-        <div className="flex justify-end mt-20">
+        <div className="flex flex-col-reverse mt-20 gap-y-5">
+          <Link
+            className="cursor-pointer underline mx-auto"
+            to={'/auth/option/login'}
+          >
+            Pernah buat akun? silakan klik disini!
+          </Link>
           <div className="font-semibold">
-            {/* Tombol Submit aktif jika partner_option dipilih dan partner_email tidak wajib divalidasi */}
             <Button
               id="mulai"
               label={isLastFieldGroup ? 'Submit' : 'Next'}

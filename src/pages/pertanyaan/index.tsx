@@ -34,6 +34,7 @@ const Pertanyaan = () => {
   const [answer, setAnswer] = useState<any>({ items: [] });
   const [goto, setGoto] = useState<number | null>(null);
   const [modalIsOpen, setModalIsOpen] = useState<boolean>(false);
+  const [isMusicPlaying, setIsMusicPlaying] = useState<boolean>(true);
 
   const currentQuestion: any = data?.data?.find(
     (question: any) => question.id === parseInt(questionId)
@@ -92,25 +93,34 @@ const Pertanyaan = () => {
         resetTranscript();
       }
     } else {
-      const maxItems = 70;
-      const answerItems = Array.from({ length: maxItems }, (_, index) => ({
-        question_id: index + 1,
-        description: transcripts[index] || '',
-        score: index < answer.items.length ? answer.items[index].score : 0,
-      }));
+      const maxItems = data?.data?.length;
+      const answerItems = [];
 
-      for (let i = 0; i < answer.items.length; i++) {
-        answerItems[i] = {
-          ...answerItems[i],
-          description: answer.items[i].description,
-          score: answer.items[i].score,
-        };
+      for (let i = 0; i < maxItems; i++) {
+        const question = data?.data[i];
+        const transcript = transcripts[i] || '';
+        const existingAnswer = answer.items.find(
+          (item: any) => item.question_id === question.id
+        );
+
+        if (existingAnswer) {
+          answerItems.push(existingAnswer);
+        } else {
+          const newAnswerItem = {
+            question_id: question.id,
+            description: transcript,
+            score: 0,
+          };
+          answerItems.push(newAnswerItem);
+        }
       }
 
       const body = {
         code_attempt: code_attempt,
         answer: answerItems,
       };
+
+      console.log('body : ', body);
 
       postQuestionaire(body.code_attempt, body.answer);
       navigate(`/kuisioner/finish`);
@@ -133,6 +143,33 @@ const Pertanyaan = () => {
       clearTimeout(transitionTimeout);
       clearTimeout(fadeInTimeout);
     };
+  }, []);
+
+  useEffect(() => {
+    const allSlugs =
+      currentQuestion?.choices?.map((choice: any) => choice.slugs).flat() || [];
+    const transcriptLowerCase = transcript.toLowerCase();
+    const checkTranscript = () => {
+      const isMatch = allSlugs.some((slug: any) => {
+        const slugParts = slug.split(';');
+        return slugParts.some((part: any) =>
+          transcriptLowerCase.includes(part)
+        );
+      });
+      if (isMatch && transcriptLowerCase !== '') {
+        setTimeout(() => {
+          handleSubmit();
+        }, 5000);
+      }
+    };
+
+    checkTranscript();
+  }, [transcript, currentQuestion, questionId, data, resetTranscript]);
+
+  useEffect(() => {
+    setTimeout(() => {
+      setIsMusicPlaying(false);
+    }, 5000);
   }, []);
 
   return (
@@ -184,7 +221,6 @@ const Pertanyaan = () => {
                 style={{ minHeight: '40px' }}
               />
             </div>
-
             <AudioRecorder
               isRecording={listening}
               handleReset={resetTranscript}
@@ -200,6 +236,24 @@ const Pertanyaan = () => {
                 onClick={handleSubmit}
               />
             </div>
+          </div>
+          <div
+            className={`${
+              isMusicPlaying
+                ? 'fixed bg-black inset-0 opacity-60 w-screen h-screen flex flex-col justify-end items-end'
+                : 'fixed bottom-1 right-1 flex flex-col justify-end items-end'
+            }`}
+          >
+            {isMusicPlaying && (
+              <div className="mx-20">
+                <h2 className="font-bold text-2xl text-white">
+                  Coba putar musik disini!
+                </h2>
+              </div>
+            )}
+            <audio controls className="m-10">
+              <source src="/background_quiztioner.mp3" type="audio/mp3" />
+            </audio>
           </div>
         </section>
       )}

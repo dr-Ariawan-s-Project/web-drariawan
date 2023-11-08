@@ -11,11 +11,16 @@ export const useDashboard = create<DashboardState>((set) => ({
   },
   loading: false,
   error: null,
-  getDashboard: async () => {
+  getDashboard: async (token: string | undefined) => {
     set({ loading: true, error: null });
     try {
       const response = await axios.get(
-        'https://drariawan.altapro.online/v1/dashboard'
+        'https://drariawan.altapro.online/v1/dashboard',
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
       );
       set({ data: response.data.data, loading: false });
     } catch (error) {

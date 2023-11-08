@@ -1,3 +1,5 @@
+import Cookies from 'js-cookie';
+
 import { useState, useEffect } from 'react';
 import { TrashIcon, PencilIcon } from '@heroicons/react/24/outline';
 import { useSwalDeleteData } from '../../utils/swal/useSwalData';
@@ -92,6 +94,7 @@ const ListPasien = () => {
     putPatient,
     getPatientById,
   } = usePatient() as any;
+  const token = Cookies.get('token');
 
   const [editingPatient, setEditingPatient] = useState<any>(null);
   const [isEditModalOpen, setEditModalOpen] = useState(false);
@@ -115,7 +118,7 @@ const ListPasien = () => {
   const handleNextPage = () => {
     const nextPage = page + 1;
     setPage(nextPage);
-    getPatient(nextPage, 10);
+    getPatient(nextPage, 10, token);
   };
 
   const handleSearch = async () => {
@@ -153,7 +156,7 @@ const ListPasien = () => {
     }
   };
   useEffect(() => {
-    getPatient(page, 10);
+    getPatient(page, 10, token);
     setStartNumber((page - 1) * 10);
   }, [getPatient, page]);
 

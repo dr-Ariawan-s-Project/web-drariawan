@@ -15,8 +15,8 @@ export type UserState = {
   data: any[];
   loading: boolean;
   error: string | null;
-  getUser: (page: number, limit: number) => Promise<void>;
-  getList: (page: number, limit: number) => Promise<void>;
+  getUser: (page: number, limit: number, token: string) => Promise<void>;
+  getList: (page: number, limit: number, token: string) => Promise<void>;
   postUser: (
     userData: any,
     selectedUser: { id: any; name: any }
@@ -37,8 +37,25 @@ export type PatientState = {
   loading: boolean;
   error: string | null;
   loginPatient: (email: string, password: string) => void;
+<<<<<<< HEAD
   getPatient: (page: number, limit: number) => Promise<void>;
   postPatient: (patientData: PatientDataProps) => Promise<void>;
+=======
+  getPatient: (page: number, limit: number, token: string) => Promise<void>;
+  postPatient: (
+    name: string,
+    email: string,
+    password: string,
+    nik: string | number,
+    dob: string,
+    phone: string | number,
+    gender: string,
+    marriage_status: string,
+    nationality: string,
+    partner_option: string,
+    partner_email: string
+  ) => Promise<void>;
+>>>>>>> 456de66b747f0a038b2f2ad337dfbf58f16c4d29
   putPatient: (patientId: number, patientData: any) => Promise<void>;
   getPatientById: (patientId: string) => Promise<any>;
   getList: () => Promise<void>;
@@ -53,14 +70,14 @@ export type DashboardState = {
   };
   loading: boolean;
   error: string | null;
-  getDashboard: () => Promise<void>;
+  getDashboard: (token: string | undefined) => Promise<void>;
 };
 
 export type ScheduleState = {
   data: any[];
   loading: boolean;
   error: string | null;
-  getSchedules: (page: number, limit: number) => Promise<void>;
+  getSchedules: (page: number, limit: number, token: string) => Promise<void>;
   postSchedule: (
     scheduleData: ScheduleData,
     selectedUser: UserData

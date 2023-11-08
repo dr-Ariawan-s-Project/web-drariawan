@@ -20,7 +20,6 @@ import Dashboard from '../pages/dashboard';
 import Scheduling from '../pages/scheduling';
 import Main from '../pages/main';
 import KonfirmasiPraktik from '../pages/konfirmasi_praktik';
-import ResumePraktik from '../pages/resume_praktik';
 import LandingKuisioner from '../pages/landing_kuisioner';
 import Responden from '../pages/responden';
 import DetailResponden from '../pages/detail_responden';
@@ -42,7 +41,6 @@ const App = () => {
         <Route element={<Main />} path="/main" />
         <Route element={<Scheduling />} path="/scheduling" />
         <Route element={<KonfirmasiPraktik />} path="/scheduling/success" />
-        <Route element={<ResumePraktik />} path="/scheduling/resume_praktik" />
         <Route element={<AdminLogin />} path="/admin/login" />
         <Route element={<Admin />} path="/admin/">
           <Route element={<ListKuisioner />} path="list_kuisioner" />

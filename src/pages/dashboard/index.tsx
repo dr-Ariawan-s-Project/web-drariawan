@@ -1,13 +1,17 @@
+import Cookies from 'js-cookie';
+
 import InformationCard from '../../components/InformationCard';
 import ListAppoinment from '../../components/ListAppoinment';
 import ListResponden from '../../components/ListResponden';
+
 import { useDashboard } from '../../store/apiDashboard';
 import { useEffect } from 'react';
 const Dashboard = () => {
+  const token = Cookies.get('token');
   const { data, error, getDashboard } = useDashboard();
 
   useEffect(() => {
-    getDashboard();
+    getDashboard(token);
   }, [getDashboard]);
 
   if (error) {

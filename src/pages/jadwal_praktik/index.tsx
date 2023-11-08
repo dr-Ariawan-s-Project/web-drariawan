@@ -1,5 +1,7 @@
 import { useState, useEffect, Key } from 'react';
 import { TrashIcon, PencilIcon } from '@heroicons/react/24/outline';
+import Cookies from 'js-cookie';
+
 import { useSchedule } from '../../store/apiSchedule';
 import { useSwalDeleteData } from '../../utils/swal/useSwalData';
 import { useSwalUpdate } from '../../utils/swal/useSwalData';
@@ -97,6 +99,7 @@ const TableRow: React.FC<{
 };
 
 const JadwalPraktik = () => {
+  const token = Cookies.get('token');
   const [page, setPage] = useState<number>(1);
   const [startNumber, setStartNumber] = useState<any>(1);
   const {
@@ -111,13 +114,10 @@ const JadwalPraktik = () => {
   const { data: userData } = useUser() as any;
   const { getList } = useUser() as any;
 
-  useEffect(() => {
-    getSchedules(page, 10);
-  }, [getSchedules, page]);
 
   useEffect(() => {
-    getList(page, 10);
-  }, [getList, page]);
+    getList(page, 10, token);
+  }, [page]);
 
   const [editingSchedule, setEditingSchedule] = useState<any>(null);
   const [isEditModalOpen, setEditModalOpen] = useState(false);
