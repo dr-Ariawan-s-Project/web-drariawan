@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { NavigateFunction, useNavigate } from 'react-router-dom';
 import { useFormik } from 'formik';
 import Cookies from 'js-cookie';
@@ -13,7 +13,9 @@ import Button from '../../components/Button';
 const DataDiri = () => {
   const navigate: NavigateFunction = useNavigate();
   const { setEmail: setEmailInStore } = useEmailStore();
-  const { validateQuestionaire, data } = useQuestionaire() as any;
+  const { validateQuestionaire } = useQuestionaire() as any;
+
+  const [codeAttempt, setCodeAttempt] = useState<string | undefined>('');
 
   const formik = useFormik({
     initialValues: {
@@ -34,6 +36,9 @@ const DataDiri = () => {
           partner_email: values.patientEmail,
         };
         await validateQuestionaire(body);
+        if (codeAttempt !== '') {
+          navigate('/verifikasi_email');
+        }
       } catch (error) {
         useSwalCreate(
           'failed',
@@ -44,12 +49,9 @@ const DataDiri = () => {
   });
 
   useEffect(() => {
-    const code_attempt = data?.data?.code_attempt;
-    Cookies.set('code_attempt', code_attempt);
-    if (code_attempt) {
-      navigate('/verifikasi_email');
-    }
-  }, [data]);
+    const code_attempt = Cookies.get('code_attempt');
+    setCodeAttempt(code_attempt);
+  }, []);
 
   return (
     <section className="flex flex-col justify-center items-center min-h-screen px-4 sm:px-6 md:px-8 lg:px-12 mt-18">
@@ -127,13 +129,13 @@ const DataDiri = () => {
           >
             <option value="">Pilih Status</option>
             <option value="myself">Myself</option>
-            <option value="patient">Partner</option>
+            <option value="partner">Partner</option>
           </select>
           {formik.touched.patientStatus && formik.errors.patientStatus && (
             <p className="text-red-500">{formik.errors.patientStatus}</p>
           )}
         </div>
-        {formik.values.patientStatus === 'patient' && (
+        {formik.values.patientStatus === 'partner' && (
           <div className="mb-4">
             <label
               className="block text-gray-700 text-sm font-bold mb-2"
