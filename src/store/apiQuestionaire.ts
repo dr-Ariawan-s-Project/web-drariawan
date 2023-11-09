@@ -1,4 +1,5 @@
 import { create } from 'zustand';
+import Cookies from 'js-cookie';
 import axios from 'axios';
 
 import { QuestionaireState } from '../utils/api';
@@ -41,7 +42,7 @@ export const useQuestionaire = create<QuestionaireState>((set) => ({
       throw error;
     }
   },
-  validateQuestionaire: async (validateData) => {
+  validateQuestionaire: async (validateData: any) => {
     set({ loading: true, error: null });
     try {
       const response = await axiosInstance.post('/v1/questioner/validate', {
@@ -51,6 +52,7 @@ export const useQuestionaire = create<QuestionaireState>((set) => ({
         partner_email: validateData.partner_email,
       });
       set({ data: response.data, loading: false });
+      Cookies.set('code_attempt', response?.data?.data?.code_attempt);
       return response.data;
     } catch (error) {
       set({ loading: false, error: 'error validate questioner' });
