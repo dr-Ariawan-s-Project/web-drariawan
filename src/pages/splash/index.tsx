@@ -5,7 +5,7 @@ import '../../styles/pulse.css';
 const Splash = () => {
   const navigate: NavigateFunction = useNavigate();
   const [typingText, setTypingText] = useState('');
-  const textToType = "Welcome to dr Ariawan's Questioner  ";
+  const textToType = 'Selamat datang di Klinik Sehat  ';
   const typingSpeed = 100;
 
   useEffect(() => {
@@ -13,7 +13,6 @@ const Splash = () => {
     const typingInterval = setInterval(() => {
       setTypingText(textToType.substring(0, currentIndex));
       currentIndex++;
-      console.log(textToType.length);
       if (currentIndex >= textToType.length) {
         navigate('/main');
       }
@@ -25,8 +24,8 @@ const Splash = () => {
   }, []);
 
   return (
-    <div className="w-screen h-screen bg-health-blue-dark flex flex-col justify-center items-center">
-      <div className="text-white text-2xl font-semibold">
+    <div className="w-screen h-screen bg-white flex flex-col gap-y-8 justify-center items-center">
+      <div className="text-health-blue-dark text-3xl">
         <h2>{typingText}</h2>
       </div>
     </div>
