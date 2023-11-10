@@ -89,8 +89,8 @@ const ListUser = () => {
 
   useEffect(() => {
     getList(page, 10, token);
-  }, [getList, page]);
-  
+  }, [getList, page, token]);
+
   const [editingUser, setEditingUser] = useState<any>(null);
   const [isEditModalOpen, setEditModalOpen] = useState(false);
 
@@ -139,7 +139,7 @@ const ListUser = () => {
   useEffect(() => {
     getList(page, 10, token);
     setStartNumber((page - 1) * 10);
-  }, [getList, page]);
+  }, [getList, page, token]);
 
   return (
     <section className="min-h-screen flex flex-col justify-center items-center">

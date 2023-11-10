@@ -128,3 +128,8 @@ export interface DateInfoProps {
   date: string;
   time?: string;
 }
+export type RoleData = {
+  name: string;
+  role: string;
+  token: string;
+};

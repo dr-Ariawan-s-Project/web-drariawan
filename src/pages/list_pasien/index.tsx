@@ -8,6 +8,7 @@ import { useSwalUpdate } from '../../utils/swal/useSwalData';
 import { usePatient } from '../../store/apiPatient';
 import { PatientState } from '../../utils/api';
 import SearchBar from '../../components/SearchBar';
+import { useAuth } from '../../store/apiAuth';
 
 const TableRow: React.FC<{
   data: PatientState['data'][0];
@@ -84,6 +85,10 @@ const TableRow: React.FC<{
 };
 
 const ListPasien = () => {
+  const { data: authData } = useAuth();
+  const userRole = authData?.role;
+  const token = Cookies.get('token');
+
   const [page, setPage] = useState<number>(1);
   const [startNumber, setStartNumber] = useState<number>(1);
 
@@ -94,7 +99,6 @@ const ListPasien = () => {
     putPatient,
     getPatientById,
   } = usePatient() as any;
-  const token = Cookies.get('token');
 
   const [editingPatient, setEditingPatient] = useState<any>(null);
   const [isEditModalOpen, setEditModalOpen] = useState(false);
@@ -149,16 +153,21 @@ const ListPasien = () => {
       await putPatient(updatedPatient.id, updatedPatient);
       useSwalUpdate('success');
       setEditModalOpen(false);
-      getPatient(page, 10);
+      getPatient(page, 10, token);
     } catch (error: any) {
       console.error('Gagal mengedit data: ', error);
       useSwalUpdate('failed', error.message);
     }
   };
+
   useEffect(() => {
-    getPatient(page, 10, token);
-    setStartNumber((page - 1) * 10);
-  }, [getPatient, page]);
+    if (!token || !userRole || !['admin', 'dokter', 'suster'].includes(userRole)) {
+      console.log('Akses ditolak.');
+    } else {
+      getPatient(page, 10, token, userRole);
+      setStartNumber((page - 1) * 10);
+    }
+  }, [getPatient, page, token, userRole]);
 
   return (
     <section className="min-h-screen flex flex-col justify-center items-center">

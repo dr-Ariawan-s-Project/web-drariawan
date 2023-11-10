@@ -8,6 +8,14 @@ export const useSchedule = create<ScheduleState>((set) => ({
   loading: false,
   error: null,
   getSchedules: async (page: number, limit: number, token: string) => {
+    if (!token) {
+      set({
+        loading: false,
+        error: 'Token is missing. Unable to retrieve Schedule data.',
+      });
+      return;
+    }
+
     set({ loading: true, error: null });
     try {
       const response = await axios.get('/v1/schedule/list', {
@@ -25,7 +33,15 @@ export const useSchedule = create<ScheduleState>((set) => ({
     }
   },
 
-  postSchedule: async (scheduleData: ScheduleData, selectedUser: UserData) => {
+  postSchedule: async (scheduleData: ScheduleData, selectedUser: UserData, token: string) => {
+    if (!token) {
+      set({
+        loading: false,
+        error: 'Token is missing. Unable to post Schedule data.',
+      });
+      return;
+    }
+
     set((prevState) => {
       return {
         ...prevState,
@@ -36,7 +52,12 @@ export const useSchedule = create<ScheduleState>((set) => ({
     try {
       const response = await axios.post(
         `/v1/schedule?id=${selectedUser.id}`,
-        scheduleData
+        scheduleData,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
       );
 
       console.log('Response from POST request:', response.data);
@@ -59,7 +80,16 @@ export const useSchedule = create<ScheduleState>((set) => ({
       throw error;
     }
   },
-  putSchedule: async (scheduleId: number, scheduleData: ScheduleData) => {
+  
+  putSchedule: async (scheduleId: number, scheduleData: ScheduleData, token: string) => {
+    if (!token) {
+      set({
+        loading: false,
+        error: 'Token is missing. Unable to update Schedule data.',
+      });
+      return;
+    }
+
     set((prevState) => {
       return {
         ...prevState,
@@ -70,7 +100,12 @@ export const useSchedule = create<ScheduleState>((set) => ({
     try {
       const response = await axios.put(
         `/v1/schedule?id=${scheduleId}`,
-        scheduleData
+        scheduleData,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
       );
       set((prevState) => {
         if (!Array.isArray(prevState.data)) {
@@ -95,7 +130,15 @@ export const useSchedule = create<ScheduleState>((set) => ({
     }
   },
 
-  deleteSchedule: async (scheduleId) => {
+  deleteSchedule: async (scheduleId: number, token: string) => {
+    if (!token) {
+      set({
+        loading: false,
+        error: 'Token is missing. Unable to delete Schedule data.',
+      });
+      return;
+    }
+
     set((prevState) => {
       return {
         ...prevState,
@@ -104,7 +147,11 @@ export const useSchedule = create<ScheduleState>((set) => ({
       };
     });
     try {
-      await axios.post(`/v1/schedule/delete?id=${scheduleId}`);
+      await axios.post(`/v1/schedule/delete?id=${scheduleId}`, null, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
       set((prevState) => {
         const updatedData = prevState.data.filter(
           (schedule) => schedule.id !== scheduleId

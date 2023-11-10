@@ -131,12 +131,12 @@ const Scheduling = () => {
     if (!token) {
       navigate('/auth/option/login');
     }
-  }, [token]);
+  }, [navigate, token]);
 
   useEffect(() => {
     getBookedSchedule();
     getProfile();
-  }, []);
+  }, [getBookedSchedule, getProfile]);
 
   console.log(patient?.id);
   console.log(schedule?.schedule_id);
@@ -153,31 +153,7 @@ const Scheduling = () => {
           melakukan pendaftaran
         </p>
       </div>
-<<<<<<< HEAD
-      <div className="flex mb-4 gap-x-5">
-        <p>Tanggal Mulai : </p>
-        <DatePicker
-          selected={selectedStartDate}
-          onChange={handleStartDateChange}
-          dateFormat="dd/MM/yyyy"
-          selectsStart
-          startDate={selectedStartDate}
-          endDate={selectedEndDate}
-          className="border border-health-blue-thin rounded-md"
-        />
-        <p>Tanggal Akhir : </p>
-        <DatePicker
-          selected={selectedEndDate}
-          onChange={handleStartDateChange}
-          dateFormat="dd/MM/yyyy"
-          className="border border-health-blue-thin rounded-md"
-          disabled
-        />
-      </div>
-      <div className="flex left-10 gap-x-7 relative">
-=======
       <div className="grid grid-cols-7 gap-4 mx-20 my-10">
->>>>>>> 456de66b747f0a038b2f2ad337dfbf58f16c4d29
         {daysOfWeek.map((day) => (
           <div key={day} className="text-center">
             <div className="font-semibold mb-2">{day}</div>

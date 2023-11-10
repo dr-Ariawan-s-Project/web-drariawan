@@ -64,7 +64,6 @@ export const useQuestionaire = create<QuestionaireState>((set) => ({
     set({ loading: true, error: null });
     try {
       const response = await axiosInstance.get('/v1/questioner/attempts');
-      console.log('Response from GET attempts:', response.data);
       set({ data: response.data, loading: false });
     } catch (error) {
       console.error('Error fetching attempts:', error);

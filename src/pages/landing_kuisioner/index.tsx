@@ -1,8 +1,23 @@
-import { useNavigate } from 'react-router-dom';
+import { To, useNavigate } from 'react-router-dom';
 import { Icon } from '@iconify/react';
-
+import { useAuth } from '../../store/apiAuth'; 
 const LandingKuisioner = () => {
   const navigate = useNavigate();
+  const { data } = useAuth(); 
+  const userRole = data?.role; 
+
+  const handleRedirect = (path: To) => {
+    const allowedRoles = ['admin', 'doctor', 'nurse'];
+    if (!userRole || !allowedRoles.includes(userRole)) {
+      console.error('Unauthorized access or invalid role. Redirecting to login page...');
+      navigate('/admin/login');
+      return;
+    }
+
+    console.error('Unauthorized access or invalid role. Redirecting to login page...');
+
+    navigate(path);
+  };
 
   return (
     <div className="mt-20 flex flex-col md:flex-row gap-4">
@@ -53,7 +68,7 @@ const LandingKuisioner = () => {
             </div>
           </div>
           <button
-            onClick={() => navigate('/admin/responden')}
+            onClick={() => handleRedirect('/admin/responden')}
             className="text-health-blue-dark text-sm font-lato_regular border-none focus:outline-none flex items-center"
           >
             ke Halaman Responden

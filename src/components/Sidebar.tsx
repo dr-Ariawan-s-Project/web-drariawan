@@ -2,6 +2,7 @@ import { Bars3Icon } from '@heroicons/react/24/outline';
 import { useState } from 'react';
 import { Icon } from '@iconify/react';
 import { useLocation } from 'react-router-dom';
+import { useAuth } from '../store/apiAuth';  
 
 const Sidebar = () => {
   const [toggle, setToggle] = useState<boolean>(false);
@@ -12,7 +13,14 @@ const Sidebar = () => {
   const navigateTo = (path: any) => {
     window.location.href = path;
   };
+
   const location = useLocation();
+  const { data } = useAuth();  
+  const userRole = data?.role;
+
+  const hasAccess = (allowedRoles: string[]) => {
+    return userRole ? allowedRoles.includes(userRole) : false;
+  };
 
   return (
     <div
@@ -41,20 +49,22 @@ const Sidebar = () => {
         </div>
 
         <ul className="p-4  ">
-          <li className="mb-2 ">
-          <button
-            onClick={() => navigateTo('/admin/')}
-            className={`text-health-blue-dark bg-white hover:bg-health-blue-dark hover:text-white text-sm font-lato_regular border-none focus:outline-none flex items-center ${
-              location.pathname === '/admin/' ? 'active' : ''
-            }`}
-          >
-              <Icon
-                icon="ant-design:pie-chart-outlined"
-                width="24"
-                height="24"
-              />{' '}
-              <span className="ml-2">Dashboard</span>
-            </button>
+        <li className="mb-2 ">
+            {hasAccess(['admin', 'dokter', 'suster']) && (
+              <button
+                onClick={() => navigateTo('/admin/')}
+                className={`text-health-blue-dark bg-white hover:bg-health-blue-dark hover:text-white text-sm font-lato_regular border-none focus:outline-none flex items-center ${
+                  location.pathname === '/admin/' ? 'active' : ''
+                }`}
+              >
+                <Icon
+                  icon="ant-design:pie-chart-outlined"
+                  width="24"
+                  height="24"
+                />
+                <span className="ml-2">Dashboard</span>
+              </button>
+            )}
           </li>
 
           <li className="mb-2">
