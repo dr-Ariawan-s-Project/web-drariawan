@@ -16,12 +16,20 @@ const TableRow: React.FC<{
   onDelete: (id: string) => void;
   onEdit: (data: PatientState['data'][0]) => void;
 }> = ({ data, index, onDelete, onEdit }) => {
+
+  const { data: authData } = useAuth();
+  const userRole = authData?.role;
+
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [idToDelete, setIdToDelete] = useState<string>('');
 
   const handleDeleteClick = () => {
-    setIdToDelete(data.id);
-    setIsDeleteModalOpen(true);
+    if (userRole === 'admin') {
+      setIdToDelete(data.id);
+      setIsDeleteModalOpen(true);
+    } else {
+      console.log('Unauthorized access to delete patient data.');
+    }
   };
 
   const handleConfirmDelete = () => {
@@ -34,9 +42,17 @@ const TableRow: React.FC<{
   };
 
   const handleEditClick = () => {
-    onEdit(data);
+    if (userRole === 'admin') {
+      onEdit(data);
+    } else {
+      console.log('Unauthorized access to edit patient data.');
+    }
   };
 
+  const deleteIconStyle = userRole === 'admin' ? '' : 'text-gray-400 cursor-not-allowed';
+  const editIconStyle = userRole === 'admin' ? '' : 'text-gray-400 cursor-not-allowed';
+ 
+ 
   return (
     <tr className="border-b text-left">
       <td className="p-2">{index + 1}</td>
@@ -46,13 +62,13 @@ const TableRow: React.FC<{
       <td className="p-2">
         <div className="flex items-center justify-center gap-x-2">
           <TrashIcon
-            className="cursor-pointer hover:text-red-500"
+            className={`cursor-pointer hover:text-red-500 ${deleteIconStyle}`}
             width={20}
             height={20}
             onClick={handleDeleteClick}
           />
           <PencilIcon
-            className="cursor-pointer hover:text-health-blue-light mx-2"
+            className={`cursor-pointer hover:text-health-blue-light mx-2 ${editIconStyle}`}
             width={20}
             height={20}
             onClick={handleEditClick}
@@ -91,14 +107,7 @@ const ListPasien = () => {
 
   const [page, setPage] = useState<number>(1);
   const [startNumber, setStartNumber] = useState<number>(1);
-
-  const {
-    data: patientData,
-    getPatient,
-    deletePatient,
-    putPatient,
-    getPatientById,
-  } = usePatient() as any;
+  const { data: patientData, getPatient, deletePatient, putPatient, getPatientById,} = usePatient() as any;
 
   const [editingPatient, setEditingPatient] = useState<any>(null);
   const [isEditModalOpen, setEditModalOpen] = useState(false);
@@ -109,16 +118,20 @@ const ListPasien = () => {
   const patientDataToShow = searchedPatientData || patientData;
 
   const handleDeletePatient = async (id: string) => {
-    try {
-      await deletePatient(id);
-      useSwalDeleteData('success');
-      setPage(1);
-    } catch (error: any) {
-      console.error('Gagal menghapus data: ', error);
-      useSwalDeleteData('failed', error.message);
+    if (userRole === 'admin') {
+      try {
+        await deletePatient(id);
+        useSwalDeleteData('success');
+        setPage(1);
+      } catch (error: any) {
+        console.error('Gagal menghapus data: ', error);
+        useSwalDeleteData('failed', error.message);
+      }
+    } else {
+      console.log('Unauthorized access to delete patient data.');
     }
   };
-
+  
   const handleNextPage = () => {
     const nextPage = page + 1;
     setPage(nextPage);
@@ -144,8 +157,12 @@ const ListPasien = () => {
   };
 
   const handleEditPatient = (patient: any) => {
-    setEditingPatient(patient);
-    setEditModalOpen(true);
+    if (userRole === 'admin') {
+      setEditingPatient(patient);
+      setEditModalOpen(true);
+    } else {
+      console.log('Unauthorized access to edit patient data.');
+    }
   };
 
   const handleEditSubmit = async (updatedPatient: any) => {
@@ -162,7 +179,7 @@ const ListPasien = () => {
 
   useEffect(() => {
     if (!token || !userRole || !['admin', 'dokter', 'suster'].includes(userRole)) {
-      console.log('Akses ditolak.');
+      console.log('Akses anda ditolak. Anda tidak memiliki akses ke halaman ini.');
     } else {
       getPatient(page, 10, token, userRole);
       setStartNumber((page - 1) * 10);

@@ -1,23 +1,34 @@
-import { useState, useEffect } from 'react';
-import { TrashIcon, PencilIcon } from '@heroicons/react/24/outline';
 import Cookies from 'js-cookie';
 
+import { useState, useEffect } from 'react';
+import { TrashIcon, PencilIcon } from '@heroicons/react/24/outline';
 import { useUser } from '../../store/apiUser';
 import { UserState } from '../../utils/api';
 import { useSwalDeleteData } from '../../utils/swal/useSwalData';
 import { useSwalUpdate } from '../../utils/swal/useSwalData';
+import { useAuth } from '../../store/apiAuth';
+
+
 const TableRow: React.FC<{
   data: UserState['data'][0];
   index: number;
   onDelete: (id: string) => void;
   onEdit: (data: UserState['data'][0]) => void;
 }> = ({ data, index, onDelete, onEdit }) => {
+
+  const { data: authData } = useAuth();
+  const userRole = authData?.role;
+
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [idToDelete, setIdToDelete] = useState<string>('');
 
   const handleDeleteClick = () => {
-    setIdToDelete(data.id);
-    setIsDeleteModalOpen(true);
+    if (userRole === 'admin') {
+      setIdToDelete(data.id);
+      setIsDeleteModalOpen(true);
+    } else {
+      console.log('Unauthorized access to delete user data.');
+    }
   };
 
   const handleConfirmDelete = () => {
@@ -30,9 +41,16 @@ const TableRow: React.FC<{
   };
 
   const handleEditClick = () => {
-    onEdit(data);
+    if (userRole === 'admin') {
+      onEdit(data);
+    } else {
+      console.log('Unauthorized access to edit user data.');
+    }
   };
 
+  const deleteIconStyle = userRole === 'admin' ? '' : 'text-gray-400 cursor-not-allowed';
+  const editIconStyle = userRole === 'admin' ? '' : 'text-gray-400 cursor-not-allowed';
+ 
   return (
     <tr className="border-b text-left">
       <td className="p-2">{index + 1}</td>
@@ -43,13 +61,13 @@ const TableRow: React.FC<{
       <td className="p-2">
         <div className="flex items-center justify-center gap-x-2">
           <TrashIcon
-            className="cursor-pointer hover:text-red-500"
+            className={`cursor-pointer hover:text-red-500 ${deleteIconStyle}`}
             width={20}
             height={20}
             onClick={handleDeleteClick}
           />
           <PencilIcon
-            className="cursor-pointer hover:text-health-blue-light mx-2"
+            className={`cursor-pointer hover:text-health-blue-light mx-2 ${editIconStyle}`}
             width={20}
             height={20}
             onClick={handleEditClick}
@@ -82,48 +100,56 @@ const TableRow: React.FC<{
 };
 
 const ListUser = () => {
+  const { data: authData } = useAuth();
+  const userRole = authData?.role;
   const token = Cookies.get('token');
+
   const [page, setPage] = useState<number>(1);
   const [startNumber, setStartNumber] = useState<number>(1);
   const { data: userData, getList, deleteUser, putUser } = useUser() as any;
-
-  useEffect(() => {
-    getList(page, 10, token);
-  }, [getList, page, token]);
 
   const [editingUser, setEditingUser] = useState<any>(null);
   const [isEditModalOpen, setEditModalOpen] = useState(false);
 
   const handleDeleteUser = async (id: string) => {
-    try {
-      await deleteUser(id);
-      userData((prevData: { data: any[] }) => ({
-        ...prevData,
-        data: prevData.data.filter((user: { id: string }) => user.id !== id),
-      }));
-      useSwalDeleteData('success');
-    } catch (error: any) {
-      console.error('Gagal menghapus data: ', error);
-      useSwalDeleteData('failed', error.message);
+    if (userRole === 'admin') {
+      try {
+        await deleteUser(id);
+        userData((prevData: { data: any[] }) => ({
+          ...prevData,
+          data: prevData.data.filter((user: { id: string }) => user.id !== id),
+        }));
+        useSwalDeleteData('success');
+      } catch (error: any) {
+        console.error('Gagal menghapus data: ', error);
+        useSwalDeleteData('failed', error.message);
+      }
+    } else {
+      console.log('Unauthorized access to delete user data.');
     }
   };
 
   const handleNextPage = () => {
     const nextPage = page + 1;
     setPage(nextPage);
-    getList(nextPage, 10);
+    getList(nextPage, 10, token);
   };
 
   const handleEditUser = (user: any) => {
-    setEditingUser(user);
-    setEditModalOpen(true);
+    if (userRole === 'admin') {
+      setEditingUser(user);
+      setEditModalOpen(true);
+    } else {
+      console.log('Unauthorized access to edit user data.');
+    }
   };
 
   const handleEditSubmit = async (updatedUser: any) => {
     try {
       await putUser(updatedUser);
       setEditModalOpen(false);
-      userData((prevData: { data: any[]; }) => ({
+      getList(page,10, token)
+      userData((prevData: { data: any[] }) => ({
         ...prevData,
         data: prevData.data.map((user) =>
           user.id === updatedUser.id ? updatedUser : user
@@ -137,9 +163,13 @@ const ListUser = () => {
   };
 
   useEffect(() => {
-    getList(page, 10, token);
-    setStartNumber((page - 1) * 10);
-  }, [getList, page, token]);
+    if (!token || !userRole || !['admin', 'dokter', 'suster'].includes(userRole)) {
+      console.log('Akses anda ditolak. Anda tidak memiliki akses ke halaman ini.');
+    } else {
+      getList(page, 10, token);
+      setStartNumber((page - 1) * 10);
+    }
+  }, [getList, page, token, userRole]);
 
   return (
     <section className="min-h-screen flex flex-col justify-center items-center">
