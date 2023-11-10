@@ -1,21 +1,39 @@
 import { useNavigate } from 'react-router-dom';
 import { SetStateAction, useEffect, useState } from 'react';
 import { useQuestionaire } from '../../store/apiQuestionaire';
+import Cookies from 'js-cookie';
+import { useAuth } from '../../store/apiAuth';
+
 // import { Answer } from '../../utils/data'; 
 
 const Responden = () => {
   const { data: attemptsData, loading, error: attemptsError, getAttempts } = useQuestionaire();
-  const [sortBy, setSortBy] = useState('created_at'); 
-  const [sortDirection, setSortDirection] = useState('desc'); 
-  useEffect(() => {
-    getAttempts();
-  }, [getAttempts]);
-
+  const [sortBy, setSortBy] = useState('created_at');
+  const [sortDirection, setSortDirection] = useState('desc');
   const navigate = useNavigate();
+  const { data: authData } = useAuth();
+  const userRole = authData?.role;
+  const token = Cookies.get('token');
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        if (!token || !userRole || !['admin', 'dokter', 'suster'].includes(userRole)) {
+          console.log('Access denied. You do not have permission to access this page.');
+        } else {
+          await getAttempts(token, userRole);
+        }
+      } catch (error) {
+        console.error('Error fetching attempts data:', error);
+      }
+    };
+
+    fetchData();
+  }, [getAttempts, token, userRole]);
 
   const handleSortChange = (field: SetStateAction<string>) => {
     if (field === sortBy) {
-      setSortDirection(sortDirection === 'asc' ? 'desc' : 'asc');
+      setSortDirection((prevDirection) => (prevDirection === 'asc' ? 'desc' : 'asc'));
     } else {
       setSortBy(field);
       setSortDirection('asc');
@@ -43,7 +61,7 @@ const Responden = () => {
   };
 
   const handleViewDetail = (item: any) => {
-    let dataToSend; // Inisialisasi dataToSend
+    let dataToSend; 
     if (item && item.id) {
       const attemptId = item.id;
   
@@ -57,7 +75,7 @@ const Responden = () => {
         email: item.patient.email,
       };
   
-      console.log(dataToSend); // Log dataToSend ke konsol
+      console.log(dataToSend); 
       navigate(`/admin/detail_responden/${item.id}`, {
         state: { attempt_id: attemptId, ...dataToSend }
       });

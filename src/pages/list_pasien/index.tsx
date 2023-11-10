@@ -118,13 +118,18 @@ const ListPasien = () => {
   const patientDataToShow = searchedPatientData || patientData;
 
   const handleDeletePatient = async (id: string) => {
+    const token = Cookies.get('token');
+    if (!token) {
+      console.error('Token not found. User may not be authenticated.');
+      return;
+    }
     if (userRole === 'admin') {
       try {
-        await deletePatient(id);
+        await deletePatient(id, token);
         useSwalDeleteData('success');
         setPage(1);
       } catch (error: any) {
-        console.error('Gagal menghapus data: ', error);
+        console.error('Failed to delete data: ', error);
         useSwalDeleteData('failed', error.message);
       }
     } else {
@@ -156,27 +161,54 @@ const ListPasien = () => {
     }
   };
 
-  const handleEditPatient = (patient: any) => {
+  const handleEditPatient = async (patient: any) => {
+    if (!token) {
+      console.error('Token not found. User may not be authenticated.');
+      return;
+    }
     if (userRole === 'admin') {
-      setEditingPatient(patient);
-      setEditModalOpen(true);
+      try {
+        const response = await putPatient(patient.id, patient, token);
+          if (response.status === 'success') {
+          useSwalUpdate('success');
+          setEditModalOpen(false);
+          getPatient(page, 10, token);
+        } else {
+          console.error('Failed to edit patient data:', response.message);
+          useSwalUpdate('failed', response.message);
+        }
+      } catch (error: any) {
+        console.error('Failed to edit patient data:', error);
+        useSwalUpdate('failed', error.message);
+      }
     } else {
       console.log('Unauthorized access to edit patient data.');
     }
   };
-
+  
   const handleEditSubmit = async (updatedPatient: any) => {
     try {
-      await putPatient(updatedPatient.id, updatedPatient);
-      useSwalUpdate('success');
-      setEditModalOpen(false);
-      getPatient(page, 10, token);
+      const token = Cookies.get('token');
+      if (!token) {
+        console.error('Token not found. User may not be authenticated.');
+        return;
+      }
+      const response = await putPatient(updatedPatient.id, updatedPatient, token);
+  
+      if (response.status === 'success') {
+        useSwalUpdate('success');
+        setEditModalOpen(false);
+        getPatient(page, 10, token);
+      } else {
+        console.error('Failed to edit patient data:', response.message);
+        useSwalUpdate('failed', response.message);
+      }
     } catch (error: any) {
-      console.error('Gagal mengedit data: ', error);
+      console.error('Failed to edit patient data:', error);
       useSwalUpdate('failed', error.message);
     }
   };
-
+  
   useEffect(() => {
     if (!token || !userRole || !['admin', 'dokter', 'suster'].includes(userRole)) {
       console.log('Akses anda ditolak. Anda tidak memiliki akses ke halaman ini.');

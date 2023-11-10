@@ -7,11 +7,12 @@ export type QuestionaireState = {
   data: any;
   loading: boolean;
   error: string | null;
-  getQuestionaire: () => Promise<void>;
+  getQuestionaire: (token: string) => Promise<void>;
   postQuestionaire: (code_attempt: string, answer: []) => Promise<void>;
   validateQuestionaire: (validateData: any) => Promise<void>;
-  getAttempts: () => Promise<void>;
-  getAnswers: (attempt_id: string) => Promise<Answer[]>;
+  getAttempts: (token: string, userRole: string) => Promise<void>;
+  getAnswers: (token: string, attempt_id: string) => Promise<Answer[]>;
+  postAssessment: (token: string, attempt_id: string, data: string) => Promise<void>;
 };
 
 export type UserState = {

@@ -37,7 +37,7 @@ const AdminLogin = () => {
     const token = data?.token;
   
     if (token) {
-      Cookies.set('token', token, { path: '/', expires: 1 / 24 }); // Set cookie dengan waktu kadaluwarsa yang benar
+      Cookies.set('token', token, { path: '/', expires: 1 / 24 }); 
       useSwalAuth('login');
       navigate('/admin/');
     } else if (errorMessage) {

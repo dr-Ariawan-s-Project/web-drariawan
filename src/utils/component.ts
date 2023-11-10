@@ -107,13 +107,14 @@ export interface SearchBarProps {
   setSearchTerm: (term: string) => void;
 }
 
-export interface ScheduleData {
-  schedule_id: number;
-  user_id: number;
-  health_care_address: string;
-  day: string;
-  time_start: string;
-  time_end: string;
+export interface ScheduleData  {
+  user?: any;
+  schedule_id?: number | undefined; 
+  user_id?: number | undefined;
+  health_care_address?: string | undefined;
+  day?: string | undefined;
+  time_start?: string | undefined;
+  time_end?: string | undefined;
 }
 
 export interface UserData {

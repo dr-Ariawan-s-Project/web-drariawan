@@ -47,7 +47,7 @@ const Navbar: FC<NavbarProps> = ({ page, type }) => {
           </p>
         </div>
         <div className="px-4 py-3">
-          <span className="block text-sm text-gray-800 font-lato_bold">Halo, {data?.role} {data?.name} !</span>
+          <span className="block font-medium px-6  md:text-md text-lg text-start">Halo, {data?.role} {data?.name} !</span>
           {/* <span className="block text-sm text-black font-lato_bold"> {data?.role}</span> */}
         </div>
         <div className="cursor-pointer ml-4" onClick={toggleDropdown}>

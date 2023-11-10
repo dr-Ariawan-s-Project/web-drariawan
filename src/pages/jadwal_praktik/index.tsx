@@ -6,31 +6,34 @@ import { useSchedule } from '../../store/apiSchedule';
 import { useSwalDeleteData } from '../../utils/swal/useSwalData';
 import { useSwalUpdate } from '../../utils/swal/useSwalData';
 import { ScheduleState } from '../../utils/api';
+import { ScheduleData } from '../../utils/component';
 import { Icon } from '@iconify/react';
 import { useUser } from '../../store/apiUser';
+import { useAuth } from '../../store/apiAuth';
+
 
 const TableRow: React.FC<{
-  data: {
-    user?: any;
-    schedule_id?: number | undefined;
-    user_id?: number | undefined;
-    health_care_address?: string | undefined;
-    day?: string | undefined;
-    time_start?: string | undefined;
-    time_end?: string | undefined;
-  };
+  data: ScheduleData;
   index: number;
   onDelete: (id: number) => void;
   onEdit: (data: any) => void;
   doctorName: string;
   editingSchedule: any;
 }> = ({ data, index, onDelete, onEdit, doctorName }) => {
+
+  const { data: authData } = useAuth();
+  const userRole = authData?.role;
+
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [idToDelete, setIdToDelete] = useState<number | null>();
 
   const handleDeleteClick = () => {
+    if (userRole === 'admin'){
     setIdToDelete(data.schedule_id);
     setIsDeleteModalOpen(true);
+    }else {
+      console.log('Unauthorized access to delete Schedule data.');
+    }
   };
 
   const handleConfirmDelete = () => {
@@ -45,8 +48,17 @@ const TableRow: React.FC<{
   };
 
   const handleEditClick = () => {
-    onEdit(data);
+    if (userRole === 'admin') {
+      onEdit(data);
+    } else {
+      console.log('Unauthorized access to edit Schedule data.');
+    }
   };
+
+  
+  const deleteIconStyle = userRole === 'admin' ? '' : 'text-gray-400 cursor-not-allowed';
+  const editIconStyle = userRole === 'admin' ? '' : 'text-gray-400 cursor-not-allowed';
+ 
 
   return (
     <tr className="border-b text-left">
@@ -59,14 +71,14 @@ const TableRow: React.FC<{
       <td className="p-2">
         <div className="flex items-center justify-center gap-x-2">
           <TrashIcon
-            className="cursor-pointer hover:text-red-500"
+            className={`cursor-pointer hover:text-red-500 ${deleteIconStyle}`}
             width={20}
             height={20}
             onClick={handleDeleteClick}
           />
 
           <PencilIcon
-            className="cursor-pointer hover:text-health-blue-light mx-2"
+            className={`cursor-pointer hover:text-health-blue-light mx-2 ${editIconStyle}`}
             width={20}
             height={20}
             onClick={handleEditClick}
@@ -99,25 +111,17 @@ const TableRow: React.FC<{
 };
 
 const JadwalPraktik = () => {
+  const { data: authData } = useAuth();
+  const userRole = authData?.role;
   const token = Cookies.get('token');
+
   const [page, setPage] = useState<number>(1);
   const [startNumber, setStartNumber] = useState<any>(1);
-  const {
-    data: scheduleData,
-    getSchedules,
-    postSchedule,
-    putSchedule,
-    deleteSchedule,
-  } = useSchedule() as ScheduleState as any;
+  const {data: scheduleData, getSchedules, postSchedule, putSchedule, deleteSchedule,} = useSchedule() as ScheduleState as any;
 
   const [selectedUserId, setSelectedUserId] = useState('');
   const { data: userData } = useUser() as any;
   const { getList } = useUser() as any;
-
-
-  useEffect(() => {
-    getList(page, 10, token);
-  }, [getList, page, token]);
 
   const [editingSchedule, setEditingSchedule] = useState<any>(null);
   const [isEditModalOpen, setEditModalOpen] = useState(false);
@@ -129,18 +133,25 @@ const JadwalPraktik = () => {
     time_start: '',
     time_end: '',
   });
+
   const handleDeleteSchedule = async (id: number | null | undefined) => {
-    if (id !== null && id !== undefined) {
+    const token = Cookies.get('token');
+    if (!token) {
+      console.error('Token not found. User may not be authenticated.');
+      return;
+    }
+    if (userRole === 'admin') {
       try {
-        await deleteSchedule(id);
+        await deleteSchedule(id, token);
         useSwalDeleteData('success');
         setPage(1);
       } catch (error: any) {
-        console.error('Gagal menghapus data: ', error);
+        console.error('Failed to delete data: ', error);
         useSwalDeleteData('failed', error.message);
       }
     }
   };
+  
   const handleNextPage = () => {
     const nextPage = page + 1;
     setPage(nextPage);
@@ -149,10 +160,13 @@ const JadwalPraktik = () => {
   };
 
   const handleEditSchedule = (schedule: any) => {
+    if (userRole === 'admin') {
     setEditingSchedule(schedule);
     setEditModalOpen(true);
-  };
-
+  } else {
+    console.log('Unauthorized access to edit Schedule data.');
+  }
+};
   const handleAddModalClose = () => {
     setAddModalOpen(false);
     setAddScheduleData({
@@ -169,6 +183,7 @@ const JadwalPraktik = () => {
         const selectedUser = userData.data.find(
           (user: any) => user.id === parseInt(selectedUserId)
         );
+  
         if (selectedUser) {
           const scheduleData = {
             user_id: selectedUser.id,
@@ -177,9 +192,9 @@ const JadwalPraktik = () => {
             time_start: addScheduleData.time_start,
             time_end: addScheduleData.time_end,
           };
-
-          const response = await postSchedule(scheduleData, selectedUser);
-
+  
+          const response = await postSchedule(scheduleData, selectedUser, token);  
+  
           if (response.status === 'success') {
             useSwalUpdate('success');
             handleAddModalClose();
@@ -188,35 +203,47 @@ const JadwalPraktik = () => {
             useSwalUpdate('failed', response.message);
           }
         } else {
-          console.error('Selected user not found in userData.data.');
-          useSwalUpdate('failed', 'Selected user not found in userData.data.');
+          console.error('Selected user not found.');
         }
       } else {
-        console.error('Invalid data for adding a schedule.');
-        useSwalUpdate('failed', 'Invalid data for adding a schedule.');
+        console.error('Selected user ID or schedule data is missing.');
       }
     } catch (error: any) {
       console.error('Failed to post Schedule data:', error);
       useSwalUpdate('failed', error.message);
     }
   };
-
+  
   const handleEditSubmit = async (updatedSchedule: any) => {
     try {
+      const token = Cookies.get('token');
+      if (!token) {
+        console.error('Token not found. User may not be authenticated.');
+        return;
+      }
       if (updatedSchedule && updatedSchedule.schedule_id) {
-        await putSchedule(updatedSchedule.schedule_id, updatedSchedule);
+        await putSchedule(updatedSchedule.schedule_id, updatedSchedule, token);
         useSwalUpdate('success');
         setEditModalOpen(false);
-        getSchedules(page, 10);
+        getSchedules(page, 10, token);
       } else {
-        console.error('Gagal mengedit data: Invalid or missing schedule_id');
+        console.error('Failed to edit data: Invalid or missing schedule_id');
         useSwalUpdate('failed', 'Invalid or missing schedule_id');
       }
     } catch (error: any) {
-      console.error('Gagal mengedit data: ', error);
+      console.error('Failed to edit data: ', error);
       useSwalUpdate('failed', error.message);
     }
   };
+  
+
+  useEffect(() => {
+    if (!token || !userRole || !['admin', 'dokter', 'suster'].includes(userRole)) {
+      console.log('Akses anda ditolak. Anda tidak memiliki akses ke halaman ini.');
+    }else{
+    getList(page, 10, token);
+  }
+ }, [getList, page, token, userRole]);
 
   return (
     <section className="min-h-screen flex flex-col justify-center items-center">

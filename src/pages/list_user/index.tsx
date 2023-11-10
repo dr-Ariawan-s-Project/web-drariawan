@@ -106,20 +106,31 @@ const ListUser = () => {
 
   const [page, setPage] = useState<number>(1);
   const [startNumber, setStartNumber] = useState<number>(1);
-  const { data: userData, getList, deleteUser, putUser } = useUser() as any;
+  const { data: userData, getList, postDeactivate, putUser } = useUser() as any;
 
   const [editingUser, setEditingUser] = useState<any>(null);
   const [isEditModalOpen, setEditModalOpen] = useState(false);
 
   const handleDeleteUser = async (id: string) => {
-    if (userRole === 'admin') {
+    const token = Cookies.get('token');
+    if (!token) {
+      console.error('Token not found. User may not be authenticated.');
+      return;
+    }
+      if (userRole === 'admin') {
       try {
-        await deleteUser(id);
-        userData((prevData: { data: any[] }) => ({
-          ...prevData,
-          data: prevData.data.filter((user: { id: string }) => user.id !== id),
-        }));
-        useSwalDeleteData('success');
+        const data = { id };
+        const response = await postDeactivate(data, token);
+          if (response.status === 'success') {
+          userData((prevData: { data: any[] }) => ({
+            ...prevData,
+            data: prevData.data.filter((user: { id: string }) => user.id !== id),
+          }));
+            useSwalDeleteData('success');
+        } else {
+          console.error('Gagal menghapus data: ', response.message);
+          useSwalDeleteData('failed', response.message);
+        }
       } catch (error: any) {
         console.error('Gagal menghapus data: ', error);
         useSwalDeleteData('failed', error.message);
@@ -128,6 +139,7 @@ const ListUser = () => {
       console.log('Unauthorized access to delete user data.');
     }
   };
+  
 
   const handleNextPage = () => {
     const nextPage = page + 1;
@@ -135,14 +147,32 @@ const ListUser = () => {
     getList(nextPage, 10, token);
   };
 
-  const handleEditUser = (user: any) => {
+  const handleEditUser = async (user: any) => {
+    const token = Cookies.get('token');
+    if (!token) {
+      console.error('Token not found. User may not be authenticated.');
+      return;
+    }
     if (userRole === 'admin') {
-      setEditingUser(user);
-      setEditModalOpen(true);
+      try {
+        const response = await putUser(user, token);
+          if (response.status === 'success') {
+          useSwalUpdate('success');
+          setEditingUser(user);
+          setEditModalOpen(true);
+        } else {
+          console.error('Failed to edit user data:', response.message);
+          useSwalUpdate('failed', response.message);
+        }
+      } catch (error: any) {
+        console.error('Failed to edit user data:', error);
+        useSwalUpdate('failed', error.message);
+      }
     } else {
       console.log('Unauthorized access to edit user data.');
     }
   };
+  
 
   const handleEditSubmit = async (updatedUser: any) => {
     try {

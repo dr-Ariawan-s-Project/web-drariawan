@@ -1,23 +1,30 @@
 import { To, useNavigate } from 'react-router-dom';
 import { Icon } from '@iconify/react';
-import { useAuth } from '../../store/apiAuth'; 
+import Cookies from 'js-cookie';
+import { useAuth } from '../../store/apiAuth';
+
 const LandingKuisioner = () => {
   const navigate = useNavigate();
-  const { data } = useAuth(); 
-  const userRole = data?.role; 
+  const { data } = useAuth();
+  const userRole = data?.role;
 
   const handleRedirect = (path: To) => {
-    const allowedRoles = ['admin', 'doctor', 'nurse'];
-    if (!userRole || !allowedRoles.includes(userRole)) {
-      console.error('Unauthorized access or invalid role. Redirecting to login page...');
-      navigate('/admin/login');
-      return;
-    }
-
-    console.error('Unauthorized access or invalid role. Redirecting to login page...');
-
     navigate(path);
   };
+
+  const isAuthenticated = Boolean(Cookies.get('token')) && Boolean(data?.role);
+  const isAdmin = userRole === 'admin';
+  const isDokter = userRole === 'dokter';
+
+  if (!isAuthenticated || !isAdmin || !isDokter) {
+    console.error('Unauthorized access or invalid role. Redirecting to login page...');
+    navigate('/admin/login');
+    return null; 
+  }
+
+  const accessDeniedMessage = (
+    <span className="text-red-500">Akses token terbatas, anda tidak dapat mengakses halaman ini.</span>
+  );
 
   return (
     <div className="mt-20 flex flex-col md:flex-row gap-4">
@@ -40,12 +47,16 @@ const LandingKuisioner = () => {
               />
             </div>
           </div>
-          <button
-            onClick={() => navigate('/admin/list_kuisioner')}
-            className="text-health-blue-dark  text-sm font-lato_regular border-none focus:outline-none flex items-center"
-          >
-            ke Halaman List Kuisioner
-          </button>
+          {isAdmin ? (
+            <button
+              onClick={() => handleRedirect('/admin/list_kuisioner')}
+              className="text-health-blue-dark  text-sm font-lato_regular border-none focus:outline-none flex items-center"
+            >
+              ke Halaman List Kuisioner
+            </button>
+          ) : (
+            accessDeniedMessage
+          )}
         </div>
       </div>
       <div className="max-w-sm rounded overflow-hidden shadow-lg flex items-center">
@@ -67,12 +78,16 @@ const LandingKuisioner = () => {
               />
             </div>
           </div>
-          <button
-            onClick={() => handleRedirect('/admin/responden')}
-            className="text-health-blue-dark text-sm font-lato_regular border-none focus:outline-none flex items-center"
-          >
-            ke Halaman Responden
-          </button>
+          {(isAdmin || isDokter) ? (
+            <button
+              onClick={() => handleRedirect('/admin/responden')}
+              className="text-health-blue-dark text-sm font-lato_regular border-none focus:outline-none flex items-center"
+            >
+              ke Halaman Responden
+            </button>
+          ) : (
+            accessDeniedMessage
+          )}
         </div>
       </div>
     </div>
