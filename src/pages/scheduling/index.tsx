@@ -131,12 +131,12 @@ const Scheduling = () => {
     if (!token) {
       navigate('/auth/option/login');
     }
-  }, [token]);
+  }, [navigate, token]);
 
   useEffect(() => {
     getBookedSchedule();
     getProfile();
-  }, []);
+  }, [getBookedSchedule, getProfile]);
 
   console.log(patient?.id);
   console.log(schedule?.schedule_id);

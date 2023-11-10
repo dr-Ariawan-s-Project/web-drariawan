@@ -1,23 +1,26 @@
 import Cookies from 'js-cookie';
-
 import InformationCard from '../../components/InformationCard';
 import ListAppoinment from '../../components/ListAppoinment';
 import ListResponden from '../../components/ListResponden';
-
 import { useDashboard } from '../../store/apiDashboard';
+import { useAuth } from '../../store/apiAuth';  
 import { useEffect } from 'react';
+
 const Dashboard = () => {
   const token = Cookies.get('token');
   const { data, error, getDashboard } = useDashboard();
+  const { data: authData, error: authError } = useAuth();
+  const userRole = authData?.role;
 
   useEffect(() => {
-    getDashboard(token);
-  }, [getDashboard]);
+    if (token) {
+      getDashboard(token);
+    }
+  }, [getDashboard, token]);
 
-  if (error) {
-    return <p>Error: {error}</p>;
+  if (authError || error) {
+    return <p>Error: {authError || error}</p>;
   }
-
   return (
     <div className="mt-20">
       <div className="flex ">
@@ -52,9 +55,17 @@ const Dashboard = () => {
         </div>
       </div>
 
-      <div className="flex flex-col md:flex-row gap-4 ">
-        <ListResponden />
-        <ListAppoinment />
+      <div className="flex flex-col md:flex-row gap-4">
+      {(userRole === 'admin' || userRole === 'dokter' || userRole === 'suster') && (
+          <div className="md:w-1/2">
+            <ListResponden />
+          </div>
+        )}
+  {(userRole === 'admin' || userRole === 'dokter' || userRole === 'suster') && (
+          <div className="md:w-1/2">
+            <ListAppoinment />
+          </div>
+        )}
       </div>
     </div>
   );

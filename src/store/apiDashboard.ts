@@ -7,6 +7,7 @@ export const useDashboard = create<DashboardState>((set) => ({
     questioner_all: 0,
     questioner_need_assess: 0,
     questioner_this_month: 0,
+    patient_all: 0
   },
   loading: false,
   error: null,

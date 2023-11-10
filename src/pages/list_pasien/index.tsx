@@ -8,6 +8,7 @@ import { useSwalUpdate } from '../../utils/swal/useSwalData';
 import { usePatient } from '../../store/apiPatient';
 import { PatientState } from '../../utils/api';
 import SearchBar from '../../components/SearchBar';
+import { useAuth } from '../../store/apiAuth';
 
 const TableRow: React.FC<{
   data: PatientState['data'][0];
@@ -15,12 +16,20 @@ const TableRow: React.FC<{
   onDelete: (id: string) => void;
   onEdit: (data: PatientState['data'][0]) => void;
 }> = ({ data, index, onDelete, onEdit }) => {
+
+  const { data: authData } = useAuth();
+  const userRole = authData?.role;
+
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [idToDelete, setIdToDelete] = useState<string>('');
 
   const handleDeleteClick = () => {
-    setIdToDelete(data.id);
-    setIsDeleteModalOpen(true);
+    if (userRole === 'admin') {
+      setIdToDelete(data.id);
+      setIsDeleteModalOpen(true);
+    } else {
+      console.log('Unauthorized access to delete patient data.');
+    }
   };
 
   const handleConfirmDelete = () => {
@@ -33,9 +42,17 @@ const TableRow: React.FC<{
   };
 
   const handleEditClick = () => {
-    onEdit(data);
+    if (userRole === 'admin') {
+      onEdit(data);
+    } else {
+      console.log('Unauthorized access to edit patient data.');
+    }
   };
 
+  const deleteIconStyle = userRole === 'admin' ? '' : 'text-gray-400 cursor-not-allowed';
+  const editIconStyle = userRole === 'admin' ? '' : 'text-gray-400 cursor-not-allowed';
+ 
+ 
   return (
     <tr className="border-b text-left">
       <td className="p-2">{index + 1}</td>
@@ -45,13 +62,13 @@ const TableRow: React.FC<{
       <td className="p-2">
         <div className="flex items-center justify-center gap-x-2">
           <TrashIcon
-            className="cursor-pointer hover:text-red-500"
+            className={`cursor-pointer hover:text-red-500 ${deleteIconStyle}`}
             width={20}
             height={20}
             onClick={handleDeleteClick}
           />
           <PencilIcon
-            className="cursor-pointer hover:text-health-blue-light mx-2"
+            className={`cursor-pointer hover:text-health-blue-light mx-2 ${editIconStyle}`}
             width={20}
             height={20}
             onClick={handleEditClick}
@@ -84,36 +101,42 @@ const TableRow: React.FC<{
 };
 
 const ListPasien = () => {
+  const { data: authData } = useAuth();
+  const userRole = authData?.role;
+  const token = Cookies.get('token');
+
   const [page, setPage] = useState<number>(1);
   const [startNumber, setStartNumber] = useState<number>(1);
-
-  const {
-    data: patientData,
-    getPatient,
-    deletePatient,
-    putPatient,
-    getPatientById,
-  } = usePatient() as any;
-  const token = Cookies.get('token');
+  const { data: patientData, getPatient, deletePatient, putPatient, getPatientById,} = usePatient() as any;
 
   const [editingPatient, setEditingPatient] = useState<any>(null);
   const [isEditModalOpen, setEditModalOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
+
   const [searchedPatientData, setSearchedPatientData] =
     useState<PatientState | null>(null);
   const patientDataToShow = searchedPatientData || patientData;
 
   const handleDeletePatient = async (id: string) => {
-    try {
-      await deletePatient(id);
-      useSwalDeleteData('success');
-      setPage(1);
-    } catch (error: any) {
-      console.error('Gagal menghapus data: ', error);
-      useSwalDeleteData('failed', error.message);
+    const token = Cookies.get('token');
+    if (!token) {
+      console.error('Token not found. User may not be authenticated.');
+      return;
+    }
+    if (userRole === 'admin') {
+      try {
+        await deletePatient(id, token);
+        useSwalDeleteData('success');
+        setPage(1);
+      } catch (error: any) {
+        console.error('Failed to delete data: ', error);
+        useSwalDeleteData('failed', error.message);
+      }
+    } else {
+      console.log('Unauthorized access to delete patient data.');
     }
   };
-
+  
   const handleNextPage = () => {
     const nextPage = page + 1;
     setPage(nextPage);
@@ -138,26 +161,62 @@ const ListPasien = () => {
     }
   };
 
-  const handleEditPatient = (patient: any) => {
-    setEditingPatient(patient);
-    setEditModalOpen(true);
+  const handleEditPatient = async (patient: any) => {
+    if (!token) {
+      console.error('Token not found. User may not be authenticated.');
+      return;
+    }
+    if (userRole === 'admin') {
+      try {
+        const response = await putPatient(patient.id, patient, token);
+          if (response.status === 'success') {
+          useSwalUpdate('success');
+          setEditModalOpen(false);
+          getPatient(page, 10, token);
+        } else {
+          console.error('Failed to edit patient data:', response.message);
+          useSwalUpdate('failed', response.message);
+        }
+      } catch (error: any) {
+        console.error('Failed to edit patient data:', error);
+        useSwalUpdate('failed', error.message);
+      }
+    } else {
+      console.log('Unauthorized access to edit patient data.');
+    }
   };
-
+  
   const handleEditSubmit = async (updatedPatient: any) => {
     try {
-      await putPatient(updatedPatient.id, updatedPatient);
-      useSwalUpdate('success');
-      setEditModalOpen(false);
-      getPatient(page, 10);
+      const token = Cookies.get('token');
+      if (!token) {
+        console.error('Token not found. User may not be authenticated.');
+        return;
+      }
+      const response = await putPatient(updatedPatient.id, updatedPatient, token);
+  
+      if (response.status === 'success') {
+        useSwalUpdate('success');
+        setEditModalOpen(false);
+        getPatient(page, 10, token);
+      } else {
+        console.error('Failed to edit patient data:', response.message);
+        useSwalUpdate('failed', response.message);
+      }
     } catch (error: any) {
-      console.error('Gagal mengedit data: ', error);
+      console.error('Failed to edit patient data:', error);
       useSwalUpdate('failed', error.message);
     }
   };
+  
   useEffect(() => {
-    getPatient(page, 10, token);
-    setStartNumber((page - 1) * 10);
-  }, [getPatient, page]);
+    if (!token || !userRole || !['admin', 'dokter', 'suster'].includes(userRole)) {
+      console.log('Akses anda ditolak. Anda tidak memiliki akses ke halaman ini.');
+    } else {
+      getPatient(page, 10, token, userRole);
+      setStartNumber((page - 1) * 10);
+    }
+  }, [getPatient, page, token, userRole]);
 
   return (
     <section className="min-h-screen flex flex-col justify-center items-center">
@@ -229,25 +288,7 @@ const ListPasien = () => {
                   }
                   placeholder="Nomor Telepon"
                 />
-                <label
-                  className="block text-gray-500 text-sm font-light my-2"
-                  htmlFor="Phone"
-                >
-                  Partner's Id
-                </label>
-                <input
-                  className="shadow appearance-none border rounded w-full mb-10 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                  type="text"
-                  name="partner_id"
-                  value={editingPatient?.partner_id || ''}
-                  onChange={(e) =>
-                    setEditingPatient({
-                      ...editingPatient,
-                      partner_id: e.target.value,
-                    })
-                  }
-                  placeholder="Partner's Id"
-                />
+
                 <div className=" flex justify-end mt-5">
                   <button
                     type="submit"

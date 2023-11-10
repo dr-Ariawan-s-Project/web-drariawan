@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 import Cookies from 'js-cookie';
 import axios from 'axios';
-
+import { Answer } from '../utils/data';
 import { QuestionaireState } from '../utils/api';
 
 const axiosInstance = axios.create({
@@ -12,10 +12,14 @@ export const useQuestionaire = create<QuestionaireState>((set) => ({
   data: [],
   loading: false,
   error: null,
-  getQuestionaire: async () => {
+  getQuestionaire: async (token) => {
     set({ loading: true, error: null });
     try {
-      const response = await axiosInstance.get('/v1/questioner');
+      const response = await axiosInstance.get('/v1/questioner', {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
       console.log('Response from API:', response.data);
       set({ data: response.data, loading: false });
     } catch (error) {
@@ -26,6 +30,7 @@ export const useQuestionaire = create<QuestionaireState>((set) => ({
       });
     }
   },
+  
 
   postQuestionaire: async (code_attempt: string, answer: []) => {
     set({ loading: true, error: null });
@@ -59,4 +64,67 @@ export const useQuestionaire = create<QuestionaireState>((set) => ({
       throw error;
     }
   },
+
+  getAttempts: async (token: string, userRole: string) => {
+    set({ loading: true, error: null });
+    try {
+      const response = await axiosInstance.get('/v1/questioner/attempts', {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        params: {
+          role: userRole,
+        },
+      });
+      set({ data: response.data, loading: false });
+    } catch (error) {
+      console.error('Error fetching attempts:', error);
+      set({
+        loading: false,
+        error: 'Terjadi kesalahan saat mengambil data attempts. Silakan coba lagi nanti.',
+      });
+    }
+  },
+  
+  
+  getAnswers: async (attempt_id: string, token: string): Promise<Answer[]> => {
+    set({ loading: true, error: null });
+    try {
+      const response = await axiosInstance.get(`/v1/questioner/attempts/${attempt_id}/answers`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      console.log('Response from GET answers:', response.data);
+      set({ data: response.data, loading: false });
+      return response.data; 
+    } catch (error) {
+      console.error('Error fetching answers:', error);
+      set({
+        loading: false,
+        error: 'Terjadi kesalahan saat mengambil data list all answers',
+      });
+      throw error; 
+    }
+  },
+  
+   postAssessment : async (token: string, attempt_id: string, data: any) => {
+    set({ loading: true, error: null });
+    try {
+      const response = await axios.post(`/v1/questioner/attempts/${attempt_id}/assesments`, data, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      return response.data;
+    } catch (error) {
+      console.error('Error posting assessment:', error);
+      set({
+        loading: false,
+        error: 'Terjadi kesalahan saat mengirim hasil Assessment',
+      });
+      throw error; 
+    }
+  }
 }));
+

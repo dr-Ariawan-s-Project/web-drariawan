@@ -10,11 +10,11 @@ export const useUser = create<UserState>((set) => ({
   getUser: async (page: number, limit: number, token: string) => {
     set({ loading: true, error: null, data: [] });
     try {
-      const response = await axios.get('/v1/user?id=', {
+      const response = await axios.get('/v1/user', {
+        params: { page, limit },
         headers: {
           Authorization: `Bearer ${token}`,
         },
-        params: { page, limit },
       });
       set({ data: response.data, loading: false, error: null });
     } catch (error: any) {
@@ -24,10 +24,15 @@ export const useUser = create<UserState>((set) => ({
       });
     }
   },
-  postUser: async (data) => {
+  
+  postUser: async (data, token) => {
     set({ loading: true, error: null, data: [] });
     try {
-      const response = await axios.post('/v1/user', data);
+      const response = await axios.post('/v1/user', data, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
       set({ data: [...response.data], loading: false, error: null });
       return response.data;
     } catch (error: any) {
@@ -38,10 +43,14 @@ export const useUser = create<UserState>((set) => ({
       throw error;
     }
   },
-  putUser: async (data) => {
+  putUser: async (data, token) => {
     set({ loading: true, error: null });
     try {
-      const response = await axios.put('/v1/user?id=', data);
+      const response = await axios.put('/v1/user', data, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
       set({ data: response.data, loading: false });
       return response.data;
     } catch (error) {
@@ -49,32 +58,43 @@ export const useUser = create<UserState>((set) => ({
       throw error;
     }
   },
-  getList: async (page: number, limit: number, token: string) => {
+  
+  getList: async (token) => {
     set({ loading: true, error: null });
     try {
       const response = await axios.get('/v1/user/list', {
         headers: {
           Authorization: `Bearer ${token}`,
         },
-        params: { search: '', page, limit },
+        params: {
+          search: '',
+          rp: 10,
+          page: 1,
+        },
       });
       set({ data: response.data.data, loading: false, error: null });
     } catch (error: any) {
       set({
         loading: false,
-        error: `Failed to retrieve User list: ${error.message}`,
+        error: `Gagal mengambil daftar Pengguna: ${error.message}`,
       });
     }
   },
-
-  postDeactivate: async (data) => {
+  
+  
+  postDeactivate: async (data, token) => {
     set({ loading: true, error: null });
     try {
-      const response = await axios.post('/v1/user/deactive?id=', data);
+      const response = await axios.post('/v1/user/deactivate', data, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
       set({ data: response.data, loading: false });
       return response.data;
     } catch (error) {
       set({ loading: false, error: 'error deactivate user' });
     }
   },
+  
 }));

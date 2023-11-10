@@ -55,3 +55,23 @@ export type ActionResponse = {
     confirmButtonText: "OK"
   }
 }
+
+export type Answer = {
+  id: string;
+  attempt_id: string;
+  question_id: number;
+  description: string;
+  score: number;
+  created_at: string;
+  updated_at: string;
+  question: {
+    id: number;
+    type: string;
+    question: string;
+    description: string;
+    url_video: string;
+    section: string;
+    choices: any; 
+    goto: any; 
+  };
+};

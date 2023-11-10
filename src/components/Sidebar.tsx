@@ -1,6 +1,8 @@
 import { Bars3Icon } from '@heroicons/react/24/outline';
 import { useState } from 'react';
 import { Icon } from '@iconify/react';
+import { useLocation } from 'react-router-dom';
+import { useAuth } from '../store/apiAuth';  
 
 const Sidebar = () => {
   const [toggle, setToggle] = useState<boolean>(false);
@@ -11,6 +13,15 @@ const Sidebar = () => {
   const navigateTo = (path: any) => {
     window.location.href = path;
   };
+
+  const location = useLocation();
+  const { data } = useAuth();  
+  const userRole = data?.role;
+
+  const hasAccess = (allowedRoles: string[]) => {
+    return userRole ? allowedRoles.includes(userRole) : false;
+  };
+
   return (
     <div
       className={`bg-white h-full p-5 flex flex-col border-r w-auto max-h-screen overflow-auto `}
@@ -38,25 +49,30 @@ const Sidebar = () => {
         </div>
 
         <ul className="p-4  ">
-          <li className="mb-2 ">
-            <button
-              onClick={() => navigateTo('/admin/')}
-              className="text-health-blue-dark  bg-white hover:bg-health-blue-dark text-sm hover:text-white font-lato_regular border-none focus:outline-none flex items-center"
-            >
-              <Icon
-                icon="ant-design:pie-chart-outlined"
-                width="24"
-                height="24"
-              />{' '}
-              <span className="ml-2">Dashboard</span>
-            </button>
+        <li className="mb-2 ">
+            {hasAccess(['admin', 'dokter', 'suster']) && (
+              <button
+                onClick={() => navigateTo('/admin/')}
+                className={`text-health-blue-dark bg-white hover:bg-health-blue-dark hover:text-white text-sm font-lato_regular border-none focus:outline-none flex items-center ${
+                  location.pathname === '/admin/' ? 'active' : ''
+                }`}
+              >
+                <Icon
+                  icon="ant-design:pie-chart-outlined"
+                  width="24"
+                  height="24"
+                />
+                <span className="ml-2">Dashboard</span>
+              </button>
+            )}
           </li>
 
           <li className="mb-2">
             <button
               onClick={() => navigateTo('/admin/landing_kuisioner')}
-              className="text-health-blue-dark bg-white hover:bg-health-blue-dark hover:text-white  text-sm font-lato_regular border-none focus:outline-none flex itemns-center"
-            >
+              className={`text-health-blue-dark bg-white hover:bg-health-blue-dark hover:text-white text-sm active:bg-health-blue-dark font-lato_regular border-none focus:outline-none flex items-center ${
+                location.pathname === '/admin/landing_kuisioner' ? 'active' : ''
+              }`}            >
               <Icon icon="heroicons:pencil-square" width="24" height="24" />{' '}
               <span className="ml-2"> Questioner</span>
             </button>
@@ -88,8 +104,17 @@ const Sidebar = () => {
               onClick={() => navigateTo('/admin/jadwal_praktik')}
               className="text-health-blue-dark bg-white hover:bg-health-blue-dark hover:text-white  text-sm font-lato_regular border-none focus:outline-none flex items-center"
             >
-              <Icon icon="heroicons:briefcase" width="24" height="24" />{' '}
-              <span className="ml-2 hover:text-white"> Praktik</span>
+              <Icon icon="teenyicons:appointments-outline" width="24" height="24" />{' '}
+              <span className="ml-2 hover:text-white">Schedules</span>
+            </button>
+          </li>
+          <li className="mb-2 ">
+            <button
+              onClick={() => navigateTo('/admin/appoinment')}
+              className="text-health-blue-dark bg-white hover:bg-health-blue-dark hover:text-white  text-sm font-lato_regular border-none focus:outline-none flex items-center "
+            >
+              <Icon icon="icon-park-outline:appointment" width="24" height="24" />
+              <span className="ml-2"></span> Appoinments
             </button>
           </li>
         </ul>

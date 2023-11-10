@@ -80,6 +80,20 @@ export interface ModalInformationProps {
   onClose?: () => void;
   children?: React.ReactNode;
 }
+export interface PatientDataProps {
+  id: number;
+  name: string;
+  email: string;
+  password: string;
+  nik: string | number;
+  dob: string;
+  phone: string | number;
+  gender: string;
+  marriage_status: string;
+  nationality: string;
+  partner_option: string;
+  partner_email: string;
+}
 
 export interface LoginFormProps {
   email: string;
@@ -88,18 +102,19 @@ export interface LoginFormProps {
 }
 
 export interface SearchBarProps {
-  onSearch: (searchTerm: string) => void;
+  onSearch: (searchTerms: string[] | string) => void;
   searchTerm?: string;
   setSearchTerm: (term: string) => void;
 }
 
-export interface ScheduleData {
-  schedule_id: number;
-  user_id: number;
-  health_care_address: string;
-  day: string;
-  time_start: string;
-  time_end: string;
+export interface ScheduleData  {
+  user?: any;
+  schedule_id?: number | undefined; 
+  user_id?: number | undefined;
+  health_care_address?: string | undefined;
+  day?: string | undefined;
+  time_start?: string | undefined;
+  time_end?: string | undefined;
 }
 
 export interface UserData {
@@ -114,3 +129,8 @@ export interface DateInfoProps {
   date: string;
   time?: string;
 }
+export type RoleData = {
+  name: string;
+  role: string;
+  token: string;
+};
