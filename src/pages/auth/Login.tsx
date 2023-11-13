@@ -1,4 +1,3 @@
-import { useEffect } from 'react';
 import { useFormik } from 'formik';
 import { NavigateFunction, useNavigate, Link } from 'react-router-dom';
 import Swal from 'sweetalert2';
@@ -12,7 +11,7 @@ import Button from '../../components/Button';
 
 const Login = () => {
   const navigate: NavigateFunction = useNavigate();
-  const { loginPatient, data } = usePatient();
+  const { loginPatient } = usePatient();
 
   const formik = useFormik({
     initialValues: {
@@ -26,8 +25,16 @@ const Login = () => {
           email: values.email,
           password: values.password,
         };
-        await loginPatient(body.email, body.password);
-        useSwalAuth('login', values.email.split('@')[0]);
+        const response: any = await loginPatient(body.email, body.password);
+        const userData = {
+          token: response?.data?.token,
+          name: response?.data?.name,
+        };
+        if (userData.token) {
+          Cookies.set('token', userData.token);
+          useSwalAuth('login', userData.name);
+          navigate('/scheduling');
+        }
       } catch (error) {
         Swal.fire({
           icon: 'error',
@@ -39,12 +46,12 @@ const Login = () => {
     },
   });
 
-  useEffect(() => {
-    if (data.length > 0) {
-      Cookies.set('token', data[0].data.token);
-      navigate('/scheduling');
-    }
-  }, [data, navigate]);
+  // useEffect(() => {
+  //   if (data.length > 0) {
+  //     Cookies.set('token', data[0].data.token);
+  //     navigate('/scheduling');
+  //   }
+  // }, [data, navigate]);
 
   return (
     <section className="flex flex-col justify-center items-center min-h-screen px-4 sm:px-6 md:px-8 lg:px-12 mt-18">
