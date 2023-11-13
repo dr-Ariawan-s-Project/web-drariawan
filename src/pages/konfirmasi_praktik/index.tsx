@@ -1,4 +1,5 @@
 import { useNavigate } from 'react-router-dom';
+import { ArrowLeftIcon } from '@heroicons/react/20/solid';
 
 import VerificationImage from '../../assets/illustrations/verification.png';
 import Button from '../../components/Button';
@@ -9,6 +10,15 @@ const KonfirmasiPraktik = () => {
   return (
     <section className="w-screen h-screen flex justify-center items-center lg:px-0 px-5">
       <div className="flex flex-col gap-y-5 text-center">
+        <div className="left-0 top-0 fixed ml-10 mt-10">
+          <div
+            className="flex items-center font-medium border border-health-blue-dark rounded-md cursor-pointer space-x-3 px-5 py-1"
+            onClick={() => navigate(-1)}
+          >
+            <ArrowLeftIcon width={30} height={30} />
+            <label className="text-xl cursor-pointer">Back</label>
+          </div>
+        </div>
         <h2 className="font-semibold text-2xl">
           Pendaftaran Anda Terverifikasi!
         </h2>
@@ -21,13 +31,13 @@ const KonfirmasiPraktik = () => {
           width={400}
           height={400}
         />
-        <div className="w-40 mx-auto mt-8">
+        <div className="w-60 mx-auto mt-8">
           <Button
             id="questioner"
             type="blue"
-            label="Isi Kuisioner"
+            label="Kembali ke halaman utama"
             active={true}
-            onClick={() => navigate('/landing')}
+            onClick={() => navigate('/main')}
           />
         </div>
       </div>
