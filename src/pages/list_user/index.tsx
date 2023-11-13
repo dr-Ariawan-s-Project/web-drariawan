@@ -8,14 +8,12 @@ import { useSwalDeleteData } from '../../utils/swal/useSwalData';
 import { useSwalUpdate } from '../../utils/swal/useSwalData';
 import { useAuth } from '../../store/apiAuth';
 
-
 const TableRow: React.FC<{
   data: UserState['data'][0];
   index: number;
   onDelete: (id: string) => void;
   onEdit: (data: UserState['data'][0]) => void;
 }> = ({ data, index, onDelete, onEdit }) => {
-
   const { data: authData } = useAuth();
   const userRole = authData?.role;
 
@@ -48,9 +46,11 @@ const TableRow: React.FC<{
     }
   };
 
-  const deleteIconStyle = userRole === 'admin' ? '' : 'text-gray-400 cursor-not-allowed';
-  const editIconStyle = userRole === 'admin' ? '' : 'text-gray-400 cursor-not-allowed';
- 
+  const deleteIconStyle =
+    userRole === 'admin' ? '' : 'text-gray-400 cursor-not-allowed';
+  const editIconStyle =
+    userRole === 'admin' ? '' : 'text-gray-400 cursor-not-allowed';
+
   return (
     <tr className="border-b text-left">
       <td className="p-2">{index + 1}</td>
@@ -101,9 +101,8 @@ const TableRow: React.FC<{
 
 const ListUser = () => {
   const { data: authData } = useAuth();
-  const userRole = authData?.role;
+  const userRole = Cookies.get('userRole');
   const token = Cookies.get('token');
-
   const [page, setPage] = useState<number>(1);
   const [startNumber, setStartNumber] = useState<number>(1);
   const { data: userData, getList, postDeactivate, putUser } = useUser() as any;
@@ -117,16 +116,18 @@ const ListUser = () => {
       console.error('Token not found. User may not be authenticated.');
       return;
     }
-      if (userRole === 'admin') {
+    if (userRole === 'admin') {
       try {
         const data = { id };
         const response = await postDeactivate(data, token);
-          if (response.status === 'success') {
+        if (response.status === 'success') {
           userData((prevData: { data: any[] }) => ({
             ...prevData,
-            data: prevData.data.filter((user: { id: string }) => user.id !== id),
+            data: prevData.data.filter(
+              (user: { id: string }) => user.id !== id
+            ),
           }));
-            useSwalDeleteData('success');
+          useSwalDeleteData('success');
         } else {
           console.error('Gagal menghapus data: ', response.message);
           useSwalDeleteData('failed', response.message);
@@ -139,7 +140,6 @@ const ListUser = () => {
       console.log('Unauthorized access to delete user data.');
     }
   };
-  
 
   const handleNextPage = () => {
     const nextPage = page + 1;
@@ -156,7 +156,7 @@ const ListUser = () => {
     if (userRole === 'admin') {
       try {
         const response = await putUser(user, token);
-          if (response.status === 'success') {
+        if (response.status === 'success') {
           useSwalUpdate('success');
           setEditingUser(user);
           setEditModalOpen(true);
@@ -172,13 +172,12 @@ const ListUser = () => {
       console.log('Unauthorized access to edit user data.');
     }
   };
-  
 
   const handleEditSubmit = async (updatedUser: any) => {
     try {
       await putUser(updatedUser);
       setEditModalOpen(false);
-      getList(page,10, token)
+      getList(page, 10, token);
       userData((prevData: { data: any[] }) => ({
         ...prevData,
         data: prevData.data.map((user) =>
@@ -193,8 +192,16 @@ const ListUser = () => {
   };
 
   useEffect(() => {
-    if (!token || !userRole || !['admin', 'dokter', 'suster'].includes(userRole)) {
-      console.log('Akses anda ditolak. Anda tidak memiliki akses ke halaman ini.');
+    console.log(token);
+    console.log(userRole);
+    if (
+      !token ||
+      !userRole ||
+      !['admin', 'dokter', 'suster'].includes(userRole)
+    ) {
+      console.log(
+        'Akses anda ditolak. Anda tidak memiliki akses ke halaman ini.'
+      );
     } else {
       getList(page, 10, token);
       setStartNumber((page - 1) * 10);
@@ -327,7 +334,7 @@ const ListUser = () => {
               {Array.isArray(userData?.data) && userData.data.length > 0 ? (
                 userData.data.map((rowData: any, index: any) => (
                   <TableRow
-                    key={rowData.id} 
+                    key={rowData.id}
                     data={rowData}
                     index={index + startNumber}
                     onDelete={handleDeleteUser}
