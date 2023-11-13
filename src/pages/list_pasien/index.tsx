@@ -16,7 +16,6 @@ const TableRow: React.FC<{
   onDelete: (id: string) => void;
   onEdit: (data: PatientState['data'][0]) => void;
 }> = ({ data, index, onDelete, onEdit }) => {
-
   const { data: authData } = useAuth();
   const userRole = authData?.role;
 
@@ -49,10 +48,11 @@ const TableRow: React.FC<{
     }
   };
 
-  const deleteIconStyle = userRole === 'admin' ? '' : 'text-gray-400 cursor-not-allowed';
-  const editIconStyle = userRole === 'admin' ? '' : 'text-gray-400 cursor-not-allowed';
- 
- 
+  const deleteIconStyle =
+    userRole === 'admin' ? '' : 'text-gray-400 cursor-not-allowed';
+  const editIconStyle =
+    userRole === 'admin' ? '' : 'text-gray-400 cursor-not-allowed';
+
   return (
     <tr className="border-b text-left">
       <td className="p-2">{index + 1}</td>
@@ -101,13 +101,18 @@ const TableRow: React.FC<{
 };
 
 const ListPasien = () => {
-  const { data: authData } = useAuth();
-  const userRole = authData?.role;
+  const userRole = Cookies.get('userRole');
   const token = Cookies.get('token');
 
   const [page, setPage] = useState<number>(1);
   const [startNumber, setStartNumber] = useState<number>(1);
-  const { data: patientData, getPatient, deletePatient, putPatient, getPatientById,} = usePatient() as any;
+  const {
+    data: patientData,
+    getPatient,
+    deletePatient,
+    putPatient,
+    getPatientById,
+  } = usePatient() as any;
 
   const [editingPatient, setEditingPatient] = useState<any>(null);
   const [isEditModalOpen, setEditModalOpen] = useState(false);
@@ -136,7 +141,7 @@ const ListPasien = () => {
       console.log('Unauthorized access to delete patient data.');
     }
   };
-  
+
   const handleNextPage = () => {
     const nextPage = page + 1;
     setPage(nextPage);
@@ -169,7 +174,7 @@ const ListPasien = () => {
     if (userRole === 'admin') {
       try {
         const response = await putPatient(patient.id, patient, token);
-          if (response.status === 'success') {
+        if (response.status === 'success') {
           useSwalUpdate('success');
           setEditModalOpen(false);
           getPatient(page, 10, token);
@@ -185,7 +190,7 @@ const ListPasien = () => {
       console.log('Unauthorized access to edit patient data.');
     }
   };
-  
+
   const handleEditSubmit = async (updatedPatient: any) => {
     try {
       const token = Cookies.get('token');
@@ -193,8 +198,12 @@ const ListPasien = () => {
         console.error('Token not found. User may not be authenticated.');
         return;
       }
-      const response = await putPatient(updatedPatient.id, updatedPatient, token);
-  
+      const response = await putPatient(
+        updatedPatient.id,
+        updatedPatient,
+        token
+      );
+
       if (response.status === 'success') {
         useSwalUpdate('success');
         setEditModalOpen(false);
@@ -208,10 +217,16 @@ const ListPasien = () => {
       useSwalUpdate('failed', error.message);
     }
   };
-  
+
   useEffect(() => {
-    if (!token || !userRole || !['admin', 'dokter', 'suster'].includes(userRole)) {
-      console.log('Akses anda ditolak. Anda tidak memiliki akses ke halaman ini.');
+    if (
+      !token ||
+      !userRole ||
+      !['admin', 'dokter', 'suster'].includes(userRole)
+    ) {
+      console.log(
+        'Akses anda ditolak. Anda tidak memiliki akses ke halaman ini.'
+      );
     } else {
       getPatient(page, 10, token, userRole);
       setStartNumber((page - 1) * 10);

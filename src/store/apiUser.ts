@@ -24,7 +24,7 @@ export const useUser = create<UserState>((set) => ({
       });
     }
   },
-  
+
   postUser: async (data, token) => {
     set({ loading: true, error: null, data: [] });
     try {
@@ -58,8 +58,8 @@ export const useUser = create<UserState>((set) => ({
       throw error;
     }
   },
-  
-  getList: async (token) => {
+
+  getList: async (page: number, limit: number, token: string) => {
     set({ loading: true, error: null });
     try {
       const response = await axios.get('/v1/user/list', {
@@ -68,8 +68,8 @@ export const useUser = create<UserState>((set) => ({
         },
         params: {
           search: '',
-          rp: 10,
-          page: 1,
+          rp: limit,
+          page: page,
         },
       });
       set({ data: response.data.data, loading: false, error: null });
@@ -80,8 +80,7 @@ export const useUser = create<UserState>((set) => ({
       });
     }
   },
-  
-  
+
   postDeactivate: async (data, token) => {
     set({ loading: true, error: null });
     try {
@@ -96,5 +95,4 @@ export const useUser = create<UserState>((set) => ({
       set({ loading: false, error: 'error deactivate user' });
     }
   },
-  
 }));
