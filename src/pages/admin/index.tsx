@@ -17,12 +17,16 @@ import Responden from '../responden';
 const Admin = () => {
   const location = useLocation();
   const navigate = useNavigate();
-  const token = Cookies.get('token');
   const { data } = useAuth();
-  const userRole = data?.role;
+
+  const token = Cookies.get('token');
+  const userRole = Cookies.get('userRole');
   const [page, setPage] = useState<string>('');
 
-  const checkUserRole = (allowedRoles: string[], userRole: string | undefined) => {
+  const checkUserRole = (
+    allowedRoles: string[],
+    userRole: string | undefined
+  ) => {
     return userRole ? allowedRoles.includes(userRole) : false;
   };
 
@@ -45,9 +49,12 @@ const Admin = () => {
   }, [location.pathname, setPage]);
 
   useEffect(() => {
-    if (!token ) {
+    if (!token) {
       navigate('/admin/login');
-    } else if (data && !checkUserRole(['admin', 'dokter', 'suster'], userRole)) {
+    } else if (
+      data &&
+      !checkUserRole(['admin', 'dokter', 'suster'], userRole)
+    ) {
       navigate('/admin/login');
     } else {
       getPage();

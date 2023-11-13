@@ -1,29 +1,35 @@
+import { useEffect } from 'react';
+
 import { To, useNavigate } from 'react-router-dom';
 import { Icon } from '@iconify/react';
 import Cookies from 'js-cookie';
-import { useAuth } from '../../store/apiAuth';
 
 const LandingKuisioner = () => {
   const navigate = useNavigate();
-  const { data } = useAuth();
-  const userRole = data?.role;
+  const userRole = Cookies.get('userRole');
 
   const handleRedirect = (path: To) => {
     navigate(path);
   };
 
-  const isAuthenticated = Boolean(Cookies.get('token')) && Boolean(data?.role);
   const isAdmin = userRole === 'admin';
   const isDokter = userRole === 'dokter';
 
-  if (!isAuthenticated || !isAdmin || !isDokter) {
-    console.error('Unauthorized access or invalid role. Redirecting to login page...');
-    navigate('/admin/login');
-    return null; 
-  }
+  useEffect(() => {
+    if (!isAdmin) {
+      console.error(
+        'Unauthorized access or invalid role. Redirecting to login page...'
+      );
+      navigate('/admin/login');
+    } else if (!isDokter) {
+      return;
+    }
+  }, []);
 
   const accessDeniedMessage = (
-    <span className="text-red-500">Akses token terbatas, anda tidak dapat mengakses halaman ini.</span>
+    <span className="text-red-500">
+      Akses token terbatas, anda tidak dapat mengakses halaman ini.
+    </span>
   );
 
   return (
@@ -78,7 +84,7 @@ const LandingKuisioner = () => {
               />
             </div>
           </div>
-          {(isAdmin || isDokter) ? (
+          {isAdmin || isDokter ? (
             <button
               onClick={() => handleRedirect('/admin/responden')}
               className="text-health-blue-dark text-sm font-lato_regular border-none focus:outline-none flex items-center"

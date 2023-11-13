@@ -35,9 +35,11 @@ const AdminLogin = () => {
   };
   useEffect(() => {
     const token = data?.token;
-  
-    if (token) {
-      Cookies.set('token', token, { path: '/', expires: 1 / 24 }); 
+    const role = data?.role;
+
+    if (token && role) {
+      Cookies.set('token', token, { path: '/', expires: 1 / 24 });
+      Cookies.set('userRole', role, { path: '/', expires: 1 / 24 });
       useSwalAuth('login');
       navigate('/admin/');
     } else if (errorMessage) {
@@ -51,7 +53,6 @@ const AdminLogin = () => {
       navigate('/admin/login');
     }
   }, [data, errorMessage, navigate]);
-  
 
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col justify-center">
