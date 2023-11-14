@@ -43,6 +43,7 @@ export interface ModalProps {
 export interface LoadingProps {
   id: string;
   isOpen?: boolean;
+  title?: string;
 }
 
 export interface CardProps {
