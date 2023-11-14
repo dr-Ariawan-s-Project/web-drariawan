@@ -113,7 +113,7 @@ const Navbar: FC<NavbarProps> = ({ page, type, profileData, menuSchedule }) => {
                   className="cursor-pointer hover:bg-gray-100 px-4 py-2"
                   onClick={menuSchedule}
                 >
-                  List Jadwal
+                  Jadwal Saya
                 </li>
                 <li
                   className="cursor-pointer hover:bg-gray-100 px-4 py-2"
