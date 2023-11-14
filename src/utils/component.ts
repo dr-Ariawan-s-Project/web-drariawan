@@ -43,6 +43,7 @@ export interface ModalProps {
 export interface LoadingProps {
   id: string;
   isOpen?: boolean;
+  title?: string;
 }
 
 export interface CardProps {
@@ -81,7 +82,6 @@ export interface ModalInformationProps {
   children?: React.ReactNode;
 }
 export interface PatientDataProps {
-  id: number;
   name: string;
   email: string;
   password: string;
@@ -92,7 +92,7 @@ export interface PatientDataProps {
   marriage_status: string;
   nationality: string;
   partner_option: string;
-  partner_email: string;
+  partner_email?: string;
 }
 
 export interface LoginFormProps {
@@ -107,9 +107,9 @@ export interface SearchBarProps {
   setSearchTerm: (term: string) => void;
 }
 
-export interface ScheduleData  {
+export interface ScheduleData {
   user?: any;
-  schedule_id?: number | undefined; 
+  schedule_id?: number | undefined;
   user_id?: number | undefined;
   health_care_address?: string | undefined;
   day?: string | undefined;
