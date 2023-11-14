@@ -1,10 +1,40 @@
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import Cookies from 'js-cookie';
+import Swal from 'sweetalert2';
+import axios from 'axios';
 
 import Navbar from '../../components/Navbar';
 import Background from '../../assets/illustrations/main-background.jpeg';
 
 const Main = () => {
   const navigate = useNavigate();
+  const [profile, setProfile] = useState<any>();
+  const token = Cookies.get('token');
+  const status = Cookies.get('status');
+
+  const getProfile = async () => {
+    try {
+      const response = await axios.get('/v1/patients/profile', {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      setProfile(response?.data?.data);
+    } catch (error) {
+      Swal.fire({
+        title: 'Gagal',
+        text: 'Gagal mengambil data profile, silahkan refresh halaman ini',
+        confirmButtonText: 'OK',
+      });
+    }
+  };
+
+  useEffect(() => {
+    if (status && token) {
+      getProfile();
+    }
+  }, []);
 
   return (
     <section
@@ -15,7 +45,10 @@ const Main = () => {
       }}
     >
       <div className="absolute inset-0 bg-black opacity-60" />
-      <Navbar />
+      <Navbar
+        profileData={profile ? profile.name : 'Login sebagai Admin'}
+        menuSchedule={() => navigate('/scheduling/schedule_list')}
+      />
       <section className="flex justify-center my-auto w-max z-10 relative">
         <div className="gap-y-7 flex flex-col my-40 mx-20">
           <h2 className="text-slate-200 text-opacity-80 font-semibold">

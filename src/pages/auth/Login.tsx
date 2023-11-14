@@ -46,13 +46,6 @@ const Login = () => {
     },
   });
 
-  // useEffect(() => {
-  //   if (data.length > 0) {
-  //     Cookies.set('token', data[0].data.token);
-  //     navigate('/scheduling');
-  //   }
-  // }, [data, navigate]);
-
   return (
     <section className="flex flex-col justify-center items-center min-h-screen px-4 sm:px-6 md:px-8 lg:px-12 mt-18">
       <h2 className="text-center font-lato_black text-xl sm:text-2xl md:text-3xl lg:text-4xl mb-4">

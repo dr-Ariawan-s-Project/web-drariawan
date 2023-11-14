@@ -1,33 +1,40 @@
 import { FC, useState } from 'react';
-import { UserIcon } from '@heroicons/react/24/outline';
 import { useNavigate } from 'react-router-dom';
 import moment from 'moment';
 import Cookies from 'js-cookie';
+
+import { UserIcon } from '@heroicons/react/24/outline';
 import { useAuth } from '../store/apiAuth';
 import { useSwalAuth } from '../utils/swal/useSwalAuth';
 
 interface NavbarProps {
   page?: string;
   type?: string;
+  profileData?: any;
+  menuSchedule?: () => void;
 }
 
-const Navbar: FC<NavbarProps> = ({ page, type }) => {
+const Navbar: FC<NavbarProps> = ({ page, type, profileData, menuSchedule }) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const currentDate = moment().format('ll');
   const navigate = useNavigate();
 
-
-  const { data } = useAuth(); 
+  const { data } = useAuth();
 
   const toggleDropdown = () => {
     setIsDropdownOpen(!isDropdownOpen);
+  };
+
+  const loginPatient = () => {
+    navigate('/auth/option/login');
   };
 
   const handleLogout = () => {
     useSwalAuth('logout').then((result) => {
       if (result === true) {
         Cookies.remove('token');
-        navigate('/admin/login');
+        Cookies.remove('status');
+        navigate('/auth/option/login');
       }
     });
   };
@@ -47,12 +54,13 @@ const Navbar: FC<NavbarProps> = ({ page, type }) => {
           </p>
         </div>
         <div className="px-4 py-3">
-          <span className="block font-medium px-6  md:text-md text-lg text-start">Halo, {data?.role} {data?.name} !</span>
-          {/* <span className="block text-sm text-black font-lato_bold"> {data?.role}</span> */}
+          <span className="block font-medium px-6  md:text-md text-lg text-start">
+            Halo, {data?.role} {data?.name} !
+          </span>
         </div>
         <div className="cursor-pointer ml-4" onClick={toggleDropdown}>
           <UserIcon className="h-6 w-6 md:h-8 md:w-8" />
-          {isDropdownOpen && (
+          {isDropdownOpen ? (
             <div className="absolute right-0 mt-2 bg-white border border-gray-300 shadow-sm w-40">
               <ul className="py-2">
                 <li
@@ -69,6 +77,8 @@ const Navbar: FC<NavbarProps> = ({ page, type }) => {
                 </li>
               </ul>
             </div>
+          ) : (
+            <></>
           )}
         </div>
       </div>
@@ -81,10 +91,28 @@ const Navbar: FC<NavbarProps> = ({ page, type }) => {
         </li>
         <li
           className="w-max h-10 px-5 py-6 rounded-md flex gap-x-5 items-center cursor-pointer font-semibold text-slate-200 hover:bg-health-blue-dark"
-          onClick={() => navigate('/admin/')}
+          onClick={profileData ? toggleDropdown : loginPatient}
         >
-          Login sebagai Admin
+          {profileData}
           <UserIcon className="h-6 w-6 md:h-8 md:w-8" />
+          {isDropdownOpen && (
+            <div className="absolute right-20 mt-36 bg-white border border-gray-300 rounded-md shadow-sm w-52">
+              <ul className="py-2 text-health-blue-dark">
+                <li
+                  className="cursor-pointer hover:bg-gray-100 px-4 py-2"
+                  onClick={menuSchedule}
+                >
+                  List Jadwal
+                </li>
+                <li
+                  className="cursor-pointer hover:bg-gray-100 px-4 py-2"
+                  onClick={() => handleLogout()}
+                >
+                  Logout
+                </li>
+              </ul>
+            </div>
+          )}
         </li>
       </ul>
     </nav>
