@@ -79,6 +79,7 @@ const Scheduling = () => {
           confirmButtonText: 'OK',
         }).then((res) => {
           if (res.isConfirmed) {
+            Cookies.set('patientName', patient?.name, { path: '/' });
             navigate('/scheduling/success', {
               state: {
                 booked: response?.data,
