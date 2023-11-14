@@ -81,7 +81,7 @@ const Scheduling = () => {
           if (res.isConfirmed) {
             navigate('/scheduling/success', {
               state: {
-                booked: booked,
+                booked: response?.data,
               },
             });
           }
@@ -137,11 +137,6 @@ const Scheduling = () => {
     getBookedSchedule();
     getProfile();
   }, [getBookedSchedule, getProfile]);
-
-  console.log(patient?.id);
-  console.log(schedule?.schedule_id);
-  console.log(formatDate(selectedDate));
-  console.log(token);
 
   return (
     <section className="w-screen h-max my-10 flex flex-col justify-center items-center">

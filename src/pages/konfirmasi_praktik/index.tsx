@@ -1,4 +1,5 @@
-import { useNavigate } from 'react-router-dom';
+import Cookies from 'js-cookie';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { ArrowLeftIcon } from '@heroicons/react/20/solid';
 
 import VerificationImage from '../../assets/illustrations/verification.png';
@@ -6,6 +7,16 @@ import Button from '../../components/Button';
 
 const KonfirmasiPraktik = () => {
   const navigate = useNavigate();
+  const location = useLocation();
+  const booked = location?.state?.booked;
+  const status = booked?.meta?.status;
+
+  const handleStatus = () => {
+    if (status) {
+      Cookies.set('status', status);
+      navigate('/main');
+    }
+  };
 
   return (
     <section className="w-screen h-screen flex justify-center items-center lg:px-0 px-5">
@@ -37,7 +48,7 @@ const KonfirmasiPraktik = () => {
             type="blue"
             label="Kembali ke halaman utama"
             active={true}
-            onClick={() => navigate('/main')}
+            onClick={() => handleStatus()}
           />
         </div>
       </div>
