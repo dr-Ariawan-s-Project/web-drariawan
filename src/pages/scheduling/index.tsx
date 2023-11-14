@@ -15,7 +15,6 @@ const Scheduling = () => {
   const [reserve, setReserve] = useState<any[]>([]);
   const [open, setOpen] = useState<boolean>(false);
   const [schedule, setSchedule] = useState<any | null>(null);
-  const [booked, setBooked] = useState<any | null>([]);
   const [patient, setPatient] = useState<any | null>([]);
   const [selectedDate, setSelectedDate] = useState<Date>(new Date());
 
@@ -71,7 +70,6 @@ const Scheduling = () => {
           },
         }
       );
-      setBooked(response?.data);
       if (response) {
         Swal.fire({
           title: 'Sukses',

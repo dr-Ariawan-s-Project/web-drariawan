@@ -1,5 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
+import Cookies from 'js-cookie';
 
 import { useQuestionaire } from '../../store/apiQuestionaire';
 import PhoneDoctor from '../../assets/illustrations/phone-doctor.svg';
@@ -8,6 +9,7 @@ import Button from '../../components/Button';
 
 const LembarPersetujuan = () => {
   const navigate = useNavigate();
+  const token: any = Cookies.get('token');
   const { getQuestionaire, data } = useQuestionaire();
   const [isPageLoaded, setIsPageLoaded] = useState(false);
 
@@ -15,7 +17,7 @@ const LembarPersetujuan = () => {
     setTimeout(() => {
       setIsPageLoaded(true);
     }, 100);
-    getQuestionaire();
+    getQuestionaire(token);
   }, [getQuestionaire]);
 
   const id = data?.data?.map((item: any) => item?.id);

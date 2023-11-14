@@ -1,9 +1,12 @@
 import React, { useState } from 'react';
+import Cookies from 'js-cookie';
+
 import { PatientDataProps, SearchBarProps } from '../utils/component';
 import { usePatient } from '../store/apiPatient';
 
 const SearchBar: React.FC<SearchBarProps> = ({ onSearch }) => {
   const { getPatient } = usePatient();
+  const token: any = Cookies.get('token');
 
   const [inputValue, setInputValue] = useState('');
 
@@ -14,7 +17,7 @@ const SearchBar: React.FC<SearchBarProps> = ({ onSearch }) => {
   const handleSearch = async () => {
     if (inputValue.trim() !== '') {
       try {
-        const patientData = await getPatient(1, 5);
+        const patientData = await getPatient(1, 5, token);
         if (Array.isArray(patientData)) {
           const filteredPatients = patientData
             .filter((patient: PatientDataProps) =>

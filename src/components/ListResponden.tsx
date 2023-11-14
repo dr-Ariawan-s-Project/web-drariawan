@@ -1,14 +1,17 @@
 import { SetStateAction, useEffect, useState } from 'react';
 import { useQuestionaire } from '../store/apiQuestionaire';
 import { Link } from 'react-router-dom';
+import Cookies from 'js-cookie';
 
 const ListResponden = () => {
   const { data, loading, error, getAttempts } = useQuestionaire();
-  const [sortBy, setSortBy] = useState('created_at'); 
-  const [sortDirection, setSortDirection] = useState('desc'); 
+  const token: any = Cookies.get('token');
+  const userRole: any = Cookies.get('userRole');
+  const [sortBy, setSortBy] = useState('created_at');
+  const [sortDirection, setSortDirection] = useState('desc');
 
   useEffect(() => {
-    getAttempts();
+    getAttempts(token, userRole);
   }, [getAttempts]);
 
   const handleSortChange = (field: SetStateAction<string>) => {
@@ -32,11 +35,11 @@ const ListResponden = () => {
 
   const sortedData = sortData(data?.data || []);
 
-  const formatDateString = (dateString:any) => {
+  const formatDateString = (dateString: any) => {
     const dateObj = new Date(dateString);
     const day = dateObj.getDate().toString().padStart(2, '0');
     const month = (dateObj.getMonth() + 1).toString().padStart(2, '0');
-    const year = dateObj.getFullYear().toString().slice(-2); 
+    const year = dateObj.getFullYear().toString().slice(-2);
     return `${day}/${month}/${year}`;
   };
 
@@ -51,31 +54,41 @@ const ListResponden = () => {
             <p>Error: {error}</p>
           ) : (
             <table className="w-full table-auto text-sm ">
-      <thead className="border-b font-medium border-neutral-300">
-  <tr>
-    <th className="px-5" onClick={() => handleSortChange('id')}>
-      No
-    </th>
-    <th onClick={() => handleSortChange('email')}>
-      Email
-      {sortBy === 'email' && (
-        <span className="pl-2">
-          {sortDirection === 'asc' ? '↑' : '↓'}
-        </span>
-      )}
-    </th>
-    <th className="px-5" onClick={() => handleSortChange('created_at')}>
-  Date 
-  {sortBy === 'created_at' && (
-    <span className="ml-2" title={sortDirection === 'asc' ? 'Urutkan dari Terbaru' : 'Urutkan dari Terlama'}>
-      {sortDirection === 'asc' ? '↑' : '↓'}
-    </span>
-  )}
-</th>
+              <thead className="border-b font-medium border-neutral-300">
+                <tr>
+                  <th className="px-5" onClick={() => handleSortChange('id')}>
+                    No
+                  </th>
+                  <th onClick={() => handleSortChange('email')}>
+                    Email
+                    {sortBy === 'email' && (
+                      <span className="pl-2">
+                        {sortDirection === 'asc' ? '↑' : '↓'}
+                      </span>
+                    )}
+                  </th>
+                  <th
+                    className="px-5"
+                    onClick={() => handleSortChange('created_at')}
+                  >
+                    Date
+                    {sortBy === 'created_at' && (
+                      <span
+                        className="ml-2"
+                        title={
+                          sortDirection === 'asc'
+                            ? 'Urutkan dari Terbaru'
+                            : 'Urutkan dari Terlama'
+                        }
+                      >
+                        {sortDirection === 'asc' ? '↑' : '↓'}
+                      </span>
+                    )}
+                  </th>
 
-    <th className="px-5">Detail</th>
-  </tr>
-</thead>
+                  <th className="px-5">Detail</th>
+                </tr>
+              </thead>
               <tbody>
                 {sortedData.map((item: any, index: number) => (
                   <tr key={item.id} className="mb-2">
@@ -83,8 +96,8 @@ const ListResponden = () => {
                     <td>{item.patient ? item.patient.email : 'N/A'}</td>
                     <td>{formatDateString(item.created_at)}</td>
                     <td className="text-center">
-  <Link to={`detail_responden/:attempt_id`}>View</Link>
-</td>
+                      <Link to={`detail_responden/:attempt_id`}>View</Link>
+                    </td>
                   </tr>
                 ))}
               </tbody>

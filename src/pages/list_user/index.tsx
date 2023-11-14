@@ -100,7 +100,6 @@ const TableRow: React.FC<{
 };
 
 const ListUser = () => {
-  const { data: authData } = useAuth();
   const userRole = Cookies.get('userRole');
   const token = Cookies.get('token');
   const [page, setPage] = useState<number>(1);
