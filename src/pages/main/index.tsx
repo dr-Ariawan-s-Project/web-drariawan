@@ -1,5 +1,4 @@
 import { useNavigate } from 'react-router-dom';
-import Swal from 'sweetalert2';
 import Cookies from 'js-cookie';
 
 import Navbar from '../../components/Navbar';
@@ -8,15 +7,6 @@ import Background from '../../assets/illustrations/main-background.jpeg';
 const Main = () => {
   const navigate = useNavigate();
   const patientName = Cookies.get('patientName');
-
-  const handleSchedule = () => {
-    Swal.fire({
-      title: 'Page Not Found',
-      text: 'Fitur sedang dalam pengerjaan',
-      confirmButtonText: 'OK',
-    });
-    // navigate('/scheduling/schedule_list')
-  };
 
   return (
     <section
@@ -29,7 +19,7 @@ const Main = () => {
       <div className="absolute inset-0 bg-black opacity-60" />
       <Navbar
         profileData={patientName ? patientName : 'Login sebagai Admin'}
-        menuSchedule={() => handleSchedule()}
+        menuSchedule={() => navigate('/scheduling/schedule_list')}
       />
       <section className="flex justify-center my-auto w-max z-10 relative">
         <div className="gap-y-7 flex flex-col my-40 mx-20">
