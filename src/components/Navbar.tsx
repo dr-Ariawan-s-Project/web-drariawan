@@ -99,14 +99,14 @@ const Navbar: FC<NavbarProps> = ({ page, type, profileData, menuSchedule }) => {
         <li
           className="w-max h-10 px-5 py-6 rounded-md flex gap-x-5 items-center cursor-pointer font-semibold text-slate-200 hover:bg-health-blue-dark"
           onClick={
-            profileData !== 'Login sebagai Admin'
+            profileData !== 'Login sebagai Patient'
               ? toggleDropdownPatient
               : loginPatient
           }
         >
           {profileData}
           <UserIcon className="h-6 w-6 md:h-8 md:w-8" />
-          {profileData !== 'Login sebagai Admin' && isDropdownOpen ? (
+          {profileData !== 'Login sebagai Patient' && isDropdownOpen ? (
             <div className="absolute right-20 mt-36 bg-white border border-gray-300 rounded-md shadow-sm w-52">
               <ul className="py-2 text-health-blue-dark">
                 <li

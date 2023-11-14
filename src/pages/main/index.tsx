@@ -28,7 +28,7 @@ const Main = () => {
     >
       <div className="absolute inset-0 bg-black opacity-60" />
       <Navbar
-        profileData={patientName ? patientName : 'Login sebagai Admin'}
+        profileData={patientName ? patientName : 'Login sebagai Patient'}
         menuSchedule={() => handleSchedule()}
       />
       <section className="flex justify-center my-auto w-max z-10 relative">
