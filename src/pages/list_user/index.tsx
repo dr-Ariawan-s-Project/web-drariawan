@@ -14,6 +14,7 @@ const TableRow: React.FC<{
   onDelete: (id: string) => void;
   onEdit: (data: UserState['data'][0]) => void;
 }> = ({ data, index, onDelete, onEdit }) => {
+
   const { data: authData } = useAuth();
   const userRole = authData?.role;
 
@@ -100,9 +101,9 @@ const TableRow: React.FC<{
 };
 
 const ListUser = () => {
-  const { data: authData } = useAuth();
   const userRole = Cookies.get('userRole');
   const token = Cookies.get('token');
+
   const [page, setPage] = useState<number>(1);
   const [startNumber, setStartNumber] = useState<number>(1);
   const { data: userData, getList, postDeactivate, putUser } = useUser() as any;
@@ -123,9 +124,7 @@ const ListUser = () => {
         if (response.status === 'success') {
           userData((prevData: { data: any[] }) => ({
             ...prevData,
-            data: prevData.data.filter(
-              (user: { id: string }) => user.id !== id
-            ),
+            data: prevData.data.filter((user: { id: string }) => user.id !== id),
           }));
           useSwalDeleteData('success');
         } else {
@@ -153,8 +152,7 @@ const ListUser = () => {
       console.error('Token not found. User may not be authenticated.');
       return;
     }
-    if (userRole === 'admin') {
-      try {
+    if (userRole === 'admin') {      try {
         const response = await putUser(user, token);
         if (response.status === 'success') {
           useSwalUpdate('success');
@@ -192,8 +190,6 @@ const ListUser = () => {
   };
 
   useEffect(() => {
-    console.log(token);
-    console.log(userRole);
     if (
       !token ||
       !userRole ||
@@ -203,11 +199,13 @@ const ListUser = () => {
         'Akses anda ditolak. Anda tidak memiliki akses ke halaman ini.'
       );
     } else {
-      getList(page, 10, token);
-      setStartNumber((page - 1) * 10);
+     getList(page, 10, token, userRole); 
+          setStartNumber((page - 1) * 10);
     }
-  }, [getList, page, token, userRole]);
-
+  }, [getList, page, token, userRole, setStartNumber]);
+  
+  
+  
   return (
     <section className="min-h-screen flex flex-col justify-center items-center">
       {isEditModalOpen && (
@@ -331,7 +329,7 @@ const ListUser = () => {
               </tr>
             </thead>
             <tbody>
-              {Array.isArray(userData?.data) && userData.data.length > 0 ? (
+            {Array.isArray(userData?.data) && userData.data.length > 0 ? (
                 userData.data.map((rowData: any, index: any) => (
                   <TableRow
                     key={rowData.id}

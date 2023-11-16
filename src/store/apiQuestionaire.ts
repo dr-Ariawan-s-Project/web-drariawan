@@ -65,7 +65,7 @@ export const useQuestionaire = create<QuestionaireState>((set) => ({
     }
   },
 
-  getAttempts: async (token: string, userRole: string) => {
+  getAttempts: async (page: number, limit: number, token: string, userRole: string) => {
     set({ loading: true, error: null });
     try {
       const response = await axiosInstance.get('/v1/questioner/attempts', {
@@ -74,6 +74,8 @@ export const useQuestionaire = create<QuestionaireState>((set) => ({
         },
         params: {
           role: userRole,
+          page: page,
+          limit: limit,
         },
       });
       set({ data: response.data, loading: false });
@@ -85,6 +87,7 @@ export const useQuestionaire = create<QuestionaireState>((set) => ({
       });
     }
   },
+  
   
   
   getAnswers: async (attempt_id: string, token: string): Promise<Answer[]> => {

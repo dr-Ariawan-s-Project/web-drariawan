@@ -50,8 +50,8 @@ const App = () => {
           <Route element={<Dashboard />} path="dashboard" />
           <Route element={<LandingKuisioner />} path="landing_kuisioner" />
           <Route element={<Responden />} path="responden" />
-          <Route element={<DetailResponden />} path="detail_responden/:attempt_id" />
-          <Route element={<Appointment />} path="appoinment" />
+          <Route element={<DetailResponden />} path="detail_responden/:id" />
+          <Route element={<Appointment />} path="appointment" />
         </Route>
       </Routes>
     </BrowserRouter>

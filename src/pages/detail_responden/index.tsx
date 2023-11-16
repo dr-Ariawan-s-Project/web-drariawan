@@ -1,8 +1,39 @@
-import { useLocation  } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
+import { useQuestionaire } from '../../store/apiQuestionaire';
+import { useEffect, useState } from 'react';
+import Cookies from 'js-cookie';
 
 const DetailResponden = () => {
+  const userRole = Cookies.get('userRole');
+  const token = Cookies.get('token');
   const location = useLocation();
-  const dataToSend = location.state;
+  const { getAnswers } = useQuestionaire() as any;
+
+  const [answers, setAnswers] = useState<any>({}); 
+
+  useEffect(() => {
+    const attemptId = location.state?.attempt_id; 
+
+    const fetchAnswers = async () => {
+      try {
+        if (!token || !userRole) {
+          console.log('Akses Ditolak.');
+          return;
+        }
+        if (userRole === 'dokter') {
+          console.log('Anda tidak memiliki akses ke halaman ini.');
+          return;
+        }
+
+        const fetchedAnswers = await getAnswers(attemptId, token);
+        setAnswers(fetchedAnswers);
+      } catch (error) {
+        console.error('Error fetching answers:', error);
+      }
+    };
+
+    fetchAnswers();
+  }, [getAnswers, location.state?.attempt_id, token, userRole]);
 
   return (
     <div className="overflow-x-auto mx-auto w-full mt-2 sm:mt-20 flex-grow text-start">
@@ -23,13 +54,13 @@ const DetailResponden = () => {
             </thead>
             <tbody>
               <tr>
-                <td>{dataToSend.ai_accuracy}</td>
-                <td>{dataToSend.ai_probability}</td>
-                <td>{dataToSend.ai_diagnosis}</td>
-                <td>{dataToSend.diagnosis}</td>
-                <td>{dataToSend.id}</td>
-                <td>{dataToSend.name}</td>
-                <td>{dataToSend.email}</td>
+                <td>{answers?.ai_accuracy}</td>
+                <td>{answers?.ai_probability}</td>
+                <td>{answers?.ai_diagnosis}</td>
+                <td>{answers?.diagnosis}</td>
+                <td>{answers?.id}</td>
+                <td>{answers?.name}</td>
+                <td>{answers?.email}</td>
               </tr>
             </tbody>
           </table>
