@@ -93,7 +93,7 @@ const Admin = () => {
               case location.pathname.includes('jadwal_praktik'):
                 return <JadwalPraktik />;
               case location.pathname.includes('appointment'):
-                  return <Appointment />;
+                return <Appointment />;
               default:
                 return <Dashboard />;
             }
