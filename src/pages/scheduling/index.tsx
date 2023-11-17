@@ -159,7 +159,7 @@ const Scheduling = () => {
                   onClick={() => handleSelectSchedule(doctorSchedule)}
                 >
                   <div className="text-md font-semibold">
-                    {doctorSchedule.User.name}
+                    {doctorSchedule.user.name}
                   </div>
                   <div className="text-sm text-gray-500">
                     {doctorSchedule.time_start} - {doctorSchedule.time_end}
@@ -185,13 +185,13 @@ const Scheduling = () => {
           <div className="flex flex-col my-10 gap-y-5 px-4">
             <div className="flex gap-x-40">
               <p className="w-1/3">Nama Dokter</p>
-              <p className="w-2/3">{schedule?.User?.name}</p>
+              <p className="w-2/3">{schedule?.user?.name}</p>
             </div>
             <div className="flex gap-x-40">
               <p className="w-1/3">Spesialis</p>
               <p className="w-2/3">
-                {schedule?.User?.specialization
-                  ? schedule?.User?.specialization
+                {schedule?.user?.specialization
+                  ? schedule?.user?.specialization
                   : 'N/A'}
               </p>
             </div>
