@@ -1,5 +1,4 @@
 import { useNavigate } from 'react-router-dom';
-import Swal from 'sweetalert2';
 import Cookies from 'js-cookie';
 
 import Navbar from '../../components/Navbar';
@@ -10,12 +9,7 @@ const Main = () => {
   const patientName = Cookies.get('patientName');
 
   const handleSchedule = () => {
-    Swal.fire({
-      title: 'Page Not Found',
-      text: 'Fitur sedang dalam pengerjaan',
-      confirmButtonText: 'OK',
-    });
-    // navigate('/scheduling/schedule_list')
+    navigate('/scheduling/schedule_list');
   };
 
   return (

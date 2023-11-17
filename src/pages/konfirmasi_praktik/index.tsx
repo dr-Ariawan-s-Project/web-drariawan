@@ -20,13 +20,6 @@ const KonfirmasiPraktik = () => {
 
   return (
     <section className="w-screen h-screen flex justify-center items-center lg:px-0 px-5">
-      <div
-        className="flex items-center font-medium border border-health-blue-dark rounded-md cursor-pointer space-x-3 px-5 py-1"
-        onClick={() => navigate(-1)}
-      >
-        <ArrowLeftIcon width={30} height={30} />
-        <label className="text-xl cursor-pointer">Back</label>
-      </div>
       <div className="flex flex-col gap-y-5 text-center">
         <div className="left-0 top-0 fixed ml-10 mt-10">
           <div
