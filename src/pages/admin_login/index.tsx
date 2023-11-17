@@ -36,10 +36,12 @@ const AdminLogin = () => {
   useEffect(() => {
     const token = data?.token;
     const role = data?.role;
-
+    const name = data?.name
     if (token && role) {
       Cookies.set('token', token, { path: '/', expires: 1 / 24 });
       Cookies.set('userRole', role, { path: '/', expires: 1 / 24 });
+      Cookies.set('userName', name, { path: '/', expires: 1 / 24 });
+
       useSwalAuth('login');
       navigate('/admin/');
     } else if (errorMessage) {

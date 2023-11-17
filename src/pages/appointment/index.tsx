@@ -1,103 +1,170 @@
-import DateInfo from '../../components/DateInfo';
-import { Fragment } from 'react';
-import { Menu, Transition } from '@headlessui/react';
-import { ChevronDownIcon } from '@heroicons/react/20/solid';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import axios from 'axios';
+import Cookies from 'js-cookie';
+import { useUser } from '../../store/apiUser';
 
-const Appointments = [
-  { date: '2023-10-25', time: '15:00' },
-  { date: '2023-10-25', time: '10:00' },
-];
-
-function classNames(...classes: string[]) {
-  return classes.filter(Boolean).join(' ');
+interface User {
+  id: number;
+  name: string;
+  picture: string;
+  specialization: string;
 }
 
-const Dropdown = () => {
-  const [selectedDoctor, setSelectedDoctor] = useState<string | null>(null);
+interface Schedule {
+  schedule_id: number;
+  user_id: number;
+  health_care_address: string;
+  day: string;
+  time_start: string;
+  time_end: string;
+  User: User;
+}
 
+interface Patient {
+  patient_id: string;
+  name: string;
+}
+
+interface Booking {
+  id: string;
+  booking_code: string;
+  patient_id: string;
+  schedule_id: number;
+  booking_date: string;
+  state: string;
+  created_at: string;
+  updated_at: string;
+  deleted_at: null | string;
+  Patient: Patient;
+  Schedule: Schedule;
+}
+
+const TableRow: React.FC<{ index: number; data: Booking }> = ({ index, data }) => {
+  const formatDate = (dateString: string) => {
+    const dateObject = new Date(dateString);
+    const day = dateObject.getDate().toString().padStart(2, '0');
+    const month = (dateObject.getMonth() + 1).toString().padStart(2, '0'); 
+    const year = dateObject.getFullYear();
+    return `${day}-${month}-${year}`;
+  };
   return (
-    <Menu as="div" className="relative inline-block text-left">
-      <div>
-        <Menu.Button className="inline-flex w-full justify-center gap-x-1.5 rounded-md bg-white px-3 py-2 text-sm font-semibold text-blue-800 shadow-sm ring-1 ring-inset ring-gray-300 hover.bg-gray-50">
-          {selectedDoctor ? selectedDoctor : 'Pilih Dokter'}
-          <ChevronDownIcon
-            className="-mr-1 h-5 w-5 text-blue-800"
-            aria-hidden="true"
-          />
-        </Menu.Button>
-      </div>
-
-      <Transition
-        as={Fragment}
-        enter="transition ease-out duration-100"
-        enterFrom="transform opacity-0 scale-95"
-        enterTo="transform opacity-100 scale-100"
-        leave="transition ease-in duration-75"
-        leaveFrom="transform opacity-100 scale-100"
-        leaveTo="transform opacity-0 scale-95"
-      >
-        <Menu.Items className="absolute right-0 z-10 mt-2 w-56 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus-outline-none">
-          <div className="py-1">
-            <Menu.Item>
-              {({ active }) => (
-                <a
-                  href="#"
-                  onClick={() => setSelectedDoctor('dr. Almira Mahsa Spog')}
-                  className={classNames(
-                    active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
-                    'block px-4 py-2 text-sm'
-                  )}
-                >
-                  dr. Almira Mahsa Spog
-                </a>
-              )}
-            </Menu.Item>
-          </div>
-        </Menu.Items>
-      </Transition>
-    </Menu>
+    <tr className="border-b text-center">
+      <td className="p-2">{index + 1}</td>
+      <td className="p-2">{data.Schedule.User.name}</td>
+      <td className="p-2">{data.Patient.name}</td>
+      <td className="p-2">{formatDate(data.booking_date)}</td>
+      <td className="p-2">{data.Schedule.day}</td>
+      <td className="p-2">{`${data.Schedule.time_start} - ${data.Schedule.time_end}`}</td>
+      <td className="p-2">{data.Schedule.health_care_address}</td>
+    </tr>
   );
 };
 
 const Appointment = () => {
-  const currentDate = new Date(); 
-  const upcomingAppointments = Appointments.filter(appointment => {
-    const appointmentDate = new Date(appointment.date + ' ' + appointment.time);
-    return appointmentDate >= currentDate; 
-  });
+  const [bookings, setBookings] = useState<Booking[]>([]);
+  const userRole = Cookies.get('userRole');
+  const token = Cookies.get('token');
+  const userName = Cookies.get('userName');
+  const startNumber = 0;
+ const {getList}  = useUser() as any;
 
-  if (upcomingAppointments.length === 0) {
-    return (
-      <div className="overflow-x-auto mx-auto w-full mt-2 sm:mt-20 flex-grow lg:px-20 md:px-10 text-start">
-        <div className="relative bg-white px-10">
-          <p className="py-20 font-lato-bold text-center">
-            There are no new appointments.
-          </p>
-        </div>
-      </div>
-    );
-  }
+ useEffect(() => {
+  const fetchBookings = async () => {
+    try {
+      if (!token || !userRole || !userName) {
+        console.log('Akses anda ditolak. Anda tidak memiliki akses ke halaman ini.');
+        return;
+      }
+      if (userRole === 'admin') {
+        console.log('Anda tidak memiliki akses ke halaman ini.');
+        return;
+      }
+
+      let bookingsResponse;
+
+      if (userRole === 'dokter') {
+        const userIdResponse = await getList(1, 10, token);
+
+        if (userIdResponse.data.data.length > 0) {
+          const userId = userIdResponse.data.data[0].id;
+          console.log('User ID:', userId);
+
+          bookingsResponse = await axios.get(
+            `https://drariawan.altapro.online/v1/booking/user/${userId}`,
+            {
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+            }
+          );
+        } else {
+          console.log('User not found.');
+          return;
+        }
+      } else if (userRole === 'suster') {
+        bookingsResponse = await axios.get(
+          'https://drariawan.altapro.online/v1/booking/list',
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+      } else {
+        console.log('Unauthorized user role.');
+        return;
+      }
+
+      console.log('Booking Response:', bookingsResponse);
+
+      const data: Booking[] = bookingsResponse.data.data;
+      setBookings(data);
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        console.error('Axios Error:', error.response?.data || error.message);
+      } else {
+        console.error('Error fetching bookings:', error);
+      }
+    }
+  };
+
+  fetchBookings();
+}, [getList, token, userRole, userName]);
+
 
   return (
-    <div className="overflow-x-auto mx-auto w-full mt-2 sm:mt-20 flex-grow lg:px-20 md:px-10 text-start">
-      <div className="relative bg-white shadow-xl rounded-2xl px-10">
-        {/* dropdown pilih dokter */}
-        <div className="text-right pt-10">
-          <Dropdown />
-        </div>
-        <h1 className="py-10 font-lato-bold">Upcoming Appointments</h1>
-
-        <div className="pb-10">
-          {upcomingAppointments.map((appointment, index) => (
-            <DateInfo
-              key={index}
-              date={appointment.date}
-              time={appointment.time}
-            />
-          ))}
-        </div>
-      </div>
+    <div>
+      <h1>Daftar Booking</h1>
+      <table className="w-full table-auto bg-white mt-20">
+        <thead className="text-health-blue-dark font-lato_regular">
+          <tr>
+            <th className="border-b p-3 text-center">No</th>
+            <th className="border-b p-3 text-center">Doctor Name</th>
+            <th className="border-b p-3 text-center">Patient Name</th>
+            <th className="border-b p-3 text-center">Booking Date</th>
+            <th className="border-b p-3 text-center">Day </th>
+            <th className="border-b p-3 text-center">Time </th>
+            <th className="border-b p-3 text-center">Health Care Address </th>
+          </tr>
+        </thead>
+        <tbody>
+          {bookings.length > 0 ? (
+            bookings.map((booking, index) => (
+              <TableRow key={booking.id} data={booking} index={index + startNumber} />
+            ))
+          ) : (
+            <tr>
+              <td colSpan={8} className="text-center py-2">
+                {userRole === 'admin' ? (
+                  <p className='mt-20'>Anda tidak memiliki akses ke halaman ini.</p>
+                ) : (
+                  <p className='mt-20'>Belum ada Appointment untuk anda .</p>
+                )}
+              </td>
+            </tr>
+          )}
+        </tbody>
+      </table>
     </div>
   );
 };

@@ -16,7 +16,7 @@ export const useUser = create<UserState>((set) => ({
           Authorization: `Bearer ${token}`,
         },
       });
-      set({ data: response.data, loading: false, error: null });
+      set({ data: response.data.data, loading: false, error: null });
     } catch (error: any) {
       set({
         loading: false,
@@ -60,7 +60,7 @@ export const useUser = create<UserState>((set) => ({
   },
 
   getList: async (page: number, limit: number, token: string) => {
-    set({ loading: true, error: null });
+    set({ loading: true, error: null, data: [] });
     try {
       const response = await axios.get('/v1/user/list', {
         headers: {
@@ -72,14 +72,14 @@ export const useUser = create<UserState>((set) => ({
           page: page,
         },
       });
-      set({ data: response.data.data, loading: false, error: null });
-    } catch (error: any) {
-      set({
-        loading: false,
-        error: `Gagal mengambil daftar Pengguna: ${error.message}`,
-      });
-    }
-  },
+    set({ data: response.data, loading: false, error: null });
+  } catch (error: any) {
+    set({
+      loading: false,
+      error: `Failed to retrieve patient list: ${error.message}`,
+    });
+  }
+},
 
   postDeactivate: async (data, token) => {
     set({ loading: true, error: null });

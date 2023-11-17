@@ -2,7 +2,6 @@ import { FC, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import moment from 'moment';
 import Cookies from 'js-cookie';
-
 import { UserIcon } from '@heroicons/react/24/outline';
 import { useAuth } from '../store/apiAuth';
 import { useSwalAuth } from '../utils/swal/useSwalAuth';
@@ -18,6 +17,8 @@ const Navbar: FC<NavbarProps> = ({ page, type, profileData, menuSchedule }) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const currentDate = moment().format('ll');
   const navigate = useNavigate();
+  const userName = Cookies.get('userName');
+  const userRole = Cookies.get('userRole');
 
   const { data } = useAuth();
 
@@ -61,9 +62,8 @@ const Navbar: FC<NavbarProps> = ({ page, type, profileData, menuSchedule }) => {
           </p>
         </div>
         <div className="px-4 py-3">
-          <span className="block font-medium px-6  md:text-md text-lg text-start">
-            Halo, {data?.role} {data?.name} !
-          </span>
+          <span className="block font-lato_regular px-6  md:text-sm text-md text-start">Halo, {userRole} !</span>
+          <span className="block font-lato_regular px-6  md:text-sm text-lg text-center">  {userName}</span>
         </div>
         <div className="cursor-pointer ml-4" onClick={toggleDropdownAdmin}>
           <UserIcon className="h-6 w-6 md:h-8 md:w-8" />

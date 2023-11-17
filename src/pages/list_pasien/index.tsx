@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import { TrashIcon, PencilIcon } from '@heroicons/react/24/outline';
 import { useSwalDeleteData } from '../../utils/swal/useSwalData';
 import { useSwalUpdate } from '../../utils/swal/useSwalData';
-
+import Tooltip from '../../components/Tooltip';
 import { usePatient } from '../../store/apiPatient';
 import { PatientState } from '../../utils/api';
 import SearchBar from '../../components/SearchBar';
@@ -30,7 +30,7 @@ const TableRow: React.FC<{
       console.log('Unauthorized access to delete patient data.');
     }
   };
-
+  
   const handleConfirmDelete = () => {
     onDelete(idToDelete);
     setIsDeleteModalOpen(false);
@@ -61,18 +61,36 @@ const TableRow: React.FC<{
       <td className="p-2">{data.phone}</td>
       <td className="p-2">
         <div className="flex items-center justify-center gap-x-2">
-          <TrashIcon
-            className={`cursor-pointer hover:text-red-500 ${deleteIconStyle}`}
-            width={20}
-            height={20}
-            onClick={handleDeleteClick}
-          />
-          <PencilIcon
-            className={`cursor-pointer hover:text-health-blue-light mx-2 ${editIconStyle}`}
-            width={20}
-            height={20}
-            onClick={handleEditClick}
-          />
+        <Tooltip
+            content={
+              userRole === 'admin'
+                ? 'Click to delete'
+                : 'Unauthorized access to delete patient data!'
+            }
+            position="top"
+          >
+            <TrashIcon
+              className={`cursor-pointer hover:text-red-500 ${deleteIconStyle}`}
+              width={20}
+              height={20}
+              onClick={handleDeleteClick}
+            />
+          </Tooltip>
+          <Tooltip
+            content={
+              userRole === 'admin'
+                ? 'Click to edit'
+                : 'Unauthorized access to edit patient data!'
+            }
+            position="top"
+          >
+            <PencilIcon
+              className={`cursor-pointer hover:text-health-blue-light mx-2 ${editIconStyle}`}
+              width={20}
+              height={20}
+              onClick={handleEditClick}
+            />
+          </Tooltip>
         </div>
       </td>
       {isDeleteModalOpen && (

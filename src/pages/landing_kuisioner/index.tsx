@@ -7,34 +7,34 @@ import Cookies from 'js-cookie';
 const LandingKuisioner = () => {
   const navigate = useNavigate();
   const userRole = Cookies.get('userRole');
+  const token = Cookies.get('token');
 
   const handleRedirect = (path: To) => {
     navigate(path);
   };
 
-  const isAdmin = userRole === 'admin';
-  const isDokter = userRole === 'dokter';
-
   useEffect(() => {
-    if (!isAdmin) {
-      console.error(
-        'Unauthorized access or invalid role. Redirecting to login page...'
-      );
+    if (!token || !userRole) {
+      console.log('Akses ditolak. Token atau userRole tidak tersedia.');
       navigate('/admin/login');
-    } else if (!isDokter) {
-      return;
+    } else {
+      if (!['admin', 'dokter', 'suster'].includes(userRole)) {
+        console.log('Akses ditolak. Anda tidak memiliki akses ke halaman ini.');
+        navigate('/admin/login');
+      }
     }
-  }, []);
+  }, [navigate, token, userRole]);
 
   const accessDeniedMessage = (
     <span className="text-red-500">
-      Akses token terbatas, anda tidak dapat mengakses halaman ini.
+      Akses terbatas. Anda tidak dapat mengakses halaman ini.
     </span>
   );
 
+
   return (
     <div className="mt-20 flex flex-col md:flex-row gap-4">
-      <div className="max-w-sm rounded overflow-hidden shadow-lg flex items-center">
+       <div className="max-w-sm rounded overflow-hidden shadow-lg flex items-center">
         <div className="px-6 py-4 flex-1">
           <div className="flex items-center justify-between">
             <h1 className="font-bold text-xl mb-0 mr-10">List Kuisioner</h1>
@@ -53,10 +53,10 @@ const LandingKuisioner = () => {
               />
             </div>
           </div>
-          {isAdmin ? (
+          {(userRole === 'admin' || userRole === 'dokter') ? (
             <button
               onClick={() => handleRedirect('/admin/list_kuisioner')}
-              className="text-health-blue-dark  text-sm font-lato_regular border-none focus:outline-none flex items-center"
+              className="text-health-blue-dark text-sm font-lato_regular border-none focus:outline-none flex items-center"
             >
               ke Halaman List Kuisioner
             </button>
@@ -84,7 +84,7 @@ const LandingKuisioner = () => {
               />
             </div>
           </div>
-          {isAdmin || isDokter ? (
+          {(userRole === 'admin' || userRole === 'dokter') ? (
             <button
               onClick={() => handleRedirect('/admin/responden')}
               className="text-health-blue-dark text-sm font-lato_regular border-none focus:outline-none flex items-center"
@@ -99,5 +99,4 @@ const LandingKuisioner = () => {
     </div>
   );
 };
-
 export default LandingKuisioner;

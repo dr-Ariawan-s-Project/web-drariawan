@@ -13,6 +13,7 @@ import Dashboard from '../dashboard';
 import LandingKuisioner from '../landing_kuisioner';
 import ListKuisioner from '../list_kuisioner';
 import Responden from '../responden';
+import Appointment from '../appointment';
 
 const Admin = () => {
   const location = useLocation();
@@ -43,6 +44,8 @@ const Admin = () => {
       setPage('List Questioner');
     } else if (location.pathname.includes('responden')) {
       setPage('List Responden');
+    } else if (location.pathname.includes('appointment')) {
+      setPage('List Appointment');
     } else {
       setPage('Dashboard Admin');
     }
@@ -89,6 +92,8 @@ const Admin = () => {
                 return <ListPasien />;
               case location.pathname.includes('jadwal_praktik'):
                 return <JadwalPraktik />;
+              case location.pathname.includes('appointment'):
+                  return <Appointment />;
               default:
                 return <Dashboard />;
             }

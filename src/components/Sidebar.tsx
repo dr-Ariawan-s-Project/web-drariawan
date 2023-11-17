@@ -110,11 +110,11 @@ const Sidebar = () => {
           </li>
           <li className="mb-2 ">
             <button
-              onClick={() => navigateTo('/admin/appoinment')}
+              onClick={() => navigateTo('/admin/appointment')}
               className="text-health-blue-dark bg-white hover:bg-health-blue-dark hover:text-white  text-sm font-lato_regular border-none focus:outline-none flex items-center "
             >
               <Icon icon="icon-park-outline:appointment" width="24" height="24" />
-              <span className="ml-2"></span> Appoinments
+              <span className="ml-2"></span> Appointment
             </button>
           </li>
         </ul>

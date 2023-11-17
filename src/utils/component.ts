@@ -107,9 +107,9 @@ export interface SearchBarProps {
   setSearchTerm: (term: string) => void;
 }
 
-export interface ScheduleData {
-  user?: any;
-  schedule_id?: number | undefined;
+export interface ScheduleData  {
+  user?: UserData;
+  schedule_id?: number | undefined; 
   user_id?: number | undefined;
   health_care_address?: string | undefined;
   day?: string | undefined;
@@ -117,9 +117,13 @@ export interface ScheduleData {
   time_end?: string | undefined;
 }
 
-export interface UserData {
+export type UserData = {
   id: number;
-}
+  name: string;
+  picture: string;
+  specialization: string;
+};
+
 export interface RespondenDataProps {
   type: string;
   question: string;
@@ -134,3 +138,17 @@ export type RoleData = {
   role: string;
   token: string;
 };
+
+export interface BookingDataProps {
+  id: string;
+  booking_code: string;
+  patient_id: string;
+  schedule_id: number;
+  booking_date: string;
+  state: string;
+  created_at: string;
+  updated_at: string;
+  deleted_at: string | null;
+  Patient: PatientDataProps;
+  Schedule: ScheduleData;
+}

@@ -1,9 +1,11 @@
+
 import {
   ScheduleData,
   UserData,
   PatientDataProps,
   RoleData,
 } from '../utils/component';
+
 import { Answer } from './data';
 
 export type QuestionaireState = {
@@ -13,7 +15,7 @@ export type QuestionaireState = {
   getQuestionaire: (token: string) => Promise<void>;
   postQuestionaire: (code_attempt: string, answer: []) => Promise<void>;
   validateQuestionaire: (validateData: any) => Promise<void>;
-  getAttempts: (token: string, userRole: string) => Promise<void>;
+  getAttempts: (page: number,limit: number, token: string, userRole: string) => Promise<void>;
   getAnswers: (token: string, attempt_id: string) => Promise<Answer[]>;
   postAssessment: (
     token: string,
@@ -77,10 +79,9 @@ export type ScheduleState = {
   data: any[];
   loading: boolean;
   error: string | null;
-  getSchedules: (page: number, limit: number, token: string) => Promise<void>;
+  getSchedules: ( token: string) => Promise<void>;
   postSchedule: (
     scheduleData: ScheduleData,
-    selectedUser: UserData,
     token: string
   ) => Promise<void>;
   putSchedule: (
@@ -90,4 +91,18 @@ export type ScheduleState = {
   ) => Promise<void>;
   deleteSchedule: (scheduleId: number, token: string) => Promise<void>;
 };
-export type { RoleData };
+
+export type AppointmentState = {
+  data: BookingDataProps[];
+  loading: boolean;
+  error: string | null;
+  putBooking: (
+    bookingId: string,
+    bookingData: BookingDataProps,
+    token: string
+  ) => Promise<void>;
+  getBookingById: (bookingId: string, token: string) => Promise<BookingDataProps | null>;
+  getListBooking: (token: string) => Promise<void>;
+  deleteBooking: (bookingId: string, token: string) => Promise<void>;
+};
+
