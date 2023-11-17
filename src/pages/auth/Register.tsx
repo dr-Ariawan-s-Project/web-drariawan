@@ -3,10 +3,12 @@ import { useFormik } from 'formik';
 import { useNavigate, Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 
-import Button from '../../components/Button';
 import { registerPasien } from '../../utils/yup/register_pasien';
-import { usePatient } from '../../store/apiPatient';
 import { useSwalCreate } from '../../utils/swal/useSwalData';
+import { PatientDataProps } from '../../utils/component';
+import { usePatient } from '../../store/apiPatient';
+
+import Button from '../../components/Button';
 
 const Register = () => {
   const navigate = useNavigate();
@@ -66,7 +68,7 @@ const Register = () => {
       if (formik.values.partner_option !== '') {
         formik.handleSubmit();
         try {
-          const body = {
+          const body: PatientDataProps = {
             name: formik.values.name,
             email: formik.values.email,
             password: formik.values.password,
@@ -79,19 +81,7 @@ const Register = () => {
             partner_option: formik.values.partner_option,
             partner_email: formik.values.partner_email,
           };
-          postPatient(
-            body.name,
-            body.email,
-            body.password,
-            body.nik,
-            body.dob,
-            body.phone,
-            body.gender,
-            body.marriage_status,
-            body.nationality,
-            body.partner_option,
-            body.partner_email
-          ).then(() => {
+          postPatient(body).then(() => {
             useSwalCreate(
               'Berhasil registrasi, silahkan login terlebih dahulu',
               'Sukses'

@@ -24,6 +24,7 @@ import LandingKuisioner from '../pages/landing_kuisioner';
 import Responden from '../pages/responden';
 import DetailResponden from '../pages/detail_responden';
 import Appointment from '../pages/appointment';
+import PatientSchedule from '../pages/patient_schedule';
 const App = () => {
   axios.defaults.baseURL = 'https://drariawan.altapro.online';
   return (
@@ -41,6 +42,7 @@ const App = () => {
         <Route element={<Main />} path="/main" />
         <Route element={<Scheduling />} path="/scheduling" />
         <Route element={<KonfirmasiPraktik />} path="/scheduling/success" />
+        <Route element={<PatientSchedule />} path="/scheduling/schedule_list" />
         <Route element={<AdminLogin />} path="/admin/login" />
         <Route element={<Admin />} path="/admin/">
           <Route element={<ListKuisioner />} path="list_kuisioner" />
@@ -50,8 +52,11 @@ const App = () => {
           <Route element={<Dashboard />} path="dashboard" />
           <Route element={<LandingKuisioner />} path="landing_kuisioner" />
           <Route element={<Responden />} path="responden" />
-          <Route element={<DetailResponden />} path="detail_responden/:id" />
-          <Route element={<Appointment />} path="appointment" />
+          <Route
+            element={<DetailResponden />}
+            path="detail_responden/:attempt_id"
+          />
+          <Route element={<Appointment />} path="appoinment" />
         </Route>
       </Routes>
     </BrowserRouter>

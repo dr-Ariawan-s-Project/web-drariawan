@@ -15,7 +15,6 @@ const Scheduling = () => {
   const [reserve, setReserve] = useState<any[]>([]);
   const [open, setOpen] = useState<boolean>(false);
   const [schedule, setSchedule] = useState<any | null>(null);
-  const [booked, setBooked] = useState<any | null>([]);
   const [patient, setPatient] = useState<any | null>([]);
   const [selectedDate, setSelectedDate] = useState<Date>(new Date());
 
@@ -71,7 +70,6 @@ const Scheduling = () => {
           },
         }
       );
-      setBooked(response?.data);
       if (response) {
         Swal.fire({
           title: 'Sukses',
@@ -79,9 +77,10 @@ const Scheduling = () => {
           confirmButtonText: 'OK',
         }).then((res) => {
           if (res.isConfirmed) {
+            Cookies.set('patientName', patient?.name, { path: '/' });
             navigate('/scheduling/success', {
               state: {
-                booked: booked,
+                booked: response?.data,
               },
             });
           }
@@ -137,11 +136,6 @@ const Scheduling = () => {
     getBookedSchedule();
     getProfile();
   }, [getBookedSchedule, getProfile]);
-
-  console.log(patient?.id);
-  console.log(schedule?.schedule_id);
-  console.log(formatDate(selectedDate));
-  console.log(token);
 
   return (
     <section className="w-screen h-max my-10 flex flex-col justify-center items-center">

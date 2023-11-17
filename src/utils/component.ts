@@ -43,6 +43,7 @@ export interface ModalProps {
 export interface LoadingProps {
   id: string;
   isOpen?: boolean;
+  title?: string;
 }
 
 export interface CardProps {
@@ -81,7 +82,6 @@ export interface ModalInformationProps {
   children?: React.ReactNode;
 }
 export interface PatientDataProps {
-  id: number;
   name: string;
   email: string;
   password: string;
@@ -92,7 +92,7 @@ export interface PatientDataProps {
   marriage_status: string;
   nationality: string;
   partner_option: string;
-  partner_email: string;
+  partner_email?: string;
 }
 
 export interface LoginFormProps {
