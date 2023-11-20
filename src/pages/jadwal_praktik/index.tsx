@@ -17,7 +17,7 @@ interface Schedule {
   day: string;
   time_start: string;
   time_end: string;
-  User: User;
+  user: User;
 }
 
 const TableRow: React.FC<{ index: number; data: Schedule }> = ({ index, data }) => {
@@ -30,13 +30,14 @@ const TableRow: React.FC<{ index: number; data: Schedule }> = ({ index, data }) 
 
   const userRole = Cookies.get('userRole');
 
-  let doctorNameCell, bookingDateCell;
+  let doctorNameCell, bookingDateCell, healthCareAddressCell;
 
   if (userRole === 'suster') {
-    doctorNameCell = <td className="p-2">{data.User.name}</td>;
+    doctorNameCell = data.user && data.user.name ? <td className="p-2">{data.user.name}</td> : null;
     bookingDateCell = <td className="p-2">{data.day}</td>;
   } else {
     bookingDateCell = <td className="p-2">{data.schedule.day}</td>;
+    healthCareAddressCell = <td className="p-2">{data.health_care_address}</td>;
   }
 
   return (
@@ -44,17 +45,13 @@ const TableRow: React.FC<{ index: number; data: Schedule }> = ({ index, data }) 
       <td className="p-2">{index + 1}</td>
       {doctorNameCell}
       {bookingDateCell}
-      <td className="p-2">
-        {userRole === 'suster' ? data.health_care_address : data.schedule.health_care_address}
-      </td>
-      <td className="p-2">
-        {`${formatTime(
-          userRole === 'suster' ? data.time_start : data.schedule.time_start
-        )} - ${formatTime(userRole === 'suster' ? data.time_end : data.schedule.time_end)}`}
-      </td>
+      {healthCareAddressCell}
+      <td className="p-2">{`${formatTime(data.time_start)} - ${formatTime(data.time_end)}`}</td>
     </tr>
   );
 };
+
+
 
 const JadwalPraktik = () => {
   const [bookings, setBookings] = useState<Schedule[]>([]);
@@ -153,14 +150,15 @@ const JadwalPraktik = () => {
                     time_end: item.time_end,
                   },
                   user: {
-                    userId: item.user_id,
-                    name: item.User.name,
-                    email: item.User.email,
-                    phone: item.User.phone,
-                    picture: item.User.picture,
-                    specialization: item.User.specialization,
+                    id: item.user_id,
+                    name: item.user.name,
+                    email: item.user.email,
+                    phone: item.user.phone,
+                    picture: item.user.picture,
+                    specialization: item.user.specialization,
                   },
                 }));
+                
 
               setBookings(filteredData);
             } else {

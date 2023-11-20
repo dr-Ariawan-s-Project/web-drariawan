@@ -47,6 +47,10 @@ const Navbar: FC<NavbarProps> = ({ page, type, profileData, menuSchedule }) => {
     });
   };
 
+  const handleSetting =()=>{
+    navigate('/admin/setting')
+  }
+
   return type === 'admin' ? (
     <nav className="bg-white shadow-md h-20 flex items-center">
       <div className="flex items-center">
@@ -78,7 +82,7 @@ const Navbar: FC<NavbarProps> = ({ page, type, profileData, menuSchedule }) => {
                 </li>
                 <li
                   className="cursor-pointer hover:bg-gray-100 px-4 py-2"
-                  onClick={() => handleLogout()}
+                  onClick={() => handleSetting()}
                 >
                   Setting
                 </li>

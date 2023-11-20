@@ -7,11 +7,10 @@ export const useUser = create<UserState>((set) => ({
   data: [],
   loading: false,
   error: null,
-  getUser: async (page: number, limit: number, token: string) => {
+  getUser: async (userId: number, token: string) => {
     set({ loading: true, error: null, data: [] });
     try {
-      const response = await axios.get('/v1/user', {
-        params: { page, limit },
+      const response = await axios.get(`https://drariawan.altapro.online/v1/user?id=${userId}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -24,7 +23,7 @@ export const useUser = create<UserState>((set) => ({
       });
     }
   },
-
+  
   postUser: async (data, token) => {
     set({ loading: true, error: null, data: [] });
     try {
@@ -43,10 +42,10 @@ export const useUser = create<UserState>((set) => ({
       throw error;
     }
   },
-  putUser: async (data, token) => {
+  putUser: async (id, data, token) => {
     set({ loading: true, error: null });
     try {
-      const response = await axios.put('/v1/user', data, {
+      const response = await axios.put(`/v1/user?id=${id}`, data, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -58,7 +57,8 @@ export const useUser = create<UserState>((set) => ({
       throw error;
     }
   },
-
+  
+  
   getList: async (page: number, limit: number, token: string) => {
     set({ loading: true, error: null, data: [] });
     try {

@@ -55,7 +55,7 @@ const LandingKuisioner = () => {
           </div>
           {(userRole === 'admin' || userRole === 'dokter') ? (
             <button
-              onClick={() => handleRedirect('/admin/list_kuisioner')}
+              onClick={() => handleRedirect('/admin/list/kuisioner')}
               className="text-health-blue-dark text-sm font-lato_regular border-none focus:outline-none flex items-center"
             >
               ke Halaman List Kuisioner
