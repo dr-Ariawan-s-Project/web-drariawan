@@ -42,7 +42,7 @@ const Navbar: FC<NavbarProps> = ({ page, type, profileData, menuSchedule }) => {
         Cookies.remove('token');
         Cookies.remove('status');
         Cookies.remove('patientName');
-        navigate('/auth/option/login');
+        navigate('/admin/login');
       }
     });
   };

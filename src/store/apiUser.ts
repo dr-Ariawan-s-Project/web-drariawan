@@ -81,18 +81,22 @@ export const useUser = create<UserState>((set) => ({
   }
 },
 
-  postDeactivate: async (data, token) => {
-    set({ loading: true, error: null });
-    try {
-      const response = await axios.post('/v1/user/deactivate', data, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      set({ data: response.data, loading: false });
-      return response.data;
-    } catch (error) {
-      set({ loading: false, error: 'error deactivate user' });
-    }
-  },
+postDeactivate: async (id, token) => {
+  set({ loading: true, error: null });
+  try {
+    const response = await axios.delete(`/v1/user/deactive?id=${id}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    console.log('Server response:', response);
+    set({ data: response.data, loading: false });
+    return response.data;
+  } catch (error:any) {
+    console.error('Error in postDeactivate: ', error.message);
+    set({ loading: false, error: 'error deactivate user' });
+  }
+},
+
+
 }));

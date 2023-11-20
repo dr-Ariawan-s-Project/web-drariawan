@@ -4,6 +4,7 @@ import {
   UserData,
   PatientDataProps,
   RoleData,
+  BookingDataProps,
 } from '../utils/component';
 
 import { Answer } from './data';
@@ -106,3 +107,5 @@ export type AppointmentState = {
   deleteBooking: (bookingId: string, token: string) => Promise<void>;
 };
 
+
+export type { RoleData };

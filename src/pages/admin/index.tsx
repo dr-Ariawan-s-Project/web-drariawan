@@ -28,8 +28,9 @@ const Admin = () => {
     allowedRoles: string[],
     userRole: string | undefined
   ) => {
-    return userRole ? allowedRoles.includes(userRole) : false;
+    return userRole ? allowedRoles.includes(userRole.toLowerCase()) : false;
   };
+  
 
   const getPage = useCallback(() => {
     if (location.pathname.includes('list_user')) {
@@ -56,15 +57,16 @@ const Admin = () => {
       navigate('/admin/login');
     } else if (
       data &&
-      !checkUserRole(['admin', 'dokter', 'suster'], userRole)
+      !checkUserRole(['superadmin', 'admin', 'dokter', 'suster'], userRole)
     ) {
       navigate('/admin/login');
     } else {
       getPage();
     }
   }, [getPage, location.pathname, navigate, token, data, userRole]);
+  
 
-  const hasAccess = checkUserRole(['admin', 'dokter', 'suster'], userRole);
+  const hasAccess = checkUserRole(['superadmin','admin', 'dokter', 'suster'], userRole);
 
   return (
     <section className="w-screen flex flex-col md:flex-row h-screen">

@@ -154,13 +154,13 @@ const Appointment = () => {
             ))
           ) : (
             <tr>
-              <td colSpan={8} className="text-center py-2">
-                {userRole === 'admin' ? (
-                  <p className='mt-20'>Anda tidak memiliki akses ke halaman ini.</p>
-                ) : (
-                  <p className='mt-20'>Belum ada Appointment untuk anda .</p>
-                )}
-              </td>
+             <td colSpan={5} className="text-center py-2">
+          {(userRole === 'admin' || userRole === 'superadmin') ? (
+           <p className="mt-20">Anda tidak memiliki akses ke halaman ini.</p>
+            ) : (
+            <p className="mt-20">Tidak ada jadwal praktik untuk user ini.</p>
+             )}
+          </td>
             </tr>
           )}
         </tbody>

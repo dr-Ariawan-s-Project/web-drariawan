@@ -50,7 +50,7 @@ const Sidebar = () => {
 
         <ul className="p-4  ">
         <li className="mb-2 ">
-            {hasAccess(['admin', 'dokter', 'suster']) && (
+            {hasAccess(['superadmin','admin', 'dokter', 'suster']) && (
               <button
                 onClick={() => navigateTo('/admin/')}
                 className={`text-health-blue-dark bg-white hover:bg-health-blue-dark hover:text-white text-sm font-lato_regular border-none focus:outline-none flex items-center ${

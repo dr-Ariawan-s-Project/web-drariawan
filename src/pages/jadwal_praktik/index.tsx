@@ -72,10 +72,11 @@ const JadwalPraktik = () => {
           return;
         }
 
-        if (userRole === 'admin') {
+        if (userRole === 'admin' || userRole === 'superadmin') {
           console.log('Anda tidak memiliki akses ke halaman ini.');
           return;
         }
+        
 
         if (userRole === 'suster') {
           try {
@@ -201,13 +202,14 @@ const JadwalPraktik = () => {
             ))
           ) : (
             <tr>
-              <td colSpan={5} className="text-center py-2">
-                {userRole === 'admin' ? (
-                  <p className="mt-20">Anda tidak memiliki akses ke halaman ini.</p>
-                ) : (
-                  <p className="mt-20">Tidak ada jadwal praktik untuk user ini.</p>
-                )}
-              </td>
+      <td colSpan={5} className="text-center py-2">
+  {(userRole === 'admin' || userRole === 'superadmin') ? (
+    <p className="mt-20">Anda tidak memiliki akses ke halaman ini.</p>
+  ) : (
+    <p className="mt-20">Tidak ada jadwal praktik untuk user ini.</p>
+  )}
+</td>
+
             </tr>
           )}
         </tbody>

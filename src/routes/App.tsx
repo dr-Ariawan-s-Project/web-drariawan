@@ -56,7 +56,7 @@ const App = () => {
             element={<DetailResponden />}
             path="detail_responden/:attempt_id"
           />
-          <Route element={<Appointment />} path="appoinment" />
+          <Route element={<Appointment />} path="appointment" />
         </Route>
       </Routes>
     </BrowserRouter>
