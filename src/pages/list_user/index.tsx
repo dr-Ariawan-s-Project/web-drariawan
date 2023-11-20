@@ -147,7 +147,7 @@ const ListUser = () => {
   return (
     <section className="min-h-screen flex flex-col justify-center items-center">
     <div className="overflow-x-auto mx-auto w-full mt-2 sm:mt-20">
-      <div className="relative overflow-x-auto h-[80vh] overflow-y-scroll">
+      <div className="relative overflow-x-auto h-[60vh] overflow-y-scroll">
         <table className="w-full table-auto bg-white">
           <thead className="text-health-blue-dark font-lato_regular">
             <tr>
@@ -175,7 +175,7 @@ const ListUser = () => {
                   {userRole === 'admin' || userRole === 'superadmin' ? (
                     <p className="mt-20">Tidak ada data tersedia.</p>
                   ) : (
-                    <p className="mt-20">Tidak ada jadwal praktik untuk user ini.</p>
+                    <p className="mt-20">Tidak ada data lain tersedia.</p>
                   )}
                 </td>
               </tr>

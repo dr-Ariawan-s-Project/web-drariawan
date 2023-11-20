@@ -30,14 +30,13 @@ const TableRow: React.FC<{ index: number; data: Schedule }> = ({ index, data }) 
 
   const userRole = Cookies.get('userRole');
 
-  let doctorNameCell, bookingDateCell, healthCareAddressCell;
+  let doctorNameCell, bookingDateCell;
 
   if (userRole === 'suster') {
-    doctorNameCell = data.user && data.user.name ? <td className="p-2">{data.user.name}</td> : null;
+    doctorNameCell = <td className="p-2">{data.user.name}</td>;
     bookingDateCell = <td className="p-2">{data.day}</td>;
   } else {
     bookingDateCell = <td className="p-2">{data.schedule.day}</td>;
-    healthCareAddressCell = <td className="p-2">{data.health_care_address}</td>;
   }
 
   return (
@@ -45,11 +44,18 @@ const TableRow: React.FC<{ index: number; data: Schedule }> = ({ index, data }) 
       <td className="p-2">{index + 1}</td>
       {doctorNameCell}
       {bookingDateCell}
-      {healthCareAddressCell}
-      <td className="p-2">{`${formatTime(data.time_start)} - ${formatTime(data.time_end)}`}</td>
+      <td className="p-2">
+        {userRole === 'suster' ? data.health_care_address : data.schedule.health_care_address}
+      </td>
+      <td className="p-2">
+        {`${formatTime(
+          userRole === 'suster' ? data.time_start : data.schedule.time_start
+        )} - ${formatTime(userRole === 'suster' ? data.time_end : data.schedule.time_end)}`}
+      </td>
     </tr>
   );
 };
+
 
 
 
@@ -183,7 +189,7 @@ const JadwalPraktik = () => {
         <thead className="text-health-blue-dark font-lato_regular">
           <tr>
             <th className="border-b p-3 text-center">No</th>
-            <th className="border-b p-3 text-center">Appointment Day</th>
+            <th className="border-b p-3 text-center">Schedule </th>
             {userRole === 'suster' && <th className="border-b p-3 text-center">Doctor Name</th>}
             <th className="border-b p-3 text-center">Health Care Address</th>
             <th className="border-b p-3 text-center">Time</th>
