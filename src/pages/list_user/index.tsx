@@ -5,6 +5,7 @@ import { TrashIcon } from '@heroicons/react/24/outline';
 import { useUser } from '../../store/apiUser';
 import { UserState } from '../../utils/api';
 import { useSwalDeleteData } from '../../utils/swal/useSwalData';
+import Tooltip from '../../components/Tooltip';
 
 const TableRow: React.FC<{
   data: UserState['data'][0];
@@ -52,13 +53,22 @@ const TableRow: React.FC<{
       <td className="p-2">{data.role}</td>
       <td className="p-2">
         <div className="flex items-center justify-center gap-x-2">
+        <Tooltip
+            content={
+              userRole === 'admin'
+                ? 'Click to delete'
+                : 'Unauthorized access to delete patient data!'
+            }
+            position="left"
+          >
           <TrashIcon
             className={`cursor-pointer hover:text-red-500 ${deleteIconStyle}`}
             width={20}
             height={20}
             onClick={handleDeleteClick}
           />
-      
+        </Tooltip>
+
         </div>
       </td>
       {isDeleteModalOpen && (

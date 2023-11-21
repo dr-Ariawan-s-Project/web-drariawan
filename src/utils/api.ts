@@ -89,7 +89,7 @@ export type ScheduleState = {
     scheduleData: ScheduleData,
     token: string
   ) => Promise<void>;
-  deleteSchedule: (scheduleId: number, token: string) => Promise<void>;
+  deleteSchedule: (id: string, token: string) => Promise<any>; 
 };
 
 export type AppointmentState = {

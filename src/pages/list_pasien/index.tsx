@@ -256,8 +256,7 @@ const ListPasien = () => {
       {isEditModalOpen && (
         <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center bg-gray-900 bg-opacity-50 z-50">
           <div className="w-full max-w-xs">
-            <form
-              className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4"
+            <form className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4"
               onSubmit={(e) => {
                 e.preventDefault();
                 handleEditSubmit(editingPatient);

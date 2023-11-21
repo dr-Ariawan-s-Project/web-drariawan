@@ -126,7 +126,7 @@ const Setting = () => {
               <div className="items-center mt-8 sm:mt-14 text-health-blue-reguler">
                 <div className="flex flex-col items-center w-full mb-2 space-x-0 space-y-2 sm:flex-row sm:space-x-4 sm:space-y-0 sm:mb-6">
                   <div className="w-full">
-                    <label htmlFor="first_name" className="block mb-2 text-sm  font-lato_bold text-indigo-900 dark:text-white">
+                    <label className="block mb-2 text-sm  font-lato_bold text-indigo-900 dark:text-white">
                       Name
                     </label>
                     <input
