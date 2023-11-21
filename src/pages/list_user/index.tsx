@@ -57,7 +57,7 @@ const TableRow: React.FC<{
             content={
               userRole === 'admin'
                 ? 'Click to delete'
-                : 'Unauthorized access to delete patient data!'
+                : 'Unauthorized access to delete user data!'
             }
             position="left"
           >
@@ -123,7 +123,7 @@ const ListUser = () => {
         useSwalDeleteData('failed', error.message);
       }
     } else {
-      console.log('Unauthorized access to delete patient data.');
+      console.log('Unauthorized access to delete user data.');
     }
   };
 

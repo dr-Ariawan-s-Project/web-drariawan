@@ -240,7 +240,7 @@ const ListPasien = () => {
     if (
       !token ||
       !userRole ||
-      !['admin', 'dokter', 'suster'].includes(userRole)
+      !['superadmin', 'admin', 'dokter', 'suster'].includes(userRole)
     ) {
       console.log(
         'Akses anda ditolak. Anda tidak memiliki akses ke halaman ini.'
