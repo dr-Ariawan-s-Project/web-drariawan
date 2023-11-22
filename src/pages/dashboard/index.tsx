@@ -56,12 +56,12 @@ const Dashboard = () => {
       </div>
 
       <div className="flex flex-col md:flex-row gap-4">
-      {(userRole === 'admin' || userRole === 'dokter' || userRole === 'suster') && (
+      {( userRole === 'admin' || userRole === 'dokter' || userRole === 'suster') && (
           <div className="md:w-1/2">
             <ListResponden />
           </div>
         )}
-  {(userRole === 'admin' || userRole === 'dokter' || userRole === 'suster') && (
+  {( userRole === 'admin' || userRole === 'dokter' || userRole === 'suster') && (
           <div className="md:w-1/2">
             <ListAppoinment />
           </div>

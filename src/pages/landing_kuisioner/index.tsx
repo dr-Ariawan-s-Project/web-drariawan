@@ -18,7 +18,7 @@ const LandingKuisioner = () => {
       console.log('Akses ditolak. Token atau userRole tidak tersedia.');
       navigate('/admin/login');
     } else {
-      if (!['admin', 'dokter', 'suster'].includes(userRole)) {
+      if (!['superadmin','admin', 'dokter', 'suster'].includes(userRole)) {
         console.log('Akses ditolak. Anda tidak memiliki akses ke halaman ini.');
         navigate('/admin/login');
       }
@@ -55,7 +55,7 @@ const LandingKuisioner = () => {
           </div>
           {(userRole === 'admin' || userRole === 'dokter') ? (
             <button
-              onClick={() => handleRedirect('/admin/list_kuisioner')}
+              onClick={() => handleRedirect('/admin/list/kuisioner')}
               className="text-health-blue-dark text-sm font-lato_regular border-none focus:outline-none flex items-center"
             >
               ke Halaman List Kuisioner

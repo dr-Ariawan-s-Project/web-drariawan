@@ -17,7 +17,7 @@ interface Schedule {
   day: string;
   time_start: string;
   time_end: string;
-  User: User;
+  user: User;
 }
 
 interface Patient {
@@ -35,8 +35,8 @@ interface Booking {
   created_at: string;
   updated_at: string;
   deleted_at: null | string;
-  Patient: Patient;
-  Schedule: Schedule;
+  patient: Patient;
+  schedule: Schedule;
 }
 
 const TableRow: React.FC<{ index: number; data: Booking }> = ({ index, data }) => {
@@ -50,12 +50,12 @@ const TableRow: React.FC<{ index: number; data: Booking }> = ({ index, data }) =
   return (
     <tr className="border-b text-center">
       <td className="p-2">{index + 1}</td>
-      <td className="p-2">{data.Schedule.User.name}</td>
-      <td className="p-2">{data.Patient.name}</td>
+      <td className="p-2">{data.schedule.user.name}</td>
+      <td className="p-2">{data.patient.name}</td>
       <td className="p-2">{formatDate(data.booking_date)}</td>
-      <td className="p-2">{data.Schedule.day}</td>
-      <td className="p-2">{`${data.Schedule.time_start} - ${data.Schedule.time_end}`}</td>
-      <td className="p-2">{data.Schedule.health_care_address}</td>
+      <td className="p-2">{data.schedule.day}</td>
+      <td className="p-2">{`${data.schedule.time_start} - ${data.schedule.time_end}`}</td>
+      <td className="p-2">{data.schedule.health_care_address}</td>
     </tr>
   );
 };
@@ -154,11 +154,11 @@ const Appointment = () => {
             ))
           ) : (
             <tr>
-              <td colSpan={8} className="text-center py-2">
-                {userRole === 'admin' ? (
-                  <p className='mt-20'>Anda tidak memiliki akses ke halaman ini.</p>
+              <td colSpan={5} className="text-center py-2">
+                {(userRole === 'admin' || userRole === 'superadmin') ? (
+                  <p className="mt-20 ">Anda tidak memiliki akses ke halaman ini.</p>
                 ) : (
-                  <p className='mt-20'>Belum ada Appointment untuk anda .</p>
+                  <p className="mt-20">Tidak ada Appointment untuk user ini.</p>
                 )}
               </td>
             </tr>

@@ -4,6 +4,7 @@ import {
   UserData,
   PatientDataProps,
   RoleData,
+  BookingDataProps,
 } from '../utils/component';
 
 import { Answer } from './data';
@@ -28,15 +29,14 @@ export type UserState = {
   data: any[];
   loading: boolean;
   error: string | null;
-  getUser: (page: number, limit: number, token: string) => Promise<void>;
-  getList: (page: number, limit: number, token: string) => Promise<void>;
+  getUser: (userId: number, token: string) => Promise<void>;   getList: (page: number, limit: number, token: string) => Promise<void>;
   postUser: (
     userData: any,
     selectedUser: { id: any; name: any },
     token: string
   ) => Promise<void>;
   postDeactivate: (data: any, token: string) => Promise<void>;
-  putUser: (userData: any, token: string) => Promise<void>;
+  putUser: (id: number, userData: any, token: string) => Promise<void>;
 };
 
 export type AuthState = {
@@ -89,7 +89,7 @@ export type ScheduleState = {
     scheduleData: ScheduleData,
     token: string
   ) => Promise<void>;
-  deleteSchedule: (scheduleId: number, token: string) => Promise<void>;
+  deleteSchedule: (id: string, token: string) => Promise<any>; 
 };
 
 export type AppointmentState = {
@@ -106,3 +106,5 @@ export type AppointmentState = {
   deleteBooking: (bookingId: string, token: string) => Promise<void>;
 };
 
+
+export type { RoleData };

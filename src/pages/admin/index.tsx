@@ -14,6 +14,7 @@ import LandingKuisioner from '../landing_kuisioner';
 import ListKuisioner from '../list_kuisioner';
 import Responden from '../responden';
 import Appointment from '../appointment';
+import Setting from '../setting_admin';
 
 const Admin = () => {
   const location = useLocation();
@@ -28,24 +29,27 @@ const Admin = () => {
     allowedRoles: string[],
     userRole: string | undefined
   ) => {
-    return userRole ? allowedRoles.includes(userRole) : false;
+    return userRole ? allowedRoles.includes(userRole.toLowerCase()) : false;
   };
+  
 
   const getPage = useCallback(() => {
-    if (location.pathname.includes('list_user')) {
+    if (location.pathname.includes('list/user')) {
       setPage('List User');
-    } else if (location.pathname.includes('landing_kuisioner')) {
+    } else if (location.pathname.includes('landing/kuisioner')) {
       setPage('Questioner');
-    } else if (location.pathname.includes('list_pasien')) {
+    } else if (location.pathname.includes('list/pasien')) {
       setPage('List Patient');
-    } else if (location.pathname.includes('jadwal_praktik')) {
+    } else if (location.pathname.includes('jadwal/praktik')) {
       setPage('Jadwal Praktik');
-    } else if (location.pathname.includes('list_kuisioner')) {
+    } else if (location.pathname.includes('list/kuisioner')) {
       setPage('List Questioner');
     } else if (location.pathname.includes('responden')) {
       setPage('List Responden');
     } else if (location.pathname.includes('appointment')) {
       setPage('List Appointment');
+    } else if (location.pathname.includes('setting')) {
+      setPage('Setting Profile');
     } else {
       setPage('Dashboard Admin');
     }
@@ -56,15 +60,16 @@ const Admin = () => {
       navigate('/admin/login');
     } else if (
       data &&
-      !checkUserRole(['admin', 'dokter', 'suster'], userRole)
+      !checkUserRole(['superadmin', 'admin', 'dokter', 'suster'], userRole)
     ) {
       navigate('/admin/login');
     } else {
       getPage();
     }
   }, [getPage, location.pathname, navigate, token, data, userRole]);
+  
 
-  const hasAccess = checkUserRole(['admin', 'dokter', 'suster'], userRole);
+  const hasAccess = checkUserRole(['superadmin','admin', 'dokter', 'suster'], userRole);
 
   return (
     <section className="w-screen flex flex-col md:flex-row h-screen">
@@ -80,20 +85,22 @@ const Admin = () => {
         <div className="my-auto p-4 mt-20 md:mt-0 bg-gray-50 w-full">
           {(() => {
             switch (true) {
-              case location.pathname.includes('list_user'):
+              case location.pathname.includes('list/user'):
                 return <ListUser />;
-              case location.pathname.includes('landing_kuisioner'):
+              case location.pathname.includes('landing/kuisioner'):
                 return <LandingKuisioner />;
-              case location.pathname.includes('list_kuisioner'):
+              case location.pathname.includes('list/kuisioner'):
                 return <ListKuisioner />;
               case location.pathname.includes('responden'):
                 return <Responden />;
-              case location.pathname.includes('list_pasien'):
+              case location.pathname.includes('list/pasien'):
                 return <ListPasien />;
-              case location.pathname.includes('jadwal_praktik'):
+              case location.pathname.includes('jadwal/praktik'):
                 return <JadwalPraktik />;
               case location.pathname.includes('appointment'):
-                return <Appointment />;
+                  return <Appointment />;
+              case location.pathname.includes('setting'):
+                  return <Setting />;
               default:
                 return <Dashboard />;
             }

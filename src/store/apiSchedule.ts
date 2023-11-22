@@ -96,47 +96,21 @@ export const useSchedule = create<ScheduleState>((set) => ({
     }
   },
 
-  deleteSchedule: async (scheduleId: number, token: string) => {
-    if (!token) {
-      set({
-        loading: false,
-        error: 'Token is missing. Unable to delete Schedule data.',
-      });
-      return;
-    }
-
-    set((prevState) => {
-      return {
-        ...prevState,
-        loading: true,
-        error: null,
-      };
-    });
+  deleteSchedule: async (id: string, token: string) => {
+    set({ loading: true, error: null });
     try {
-      await axios.post(`/v1/schedule/delete?id=${scheduleId}`, null, {
+      const response = await axios.delete(`/v1/user/deactive?id=${id}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
-      set((prevState) => {
-        const updatedData = prevState.data.filter(
-          (schedule) => schedule.id !== scheduleId
-        );
-        return {
-          ...prevState,
-          data: updatedData,
-          loading: false,
-          error: null,
-        };
-      });
+      console.log('Server response:', response);
+      set({ data: response.data, loading: false });
+      return response.data;
     } catch (error: any) {
-      set((prevState) => {
-        return {
-          ...prevState,
-          loading: false,
-          error: `Failed to delete schedule data: ${error.message}`,
-        };
-      });
+      console.error('Error in postDeactivate: ', error.message);
+      set({ loading: false, error: 'error deactivate user' });
     }
   },
+  
 }));

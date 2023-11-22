@@ -50,7 +50,7 @@ const Sidebar = () => {
 
         <ul className="p-4  ">
         <li className="mb-2 ">
-            {hasAccess(['admin', 'dokter', 'suster']) && (
+            {hasAccess(['superadmin','admin', 'dokter', 'suster']) && (
               <button
                 onClick={() => navigateTo('/admin/')}
                 className={`text-health-blue-dark bg-white hover:bg-health-blue-dark hover:text-white text-sm font-lato_regular border-none focus:outline-none flex items-center ${
@@ -69,7 +69,7 @@ const Sidebar = () => {
 
           <li className="mb-2">
             <button
-              onClick={() => navigateTo('/admin/landing_kuisioner')}
+              onClick={() => navigateTo('/admin/landing/kuisioner')}
               className={`text-health-blue-dark bg-white hover:bg-health-blue-dark hover:text-white text-sm active:bg-health-blue-dark font-lato_regular border-none focus:outline-none flex items-center ${
                 location.pathname === '/admin/landing_kuisioner' ? 'active' : ''
               }`}            >
@@ -79,7 +79,7 @@ const Sidebar = () => {
           </li>
           <li className="mb-2">
             <button
-              onClick={() => navigateTo('/admin/list_pasien')}
+              onClick={() => navigateTo('/admin/list/pasien')}
               className="text-health-blue-dark bg-white hover:bg-health-blue-dark hover:text-white  text-sm font-lato_regular border-none focus:outline-none flex items-center"
             >
               <Icon
@@ -92,7 +92,7 @@ const Sidebar = () => {
           </li>
           <li className="mb-2 ">
             <button
-              onClick={() => navigateTo('/admin/list_user')}
+              onClick={() => navigateTo('/admin/list/user')}
               className="text-health-blue-dark bg-white hover:bg-health-blue-dark hover:text-white  text-sm font-lato_regular border-none focus:outline-none flex items-center "
             >
               <Icon icon="heroicons:user" width="24" height="24" />
@@ -101,7 +101,7 @@ const Sidebar = () => {
           </li>
           <li className="mb-2">
             <button
-              onClick={() => navigateTo('/admin/jadwal_praktik')}
+              onClick={() => navigateTo('/admin/jadwal/praktik')}
               className="text-health-blue-dark bg-white hover:bg-health-blue-dark hover:text-white  text-sm font-lato_regular border-none focus:outline-none flex items-center"
             >
               <Icon icon="teenyicons:appointments-outline" width="24" height="24" />{' '}
