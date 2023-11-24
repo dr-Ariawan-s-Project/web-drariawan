@@ -23,7 +23,9 @@ export const useDashboard = create<DashboardState>((set) => ({
           },
         }
       );
+
       set({ data: response.data.data, loading: false });
+
     } catch (error) {
       console.error('Error fetching Dashboard data:', error);
       set({
@@ -43,14 +45,15 @@ export const useDashboard = create<DashboardState>((set) => ({
           },
         }
       );
-      set({ data: response.data.data, loading: false });
+
+      set((state) => ({ ...state, data: { ...state.data, chartData: response.data.data }, loading: false }));
     } catch (error) {
-      console.error('Error fetching Dashboard data:', error);
+      console.error('Error fetching Chart Data:', error);
       set({
         loading: false,
-        error: 'Terjadi kesalahan saat mengambil data Dashboard',
+        error: 'Terjadi kesalahan saat mengambil data Chart',
       });
     }
   },
-  
+
 }));

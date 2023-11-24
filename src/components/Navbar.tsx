@@ -3,7 +3,6 @@ import { useNavigate } from 'react-router-dom';
 import moment from 'moment';
 import Cookies from 'js-cookie';
 import { UserIcon } from '@heroicons/react/24/outline';
-import { useAuth } from '../store/apiAuth';
 import { useSwalAuth } from '../utils/swal/useSwalAuth';
 
 interface NavbarProps {
@@ -20,7 +19,6 @@ const Navbar: FC<NavbarProps> = ({ page, type, profileData, menuSchedule }) => {
   const userName = Cookies.get('userName');
   const userRole = Cookies.get('userRole');
 
-  const { data } = useAuth();
 
   const toggleDropdownAdmin = () => {
     setIsDropdownOpen(!isDropdownOpen);
@@ -66,25 +64,26 @@ const Navbar: FC<NavbarProps> = ({ page, type, profileData, menuSchedule }) => {
           </p>
         </div>
         <div className="px-4 py-3">
-          <span className="block font-lato_regular px-6  md:text-sm text-md text-start">Halo, {userRole} !</span>
-          <span className="block font-lato_regular px-6  md:text-sm text-lg text-center">  {userName}</span>
+          <span className="block font-lato_regular px-6  md:text-sm sm:text-xs text-md text-start">Halo, {userRole} !</span>
+          <span className="block font-lato_regular px-6  md:text-sm sm:text-xs text-lg text-center">  {userName}</span>
         </div>
         <div className="cursor-pointer ml-4" onClick={toggleDropdownAdmin}>
           <UserIcon className="h-6 w-6 md:h-8 md:w-8" />
           {isDropdownOpen ? (
             <div className="absolute right-0 mt-2 bg-white border border-gray-300 shadow-sm w-40">
               <ul className="py-2">
-                <li
-                  className="cursor-pointer hover:bg-gray-100 px-4 py-2"
-                  onClick={() => handleLogout()}
-                >
-                  Logout
-                </li>
+               
                 <li
                   className="cursor-pointer hover:bg-gray-100 px-4 py-2"
                   onClick={() => handleSetting()}
                 >
                   Setting
+                </li>
+                <li
+                  className="cursor-pointer hover:bg-gray-100 px-4 py-2"
+                  onClick={() => handleLogout()}
+                >
+                  Logout
                 </li>
               </ul>
             </div>

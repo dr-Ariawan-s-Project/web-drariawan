@@ -1,11 +1,27 @@
-import  { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import Chart from 'chart.js/auto';
 
 interface BarChartProps {
   data: { month: string; count: number }[];
+  label?: string;
+  backgroundColor?: string;
+  borderColor?: string;
+  borderWidth?: number;
+  yAxisLabel?: string;
+  height?: number;
+  width?: number;
 }
 
-const BarChart: React.FC<BarChartProps> = ({ data }) => {
+const BarChart: React.FC<BarChartProps> = ({
+  data,
+  label = 'Count',
+  backgroundColor = 'rgba(75, 192, 192, 0.2)',
+  borderColor = 'rgba(75, 192, 192, 1)',
+  borderWidth = 1,
+  yAxisLabel = 'Count',
+  height = 200,
+  width = 400,
+}) => {
   const [chart, setChart] = useState<Chart | null>(null);
 
   useEffect(() => {
@@ -22,11 +38,11 @@ const BarChart: React.FC<BarChartProps> = ({ data }) => {
             labels,
             datasets: [
               {
-                label: 'Count',
+                label,
                 data: counts,
-                backgroundColor: 'rgba(75, 192, 192, 0.2)',
-                borderColor: 'rgba(75, 192, 192, 1)',
-                borderWidth: 1,
+                backgroundColor,
+                borderColor,
+                borderWidth,
               },
             ],
           },
@@ -34,8 +50,14 @@ const BarChart: React.FC<BarChartProps> = ({ data }) => {
             scales: {
               y: {
                 beginAtZero: true,
+                title: {
+                  display: true,
+                  text: yAxisLabel,
+                },
               },
             },
+            responsive: true,
+            maintainAspectRatio: false, 
           },
         });
 
@@ -46,9 +68,9 @@ const BarChart: React.FC<BarChartProps> = ({ data }) => {
         chart.update();
       }
     }
-  }, [data, chart]);
+  }, [data, chart, label, backgroundColor, borderColor, borderWidth, yAxisLabel]);
 
-  return <canvas id="barChart" width="400" height="200"></canvas>;
+  return <canvas id="barChart" width={width} height={height}></canvas>;
 };
 
 export default BarChart;

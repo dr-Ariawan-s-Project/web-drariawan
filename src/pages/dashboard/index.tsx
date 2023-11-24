@@ -18,9 +18,7 @@ const Dashboard = () => {
   if (error) {
     return <p>Error: {error}</p>;
   }
-  console.log("data:", data);
-  console.log("userRole:", userRole);
-
+ 
   return (
     <div className="mt-20">
       <div className="flex ">
@@ -55,13 +53,23 @@ const Dashboard = () => {
         </div>
       </div>
 
-      <div className="flex flex-col md:flex-row gap-4">
-        {(userRole === 'admin' || userRole === 'dokter' || userRole === 'suster') && (
-          <div className="md:w-1/2">
-            <BarChart data={data.chartData} />
+      <div className="flex flex-col md:flex-row gap-4 mt-20 dark:bg-slate-850 rounded-2xl bg-clip-border">
+      {(userRole === 'admin' || userRole === 'dokter' || userRole === 'suster') && (
+    <div className="md:max-w-full bg-white shadow-xl rounded-xl bg-clip-border p-4">
+      <BarChart
+        data={data.chartData}
+        label="Responden Tiap Bulan" 
+        backgroundColor="rgba(75, 192, 192, 0.2)" 
+        borderColor="rgba(75, 192, 192, 1)"  
+        borderWidth={1}  
+        yAxisLabel="Jumlah Responden"  
+        height={300}  
+        width={600}  
+      />
           </div>
         )}
       </div>
+
     </div>
   );
 };
