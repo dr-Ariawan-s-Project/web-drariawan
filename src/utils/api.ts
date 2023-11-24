@@ -1,7 +1,6 @@
 
 import {
   ScheduleData,
-  UserData,
   PatientDataProps,
   RoleData,
   BookingDataProps,
@@ -69,12 +68,13 @@ export type DashboardState = {
     questioner_all: number;
     questioner_need_assess: number;
     questioner_this_month: number;
+    chartData: { month: string; count: number }[];
   };
   loading: boolean;
   error: string | null;
   getDashboard: (token: string | undefined) => Promise<void>;
+  getChartData: (token: string | undefined) => Promise<void>; // Add this function
 };
-
 export type ScheduleState = {
   data: any[];
   loading: boolean;

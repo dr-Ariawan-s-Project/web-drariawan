@@ -1,23 +1,19 @@
 import Cookies from 'js-cookie';
 
 import { useState, useEffect } from 'react';
-import { TrashIcon, PencilIcon } from '@heroicons/react/24/outline';
+import { TrashIcon } from '@heroicons/react/24/outline';
 import { useSwalDeleteData } from '../../utils/swal/useSwalData';
-import { useSwalUpdate } from '../../utils/swal/useSwalData';
 import Tooltip from '../../components/Tooltip';
 import { usePatient } from '../../store/apiPatient';
 import { PatientState } from '../../utils/api';
-import SearchBar from '../../components/SearchBar';
-import { useAuth } from '../../store/apiAuth';
 
 const TableRow: React.FC<{
   data: PatientState['data'][0];
   index: number;
   onDelete: (id: string) => void;
-  onEdit: (data: PatientState['data'][0]) => void;
-}> = ({ data, index, onDelete, onEdit }) => {
-  const { data: authData } = useAuth();
-  const userRole = authData?.role;
+}> = ({ data, index, onDelete }) => {
+
+  const userRole = Cookies.get('userRole');
 
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [idToDelete, setIdToDelete] = useState<string>('');
@@ -40,17 +36,8 @@ const TableRow: React.FC<{
     setIsDeleteModalOpen(false);
   };
 
-  const handleEditClick = () => {
-    if (userRole === 'admin') {
-      onEdit(data);
-    } else {
-      console.log('Unauthorized access to edit patient data.');
-    }
-  };
 
   const deleteIconStyle =
-    userRole === 'admin' ? '' : 'text-gray-400 cursor-not-allowed';
-  const editIconStyle =
     userRole === 'admin' ? '' : 'text-gray-400 cursor-not-allowed';
 
   return (
@@ -63,34 +50,20 @@ const TableRow: React.FC<{
         <div className="flex items-center justify-center gap-x-2">
         <Tooltip
             content={
-              userRole === 'admin'
+              userRole === 'superadmin' || userRole === 'admin'
                 ? 'Click to delete'
                 : 'Unauthorized access to delete patient data!'
             }
-            position="top"
+            position="left"
           >
             <TrashIcon
-              className={`cursor-pointer hover:text-red-500 ${deleteIconStyle}`}
+              className={`cursor-pointer hover:text-red-800 ${deleteIconStyle}`}
               width={20}
               height={20}
               onClick={handleDeleteClick}
             />
           </Tooltip>
-          <Tooltip
-            content={
-              userRole === 'admin'
-                ? 'Click to edit'
-                : 'Unauthorized access to edit patient data!'
-            }
-            position="top"
-          >
-            <PencilIcon
-              className={`cursor-pointer hover:text-health-blue-light mx-2 ${editIconStyle}`}
-              width={20}
-              height={20}
-              onClick={handleEditClick}
-            />
-          </Tooltip>
+   
         </div>
       </td>
       {isDeleteModalOpen && (
@@ -124,21 +97,7 @@ const ListPasien = () => {
 
   const [page, setPage] = useState<number>(1);
   const [startNumber, setStartNumber] = useState<number>(1);
-  const {
-    data: patientData,
-    getPatient,
-    deletePatient,
-    putPatient,
-    getPatientById,
-  } = usePatient() as any;
-
-  const [editingPatient, setEditingPatient] = useState<any>(null);
-  const [isEditModalOpen, setEditModalOpen] = useState(false);
-  const [searchTerm, setSearchTerm] = useState('');
-
-  const [searchedPatientData, setSearchedPatientData] =
-    useState<PatientState | null>(null);
-  const patientDataToShow = searchedPatientData || patientData;
+  const {data: patientData,getPatient,deletePatient} = usePatient() as any;
 
   const handleDeletePatient = async (id: string) => {
     const token = Cookies.get('token');
@@ -150,7 +109,10 @@ const ListPasien = () => {
       try {
         await deletePatient(id, token);
         useSwalDeleteData('success');
-        setPage(1);
+         setPage(1);
+        setTimeout(() => {
+          window.location.reload();
+        }, 1000); 
       } catch (error: any) {
         console.error('Failed to delete data: ', error);
         useSwalDeleteData('failed', error.message);
@@ -166,75 +128,6 @@ const ListPasien = () => {
     getPatient(nextPage, 10, token);
   };
 
-  const handleSearch = async () => {
-    if (searchTerm.trim() !== '') {
-      try {
-        const result = await getPatientById(searchTerm);
-        if (result && result.data) {
-          setSearchedPatientData(result.data);
-        } else {
-          setSearchedPatientData(null);
-        }
-      } catch (error) {
-        console.error('Error searching for patient:', error);
-        setSearchedPatientData(null);
-      }
-    } else {
-      setSearchedPatientData(null);
-    }
-  };
-
-  const handleEditPatient = async (patient: any) => {
-    if (!token) {
-      console.error('Token not found. User may not be authenticated.');
-      return;
-    }
-    if (userRole === 'admin') {
-      try {
-        const response = await putPatient(patient.id, patient, token);
-        if (response.status === 'success') {
-          useSwalUpdate('success');
-          setEditModalOpen(false);
-          getPatient(page, 10, token);
-        } else {
-          console.error('Failed to edit patient data:', response.message);
-          useSwalUpdate('failed', response.message);
-        }
-      } catch (error: any) {
-        console.error('Failed to edit patient data:', error);
-        useSwalUpdate('failed', error.message);
-      }
-    } else {
-      console.log('Unauthorized access to edit patient data.');
-    }
-  };
-
-  const handleEditSubmit = async (updatedPatient: any) => {
-    try {
-      const token = Cookies.get('token');
-      if (!token) {
-        console.error('Token not found. User may not be authenticated.');
-        return;
-      }
-      const response = await putPatient(
-        updatedPatient.id,
-        updatedPatient,
-        token
-      );
-
-      if (response.status === 'success') {
-        useSwalUpdate('success');
-        setEditModalOpen(false);
-        getPatient(page, 10, token);
-      } else {
-        console.error('Failed to edit patient data:', response.message);
-        useSwalUpdate('failed', response.message);
-      }
-    } catch (error: any) {
-      console.error('Failed to edit patient data:', error);
-      useSwalUpdate('failed', error.message);
-    }
-  };
 
   useEffect(() => {
     if (
@@ -253,102 +146,9 @@ const ListPasien = () => {
 
   return (
     <section className="min-h-screen flex flex-col justify-center items-center">
-      {isEditModalOpen && (
-        <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center bg-gray-900 bg-opacity-50 z-50">
-          <div className="w-full max-w-xs">
-            <form className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4"
-              onSubmit={(e) => {
-                e.preventDefault();
-                handleEditSubmit(editingPatient);
-              }}
-            >
-              <div className="mb-4">
-                <label
-                  className="block text-gray-500 text-sm font-thin mb-2"
-                  htmlFor="name"
-                >
-                  Name
-                </label>
-                <input
-                  className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                  type="text"
-                  name="name"
-                  value={editingPatient?.name || ''}
-                  onChange={(e) =>
-                    setEditingPatient({
-                      ...editingPatient,
-                      name: e.target.value,
-                    })
-                  }
-                  placeholder="Nama"
-                />
-                <label
-                  className="block text-gray-500 text-sm font-thin my-2"
-                  htmlFor="Email"
-                >
-                  Email
-                </label>
-                <input
-                  className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                  type="text"
-                  name="email"
-                  value={editingPatient?.email || ''}
-                  onChange={(e) =>
-                    setEditingPatient({
-                      ...editingPatient,
-                      email: e.target.value,
-                    })
-                  }
-                  placeholder="Email"
-                />
-                <label
-                  className="block text-gray-500 text-sm font-thin my-2"
-                  htmlFor="Phone"
-                >
-                  Phone
-                </label>
-                <input
-                  className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                  type="text"
-                  name="phone"
-                  value={editingPatient?.phone || ''}
-                  onChange={(e) =>
-                    setEditingPatient({
-                      ...editingPatient,
-                      phone: e.target.value,
-                    })
-                  }
-                  placeholder="Nomor Telepon"
-                />
-
-                <div className=" flex justify-end mt-5">
-                  <button
-                    type="submit"
-                    className="bg-blue-500 text-white px-4 py-2 mr-2 rounded"
-                  >
-                    Simpan
-                  </button>
-                  <button
-                    type="button"
-                    className="bg-gray-300 px-4 py-2 rounded"
-                    onClick={() => setEditModalOpen(false)}
-                  >
-                    Batal
-                  </button>
-                </div>
-              </div>
-            </form>
-          </div>
-        </div>
-      )}
+     
       <div className="overflow-x-auto mx-auto w-full mt-2 sm:mt-20">
-        <div className="relative overflow-x-auto h-[80vh] overflow-y-scroll">
-          <SearchBar
-            onSearch={handleSearch}
-            searchTerm={searchTerm}
-            setSearchTerm={setSearchTerm}
-          />
-
+        <div className="relative overflow-x-auto h-[60vh] overflow-y-scroll">
           <table className="w-full table-auto bg-white">
             <thead className="  text-health-blue-dark font-lato_regular  ">
               <tr>
@@ -360,25 +160,25 @@ const ListPasien = () => {
               </tr>
             </thead>
             <tbody>
-              {Array.isArray(patientDataToShow?.data) &&
-              patientDataToShow.data.length > 0 ? (
-                patientDataToShow.data.map((rowData: any, index: any) => (
+              {Array.isArray(patientData?.data) &&
+              patientData.data.length > 0 ? (
+                patientData.data.map((rowData: any, index: any) => (
                   <TableRow
-                    key={index}
+                    key={rowData.id}
                     data={rowData}
                     index={index + startNumber}
-                    onDelete={handleDeletePatient}
-                    onEdit={handleEditPatient}
-                  />
+                    onDelete={handleDeletePatient}                  />
                 ))
               ) : (
                 <tr>
-                  <td colSpan={8} className="text-center py-2">
-                    {searchedPatientData
-                      ? 'No data matching the search criteria'
-                      : 'No data available'}
-                  </td>
-                </tr>
+                <td colSpan={5} className="text-center py-2">
+                  {userRole === 'admin' || userRole === 'superadmin' ? (
+                    <p className="mt-20">Tidak ada data tersedia.</p>
+                  ) : (
+                    <p className="mt-20">Tidak ada data lain tersedia.</p>
+                  )}
+                </td>
+              </tr>
               )}
             </tbody>
           </table>

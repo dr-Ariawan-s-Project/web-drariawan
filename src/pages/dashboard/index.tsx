@@ -1,26 +1,26 @@
 import Cookies from 'js-cookie';
 import InformationCard from '../../components/InformationCard';
-import ListAppoinment from '../../components/ListAppoinment';
-import ListResponden from '../../components/ListResponden';
-import { useDashboard } from '../../store/apiDashboard';
-import { useAuth } from '../../store/apiAuth';  
 import { useEffect } from 'react';
+
+import { useDashboard } from '../../store/apiDashboard';
+import BarChart from '../../components/BarChart';
 
 const Dashboard = () => {
   const token = Cookies.get('token');
-  const { data, error, getDashboard } = useDashboard();
-  const { data: authData, error: authError } = useAuth();
-  const userRole = authData?.role;
-
+  const { data, getDashboard, getChartData, error } = useDashboard();
+  const userRole = Cookies.get('userRole');
   useEffect(() => {
     if (token) {
       getDashboard(token);
+      getChartData(token);
     }
-  }, [getDashboard, token]);
-
-  if (authError || error) {
-    return <p>Error: {authError || error}</p>;
+  }, [getChartData, getDashboard, token]);
+  if (error) {
+    return <p>Error: {error}</p>;
   }
+  console.log("data:", data);
+  console.log("userRole:", userRole);
+
   return (
     <div className="mt-20">
       <div className="flex ">
@@ -56,14 +56,9 @@ const Dashboard = () => {
       </div>
 
       <div className="flex flex-col md:flex-row gap-4">
-      {( userRole === 'admin' || userRole === 'dokter' || userRole === 'suster') && (
+        {(userRole === 'admin' || userRole === 'dokter' || userRole === 'suster') && (
           <div className="md:w-1/2">
-            <ListResponden />
-          </div>
-        )}
-  {( userRole === 'admin' || userRole === 'dokter' || userRole === 'suster') && (
-          <div className="md:w-1/2">
-            <ListAppoinment />
+            <BarChart data={data.chartData} />
           </div>
         )}
       </div>
@@ -72,3 +67,5 @@ const Dashboard = () => {
 };
 
 export default Dashboard;
+
+
