@@ -52,6 +52,7 @@ const Setting = () => {
     }
   };
 
+  
   useEffect(() => {
     const fetchUser = async () => {
       try {
@@ -78,7 +79,6 @@ const Setting = () => {
 
           if (userIdResponse.data && userIdResponse.data.data && userIdResponse.data.data.length > 0) {
             userId = userIdResponse.data.data[0].id;
-            console.log('User ID:', userId);
           } else {
             console.log('User not found or response data is invalid.');
             return;
@@ -95,7 +95,6 @@ const Setting = () => {
                 },
               }
             );
-            console.log('UserData Response:', userResponse);
 
             if (userResponse?.data?.data) {
               const data: User = userResponse.data.data;
@@ -129,7 +128,7 @@ const Setting = () => {
                     <label className="block mb-2 text-sm  font-lato_bold text-indigo-900 dark:text-white">
                       Name
                     </label>
-                    <input
+                   <input
                       type="text"
                       id="first_name"
                       className=" font-lato_regular border border-indigo-300 text-health-blue-dark text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block w-full p-2.5"
@@ -137,7 +136,7 @@ const Setting = () => {
                       value={user?.name || ''}
                       required
                       disabled={!editMode}
-                      onChange={(e) => setUser({ ...user, name: e.target.value })}
+                      onChange={(e) => setUser((prevUser) => prevUser ? { ...prevUser, name: e.target.value } : prevUser)}
                     />
                   </div>
                 </div>
@@ -154,8 +153,8 @@ const Setting = () => {
                     value={user?.email || ''}
                     required
                     disabled={!editMode}
-                    onChange={(e) => setUser({ ...user, email: e.target.value })}
-                  />
+                    onChange={(e) => setUser((prevUser) => prevUser ? { ...prevUser, email: e.target.value } : prevUser)}
+                    />
                 </div>
                 <div className="mb-2 sm:mb-6">
                   <label htmlFor="email" className="block mb-2 text-sm  font-lato_bold text-indigo-900 dark:text-white">
@@ -169,8 +168,8 @@ const Setting = () => {
                     value={user?.phone || ''}
                     required
                     disabled={!editMode}
-                    onChange={(e) => setUser({ ...user, phone: e.target.value })}
-                  />
+                    onChange={(e) => setUser((prevUser) => prevUser ? { ...prevUser, phone: e.target.value } : prevUser)}
+                    />
                 </div>
                 <div className="flex flex-col items-center w-full mb-2 space-x-0 space-y-2 sm:flex-row sm:space-x-4 sm:space-y-0 sm:mb-6">
                   <div className="w-full">
@@ -185,7 +184,7 @@ const Setting = () => {
                       value={user?.role || ''}
                       required
                       disabled={!editMode}
-                      onChange={(e) => setUser({ ...user, role: e.target.value })}
+                      onChange={(e) => setUser((prevUser) => prevUser ? { ...prevUser, role: e.target.value } : prevUser)}
                     />
                   </div>
                 </div>
@@ -202,8 +201,8 @@ const Setting = () => {
                     value={user?.specialization || ''}
                     required
                     disabled={!editMode}
-                    onChange={(e) => setUser({ ...user, specialization: e.target.value })}
-                  />
+                    onChange={(e) => setUser((prevUser) => prevUser ? { ...prevUser, specialization: e.target.value } : prevUser)}
+                    />
                 </div>
 
                 <div className="flex justify-end space-x-4">

@@ -15,6 +15,7 @@ import ListKuisioner from '../list_kuisioner';
 import Responden from '../responden';
 import Appointment from '../appointment';
 import Setting from '../setting_admin';
+import Assessment from '../assessment';
 
 const Admin = () => {
   const location = useLocation();
@@ -48,6 +49,8 @@ const Admin = () => {
       setPage('List Responden');
     } else if (location.pathname.includes('appointment')) {
       setPage('List Appointment');
+    } else if (location.pathname.includes('assessment')) {
+      setPage('Assessment Page');
     } else if (location.pathname.includes('setting')) {
       setPage('Setting Profile');
     } else {
@@ -101,6 +104,8 @@ const Admin = () => {
                   return <Appointment />;
               case location.pathname.includes('setting'):
                   return <Setting />;
+              case location.pathname.includes('assessment'):
+                    return <Assessment />;
               default:
                 return <Dashboard />;
             }

@@ -1,20 +1,28 @@
 import Cookies from 'js-cookie';
-
 import { useState, useEffect } from 'react';
 import { TrashIcon } from '@heroicons/react/24/outline';
 import { useUser } from '../../store/apiUser';
 import { UserState } from '../../utils/api';
-import { useSwalDeleteData } from '../../utils/swal/useSwalData';
+import { useSwalCreate, useSwalDeleteData } from '../../utils/swal/useSwalData';
 import Tooltip from '../../components/Tooltip';
+import axios from 'axios';
+import { Icon } from '@iconify/react';
+
+interface User {
+  id: number;
+  name: string;
+  phone: string;
+  email: string;
+  role: string;
+  specialization: string;
+}
 
 const TableRow: React.FC<{
   data: UserState['data'][0];
   index: number;
   onDelete: (id: string) => void;
 }> = ({ data, index, onDelete }) => {
-
   const userRole = Cookies.get('userRole');
-
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [idToDelete, setIdToDelete] = useState<string>('');
 
@@ -30,7 +38,6 @@ const TableRow: React.FC<{
       console.log('Unauthorized access to delete user data.');
     }
   };
-  
 
   const handleConfirmDelete = () => {
     onDelete(idToDelete);
@@ -41,8 +48,7 @@ const TableRow: React.FC<{
     setIsDeleteModalOpen(false);
   };
 
-  const deleteIconStyle =
-    userRole === 'admin' ? '' : 'text-gray-400 cursor-not-allowed';
+  const deleteIconStyle = userRole === 'admin' ? '' : 'text-gray-400 cursor-not-allowed';
 
   return (
     <tr className="border-b text-left">
@@ -53,7 +59,7 @@ const TableRow: React.FC<{
       <td className="p-2">{data.role}</td>
       <td className="p-2">
         <div className="flex items-center justify-center gap-x-2">
-        <Tooltip
+          <Tooltip
             content={
               userRole === 'admin'
                 ? 'Click to delete'
@@ -61,14 +67,13 @@ const TableRow: React.FC<{
             }
             position="left"
           >
-          <TrashIcon
-            className={`cursor-pointer hover:text-red-500 ${deleteIconStyle}`}
-            width={20}
-            height={20}
-            onClick={handleDeleteClick}
-          />
-        </Tooltip>
-
+            <TrashIcon
+              className={`cursor-pointer hover:text-red-500 ${deleteIconStyle}`}
+              width={20}
+              height={20}
+              onClick={handleDeleteClick}
+            />
+          </Tooltip>
         </div>
       </td>
       {isDeleteModalOpen && (
@@ -99,6 +104,7 @@ const TableRow: React.FC<{
 const ListUser = () => {
   const userRole = Cookies.get('userRole');
   const token = Cookies.get('token');
+  const [, setUsers] = useState<User[]>([]);
 
   const [page, setPage] = useState<number>(1);
   const [startNumber, setStartNumber] = useState<number>(1);
@@ -117,7 +123,7 @@ const ListUser = () => {
         setPage(1);
         setTimeout(() => {
           window.location.reload();
-        }, 1000); 
+        }, 1000);
       } catch (error: any) {
         console.error('Failed to delete data: ', error);
         useSwalDeleteData('failed', error.message);
@@ -127,37 +133,190 @@ const ListUser = () => {
     }
   };
 
-  
-
   const handleNextPage = () => {
     const nextPage = page + 1;
     setPage(nextPage);
     getList(nextPage, 10, token);
   };
 
- 
- 
+  const [isAddUserModalOpen, setAddUserModalOpen] = useState(false);
+  const [newUser, setNewUser] = useState({
+    name: '',
+    email: '',
+    phone: '',
+    role: '',
+    password: '',
+    specialization: '',
+  });
+
+  const handleAddUser = async (userData: {
+    name: string;
+    email: string;
+    phone: string;
+    role: string;
+    password: string;
+    specialization: string;
+  }) => {
+    try {
+      console.log('Data Baru', userData);
+
+      const response = await axios.post(
+        'https://drariawan.altapro.online/v1/user',
+        userData,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      setTimeout(() => {
+        window.location.reload();
+      }, 1000);
+      console.log('New User Response:', response);
+      setUsers((prevUsers) => [...prevUsers, response.data.data]);
+
+      setAddUserModalOpen(false);
+      useSwalCreate('success');
+    } catch (error: any) {
+      console.error('Failed to update data: ', error);
+
+      if (error.response) {
+        console.error('Error response:', error.response.data);
+      }
+
+      useSwalCreate('failed', error.message);
+    }
+  };
+
   useEffect(() => {
     if (
       !token ||
       !userRole ||
-      !['superadmin','admin', 'dokter', 'suster'].includes(userRole)
+      !['superadmin', 'admin', 'dokter', 'suster'].includes(userRole)
     ) {
       console.log(
         'Akses anda ditolak. Anda tidak memiliki akses ke halaman ini.'
       );
     } else {
-     getList(page, 10, token, userRole); 
-          setStartNumber((page - 1) * 10);
+      getList(page, 10, token, userRole);
+      setStartNumber((page - 1) * 10);
     }
   }, [getList, page, token, userRole, setStartNumber]);
-  
-  
-  
+
   return (
     <section className="min-h-screen flex flex-col justify-center items-center">
+      {userRole === 'superadmin' && (
+        <button
+          className="ml-auto bg-white mt-10 sm:mt-20 md:mt-20  mr-8 flex items-center text-health-blue-medium border border-health-blue-medium font-lato_regular "
+          onClick={() => setAddUserModalOpen(true)}
+        >
+          <Icon
+            icon="mdi:briefcase-plus-outline"
+            color="#004a7"
+            width="24"
+            height="24"
+            className="mr-2"
+          />
+          Tambah User
+        </button>
+      )}
+      {isAddUserModalOpen && (
+        <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center bg-gray-900 bg-opacity-50 z-50">
+          <div className="w-full max-w-xs">
+            <span className="close" onClick={() => setAddUserModalOpen(false)}>
+              &times;
+            </span>
+            <form
+              className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4"
+              onSubmit={(e) => {
+                e.preventDefault();
+                handleAddUser(newUser);
+              }}
+            >
+              <label className="block mb-2 text-sm  font-lato_bold text-indigo-900 dark:text-white">
+                Name
+              </label>
+              <input
+                type="text"
+                id="name"
+                className=" font-lato_regular mb-2 border border-indigo-300 text-health-blue-dark text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block w-full p-2.5"
+                value={newUser.name}
+                onChange={(e) => setNewUser({ ...newUser, name: e.target.value })}
+              />
+              <label className="block mb-2 text-sm  font-lato_bold text-indigo-900 dark:text-white">
+                Email
+              </label>
+              <input
+                type="email"
+                id="email"
+                className=" font-lato_regular  mb-2 border border-indigo-300 text-health-blue-dark text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block w-full p-2.5"
+                value={newUser.email}
+                onChange={(e) => setNewUser({ ...newUser, email: e.target.value })}
+              />
+              <label className="block mb-2 text-sm font-lato_bold text-indigo-900 dark:text-white">
+                Phone
+              </label>
+              <input
+                type="text"
+                id="phone"
+                className="font-lato_regular border mb-2 border-indigo-300 text-health-blue-dark text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block w-full p-2.5"
+                value={newUser.phone}
+                onChange={(e) => setNewUser({ ...newUser, phone: e.target.value })}
+              />
+
+              <label className="block mb-2 text-sm font-lato_bold text-indigo-900 dark:text-white">
+                Role
+              </label>
+              <input
+                type="text"
+                id="role"
+                className="font-lato_regular mb-2 border border-indigo-300 text-health-blue-dark text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block w-full p-2.5"
+                value={newUser.role}
+                onChange={(e) => setNewUser({ ...newUser, role: e.target.value })}
+              />
+
+              <label className="block mb-2 text-sm font-lato_bold text-indigo-900 dark:text-white">
+                Password
+              </label>
+              <input
+                type="text"
+                id="password"
+                className="font-lato_regular border mb-2 border-indigo-300 text-health-blue-dark text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block w-full p-2.5"
+                value={newUser.password}
+                onChange={(e) => setNewUser({ ...newUser, password: e.target.value })}
+              />
+
+              <label className="block mb-2 text-sm font-lato_bold text-indigo-900 dark:text-white">
+                Specialization
+              </label>
+              <input
+                type="text"
+                id="time_end"
+                className="font-lato_regular border mb-2 border-indigo-300 text-health-blue-dark text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block w-full p-2.5"
+                value={newUser.specialization}
+                onChange={(e) =>
+                  setNewUser({ ...newUser, specialization: e.target.value })
+                }
+              />
+
+              <div className="flex justify-end mt-5">
+                <button type="submit" className="bg-blue-500 text-white px-4 py-2 mr-2 rounded">
+                 Simpan
+                </button>
+                <button
+                  type="button"
+                  className="bg-gray-300 px-4 py-2 rounded"
+                  onClick={() => setAddUserModalOpen(false)}
+                >
+                  Batal
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
     <div className="overflow-x-auto mx-auto w-full mt-2 sm:mt-20">
-      <div className="relative overflow-x-auto h-[60vh] overflow-y-scroll">
+      <div className="relative overflow-x-auto h-[50vh] overflow-y-scroll">
         <table className="w-full table-auto bg-white">
           <thead className="text-health-blue-dark font-lato_regular">
             <tr>
@@ -169,8 +328,8 @@ const ListUser = () => {
               <th className="border-b p-3 text-center">Actions</th>
             </tr>
           </thead>
-          <tbody>
-            {Array.isArray(userData?.data) && userData.data.length > 0 ? (
+        <tbody>
+        {Array.isArray(userData?.data) && userData.data.length > 0 ? (
               userData.data.map((rowData: any, index: any) => (
                 <TableRow
                   key={rowData.id}
@@ -182,7 +341,7 @@ const ListUser = () => {
             ) : (
               <tr>
                 <td colSpan={5} className="text-center py-2">
-                  {userRole === 'admin' || userRole === 'superadmin' ? (
+                  {userRole === 'admin' || userRole === 'superadmin' || userRole === 'superadmin'  ? (
                     <p className="mt-20">Tidak ada data tersedia.</p>
                   ) : (
                     <p className="mt-20">Tidak ada data lain tersedia.</p>

@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { Icon } from '@iconify/react';
 import { useLocation } from 'react-router-dom';
 import { useAuth } from '../store/apiAuth';  
+import { Link } from 'react-router-dom';
 
 const Sidebar = () => {
   const [toggle, setToggle] = useState<boolean>(false);
@@ -45,8 +46,10 @@ const Sidebar = () => {
         }`}
       >
         <div className="pb-8 border-b flex justify-center items-center">
+         <Link to="/admin/">
           <img className="w-32 sm:w-40" src="/klinik_sehat.svg" alt="logo" />
-        </div>
+         </Link>        
+      </div>
 
         <ul className="p-4  ">
         <li className="mb-2 ">
