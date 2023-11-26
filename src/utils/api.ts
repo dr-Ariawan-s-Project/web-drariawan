@@ -73,7 +73,7 @@ export type DashboardState = {
   loading: boolean;
   error: string | null;
   getDashboard: (token: string | undefined) => Promise<void>;
-  getChartData: (token: string | undefined) => Promise<void>; // Add this function
+  getChartData: (token: string | undefined) => Promise<void>; 
 };
 export type ScheduleState = {
   data: any[];
