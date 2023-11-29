@@ -85,7 +85,7 @@ const AnswerDetail: React.FC<AnswerDetailProps> = ({ answers, userId }) => {
                     <td className="border-b p-3 text-center">{answer.question.id}</td>
                     <td className="border-b p-3 text-center">{answer.question.type}</td>
                     <td className="border-b p-3 text-center">{answer.question.section}</td>
-                    <td className="border-b p-3 text-center">{answer.question.question}</td>
+                    <td className="border-b p-3 text-left">{answer.question.question}</td>
                     <td className="border-b p-3 text-center">{answer.question.description}</td>
                     <td className="border-b p-3 text-center">{answer.score}</td>
                   </tr>
