@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { NavigateFunction, useNavigate } from 'react-router-dom';
 import { useFormik } from 'formik';
 import Cookies from 'js-cookie';
+import axios from 'axios';
 
 import { useEmailStore } from '../../store/getEmail';
 import { useQuestionaire } from '../../store/apiQuestionaire';
@@ -14,10 +15,11 @@ const DataDiri = () => {
   const navigate: NavigateFunction = useNavigate();
   const { setEmail: setEmailInStore } = useEmailStore();
   const { validateQuestionaire } = useQuestionaire() as any;
+  const token = Cookies.get('token');
 
   const [codeAttempt, setCodeAttempt] = useState<string | undefined>('');
 
-  const formik = useFormik({
+  const formik: any = useFormik({
     initialValues: {
       email: '',
       phoneNumber: '',
@@ -48,9 +50,29 @@ const DataDiri = () => {
     },
   });
 
+  const getProfile = async () => {
+    try {
+      const response = await axios.get('/v1/patients/profile', {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      const profileData = response?.data?.data;
+      formik.setValues({
+        email: profileData?.email || '',
+        phoneNumber: profileData?.phone || '',
+        patientStatus: '',
+        patientEmail: '',
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   useEffect(() => {
     const code_attempt = Cookies.get('code_attempt');
     setCodeAttempt(code_attempt);
+    getProfile();
   }, []);
 
   return (
