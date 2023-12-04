@@ -28,32 +28,34 @@ export const useAppointment = create<AppointmentState>((set) => ({
     }
   },
 
-  putBooking: async (bookingId: string, bookingData: BookingDataProps, token: string): Promise<void> => {
-    set({ loading: true, error: null });
-
+  putBooking : async (bookingId: string, patientId: string, scheduleId: number, bookingDate: string, token: string
+  ): Promise<void> => {
     try {
-      const response = await axios.put(`/v1/booking/${bookingId}`, bookingData, {
-        headers: {
-          Authorization: `Bearer ${token}`,
+      const response = await axios.put(
+        `https://drariawan.altapro.online/v1/booking/${bookingId}`,
+        {
+          patient_id: patientId,
+          schedule_id: scheduleId,
+          booking_date: bookingDate,
         },
-      });
-
-      set((prevState) => ({
-        ...prevState,
-        data: prevState.data.map((booking) => (booking.id === bookingId ? response.data : booking)),
-        loading: false,
-        error: null,
-      }));
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      set({ data: response.data ? [response.data] : [], loading: false, error: null });
+      return response.data;
     } catch (error: any) {
-      const errorMessage = error.response?.data.message || error.message;
       set({
         loading: false,
-        error: `Failed to edit appointment data: ${errorMessage}`,
+        error: `Failed to retrieve appointment data: ${error.message}`,
         data: [],
       });
       throw error;
     }
   },
+  
 
   getBookingById: async (bookingId: string, token: string): Promise<BookingDataProps | null> => {
     set({ loading: true, error: null });
@@ -76,33 +78,24 @@ export const useAppointment = create<AppointmentState>((set) => ({
     }
   },
 
-  deleteBooking: async (bookingId: string, token: string): Promise<void> => {
-    set((prevState) => ({
-      ...prevState,
-      loading: true,
-      error: null,
-    }));
-
+  deleteBooking : async (bookingId: string, token: string): Promise<void> => {
+    set({ loading: true, error: null, data: [] })
     try {
-      await axios.delete(`/v1/booking/${bookingId}`, {
+      await axios.delete(`/v1/booking/delete/${bookingId}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
-
-      set((prevState) => ({
-        ...prevState,
+  
+      set({ loading: false, error: null, data: [] });
+      console.log('Appointment data deleted successfully.');
+    } catch (error:any) {
+      console.error(`Failed to delete appointment data: ${error.message}`);
+      set({
         loading: false,
-        error: null,
-        data: prevState.data.filter((booking) => booking.id !== bookingId),
-      }));
-    } catch (error: any) {
-      set((prevState) => ({
-        ...prevState,
-        loading: false,
-        error: `Failed to delete appointment data: ${error.message}`,
+        error: `Failed to retrieve appointment data: ${error.message}`,
         data: [],
-      }));
+      });
     }
-  },
+  }
 }));

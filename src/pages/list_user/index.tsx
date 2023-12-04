@@ -27,7 +27,7 @@ const TableRow: React.FC<{
   const [idToDelete, setIdToDelete] = useState<string>('');
 
   const handleDeleteClick = () => {
-    if (userRole === 'admin') {
+    if (userRole === 'superadmin') {
       try {
         setIdToDelete(data.id);
         setIsDeleteModalOpen(true);
@@ -48,7 +48,7 @@ const TableRow: React.FC<{
     setIsDeleteModalOpen(false);
   };
 
-  const deleteIconStyle = userRole === 'admin' ? '' : 'text-gray-400 cursor-not-allowed';
+  const deleteIconStyle = userRole === 'superadmin' ? '' : 'text-gray-400 cursor-not-allowed';
 
   return (
     <tr className="border-b text-left">
@@ -61,7 +61,7 @@ const TableRow: React.FC<{
         <div className="flex items-center justify-center gap-x-2">
           <Tooltip
             content={
-              userRole === 'admin'
+              userRole === 'superadmin'
                 ? 'Click to delete'
                 : 'Unauthorized access to delete user data!'
             }
@@ -116,7 +116,7 @@ const ListUser = () => {
       console.error('Token not found. User may not be authenticated.');
       return;
     }
-    if (userRole === 'admin') {
+    if (userRole === 'superadmin') {
       try {
         await postDeactivate(id, token);
         useSwalDeleteData('success');
