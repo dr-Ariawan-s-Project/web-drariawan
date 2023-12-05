@@ -47,32 +47,16 @@ export const useSchedule = create<ScheduleState>((set) => ({
     }
   },
   
-  putSchedule: async (scheduleId: number, scheduleData: ScheduleData, token: string) => {
-    if (!token) {
-      set({
-        loading: false,
-        error: 'Token is missing. Unable to update Schedule data.',
-      });
-      return;
-    }
-
-    set((prevState) => {
-      return {
-        ...prevState,
-        loading: true,
-        error: null,
-      };
-    });
+  putSchedule: async (scheduleId, scheduleData, token) => {
+    set({ loading: true, error: null });
+  
     try {
-      const response = await axios.put(
-        `/v1/schedule?id=${scheduleId}`,
-        scheduleData,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+      const response = await axios.put(`/v1/schedule?id=${scheduleId}`, scheduleData, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+  
       set((prevState) => {
         if (!Array.isArray(prevState.data)) {
           return prevState;
@@ -85,17 +69,15 @@ export const useSchedule = create<ScheduleState>((set) => ({
         });
         return { ...prevState, data: updatedData, loading: false, error: null };
       });
-    } catch (error: any) {
-      set((prevState) => {
-        return {
-          ...prevState,
-          loading: false,
-          error: `Failed to update schedule data: ${error.message}`,
-        };
-      });
+    } catch (error:any) {
+      set((prevState) => ({
+        ...prevState,
+        loading: false,
+        error: `Failed to update schedule data: ${error.message}`,
+      }));
     }
   },
-
+  
   deleteSchedule: async (id: string, token: string) => {
     set({ loading: true, error: null });
     try {

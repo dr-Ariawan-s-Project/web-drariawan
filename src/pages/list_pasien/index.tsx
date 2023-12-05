@@ -40,8 +40,8 @@ const TableRow: React.FC<{
     onEdit(data);
   };
 
-  const editIconStyle = userRole === 'admin' ? '' : 'text-gray-400 cursor-not-allowed';
-  const deleteIconStyle = userRole === 'admin' ? '' : 'text-gray-400 cursor-not-allowed';
+  const editIconStyle = userRole === 'admin' || userRole === 'suster' ? '' : 'text-gray-400 cursor-not-allowed';
+  const deleteIconStyle = userRole === 'admin' || userRole === 'suster' ? '' : 'text-gray-400 cursor-not-allowed';
 
   return (
     <tr className="border-b text-left">
@@ -53,14 +53,14 @@ const TableRow: React.FC<{
         <div className="flex items-center justify-center gap-x-2">
           <Tooltip
             content={
-              userRole === 'superadmin' || userRole === 'admin'
+              userRole === 'admin' || userRole === 'suster'
                 ? 'Click to delete'
                 : 'Unauthorized access to delete patient data!'
             }
             position="left"
           >
             <TrashIcon
-              className={`cursor-pointer hover:text-red-800 ${deleteIconStyle}`}
+              className={`cursor-pointer text-gray-400 hover:text-red-800 ${deleteIconStyle}`}
               width={20}
               height={20}
               onClick={handleDeleteClick}
@@ -75,7 +75,7 @@ const TableRow: React.FC<{
             position="left"
           >
             <PencilIcon
-              className={`cursor-pointer hover:text-health-blue-medium ${editIconStyle}`}
+              className={`cursor-pointer text-gray-400 hover:text-health-blue-medium ${editIconStyle}`}
               width={20}
               height={20}
               onClick={handleEditClick}
