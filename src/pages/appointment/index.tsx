@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import Cookies from 'js-cookie';
-import { useUser } from '../../store/apiUser';
 import Tooltip from '../../components/Tooltip';
 import { PencilIcon, TrashIcon } from '@heroicons/react/24/outline';
 import { useSwalDeleteData, useSwalUpdate } from '../../utils/swal/useSwalData';
@@ -178,7 +177,7 @@ const handleEditSubmit = async () => {
           content={
             userRole === 'suster'
               ? 'Click to edit'
-              : 'Unauthorized access to edit patient data!'
+              : 'Unauthorized access to edit Appointment data!'
           }
           position="left"
         >
@@ -306,7 +305,6 @@ const Appointment = () => {
   const token = Cookies.get('token');
   const userName = Cookies.get('userName');
   const startNumber = 0;
-  const { getList } = useUser() as any;
   const { deleteBooking } = useAppointment() as any;
 
  const handleDeleteBooking = async (id: string) => {
@@ -370,38 +368,64 @@ const handleEditBooking = async (editModalData: any) => {
 };
 
 
- useEffect(() => {
+useEffect(() => {
   const fetchBookings = async () => {
     try {
       if (!token || !userRole || !userName) {
-        console.log('Akses anda ditolak. Anda tidak memiliki akses ke halaman ini.');
+        console.log(
+          'Akses anda ditolak. Anda tidak memiliki akses ke halaman ini.'
+        );
         return;
       }
-      if (userRole === 'admin') {
+
+      if (userRole === 'admin' || userRole === 'superadmin') {
         console.log('Anda tidak memiliki akses ke halaman ini.');
         return;
       }
 
-      let bookingsResponse;
+      let userId: number | null = null;
 
       if (userRole === 'dokter') {
-        const userIdResponse = await getList(1, 10, token);
+        const userResponse = await axios.get(
+          'https://drariawan.altapro.online/v1/user/list',
+          {
+            params: {
+              search: userName,
+              rp: 10,
+              page: 1,
+            },
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
 
-        if (userIdResponse.data.data.length > 0) {
-          const userId = userIdResponse.data.data[0].id;
-
-          bookingsResponse = await axios.get(
-            `https://drariawan.altapro.online/v1/booking/user/${userId}`,
-            {
-              headers: {
-                Authorization: `Bearer ${token}`,
-              },
-            }
-          );
+        if (
+          userResponse.data &&
+          userResponse.data.data &&
+          userResponse.data.data.length > 0
+        ) {
+          userId = userResponse.data.data[0].id;
+          console.log('User ID:', userId);
         } else {
-          console.log('User not found.');
+          console.log('User not found or response data is invalid.');
           return;
         }
+      }
+
+      console.log('User ID:', userId);
+
+      let bookingsResponse;
+
+      if (userId !== null) {
+        bookingsResponse = await axios.get(
+          `https://drariawan.altapro.online/v1/booking/user/${userId}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
       } else if (userRole === 'suster') {
         bookingsResponse = await axios.get(
           'https://drariawan.altapro.online/v1/booking/list',
@@ -416,8 +440,12 @@ const handleEditBooking = async (editModalData: any) => {
         return;
       }
 
-      const data: Booking[] = bookingsResponse.data.data;
-      setBookings(data);
+      if (bookingsResponse.data && bookingsResponse.data.data) {
+        const data: Booking[] = bookingsResponse.data.data;
+        setBookings(data);
+      } else {
+        console.error('Data not available in the response.');
+      }
     } catch (error) {
       if (axios.isAxiosError(error)) {
         console.error('Axios Error:', error.response?.data || error.message);
@@ -428,7 +456,7 @@ const handleEditBooking = async (editModalData: any) => {
   };
 
   fetchBookings();
-}, [getList, token, userRole, userName, setBookings]);
+}, [token, userRole, userName, setBookings]);
 
 return (
   <div>
@@ -459,7 +487,7 @@ return (
           ))
         ) : (
           <tr>
-            <td colSpan={5} className="text-center py-2">
+            <td colSpan={8} className="text-center py-2">
               {(userRole === 'admin' || userRole === 'superadmin') ? (
                 <p className="mt-20 ">Anda tidak memiliki akses ke halaman ini.</p>
               ) : (

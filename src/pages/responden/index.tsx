@@ -4,6 +4,7 @@ import Cookies from 'js-cookie';
 import axios from 'axios';
 import { Icon } from '@iconify/react';
 import { Link } from 'react-router-dom';
+import Tooltip from '../../components/Tooltip';
 
 interface Answer {
   choices: any;
@@ -107,6 +108,8 @@ const AnswerDetail: React.FC<AnswerDetailProps> = ({ answers, userId }) => {
 
 
 const TableRow: React.FC<TableRowProps> = ({ index, item, formatDate, handleViewDetail }) => {
+  const userRole = Cookies.get('userRole');
+
   return (
     <tr key={item.id} className="mb-2 border-b text-center">
       <td className="text-center p-2">{index + 1}</td>
@@ -115,13 +118,22 @@ const TableRow: React.FC<TableRowProps> = ({ index, item, formatDate, handleView
       <td className="p-2">{item.diagnosis}</td>
       <td className="p-2">{item.feedback}</td>
       <td className="text-center p-2">
-        <a
-          role="button"
-          onClick={() => handleViewDetail(item.id, item.patient?.email || 'N/A', item.patient?.id || 'N/A')}
-          className="text-blue-500 hover:underline"
-        >
-          View
-        </a>
+        {userRole !== 'admin' ? (
+          <Tooltip
+            content="Unauthorized access to view Respondent details!"
+            position="left"
+          >
+            <span className="text-gray-500 cursor-not-allowed">View</span>
+          </Tooltip>
+        ) : (
+          <a
+            role="button"
+            onClick={() => handleViewDetail(item.id, item.patient?.email || 'N/A', item.patient?.id || 'N/A')}
+            className="text-blue-500 hover:underline"
+          >
+            View
+          </a>
+        )}
       </td>
       <td className="p-2">
         <button

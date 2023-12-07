@@ -57,18 +57,14 @@ export const useSchedule = create<ScheduleState>((set) => ({
         },
       });
   
-      set((prevState) => {
-        if (!Array.isArray(prevState.data)) {
-          return prevState;
-        }
-        const updatedData = prevState.data.map((schedule) => {
-          if (schedule.id === scheduleId) {
-            return response.data;
-          }
-          return schedule;
-        });
-        return { ...prevState, data: updatedData, loading: false, error: null };
-      });
+      set((prevState) => ({
+        ...prevState,
+        data: (prevState.data ?? []).map((schedule) => {
+          return schedule.schedule_id === scheduleId ? response.data : schedule;
+        }),
+        loading: false,
+        error: null,
+      }));
     } catch (error:any) {
       set((prevState) => ({
         ...prevState,
@@ -77,6 +73,7 @@ export const useSchedule = create<ScheduleState>((set) => ({
       }));
     }
   },
+  
   
   deleteSchedule: async (id: string, token: string) => {
     set({ loading: true, error: null });

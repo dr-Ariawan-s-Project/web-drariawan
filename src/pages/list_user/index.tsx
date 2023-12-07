@@ -192,7 +192,7 @@ const ListUser = () => {
     if (
       !token ||
       !userRole ||
-      !['superadmin', 'admin', 'dokter', 'suster'].includes(userRole)
+      !['superadmin', 'admin'].includes(userRole)
     ) {
       console.log(
         'Akses anda ditolak. Anda tidak memiliki akses ke halaman ini.'
@@ -340,14 +340,14 @@ const ListUser = () => {
               ))
             ) : (
               <tr>
-                <td colSpan={5} className="text-center py-2">
-                  {userRole === 'admin' || userRole === 'superadmin' || userRole === 'superadmin'  ? (
-                    <p className="mt-20">Tidak ada data tersedia.</p>
-                  ) : (
-                    <p className="mt-20">Tidak ada data lain tersedia.</p>
-                  )}
-                </td>
-              </tr>
+              <td colSpan={8} className="text-center py-2">
+                { userRole === 'suster'  || userRole === 'dokter' ? (
+                  <p className="mt-20">Anda tidak memiliki akses kehalaman ini.</p>
+                ) : (
+                  <p className="mt-20">Tidak ada data lain tersedia.</p>
+                )}
+              </td>
+            </tr>
             )}
           </tbody>
         </table>
