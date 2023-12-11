@@ -27,6 +27,7 @@ import Appointment from '../pages/appointment';
 import PatientSchedule from '../pages/patient_schedule';
 import Assessment from '../pages/assessment';
 import Setting from '../pages/setting_admin';
+import Unauthorized from '../pages/unauthorized_page';
 
 const App = () => {
   axios.defaults.baseURL = 'https://drariawan-api.alterra.id/ ';
@@ -64,6 +65,7 @@ const App = () => {
           <Route element={<Assessment />} path="assessment" />
           <Route element={<Setting />} path="setting" />
         </Route>
+        <Route element={<Unauthorized />} path="/unauthorized" />
       </Routes>
     </BrowserRouter>
   );

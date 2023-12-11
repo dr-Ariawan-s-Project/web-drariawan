@@ -1,18 +1,30 @@
 import { useState, useEffect } from 'react';
-import data from '../../datas/success/success.json';
+import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
+import Cookies from 'js-cookie';
+
+import data from '../../datas/success/success.json';
 import DoctorFinish from '../../assets/illustrations/doctor-finish.svg';
 
 const Success = () => {
+  const code_attempt = Cookies.get('code_attempt');
+  const navigate = useNavigate();
   const [showDoctorFinish, setShowDoctorFinish] = useState<boolean>(false);
   useEffect(() => {
     const showDoctorFinishTimeout = setTimeout(() => {
       setShowDoctorFinish(true);
     }, 900);
-
     return () => {
       clearTimeout(showDoctorFinishTimeout);
     };
+  }, []);
+
+  useEffect(() => {
+    if (!code_attempt) {
+      navigate('/unauthorized');
+    } else {
+      return;
+    }
   }, []);
 
   return (

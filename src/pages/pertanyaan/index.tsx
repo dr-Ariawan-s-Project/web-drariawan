@@ -125,7 +125,11 @@ const Pertanyaan = () => {
   };
 
   useEffect(() => {
-    getQuestionaire();
+    if (!code_attempt) {
+      navigate('/unauthorized');
+    } else {
+      getQuestionaire();
+    }
   }, []);
 
   useEffect(() => {
