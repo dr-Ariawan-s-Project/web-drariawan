@@ -14,7 +14,7 @@ import Button from '../../components/Button';
 const DataDiri = () => {
   const navigate: NavigateFunction = useNavigate();
   const { setEmail: setEmailInStore } = useEmailStore();
-  const { validateQuestionaire } = useQuestionaire() as any;
+  const { validateQuestionaire } = useQuestionaire();
   const token = Cookies.get('token');
 
   const [codeAttempt, setCodeAttempt] = useState<string | undefined>('');
@@ -72,7 +72,11 @@ const DataDiri = () => {
   useEffect(() => {
     const code_attempt = Cookies.get('code_attempt');
     setCodeAttempt(code_attempt);
-    getProfile();
+    if (!token) {
+      return;
+    } else {
+      getProfile();
+    }
   }, []);
 
   return (

@@ -115,14 +115,10 @@ const Pertanyaan = () => {
           answerItems.push(newAnswerItem);
         }
       }
-
       const body = {
         code_attempt: code_attempt,
         answer: answerItems,
       };
-
-      console.log('body : ', body);
-
       postQuestionaire(body.code_attempt, body.answer);
       navigate(`/kuisioner/finish`);
     }
@@ -235,7 +231,7 @@ const Pertanyaan = () => {
                 id="Selanjutnya-1"
                 type="blue"
                 label="Selanjutnya"
-                active={transcript !== '' ? true : false}
+                active={transcript !== '' || check !== null ? true : false}
                 onClick={handleSubmit}
               />
             </div>
