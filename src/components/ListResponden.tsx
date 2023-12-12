@@ -11,7 +11,7 @@ const ListResponden = () => {
   const [sortDirection, setSortDirection] = useState('desc');
 
   useEffect(() => {
-    getAttempts(token, userRole);
+    getAttempts(1, 10, token, userRole);
   }, [getAttempts]);
 
   const handleSortChange = (field: SetStateAction<string>) => {

@@ -14,6 +14,7 @@ import ModalInformation from '../../components/ModalInformation';
 import IconInfo from '../../assets/icons/information.svg';
 
 import { useQuestionaire } from '../../store/apiQuestionaire';
+import VideoPlayer from '../../components/VideoPlayer';
 
 const Pertanyaan = () => {
   const navigate = useNavigate();
@@ -114,21 +115,21 @@ const Pertanyaan = () => {
           answerItems.push(newAnswerItem);
         }
       }
-
       const body = {
         code_attempt: code_attempt,
         answer: answerItems,
       };
-
-      console.log('body : ', body);
-
       postQuestionaire(body.code_attempt, body.answer);
       navigate(`/kuisioner/finish`);
     }
   };
 
   useEffect(() => {
-    getQuestionaire();
+    if (!code_attempt) {
+      navigate('/unauthorized');
+    } else {
+      getQuestionaire();
+    }
   }, []);
 
   useEffect(() => {
@@ -178,7 +179,7 @@ const Pertanyaan = () => {
         <AnimatedWrapper>Loading ...</AnimatedWrapper>
       ) : (
         <section
-          className={`flex flex-col justify-center items-center min-h-screen px-4 sm:px-6 md:px-8 lg:px-12 mt-22  ${
+          className={`flex flex-col justify-center items-center min-h-screen px-4 py-10 sm:px-6 md:px-8 lg:px-12 mt-22  ${
             fadeIn ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
           } transition-opacity duration-500 transform`}
         >
@@ -186,15 +187,17 @@ const Pertanyaan = () => {
             <h2 className="text-center font-lato_black text-xl sm:text-base md:text-xl lg:text-2xl mb-4">
               {currentQuestion?.question}
             </h2>
-            <div>
-              <button onClick={() => setModalIsOpen(true)}>
+            <div className="flex justify-center space-x-5 my-5">
+              <button onClick={() => setModalIsOpen(true)} className="h-10">
                 <img src={IconInfo} alt="Icon Info" width={18} height={18} />
               </button>
-
-              <ModalInformation
-                isOpen={modalIsOpen}
-                onClose={() => setModalIsOpen(false)}
-              ></ModalInformation>
+              <div className="">
+                <ModalInformation
+                  isOpen={modalIsOpen}
+                  onClose={() => setModalIsOpen(false)}
+                ></ModalInformation>
+              </div>
+              <VideoPlayer src={currentQuestion?.url_video} />
             </div>
           </div>
           <div className="flex flex-col gap-y-5">
@@ -232,7 +235,7 @@ const Pertanyaan = () => {
                 id="Selanjutnya-1"
                 type="blue"
                 label="Selanjutnya"
-                active={transcript !== '' ? true : false}
+                active={transcript !== '' || check !== null ? true : false}
                 onClick={handleSubmit}
               />
             </div>

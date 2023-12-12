@@ -25,11 +25,12 @@ import Responden from '../pages/responden';
 import DetailResponden from '../pages/detail_responden';
 import Appointment from '../pages/appointment';
 import PatientSchedule from '../pages/patient_schedule';
-import Assessment from '../pages/assessment'
+import Assessment from '../pages/assessment';
 import Setting from '../pages/setting_admin';
+import Unauthorized from '../pages/unauthorized_page';
 
 const App = () => {
-  axios.defaults.baseURL = 'https://drariawan.altapro.online';
+  axios.defaults.baseURL = 'https://drariawan-api.alterra.id/ ';
   return (
     <BrowserRouter>
       <Routes>
@@ -55,13 +56,16 @@ const App = () => {
           <Route element={<Dashboard />} path="dashboard" />
           <Route element={<LandingKuisioner />} path="landing/kuisioner" />
           <Route element={<Responden />} path="responden" />
-          <Route element={<DetailResponden />} path="detail_responden/:attempt_id"  />
+          <Route
+            element={<DetailResponden />}
+            path="detail_responden/:attempt_id"
+          />
 
           <Route element={<Appointment />} path="appointment" />
           <Route element={<Assessment />} path="assessment" />
           <Route element={<Setting />} path="setting" />
-
         </Route>
+        <Route element={<Unauthorized />} path="/unauthorized" />
       </Routes>
     </BrowserRouter>
   );
