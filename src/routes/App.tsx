@@ -30,7 +30,7 @@ import Setting from '../pages/setting_admin';
 import Unauthorized from '../pages/unauthorized_page';
 
 const App = () => {
-  axios.defaults.baseURL = 'https://drariawan-api.alterra.id/ ';
+  axios.defaults.baseURL = 'https://drariawan-api.alta.id/';
   return (
     <BrowserRouter>
       <Routes>
