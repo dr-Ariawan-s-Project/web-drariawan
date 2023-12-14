@@ -8,7 +8,8 @@ import { TrashIcon, PencilIcon } from '@heroicons/react/24/outline';
 import { useSwalDeleteData } from '../../utils/swal/useSwalData';
 import Tooltip from '../../components/Tooltip';
 import { useSchedule } from '../../store/apiSchedule';
- 
+import Loading from '../../components/Loading';
+
 
 
 interface User {
@@ -46,11 +47,11 @@ const DeleteModal: React.FC<{ isOpen: boolean; onCancel: () => void; onConfirm: 
 );
 const EditModal: React.FC<{ isOpen: boolean; onCancel: () => void; onConfirm: (updatedData: any) => void; scheduleData: any;  }> = ({ onCancel, onConfirm, scheduleData }) => {
   const [editModalData, setEditModalData] = useState({
-    schedule: scheduleData.schedule.day || '',
+    schedule: scheduleData.day || '',
     doctorName: scheduleData.user?.name || '', 
-    healthCareAddress: scheduleData.schedule.health_care_address || '',
-    timeStart: scheduleData.schedule.time_start || '',
-    timeEnd: scheduleData.schedule.time_end || '',
+    healthCareAddress: scheduleData.health_care_address || '',
+    timeStart: scheduleData.time_start || '',
+    timeEnd: scheduleData.time_end || '',
   });
 
   const handleSaveEdit = () => {
@@ -191,15 +192,17 @@ const EditModal: React.FC<{ isOpen: boolean; onCancel: () => void; onConfirm: (u
         </form>
       </div>
 </div>
-  );
-}
- const TableRow: React.FC<{
- index: number;
-  data: Schedule;
-  onDelete: (id: string) => void;
-  onEdit: (scheduleId: number, scheduleData: Schedule) => void;
-  }> = ({ index, data, onDelete }) => {
 
+  );
+
+            }
+ const TableRow: React.FC<{
+index: number;
+ data: Schedule;
+ onDelete: (id: string) => void;
+  onEdit: (scheduleId: number, scheduleData: Schedule) => void;
+}> = ({ index, data, onDelete }) => {
+    
     const formatTime = (timeString: string) => {
     const timeObject = new Date(`1970-01-01T${timeString}`);
     const hours = timeObject.getHours().toString().padStart(2, '0');
@@ -216,9 +219,9 @@ const EditModal: React.FC<{ isOpen: boolean; onCancel: () => void; onConfirm: (u
   const [idToEdit, setIdToEdit] = useState<number | null>(null);
   
   const handleDeleteClick = () => {
-    if (userRole === 'admin' || userRole === 'suster' || userRole === 'dokter') {
+    if (userRole === 'admin' || userRole === 'suster') {
       try {
-        setIdToDelete(data.schedule.schedule_id);
+        setIdToDelete(data.schedule_id);
         setIsDeleteModalOpen(true);
       } catch (error) {
         console.error('Error handling delete click: ', error);
@@ -227,11 +230,10 @@ const EditModal: React.FC<{ isOpen: boolean; onCancel: () => void; onConfirm: (u
       console.log('Unauthorized access to delete schedule data.');
     }
   };
-  
   const handleEditClick = () => {
     if (userRole === 'admin' || userRole === 'suster' || userRole === 'dokter') {
       try {
-        setIdToEdit(data.schedule.schedule_id);
+        setIdToEdit(data.schedule_id);
         setIsEditModalOpen(true);
       } catch (error) {
         console.error('Error handling edit click: ', error);
@@ -242,13 +244,14 @@ const EditModal: React.FC<{ isOpen: boolean; onCancel: () => void; onConfirm: (u
   };
   
   
+  
+
   const handleConfirmDelete = () => {
-    if (idToDelete !== null && idToDelete !== undefined) {
-      onDelete(idToDelete.toString());
+    if (idToDelete !== null) {
+      onDelete(idToDelete.toString()); 
       setIsDeleteModalOpen(false);
     }
   };
-  
 
   const handleCancelDelete = () => {
     setIsDeleteModalOpen(false);
@@ -264,13 +267,14 @@ const EditModal: React.FC<{ isOpen: boolean; onCancel: () => void; onConfirm: (u
       console.error('Token not found. User may not be authenticated.');
       return;
     }
-  
+
     if (idToEdit !== null) {
       try {
         await putSchedule(idToEdit, updatedData, token);
         useSwalUpdate('success');
-        setIsEditModalOpen(false);
-        setIdToEdit(null);
+        setTimeout(() => {
+          window.location.reload();
+        }, 1000);
       } catch (error: any) {
         console.error('Failed to update data: ', error);
         useSwalUpdate('failed', error.message);
@@ -286,27 +290,27 @@ const EditModal: React.FC<{ isOpen: boolean; onCancel: () => void; onConfirm: (u
 
 
   if (userRole === 'suster') {
-    doctorNameCell = <td className="p-2">{data.user.name}</td>;
-    bookingDateCell = <td className="p-2">{data.day}</td>;
+    doctorNameCell = <td className="p-4">{data.user.name}</td>;
+    bookingDateCell = <td className="p-4">{data.day}</td>;
   } else {
-    bookingDateCell = <td className="p-2">{data.schedule?.day}</td>;
+    bookingDateCell = <td className="p-4">{data.schedule?.day}</td>;
   }
 
   return (
     <>
   <tr className="border-b text-left">
-  <td className="p-2">{index + 1}</td>
+  <td className="p-4">{index + 1}</td>
   {doctorNameCell}
   {bookingDateCell}
-  <td className="p-2">
+  <td className="p-4">
     {userRole === 'suster' ? data.health_care_address : data.schedule?.health_care_address}
   </td>
-  <td className="p-2">
+  <td className="p-4">
     {`${formatTime(
       userRole === 'suster' ? data.time_start : data.schedule?.time_start
     )} - ${formatTime(userRole === 'suster' ? data.time_end : data.schedule?.time_end)}`}
   </td>
-  <td className="p-2">
+  <td className="p-4">
     <div className="flex items-center justify-center gap-x-2">
       <Tooltip
         content={
@@ -357,9 +361,9 @@ const JadwalPraktik = () => {
   const userRole = Cookies.get('userRole');
   const token = Cookies.get('token');
   const userName = Cookies.get('userName');
+  const [isLoading, setIsLoading] = useState(false);
 
   const startNumber = 0;
-  const { putSchedule } = useSchedule() as any;
 
   const [isAddScheduleModalOpen, setAddScheduleModalOpen] = useState(false);
   const [newSchedule, setNewSchedule] = useState({
@@ -378,11 +382,89 @@ const JadwalPraktik = () => {
     time_end: string;
   }) => {
     try {
-      console.log('Data Baru:', scheduleData);
-      
-      if (userRole === 'admin' || userRole === 'suster' || userRole === 'dokter') {
-        const response = await axios.post(
-          'https://drariawan.altapro.online/v1/schedule',
+      console.log('Data Baru', scheduleData);
+
+      const response = await axios.post(
+        '/v1/schedule',
+        scheduleData,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      setTimeout(() => {
+        window.location.reload();
+      }, 1000);
+      console.log('New Schedule Response:', response);
+      setBookings((prevBookings) => [...prevBookings, response.data.data]);
+
+      setAddScheduleModalOpen(false);
+      useSwalCreate('success');
+    } catch (error: any) {
+      console.error('Failed to update data: ', error);
+
+      if (error.response) {
+        console.error('Error response:', error.response.data);
+      }
+
+      useSwalCreate('failed', error.message);
+    }
+  };
+
+  const handleDeleteSchedule = async (id: string) => {
+    console.log('Deleting schedule with id:', id);
+
+    const token = Cookies.get('token');
+    if (!token) {
+      console.error('Token not found. User may not be authenticated.');
+      return;
+    }
+
+    if (userRole === 'admin' || userRole === 'suster') {
+      try {
+        const response = await axios.delete(
+          `/v1/schedule/delete?id=${id}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+
+        console.log('Server response:', response);
+
+        useSwalDeleteData('success');
+        setTimeout(() => {
+          window.location.reload();
+        }, 1000);
+      } catch (error:any) {
+        console.error('Failed to delete data: ', error);
+        useSwalDeleteData('failed', error.message);
+      }
+    } else {
+      console.log('Unauthorized access to delete patient data.');
+    }
+};
+
+
+  const handleEditSchedule =  async (scheduleId: number, scheduleData: {
+    health_care_address: string;
+    day: string;
+    time_start: string;
+    time_end: string;
+  }) => {
+
+    const token = Cookies.get('token');
+    if (!token) {
+      console.error('Token not found. User may not be authenticated.');
+      return;
+    }
+
+    if (userRole === 'admin' || userRole === 'suster' || userRole === 'dokter') {
+      try {
+        const response = await axios.put(
+          `/v1/schedule?id=${scheduleId}`,
           scheduleData,
           {
             headers: {
@@ -390,93 +472,13 @@ const JadwalPraktik = () => {
             },
           }
         );
-  
-        setBookings((prevBookings) => [...prevBookings, response.data.data]);
-  
-        setAddScheduleModalOpen(false);
-        useSwalCreate('success');
-      } else {
-        console.log('Unauthorized access to add a new schedule.');
-      }
-    } catch (error: any) {
-      console.error('Failed to add new schedule: ', error);
-  
-      if (error.response) {
-        console.error('Error response:', error.response.data);
-      }
-  
-      useSwalCreate('failed', error.message);
-    }
-  };
-  
-  const handleDeleteSchedule = async (id: string) => {
-    console.log('Deleting schedule with id:', id);
-    
-    const token = Cookies.get('token');
-    if (!token) {
-      console.error('Token not found. User may not be authenticated.');
-      return;
-    }
-    const userRole = Cookies.get('userRole');
-  
-    if (userRole === 'admin' || userRole === 'suster' || userRole === 'dokter') {
-      try {
-  
-        const response = await axios.delete(
-          `https://drariawan.altapro.online/v1/schedule/delete?id=${id}`,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
-  
+
         console.log('Server response:', response);
-  
-        useSwalDeleteData('success');
+
+        useSwalUpdate('success');
         setTimeout(() => {
           window.location.reload();
         }, 1000);
-      } catch (error: any) {
-        console.error('Failed to delete data: ', error);
-        useSwalDeleteData('failed', error.message);
-      }
-    } else {
-      console.log('Unauthorized access to delete patient data.');
-    }
-  };
-  
-  const handleEditSchedule = async (
-    scheduleId: number,
-    scheduleData: {
-      health_care_address: string;
-      day: string;
-      time_start: string;
-      time_end: string;
-    }
-  ) => {
-    const token = Cookies.get('token');
-    if (!token) {
-      console.error('Token not found. User may not be authenticated.');
-      return;
-    }
-    if (userRole === 'admin' || userRole === 'suster' || userRole === 'dokter') {
-      try {
-        console.log('Sending edit request:', scheduleId, scheduleData);
-        const response = await putSchedule(scheduleId, scheduleData, token);
-        console.log('Server response:', response);
-        setBookings((prevBookings) => {
-          const updatedBookings = prevBookings.map((booking) =>
-            booking.schedule.schedule_id === scheduleId
-              ? {
-                  ...booking,
-                  schedule: { ...booking.schedule, ...scheduleData },
-                }
-              : booking
-          );
-          return updatedBookings;
-        });
-  
       } catch (error: any) {
         console.error('Failed to update data: ', error);
         useSwalUpdate('failed', error.message);
@@ -485,11 +487,11 @@ const JadwalPraktik = () => {
       console.log('Unauthorized access to update patient data.');
     }
   };
-  
 
   useEffect(() => {
     const fetchSchedules = async () => {
       try {
+        setIsLoading(true);
         if (!token || !userRole || !userName) {
           console.log(
             'Akses anda ditolak. Anda tidak memiliki akses ke halaman ini.'
@@ -505,13 +507,15 @@ const JadwalPraktik = () => {
         if (userRole === 'suster') {
           try {
             const schedulesResponse = await axios.get(
-              'https://drariawan.altapro.online/v1/schedule/list',
+              '/v1/schedule/list',
               {
                 headers: {
                   Authorization: `Bearer ${token}`,
                 },
               }
             );
+
+            console.log('Schedule Response:', schedulesResponse);
 
             if (schedulesResponse.data && schedulesResponse.data.data) {
               const data: Schedule[] = schedulesResponse.data.data;
@@ -528,7 +532,7 @@ const JadwalPraktik = () => {
         let userId: number | null = null;
         if (userRole === 'dokter' || userRole === 'suster') {
           const userResponse = await axios.get(
-            'https://drariawan.altapro.online/v1/user/list',
+            '/v1/user/list',
             {
               params: {
                 search: userName,
@@ -547,6 +551,7 @@ const JadwalPraktik = () => {
             userResponse.data.data.length > 0
           ) {
             userId = userResponse.data.data[0].id;
+            console.log('User ID:', userId);
           } else {
             console.log('User not found or response data is invalid.');
             return;
@@ -556,13 +561,16 @@ const JadwalPraktik = () => {
         if (userId !== null) {
           try {
             const schedulesResponse = await axios.get(
-              'https://drariawan.altapro.online/v1/schedule/list',
+              '/v1/schedule/list',
               {
                 headers: {
                   Authorization: `Bearer ${token}`,
                 },
               }
             );
+
+            console.log('Schedule Response:', schedulesResponse);
+
             if (schedulesResponse.data && schedulesResponse.data.data) {
               const filteredData = schedulesResponse.data.data
                 .filter((item: any) => item.user_id === userId)
@@ -594,18 +602,21 @@ const JadwalPraktik = () => {
         }
       } catch (error) {
         console.error('Error:', error);
+      } finally {
+        setIsLoading(false);
       }
     };
-
+  
     fetchSchedules();
   }, [token, userName, userRole]);
+  
 
   useEffect(() => {
     const fetchUserData = async () => {
       try {
         if (userRole === 'dokter') {
           const userResponse = await axios.get(
-            'https://drariawan.altapro.online/v1/user/list',
+            '/v1/user/list',
             {
               params: {
                 search: userName,
@@ -639,14 +650,14 @@ const JadwalPraktik = () => {
       } catch (error) {
         console.error('Error fetching user data:', error);
       }
+      
     };
 
     fetchUserData();
   }, [token, userName, userRole, setNewSchedule]);
 
   return (
-    <div className="flex flex-col items-end">
-      <h1>Daftar Praktik</h1>
+    <div className="table-container overflow-x-scroll ">
       {userRole === 'dokter' && (
         <button
           className="ml-auto bg-white mt-20 flex items-center text-health-blue-medium border border-health-blue-medium font-lato_regular"
@@ -780,9 +791,9 @@ const JadwalPraktik = () => {
           </div>
         </div>
       )}
-
-      <table className="w-full table-auto bg-white mt-10">
-        <thead className="text-health-blue-dark font-lato_regular">
+    {isLoading && <Loading id="loadingModal" isOpen={true} />}
+    <table className="w-full min-w-full table-auto bg-white mt-10 ">
+        <thead className="  bg-gray-200 text-base text-black font-lato_regular ">
           <tr>
             <th className="border-b p-3 text-center">No</th>
             {userRole === 'suster' && (
@@ -801,17 +812,16 @@ const JadwalPraktik = () => {
           {bookings.length > 0 ? (
             bookings.map((booking, index) => (
               <TableRow
-              key={
-                userRole === 'suster'
-                  ? booking.user?.id || index
-                  : booking.schedule?.schedule_id || index
-              }
-              data={booking}
-              index={index + startNumber}
-              onDelete={handleDeleteSchedule}
-              onEdit={(scheduleId: number, scheduleData: Schedule) => handleEditSchedule(scheduleId, scheduleData)}
-            />
-            
+                key={
+                  userRole === 'suster'
+                    ? booking.user?.id || index
+                    : booking.schedule?.schedule_id || index
+                }
+                data={booking}
+                index={index + startNumber}
+                onDelete={handleDeleteSchedule}
+                onEdit={async (scheduleId: number, scheduleData: Schedule) => await handleEditSchedule(scheduleId, scheduleData)}
+              />
             ))
           ) : (
             <tr>
@@ -831,4 +841,3 @@ const JadwalPraktik = () => {
 };
 
 export default JadwalPraktik;
-

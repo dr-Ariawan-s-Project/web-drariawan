@@ -4,6 +4,7 @@ import moment from 'moment';
 import Cookies from 'js-cookie';
 import { UserIcon } from '@heroicons/react/24/outline';
 import { useSwalAuth } from '../utils/swal/useSwalAuth';
+import { Icon } from '@iconify/react';
 
 interface NavbarProps {
   page?: string;
@@ -52,24 +53,23 @@ const Navbar: FC<NavbarProps> = ({ page, type, profileData, menuSchedule }) => {
   return type === 'admin' ? (
     <nav className="bg-white shadow-md h-20 flex items-center">
       <div className="flex items-center">
-        <p className="font-lato_regular px-6  md:text-xl text-lg text-start">
+        <p className="font-lato_regular px-6  md:text-md text-lg text-start">
           {page}
         </p>
       </div>
-
-      <div className="lg:fixed md:fixed lg:right-10 md:right-10 flex flex-row justify-center items-center">
+      <div className="lg:fixed md:fixed lg:right-10 md:right-10 flex items-center">
         <div className="mr-4">
           <p className="text-gray-800 text-sm p-2 border border-gray-500 rounded-md">
             {currentDate}
           </p>
-        </div>
-        <div className="px-4 py-3">
-          <span className="block font-lato_regular px-6  md:text-sm sm:text-xs text-md text-start">Halo, {userRole} !</span>
-          <span className="block font-lato_regular px-6  md:text-sm sm:text-xs text-lg text-center">  {userName}</span>
-        </div>
-        <div className="cursor-pointer ml-4" onClick={toggleDropdownAdmin}>
-          <UserIcon className="h-6 w-6 md:h-8 md:w-8" />
-          {isDropdownOpen ? (
+      </div>
+      <div className="px-4 py-3">
+        <span className="block font-lato_regular px-6 lg:text-md md:text-sm sm:text-xs text-sm text-start">Halo, {userRole}!</span>
+        <span className="font-lato_regular px-6 lg:text-md md:text-sm sm:text-xs text-sm text-center hidden md:block lg:block">{userName}</span>
+      </div>
+      <div className="cursor-pointer ml-4" onClick={toggleDropdownAdmin}>
+      <Icon icon="material-symbols-light:account-circle" color="#004878" width="40" />
+            {isDropdownOpen ? (
             <div className="absolute right-0 mt-2 bg-white border border-gray-300 shadow-sm w-40">
               <ul className="py-2">
                

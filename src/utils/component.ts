@@ -93,6 +93,7 @@ export interface PatientDataProps {
   nationality: string;
   partner_option: string;
   partner_email?: string;
+  patientId:string
 }
 
 export interface LoginFormProps {
@@ -109,7 +110,7 @@ export interface SearchBarProps {
 
 export interface ScheduleData  {
   user?: UserData;
-  schedule_id?: number | undefined; 
+  scheduleId?: number | undefined; 
   user_id?: number | undefined;
   health_care_address?: string | undefined;
   day?: string | undefined;
@@ -142,6 +143,7 @@ export type RoleData = {
 export interface BookingDataProps {
   id: string;
   booking_code: string;
+  bookingId :string;
   patient_id: string;
   schedule_id: number;
   booking_date: string;

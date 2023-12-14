@@ -6,6 +6,7 @@ import { useSwalUpdate } from '../../utils/swal/useSwalData';
 import Tooltip from '../../components/Tooltip';
 import { usePatient } from '../../store/apiPatient';
 import { PatientState } from '../../utils/api';
+import Loading from '../../components/Loading';
 
 const TableRow: React.FC<{
   data: PatientState['data'][0];
@@ -19,7 +20,7 @@ const TableRow: React.FC<{
   const [idToDelete, setIdToDelete] = useState<string>('');
 
   const handleDeleteClick = () => {
-    if (userRole === 'admin') {
+    if (userRole === 'admin'  || userRole === 'suster') {
       setIdToDelete(data.id);
       setIsDeleteModalOpen(true);
     } else {
@@ -45,11 +46,11 @@ const TableRow: React.FC<{
 
   return (
     <tr className="border-b text-left">
-      <td className="p-2">{index + 1}</td>
-      <td className="p-2">{data.name}</td>
-      <td className="p-2">{data.email}</td>
-      <td className="p-2">{data.phone}</td>
-      <td className="p-2">
+      <td className="p-4">{index + 1}</td>
+      <td className="p-4">{data.name}</td>
+      <td className="p-4">{data.email}</td>
+      <td className="p-4">{data.phone}</td>
+      <td className="p-4">
         <div className="flex items-center justify-center gap-x-2">
           <Tooltip
             content={
@@ -117,6 +118,7 @@ const ListPasien = () => {
 
   const [editingPatient, setEditingPatient] = useState<PatientState['data'][0] | null>(null);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleDeletePatient = async (id: string) => {
     const token = Cookies.get('token');
@@ -124,7 +126,7 @@ const ListPasien = () => {
       console.error('Token not found. User may not be authenticated.');
       return;
     }
-    if (userRole === 'admin') {
+    if (userRole === 'admin' || userRole === 'suster') {
       try {
         await deletePatient(id, token);
         useSwalDeleteData('success');
@@ -168,22 +170,28 @@ const ListPasien = () => {
     setIsEditModalOpen(false);
     setEditingPatient(null);
   };
-
+  
   useEffect(() => {
-    if (
-      !token ||
-      !userRole ||
-      ![ 'admin',  'suster'].includes(userRole)
-    ) {
-      console.log(
-        'Akses anda ditolak. Anda tidak memiliki akses ke halaman ini.'
-      );
-    } else {
-      getPatient(page, 10, token, userRole);
-      setStartNumber((page - 1) * 10);
-    }
+    const fetchData = async () => {
+      try {
+        setIsLoading(true);
+  
+        if (!token || !userRole || !['admin', 'suster'].includes(userRole)) {
+          console.log('Akses anda ditolak. Anda tidak memiliki akses ke halaman ini.');
+        } else {
+          await getPatient(page, 10, token, userRole);
+          setStartNumber((page - 1) * 10);
+        }
+      } catch (error) {
+        console.error('Error:', error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+  
+    fetchData();
   }, [getPatient, page, token, userRole]);
-
+  
   return (
     <section className="min-h-screen flex flex-col justify-center items-center">
       {isEditModalOpen && (
@@ -277,8 +285,9 @@ const ListPasien = () => {
       )}
       <div className="overflow-x-auto mx-auto w-full mt-2 sm:mt-20">
         <div className="relative overflow-x-auto h-[60vh] overflow-y-scroll">
+        {isLoading && <Loading id="loadingModal" isOpen={true} />}
           <table className="w-full table-auto bg-white">
-            <thead className="text-health-blue-dark font-lato_regular">
+          <thead className="  bg-gray-200  text-black font-lato_regular ">
               <tr>
                 <th className="border-b p-3 text-center">No</th>
                 <th className="border-b p-3 text-center">Name</th>

@@ -3,6 +3,7 @@ import { useUser } from '../../store/apiUser';
 import Cookies from 'js-cookie';
 import { useEffect, useState } from 'react';
 import { useSwalUpdate } from '../../utils/swal/useSwalData';
+import Loading from '../../components/Loading';
 
 interface User {
   id: number;
@@ -21,6 +22,7 @@ const Setting = () => {
   const userName = Cookies.get('userName');
   const [user, setUser] = useState<User | null>(null);
   const [editMode, setEditMode] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleEditClick = () => {
     setEditMode(true);
@@ -56,68 +58,63 @@ const Setting = () => {
   useEffect(() => {
     const fetchUser = async () => {
       try {
+        setIsLoading(true);
+  
         if (!token || !userRole || !userName) {
-          console.log('Akses anda ditolak. Anda tidak memiliki akses ke halaman ini.');
-          return;
+          throw new Error('Access denied. Missing token, userRole, or userName.');
         }
-
-        let userId: number | null = null;
+  
+        let userId = null;
+  
         if (userRole === 'admin' || userRole === 'dokter' || userRole === 'suster') {
-          const userIdResponse = await axios.get(
-            'https://drariawan.altapro.online/v1/user/list',
-            {
-              params: {
-                search: userName,
-                rp: 10,
-                page: 1,
-              },
-              headers: {
-                Authorization: `Bearer ${token}`,
-              },
-            }
-          );
-
+          const userIdResponse = await axios.get('/v1/user/list', {
+            params: {
+              search: userName,
+              rp: 10,
+              page: 1,
+            },
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          });
+  
           if (userIdResponse.data && userIdResponse.data.data && userIdResponse.data.data.length > 0) {
             userId = userIdResponse.data.data[0].id;
           } else {
-            console.log('User not found or response data is invalid.');
-            return;
+            throw new Error('User not found or response data is invalid.');
           }
         }
-
+  
         if (userId !== null) {
-          try {
-            const userResponse = await axios.get(
-              `https://drariawan.altapro.online/v1/user?id=${userId}`,
-              {
-                headers: {
-                  Authorization: `Bearer ${token}`,
-                },
-              }
-            );
-
-            if (userResponse?.data?.data) {
-              const data: User = userResponse.data.data;
-              setUser(data);
-            } else {
-              console.log('User not found.');
-            }
-          } catch (error: any) {
-            console.error('Error fetching user data:', error.response || error.message || error);
+          const userResponse = await axios.get(`/v1/user?id=${userId}`, {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          });
+  
+          if (userResponse?.data?.data) {
+            const data: User = userResponse.data.data;
+            setUser(data);
+          } else {
+            throw new Error('User not found.');
           }
         } else {
-          console.log('User ID is null.');
+          throw new Error('User ID is null.');
         }
-      } catch (error: any) {
+      } catch (error :any) {
         console.error('Error in fetchUser:', error.response || error.message || error);
+      } finally {
+        setIsLoading(false);
       }
     };
-
+  
     fetchUser();
   }, [token, userRole, userName]);
-
+  
   return (
+    
     <div className="bg-white w-full flex flex-col gap-5 px-3 md:px-16 lg:px-28 md:flex-row text-health-blue-reguler">
+    {isLoading && <Loading id="loadingModal" isOpen={true} />}
       <main className="w-full min-h-screen py-1 md:w-2/3 lg:w-3/4">
         <div className="p-2 md:p-4">
           <div className="w-full px-6 pb-8 mt-8 sm:max-w-xl sm:rounded-lg">

@@ -11,7 +11,7 @@ export const useSchedule = create<ScheduleState>((set) => ({
     try {
       set({ loading: true, error: null, data: [] });
   
-      const response = await axios.get('https://drariawan.altapro.online/v1/schedule/list', {
+      const response = await axios.get('/v1/schedule/list', {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -29,7 +29,7 @@ export const useSchedule = create<ScheduleState>((set) => ({
     set({ loading: true, error: null, data: [] });
     try {
       const response = await axios.post(
-        'https://drariawan.altapro.online/v1/schedule',
+        '/v1/schedule',
         scheduleData,
         {
           headers: {
@@ -48,29 +48,29 @@ export const useSchedule = create<ScheduleState>((set) => ({
   },
   
   putSchedule: async (scheduleId, scheduleData, token) => {
-    set({ loading: true, error: null });
-  
     try {
-      const response = await axios.put(`/v1/schedule?id=${scheduleId}`, scheduleData, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      set({ loading: true, error: null });
   
-      set((prevState) => ({
-        ...prevState,
-        data: (prevState.data ?? []).map((schedule) => {
-          return schedule.schedule_id === scheduleId ? response.data : schedule;
-        }),
-        loading: false,
-        error: null,
-      }));
+      const response = await axios.put(
+        `/v1/schedule?id=${scheduleId}`,
+        scheduleData,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+  
+      set({ loading: false, error: null });
+
+      return response.data;
     } catch (error:any) {
-      set((prevState) => ({
-        ...prevState,
+      set({
         loading: false,
         error: `Failed to update schedule data: ${error.message}`,
-      }));
+      });
+  
+      throw error;
     }
   },
   

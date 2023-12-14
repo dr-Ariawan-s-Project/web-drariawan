@@ -5,6 +5,7 @@ import axios from 'axios';
 import { Icon } from '@iconify/react';
 import { Link } from 'react-router-dom';
 import Tooltip from '../../components/Tooltip';
+import Loading from '../../components/Loading';
 
 interface Answer {
   choices: any;
@@ -164,6 +165,7 @@ const Responden = () => {
   const [startNumber, setStartNumber] = useState<number>(1);
   const [selectedAttempt, setSelectedAttempt] = useState<{ attemptId: string; answers: Answer[] } | null>(null);
   const [showAnswers, setShowAnswers] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleSortChange = (field: SetStateAction<string>) => {
     if (field === sortBy) {
@@ -205,7 +207,7 @@ const Responden = () => {
       }
   
       const attemptResponse = await axios.get(
-        `https://drariawan.altapro.online/v1/questioner/attempts`,
+        `/v1/questioner/attempts`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -221,7 +223,7 @@ const Responden = () => {
       }
   
       const answersResponse = await axios.get(
-        `https://drariawan.altapro.online/v1/questioner/attempts/${attemptId}/answers`,
+        `v1/questioner/attempts/${attemptId}/answers`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -272,6 +274,7 @@ const Responden = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
+        setIsLoading(true);
         if (!token || !userRole || !['admin', 'dokter', 'suster'].includes(userRole)) {
           console.log('Access denied. You do not have access to this page.');
         } else {
@@ -280,6 +283,8 @@ const Responden = () => {
         }
       } catch (error) {
         console.error('Error fetching attempts data:', error);
+      } finally {
+        setIsLoading(false);
       }
     };
 
@@ -287,7 +292,8 @@ const Responden = () => {
   }, [getAttempts, page, token, userRole]);
 
   return (
-    <div className="overflow-x-auto mx-auto w-full mt-2 sm:mt-20 flex-grow text-center">
+    <section className="overflow-x-auto mx-auto w-full mt-2 sm:mt-20 flex-grow text-center">
+     {isLoading && <Loading id="loadingModal" isOpen={true} />}
       <div className="relative bg-white px-10 py-4">
         <div className="relative overflow-x-auto overflow-y-scroll pr-10 ">
           {loading ? (
@@ -357,37 +363,41 @@ const Responden = () => {
 
                     </tbody>
                   </table>
-                  <div className="flex flex-col md:flex-row justify-center items-center mt-10 gap-5">
-                    <button
-                      className="w-full md:w-32 h-10 bg-health-blue-dark border-none hover:bg-health-blue-reguler focus:outline-none rounded-md text-white font-semibold flex items-center justify-center"
-                      onClick={() => setPage(page - 1)}
-                      disabled={page === 1}
-                    >
-                      Prev
-                    </button>
-                    <div className="w-full md:w-32 mt-3 md:mt-0">
-                      <input
-                        className="w-full h-10 p-3 rounded-sm border border-health-blue-dark text-center"
-                        type="number"
-                        value={page}
-                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => setPage(parseInt(e.target.value))}
-                      />
-                    </div>
-                    <button
-                      className="w-full md:w-32 h-10 bg-health-blue-dark border-none hover:bg-health-blue-reguler focus:outline-none rounded-md text-white font-semibold flex items-center justify-center"
-                      onClick={handleNextPage}
-                      disabled={!attemptsData?.data || attemptsData.data.length === 0}
-                    >
-                      Next
-                    </button>
-                  </div>
+               
                 </div>
               )}
             </div>
           )}
         </div>
       </div>
-    </div>
+      <div className="flex flex-col md:flex-row justify-center items-center mt-10 gap-5">
+        <button
+          className="w-full md:w-32 h-10 bg-health-blue-dark border-none hover:bg-health-blue-reguler focus:outline-none rounded-md text-white font-semibold flex items-center justify-center"
+          onClick={() => setPage(page - 1)}
+          disabled={page === 1}
+        >
+          Prev
+        </button>
+
+        <div className="w-full md:w-32 mt-3 md:mt-0">
+          <input
+            className="w-full h-10 p-3 rounded-sm border border-health-blue-dark text-center"
+            type="number"
+            value={page}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setPage(parseInt(e.target.value))}
+          />
+        </div>
+
+        <button
+          className="w-full md:w-32 h-10 bg-health-blue-dark border-none hover:bg-health-blue-reguler focus:outline-none rounded-md text-white font-semibold flex items-center justify-center"
+          onClick={handleNextPage}
+          disabled={!attemptsData?.data || attemptsData.data.length === 0}
+        >
+          Next
+        </button>
+      </div>
+  
+    </section>
   );
 };
 

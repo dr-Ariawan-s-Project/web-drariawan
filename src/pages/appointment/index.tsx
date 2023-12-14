@@ -5,6 +5,7 @@ import Tooltip from '../../components/Tooltip';
 import { PencilIcon, TrashIcon } from '@heroicons/react/24/outline';
 import { useSwalDeleteData, useSwalUpdate } from '../../utils/swal/useSwalData';
 import { useAppointment } from '../../store/apiAppointment';
+import Loading from '../../components/Loading';
 
 interface User {
   id: number;
@@ -67,6 +68,7 @@ const TableRow: React.FC<{
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [idToDelete, setIdToDelete] = useState<string>('');
+  const { putBooking } = useAppointment() as any;
 
   const [editModalData, setEditModalData] = useState({
     patient: { name: '', id: '' },
@@ -110,18 +112,12 @@ const handleCancelDelete = () => {
 const handleEditSubmit = async () => {
   const token = Cookies.get('token');
   try {
-    const response = await axios.put(
-      `https://drariawan.altapro.online/v1/booking/${data.id}`,
-      {
-        patient_id: editModalData.patient?.id,
-        schedule_id: parseInt(editModalData.schedule_id),
-        booking_date: new Date(editModalData.booking_date).toISOString().split('T')[0],
-      },
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
+    const response = await putBooking(
+      data.id,
+      editModalData.patient?.id || '',
+      parseInt(editModalData.schedule_id),
+      new Date(editModalData.booking_date).toISOString().split('T')[0],
+      token || ''
     );
 
     setIsEditModalOpen(false);
@@ -305,7 +301,8 @@ const Appointment = () => {
   const token = Cookies.get('token');
   const userName = Cookies.get('userName');
   const startNumber = 0;
-  const { deleteBooking } = useAppointment() as any;
+  const {deleteBooking } = useAppointment() as any;
+  const [isLoading, setIsLoading] = useState(false);
 
  const handleDeleteBooking = async (id: string) => {
   const token = Cookies.get('token');
@@ -339,7 +336,7 @@ const handleEditBooking = async (editModalData: any) => {
   if (userRole === 'suster' && editModalData) {
     try {
       const response = await axios.put(
-        `https://drariawan.altapro.online/v1/booking/${editModalData.id}`,
+        `/v1/booking/${editModalData.id}`,
         {
           patient_id: editModalData.patient?.id,
           schedule_id: editModalData.schedule_id,
@@ -369,36 +366,27 @@ const handleEditBooking = async (editModalData: any) => {
 
 
 useEffect(() => {
-  const fetchBookings = async () => {
+  const fetchData = async () => {
     try {
+      setIsLoading(true);
       if (!token || !userRole || !userName) {
-        console.log(
-          'Akses anda ditolak. Anda tidak memiliki akses ke halaman ini.'
-        );
-        return;
-      }
-
-      if (userRole === 'admin' || userRole === 'superadmin') {
-        console.log('Anda tidak memiliki akses ke halaman ini.');
+        console.log('Akses anda ditolak. Anda tidak memiliki akses ke halaman ini.');
         return;
       }
 
       let userId: number | null = null;
 
       if (userRole === 'dokter') {
-        const userResponse = await axios.get(
-          'https://drariawan.altapro.online/v1/user/list',
-          {
-            params: {
-              search: userName,
-              rp: 10,
-              page: 1,
-            },
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
+        const userResponse = await axios.get('/v1/user/list', {
+          params: {
+            search: userName,
+            rp: 10,
+            page: 1,
+          },
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
 
         if (
           userResponse.data &&
@@ -418,23 +406,17 @@ useEffect(() => {
       let bookingsResponse;
 
       if (userId !== null) {
-        bookingsResponse = await axios.get(
-          `https://drariawan.altapro.online/v1/booking/user/${userId}`,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
+        bookingsResponse = await axios.get(`/v1/booking/user/${userId}`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
       } else if (userRole === 'suster') {
-        bookingsResponse = await axios.get(
-          'https://drariawan.altapro.online/v1/booking/list',
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
+        bookingsResponse = await axios.get('/v1/booking/list', {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
       } else {
         console.log('Unauthorized user role.');
         return;
@@ -452,20 +434,23 @@ useEffect(() => {
       } else {
         console.error('Error fetching bookings:', error);
       }
+    } finally {
+      setIsLoading(false);
+    
     }
   };
 
-  fetchBookings();
+  fetchData();
 }, [token, userRole, userName, setBookings]);
 
 return (
-  <div>
-    <h1>Daftar Booking</h1>
-    <table className="w-full table-auto bg-white mt-20">
-      <thead className="text-health-blue-dark font-lato_regular">
+  <div className="table-container overflow-x-scroll ">
+    {isLoading && <Loading id="loadingModal" isOpen={true} />}
+    <table className="w-full min-w-full table-auto bg-white mt-20">
+    <thead className="  bg-gray-200 text-base text-black font-lato_regular ">
         <tr>
-          <th className="border-b p-3 text-center">No</th>
-          <th className="border-b p-3 text-center">Created Date</th>
+        <th className="border-b p-3 text-center">No</th>
+          <th className="border-b p-3  text-center">Created Date</th>
           <th className="border-b p-3 text-center">Doctor Name</th>
           <th className="border-b p-3 text-center">Patient Name</th>
           <th className="border-b p-3 text-center">Booking Date</th>

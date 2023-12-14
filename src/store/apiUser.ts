@@ -10,7 +10,7 @@ export const useUser = create<UserState>((set) => ({
   getUser: async (userId: number, token: string) => {
     set({ loading: true, error: null, data: [] });
     try {
-      const response = await axios.get(`https://drariawan.altapro.online/v1/user?id=${userId}`, {
+      const response = await axios.get(`/v1/user?id=${userId}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },

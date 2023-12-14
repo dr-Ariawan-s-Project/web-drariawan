@@ -16,7 +16,7 @@ export const useDashboard = create<DashboardState>((set) => ({
     set({ loading: true, error: null });
     try {
       const response = await axios.get(
-        'https://drariawan.altapro.online/v1/dashboard',
+        '/v1/dashboard',
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -38,7 +38,7 @@ export const useDashboard = create<DashboardState>((set) => ({
     set({ loading: true, error: null });
     try {
       const response = await axios.get(
-        'https://drariawan.altapro.online/v1/dashboard/questioner',
+        '/v1/dashboard/questioner',
         {
           headers: {
             Authorization: `Bearer ${token}`,

@@ -8,9 +8,8 @@ export const useAppointment = create<AppointmentState>((set) => ({
   loading: false,
   error: null,
 
-  getListBooking: async (token: string): Promise<void> => {
+  getListBooking : async function (token: string): Promise<void> {
     set({ loading: true, error: null, data: [] });
-
     try {
       const response = await axios.get('/v1/booking/list', {
         headers: {
@@ -18,45 +17,41 @@ export const useAppointment = create<AppointmentState>((set) => ({
         },
       });
       const responseData = response.data;
-      set({ data: responseData.data || [], loading: false, error: null });
-    } catch (error: any) {
+  
+      set({
+        data: responseData.data || [],
+        loading: false,
+        error: null,
+      });
+    } catch (error:any) {
+      console.error('Error fetching appointment data:', error);
+  
       set({
         loading: false,
-        error: `Failed to retrieve appointment data: ${error.message}`,
+        error: `Failed to retrieve appointment data: ${error.message || 'Unknown error'}`,
         data: [],
       });
-    }
-  },
-
-  putBooking : async (bookingId: string, patientId: string, scheduleId: number, bookingDate: string, token: string
-  ): Promise<void> => {
-    try {
-      const response = await axios.put(
-        `https://drariawan.altapro.online/v1/booking/${bookingId}`,
-        {
-          patient_id: patientId,
-          schedule_id: scheduleId,
-          booking_date: bookingDate,
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-      set({ data: response.data ? [response.data] : [], loading: false, error: null });
-      return response.data;
-    } catch (error: any) {
-      set({
-        loading: false,
-        error: `Failed to retrieve appointment data: ${error.message}`,
-        data: [],
-      });
-      throw error;
     }
   },
   
-
+  putBooking: async (bookingData: BookingDataProps, token: string) => {
+    const response = await axios.put(
+      `/booking/${bookingData.id}`,
+      {
+        patient_id: bookingData.Patient.patientId,
+        schedule_id: bookingData.scheduleId,
+        booking_date: bookingData.bookingDate,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+  
+    return response.data;
+  },  
+  
   getBookingById: async (bookingId: string, token: string): Promise<BookingDataProps | null> => {
     set({ loading: true, error: null });
 
