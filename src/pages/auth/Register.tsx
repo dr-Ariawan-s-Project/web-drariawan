@@ -1,7 +1,8 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useFormik } from 'formik';
 import { useNavigate, Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
+import Cookies from 'js-cookie';
 
 import { registerPasien } from '../../utils/yup/register_pasien';
 import { useSwalCreate } from '../../utils/swal/useSwalData';
@@ -12,6 +13,7 @@ import Button from '../../components/Button';
 
 const Register = () => {
   const navigate = useNavigate();
+  const token = Cookies.get('token');
   const { postPatient } = usePatient();
   const [currentFieldGroup, setCurrentFieldGroup] = useState<number>(0);
   const fieldGroups = [
@@ -99,6 +101,14 @@ const Register = () => {
 
   const isLastFieldGroup = currentFieldGroup === fieldGroups.length - 1;
   const isPartnerEmailRequired = formik.values.partner_option === 'Partner';
+
+  useEffect(() => {
+    if (token) {
+      navigate('/scheduling');
+    } else {
+      return;
+    }
+  }, []);
 
   return (
     <section className="flex flex-col justify-center items-center min-h-screen px-4 sm:px-6 md:px-8 lg:px-12 mt-18">

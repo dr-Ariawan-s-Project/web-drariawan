@@ -46,9 +46,9 @@ const Main = () => {
             </button>
             <button
               onClick={() => navigate('/auth/option/register')}
-              className="bg-slate-200 bg-opacity-70 rounded-md w-36 border-none focus:outline-none hover:text-white hover:bg-health-blue-dark"
+              className="bg-slate-200 bg-opacity-70 rounded-md w-40 border-none focus:outline-none hover:text-white hover:bg-health-blue-dark"
             >
-              Daftar Pasien
+              Booking Jadwal
             </button>
           </div>
         </div>
