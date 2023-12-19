@@ -31,7 +31,7 @@ const Login = () => {
           name: response?.data?.name,
         };
         if (userData.token) {
-          Cookies.set('token', userData.token);
+          Cookies.set('token', userData.token, { expires: 1 });
           useSwalAuth('login', userData.name);
           navigate('/scheduling');
         }
