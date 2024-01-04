@@ -1,7 +1,7 @@
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 
 import ProtectedRoute from './protected-route';
-import Admin from '../pages/admin';
+import Admin from '../pages/admin/old';
 import Register from '../pages/auth/register';
 import Login from '../pages/auth/login';
 import DataDiri from '../pages/data_diri';
@@ -16,7 +16,7 @@ import Splash from '../pages/splash';
 import VerifikasiEmail from '../pages/verifikasi_email';
 import AdminLogin from '../pages/admin/login';
 import JadwalPraktik from '../pages/jadwal_praktik';
-import Dashboard from '../pages/dashboard';
+import Dashboard from '../pages/admin';
 import Scheduling from '../pages/scheduling';
 import Main from '../pages/main';
 import KonfirmasiPraktik from '../pages/konfirmasi_praktik';
@@ -92,15 +92,11 @@ const App = () => {
         },
         {
           path: '/admin',
-          element: <Admin />,
+          element: <Dashboard />,
         },
         {
           path: '/admin/login',
           element: <AdminLogin />,
-        },
-        {
-          path: '/dashboard',
-          element: <Dashboard />,
         },
         {
           path: '/list/kuisioner',
