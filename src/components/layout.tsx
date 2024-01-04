@@ -14,7 +14,7 @@ const Layout = (props: Readonly<Props>) => {
   const { children, hideNavbar, centerY = false, centerX = false } = props;
 
   return (
-    <div className="bg-white flex flex-col h-screen w-full text-gray-900 overflow-auto">
+    <div className="bg-white flex flex-col h-screen w-full [&>*]:text-health-blue-dark">
       {!hideNavbar && <Navbar />}
       <div
         className={clsx(

@@ -2,7 +2,6 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useNavigate, Link } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { Loader2 } from 'lucide-react';
-import Cookies from 'js-cookie';
 
 import {
   CustomFormField,
@@ -35,12 +34,11 @@ const AdminLogin = () => {
     try {
       const result = await adminLogin(data);
       toast({
-        description: 'Hello, welcome back!',
+        description: 'Halo, selamat datang kembali',
       });
       // TODO: Change addAuth to accept role
       addAuth(result.data);
-      // Cookies.set('token', userData.token, { expires: 1 });
-      navigate('/admin');
+      // navigate('/admin');
     } catch (error) {
       toast({
         title: 'Oops! Sesuatu telah terjadi',

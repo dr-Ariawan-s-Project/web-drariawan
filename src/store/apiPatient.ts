@@ -49,7 +49,10 @@ export const usePatient = create<PatientState>((set) => ({
     set({ loading: true, error: null, data: [] });
     console.log('data : ', patientData);
     try {
-      const response = await axios.post('/v1/patients', patientData);
+      const response = await axios.post(
+        'https://drariawan-api.alta.id/v1/patients',
+        patientData
+      );
       set({ data: [response.data], loading: false, error: null });
       console.log(response?.data);
     } catch (error: any) {

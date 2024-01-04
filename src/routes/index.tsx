@@ -2,8 +2,8 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 
 import ProtectedRoute from './protected-route';
 import Admin from '../pages/admin';
-import Register from '../pages/auth/Register';
-import Login from '../pages/auth/Login';
+import Register from '../pages/auth/register';
+import Login from '../pages/auth/login';
 import DataDiri from '../pages/data_diri';
 import Kuisioner from '../pages/kuisioner';
 import ListUser from '../pages/list_user';

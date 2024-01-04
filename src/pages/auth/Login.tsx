@@ -101,7 +101,9 @@ const Login = () => {
               )}
             </Button>
             <Button variant="link" asChild>
-              <Link to="/register">Belum buat akun? silakan klik disini!</Link>
+              <Link to="/register">
+                Belum memiliki akun? Silakan klik disini!
+              </Link>
             </Button>
           </div>
         </form>
