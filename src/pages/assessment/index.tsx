@@ -3,12 +3,14 @@ import Cookies from 'js-cookie';
 import { useEffect, useState } from 'react';
 import { useSwalCreate } from '../../utils/swal/useSwalData';
 import { useQuestionaire } from '../../store/apiQuestionaire';
+import Loading from '../../components/Loading';
 
 
 const Assessment = () => {
   const userRole = Cookies.get('userRole');
   const token = Cookies.get('token');
   const {  getAttempts } = useQuestionaire();
+  const [isLoading, setIsLoading] = useState(false);
 
   const [newAssessment, setNewAssessment] = useState({
     diagnosis : '',
@@ -27,7 +29,7 @@ const Assessment = () => {
       const attemptId = Cookies.get('current_attempt_id');
   
       const response = await axios.post(
-        `https://drariawan.altapro.online/v1/questioner/attempts/${attemptId}/assesments`,
+        `/v1/questioner/attempts/${attemptId}/assesments`,
         assessment,
         {
           headers: {
@@ -59,6 +61,8 @@ const Assessment = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
+        setIsLoading(true);
+
         if (!token || !userRole || !['admin', 'dokter', 'suster'].includes(userRole)) {
           console.log('Access denied. You do not have access to this page.');
         } else {
@@ -66,6 +70,8 @@ const Assessment = () => {
         }
       } catch (error) {
         console.error('Error fetching attempts data:', error);
+      } finally {
+        setIsLoading(false);
       }
     };
 
@@ -74,6 +80,7 @@ const Assessment = () => {
 
   return (
     <div className="bg-white w-full flex flex-col gap-5 px-3 md:px-16 lg:px-28 md:flex-row text-health-blue-reguler">
+    {isLoading && <Loading id="loadingModal" isOpen={true} />}
       <main className="w-full min-h-screen py-1 md:w-2/3 lg:w-3/4">
         <div className="p-2 md:p-4">
           <div className="w-full px-6 pb-8 mt-8 sm:max-w-xl sm:rounded-lg">

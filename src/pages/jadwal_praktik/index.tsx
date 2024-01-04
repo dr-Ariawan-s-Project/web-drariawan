@@ -8,7 +8,8 @@ import { TrashIcon, PencilIcon } from '@heroicons/react/24/outline';
 import { useSwalDeleteData } from '../../utils/swal/useSwalData';
 import Tooltip from '../../components/Tooltip';
 import { useSchedule } from '../../store/apiSchedule';
- 
+import Loading from '../../components/Loading';
+
 
 
 interface User {
@@ -289,27 +290,27 @@ index: number;
 
 
   if (userRole === 'suster') {
-    doctorNameCell = <td className="p-2">{data.user.name}</td>;
-    bookingDateCell = <td className="p-2">{data.day}</td>;
+    doctorNameCell = <td className="p-4">{data.user.name}</td>;
+    bookingDateCell = <td className="p-4">{data.day}</td>;
   } else {
-    bookingDateCell = <td className="p-2">{data.schedule?.day}</td>;
+    bookingDateCell = <td className="p-4">{data.schedule?.day}</td>;
   }
 
   return (
     <>
   <tr className="border-b text-left">
-  <td className="p-2">{index + 1}</td>
+  <td className="p-4">{index + 1}</td>
   {doctorNameCell}
   {bookingDateCell}
-  <td className="p-2">
+  <td className="p-4">
     {userRole === 'suster' ? data.health_care_address : data.schedule?.health_care_address}
   </td>
-  <td className="p-2">
+  <td className="p-4">
     {`${formatTime(
       userRole === 'suster' ? data.time_start : data.schedule?.time_start
     )} - ${formatTime(userRole === 'suster' ? data.time_end : data.schedule?.time_end)}`}
   </td>
-  <td className="p-2">
+  <td className="p-4">
     <div className="flex items-center justify-center gap-x-2">
       <Tooltip
         content={
@@ -360,6 +361,7 @@ const JadwalPraktik = () => {
   const userRole = Cookies.get('userRole');
   const token = Cookies.get('token');
   const userName = Cookies.get('userName');
+  const [isLoading, setIsLoading] = useState(false);
 
   const startNumber = 0;
 
@@ -383,7 +385,7 @@ const JadwalPraktik = () => {
       console.log('Data Baru', scheduleData);
 
       const response = await axios.post(
-        'https://drariawan.altapro.online/v1/schedule',
+        '/v1/schedule',
         scheduleData,
         {
           headers: {
@@ -422,7 +424,7 @@ const JadwalPraktik = () => {
     if (userRole === 'admin' || userRole === 'suster') {
       try {
         const response = await axios.delete(
-          `https://drariawan.altapro.online/v1/schedule/delete?id=${id}`,
+          `/v1/schedule/delete?id=${id}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -462,7 +464,7 @@ const JadwalPraktik = () => {
     if (userRole === 'admin' || userRole === 'suster' || userRole === 'dokter') {
       try {
         const response = await axios.put(
-          `https://drariawan.altapro.online/v1/schedule?id=${scheduleId}`,
+          `/v1/schedule?id=${scheduleId}`,
           scheduleData,
           {
             headers: {
@@ -489,6 +491,7 @@ const JadwalPraktik = () => {
   useEffect(() => {
     const fetchSchedules = async () => {
       try {
+        setIsLoading(true);
         if (!token || !userRole || !userName) {
           console.log(
             'Akses anda ditolak. Anda tidak memiliki akses ke halaman ini.'
@@ -504,7 +507,7 @@ const JadwalPraktik = () => {
         if (userRole === 'suster') {
           try {
             const schedulesResponse = await axios.get(
-              'https://drariawan.altapro.online/v1/schedule/list',
+              '/v1/schedule/list',
               {
                 headers: {
                   Authorization: `Bearer ${token}`,
@@ -529,7 +532,7 @@ const JadwalPraktik = () => {
         let userId: number | null = null;
         if (userRole === 'dokter' || userRole === 'suster') {
           const userResponse = await axios.get(
-            'https://drariawan.altapro.online/v1/user/list',
+            '/v1/user/list',
             {
               params: {
                 search: userName,
@@ -558,7 +561,7 @@ const JadwalPraktik = () => {
         if (userId !== null) {
           try {
             const schedulesResponse = await axios.get(
-              'https://drariawan.altapro.online/v1/schedule/list',
+              '/v1/schedule/list',
               {
                 headers: {
                   Authorization: `Bearer ${token}`,
@@ -599,18 +602,21 @@ const JadwalPraktik = () => {
         }
       } catch (error) {
         console.error('Error:', error);
+      } finally {
+        setIsLoading(false);
       }
     };
-
+  
     fetchSchedules();
   }, [token, userName, userRole]);
+  
 
   useEffect(() => {
     const fetchUserData = async () => {
       try {
         if (userRole === 'dokter') {
           const userResponse = await axios.get(
-            'https://drariawan.altapro.online/v1/user/list',
+            '/v1/user/list',
             {
               params: {
                 search: userName,
@@ -644,14 +650,14 @@ const JadwalPraktik = () => {
       } catch (error) {
         console.error('Error fetching user data:', error);
       }
+      
     };
 
     fetchUserData();
   }, [token, userName, userRole, setNewSchedule]);
 
   return (
-    <div className="flex flex-col items-end">
-      <h1>Daftar Praktik</h1>
+    <div className="table-container overflow-x-scroll ">
       {userRole === 'dokter' && (
         <button
           className="ml-auto bg-white mt-20 flex items-center text-health-blue-medium border border-health-blue-medium font-lato_regular"
@@ -785,9 +791,9 @@ const JadwalPraktik = () => {
           </div>
         </div>
       )}
-
-      <table className="w-full table-auto bg-white mt-10">
-        <thead className="text-health-blue-dark font-lato_regular">
+    {isLoading && <Loading id="loadingModal" isOpen={true} />}
+    <table className="w-full min-w-full table-auto bg-white mt-10 ">
+        <thead className="  bg-gray-200 text-base text-black font-lato_regular ">
           <tr>
             <th className="border-b p-3 text-center">No</th>
             {userRole === 'suster' && (
@@ -835,5 +841,3 @@ const JadwalPraktik = () => {
 };
 
 export default JadwalPraktik;
-
-

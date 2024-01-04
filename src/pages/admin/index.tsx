@@ -82,7 +82,7 @@ const Admin = () => {
         </div>
       )}
       <div className="w-full md:w-5/6">
-        <div className="lg:fixed md:fixed w-full z-10">
+        <div className="lg:fixed md:fixed sm:fixed w-full z-10">
           <Navbar type="admin" page={page} />
         </div>
         <div className="my-auto p-4 mt-20 md:mt-0 bg-gray-50 w-full">

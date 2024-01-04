@@ -52,12 +52,12 @@ const TableRow: React.FC<{
 
   return (
     <tr className="border-b text-left">
-      <td className="p-2">{index + 1}</td>
-      <td className="p-2">{data.name}</td>
-      <td className="p-2">{data.email}</td>
-      <td className="p-2">{data.phone}</td>
-      <td className="p-2">{data.role}</td>
-      <td className="p-2">
+      <td className="p-4">{index + 1}</td>
+      <td className="p-4">{data.name}</td>
+      <td className="p-4">{data.email}</td>
+      <td className="p-4">{data.phone}</td>
+      <td className="p-4">{data.role}</td>
+      <td className="p-4">
         <div className="flex items-center justify-center gap-x-2">
           <Tooltip
             content={
@@ -192,7 +192,7 @@ const ListUser = () => {
     if (
       !token ||
       !userRole ||
-      !['superadmin', 'admin', 'dokter', 'suster'].includes(userRole)
+      !['superadmin', 'admin'].includes(userRole)
     ) {
       console.log(
         'Akses anda ditolak. Anda tidak memiliki akses ke halaman ini.'
@@ -318,7 +318,7 @@ const ListUser = () => {
     <div className="overflow-x-auto mx-auto w-full mt-2 sm:mt-20">
       <div className="relative overflow-x-auto h-[50vh] overflow-y-scroll">
         <table className="w-full table-auto bg-white">
-          <thead className="text-health-blue-dark font-lato_regular">
+        <thead className="  bg-gray-200 text-base text-black font-lato_regular ">
             <tr>
               <th className="border-b p-3 text-center">No</th>
               <th className="border-b p-3 text-center">Name</th>
@@ -340,14 +340,14 @@ const ListUser = () => {
               ))
             ) : (
               <tr>
-                <td colSpan={5} className="text-center py-2">
-                  {userRole === 'admin' || userRole === 'superadmin' || userRole === 'superadmin'  ? (
-                    <p className="mt-20">Tidak ada data tersedia.</p>
-                  ) : (
-                    <p className="mt-20">Tidak ada data lain tersedia.</p>
-                  )}
-                </td>
-              </tr>
+              <td colSpan={8} className="text-center py-2">
+                { userRole === 'suster'  || userRole === 'dokter' ? (
+                  <p className="mt-20">Anda tidak memiliki akses kehalaman ini.</p>
+                ) : (
+                  <p className="mt-20">Tidak ada data lain tersedia.</p>
+                )}
+              </td>
+            </tr>
             )}
           </tbody>
         </table>

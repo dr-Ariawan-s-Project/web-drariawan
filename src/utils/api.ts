@@ -96,7 +96,7 @@ export type AppointmentState = {
   data: BookingDataProps[];
   loading: boolean;
   error: string | null;
-  putBooking: (bookingId: string, patientId: string, scheduleId: number, bookingDate: string, token: string) => Promise<void>;
+  putBooking: (bookingData: BookingDataProps, token: string) => Promise<any>;
   getBookingById: (bookingId: string, token: string) => Promise<BookingDataProps | null>;
   getListBooking: (token: string) => Promise<void>;
   deleteBooking: (bookingId: string, token: string) => Promise<void>;
