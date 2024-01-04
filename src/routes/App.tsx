@@ -1,5 +1,4 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import axios from 'axios';
 
 import Admin from '../pages/admin';
 import Register from '../pages/auth/Register';
@@ -14,7 +13,7 @@ import Pertanyaan from '../pages/pertanyaan';
 import Success from '../pages/success';
 import Splash from '../pages/splash';
 import VerifikasiEmail from '../pages/verifikasi_email';
-import AdminLogin from '../pages/admin_login';
+import AdminLogin from '../pages/admin/login';
 import JadwalPraktik from '../pages/jadwal_praktik';
 import Dashboard from '../pages/dashboard';
 import Scheduling from '../pages/scheduling';
@@ -30,14 +29,13 @@ import Setting from '../pages/setting_admin';
 import Unauthorized from '../pages/unauthorized_page';
 
 const App = () => {
-  axios.defaults.baseURL = 'https://drariawan-api.alta.id/';
   return (
     <BrowserRouter>
       <Routes>
         <Route element={<Splash />} path="/" />
         <Route element={<Landing />} path="/landing" />
-        <Route element={<Login />} path="/auth/option/login" />
-        <Route element={<Register />} path="/auth/option/register" />
+        <Route element={<Login />} path="/login" />
+        <Route element={<Register />} path="/register" />
         <Route element={<DataDiri />} path="/data_diri" />
         <Route element={<Kuisioner />} path="/kuisioner" />
         <Route element={<Pertanyaan />} path="/kuisioner/:questionId" />

@@ -4,38 +4,43 @@ import { useForm } from 'react-hook-form';
 import { Loader2 } from 'lucide-react';
 import Cookies from 'js-cookie';
 
-import { CustomFormField } from '@/components/custom-formfield';
+import {
+  CustomFormField,
+  CustomFormCheckbox,
+} from '@/components/custom-formfield';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Form } from '@/components/ui/form';
 import Layout from '@/components/layout';
 import { useToast } from '@/components/ui/use-toast';
-import { LoginSchema, loginSchema } from '@/utils/apis/auth/types';
-import { userLogin } from '@/utils/apis/auth/api';
+import { AdminLoginSchema, adminLoginSchema } from '@/utils/apis/auth/types';
+import { adminLogin } from '@/utils/apis/auth/api';
 import useAuthStore from '@/utils/states/auth';
 
-const Login = () => {
+const AdminLogin = () => {
   const addAuth = useAuthStore((state) => state.addAuth);
   const navigate = useNavigate();
   const { toast } = useToast();
 
-  const form = useForm<LoginSchema>({
-    resolver: zodResolver(loginSchema),
+  const form = useForm<AdminLoginSchema>({
+    resolver: zodResolver(adminLoginSchema),
     defaultValues: {
       email: '',
       password: '',
+      remember: false,
     },
   });
 
-  async function onSubmit(data: LoginSchema) {
+  async function onSubmit(data: AdminLoginSchema) {
     try {
-      const result = await userLogin(data);
+      const result = await adminLogin(data);
       toast({
         description: 'Hello, welcome back!',
       });
+      // TODO: Change addAuth to accept role
       addAuth(result.data);
       // Cookies.set('token', userData.token, { expires: 1 });
-      navigate('/scheduling');
+      navigate('/admin');
     } catch (error) {
       toast({
         title: 'Oops! Sesuatu telah terjadi',
@@ -47,10 +52,12 @@ const Login = () => {
 
   return (
     <Layout centerX centerY>
-      <p className="font-lato_black text-center mb-4 text-4xl">Login</p>
-      <p className="text-lg lg:text-xl">
-        Silakan login untuk memilih jadwal praktek
-      </p>
+      <div className="mx-auto max-w-md w-full">
+        <p className="font-medium text-center text-xl">Login</p>
+        <p className="font-bold mt-2 text-center text-health-blue-dark text-3xl">
+          ADMIN
+        </p>
+      </div>
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
@@ -59,12 +66,13 @@ const Login = () => {
           <CustomFormField control={form.control} name="email" label="Email">
             {(field) => (
               <Input
+                {...field}
                 data-testid="input-email"
                 placeholder="name@mail.com"
                 type="email"
                 disabled={form.formState.isSubmitting}
                 aria-disabled={form.formState.isSubmitting}
-                {...field}
+                value={field.value as string}
               />
             )}
           </CustomFormField>
@@ -75,16 +83,27 @@ const Login = () => {
           >
             {(field) => (
               <Input
+                {...field}
                 data-testid="input-password"
                 placeholder="Password"
                 type="password"
                 disabled={form.formState.isSubmitting}
                 aria-disabled={form.formState.isSubmitting}
-                {...field}
+                value={field.value as string}
               />
             )}
           </CustomFormField>
-          <div className="flex flex-col mt-20 gap-y-5">
+          <div className="flex justify-between items-center">
+            <CustomFormCheckbox
+              control={form.control}
+              name="remember"
+              label="Remember me"
+            />
+            <Button variant="link" asChild>
+              <Link to="">Forgot Password</Link>
+            </Button>
+          </div>
+          <div className="flex flex-col mt-20">
             <Button
               data-testid="btn-submit"
               type="submit"
@@ -100,9 +119,6 @@ const Login = () => {
                 'Login'
               )}
             </Button>
-            <Button variant="link" asChild>
-              <Link to="/register">Belum buat akun? silakan klik disini!</Link>
-            </Button>
           </div>
         </form>
       </Form>
@@ -110,4 +126,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default AdminLogin;

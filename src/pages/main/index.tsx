@@ -1,59 +1,43 @@
-import { useNavigate } from 'react-router-dom';
-import Cookies from 'js-cookie';
+import { Link } from 'react-router-dom';
 
-import Navbar from '../../components/Navbar';
+import { Button } from '@/components/ui/button';
+import Layout from '@/components/layout';
 import Background from '../../assets/illustrations/main-background.jpeg';
 
 const Main = () => {
-  const navigate = useNavigate();
-  const patientName = Cookies.get('patientName');
-
-  const handleSchedule = () => {
-    navigate('/scheduling/schedule_list');
-  };
-
   return (
-    <section
-      className="w-max h-screen relative"
-      style={{
-        backgroundImage: `url(${Background})`,
-        backgroundSize: 'cover',
-      }}
-    >
-      <div className="absolute inset-0 bg-black opacity-60" />
-      <Navbar
-        profileData={patientName ? patientName : 'Login sebagai Patient'}
-        menuSchedule={() => handleSchedule()}
-      />
-      <section className="flex justify-center my-auto w-max z-10 relative">
-        <div className="gap-y-7 flex flex-col my-40 mx-20">
-          <h2 className="text-slate-200 text-opacity-80 font-semibold">
+    <Layout>
+      <div className="flex flex-grow w-full">
+        <div
+          className="bg-center bg-cover h-full w-1/2 hidden md:flex"
+          style={{
+            backgroundImage: `linear-gradient(
+            rgba(0, 0, 0, 0.5),
+            rgba(0, 0, 0, 0.5)
+          ), url(${Background})`,
+          }}
+        />
+        <div className="flex flex-col h-full w-full p-8 justify-center md:w-1/2">
+          <h2 className="font-semibold tracking-wider text-2xl">
             Kesehatan Reproduksi adalah Hak Anda
           </h2>
-          <p className="text-slate-300 text-opacity-70">
-            Kami percaya bahwa setiap individu berhak mendapatkan informasi dan{' '}
-            <br />
-            akses yang diperlukan untuk menjaga kesehatan reproduksinya. <br />{' '}
-            Kami hadir untuk memberikan akses yang setara dan pengetahuan yang
+          <p className="font-normal tracking-wider">
+            Kami percaya bahwa setiap individu berhak mendapatkan informasi dan
+            akses yang diperlukan untuk menjaga kesehatan reproduksinya. Kami
+            hadir untuk memberikan akses yang setara dan pengetahuan yang
             diperlukan.
           </p>
-          <div className="flex gap-x-7 mt-20">
-            <button
-              onClick={() => navigate('/landing')}
-              className="bg-slate-200 bg-opacity-70 rounded-md w-36 border-none focus:outline-none hover:text-white hover:bg-health-blue-dark"
-            >
-              Isi Kuisioner
-            </button>
-            <button
-              onClick={() => navigate('/auth/option/register')}
-              className="bg-slate-200 bg-opacity-70 rounded-md w-40 border-none focus:outline-none hover:text-white hover:bg-health-blue-dark"
-            >
-              Booking Jadwal
-            </button>
+          <div className="flex mt-20 gap-x-7">
+            <Button asChild>
+              <Link to="/landing">Isi Kuisioner</Link>
+            </Button>
+            <Button asChild>
+              <Link to="/register">Booking Jadwal</Link>
+            </Button>
           </div>
         </div>
-      </section>
-    </section>
+      </div>
+    </Layout>
   );
 };
 
