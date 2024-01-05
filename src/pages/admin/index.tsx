@@ -4,13 +4,13 @@ import { useEffect } from 'react';
 
 import { useDashboard } from '../../store/apiDashboard';
 import BarChart from '../../components/BarChart';
-import Layout from '@/components/layout';
+import { AdminLayout } from '@/components/layout';
 
 const Dashboard = () => {
   return (
-    <Layout>
+    <AdminLayout>
       <p>test</p>
-    </Layout>
+    </AdminLayout>
   );
 };
 

@@ -6,13 +6,8 @@ export const loginSchema = z.object({
     .min(1, { message: 'Email wajib diisi' })
     .email('Email tidak valid'),
   password: z.string().min(1, { message: 'Password wajib diisi' }),
+  remember: z.boolean().default(false),
 });
-
-export const adminLoginSchema = z
-  .object({
-    remember: z.boolean().default(false),
-  })
-  .merge(loginSchema);
 
 const baseSchema = z.object({
   name: z.string().min(1, { message: 'Nama lengkap wajib diisi' }),
@@ -76,5 +71,4 @@ export const registerSchema = z.discriminatedUnion('partner_option', [
 ]);
 
 export type LoginSchema = z.infer<typeof loginSchema>;
-export type AdminLoginSchema = z.infer<typeof adminLoginSchema>;
 export type RegisterSchema = z.infer<typeof registerSchema>;

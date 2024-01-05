@@ -58,8 +58,10 @@ const Register = () => {
 
   return (
     <Layout centerX centerY>
-      <p className="font-lato_black text-center mb-4 text-4xl">Register</p>
-      <p className="text-lg lg:text-xl">Silakan mengisi data terlebih dahulu</p>
+      <p className="font-bold text-center mb-4 text-4xl">Register</p>
+      <p className="text-lg lg:text-xl text-center">
+        Silakan mengisi data terlebih dahulu
+      </p>
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
@@ -150,7 +152,8 @@ const Register = () => {
               <Input
                 {...field}
                 data-testid="input-phone-number"
-                placeholder="Nomor telepon"
+                placeholder="+62818111111"
+                type="tel"
                 disabled={form.formState.isSubmitting}
                 aria-disabled={form.formState.isSubmitting}
               />
@@ -209,13 +212,11 @@ const Register = () => {
                   Please wait
                 </>
               ) : (
-                'Login'
+                'Register'
               )}
             </Button>
             <Button variant="link" asChild>
-              <Link to="/register">
-                Sudah memiliki akun? silakan klik disini!
-              </Link>
+              <Link to="/login">Sudah memiliki akun? silakan klik disini!</Link>
             </Button>
           </div>
         </form>

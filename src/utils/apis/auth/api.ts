@@ -5,9 +5,6 @@ import { LoginSchema, RegisterSchema } from './types';
 export interface IUserPayload {
   token: string;
   name: string;
-}
-
-export interface IAdminPayload extends IUserPayload {
   role: string;
 }
 
@@ -17,7 +14,9 @@ export const userLogin = async (body: LoginSchema) => {
 
     return response.data as Response<IUserPayload>;
   } catch (error: any) {
-    throw Error(error.response.data.message);
+    const { code, message } = error.response.data.meta;
+
+    throw Error(`${code}: ${message}`);
   }
 };
 
@@ -25,9 +24,11 @@ export const adminLogin = async (body: LoginSchema) => {
   try {
     const response = await axiosWithConfig.post(`/login`, body);
 
-    return response.data as Response<IAdminPayload>;
+    return response.data as Response<IUserPayload>;
   } catch (error: any) {
-    throw Error(error.response.data.message);
+    const { code, message } = error.response.data.meta;
+
+    throw Error(`${code}: ${message}`);
   }
 };
 
@@ -38,6 +39,8 @@ export const userRegister = async (body: RegisterSchema) => {
     // TODO: Change response when it is known
     return response.data as Response;
   } catch (error: any) {
-    throw Error(error.response.data.message);
+    const { code, message } = error.response.data.meta;
+
+    throw Error(`${code}: ${message}`);
   }
 };

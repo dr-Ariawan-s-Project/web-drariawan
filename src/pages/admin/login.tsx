@@ -7,12 +7,12 @@ import {
   CustomFormField,
   CustomFormCheckbox,
 } from '@/components/custom-formfield';
+import { useToast } from '@/components/ui/use-toast';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Form } from '@/components/ui/form';
 import Layout from '@/components/layout';
-import { useToast } from '@/components/ui/use-toast';
-import { AdminLoginSchema, adminLoginSchema } from '@/utils/apis/auth/types';
+import { LoginSchema, loginSchema } from '@/utils/apis/auth/types';
 import { adminLogin } from '@/utils/apis/auth/api';
 import useAuthStore from '@/utils/states/auth';
 
@@ -21,8 +21,8 @@ const AdminLogin = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
 
-  const form = useForm<AdminLoginSchema>({
-    resolver: zodResolver(adminLoginSchema),
+  const form = useForm<LoginSchema>({
+    resolver: zodResolver(loginSchema),
     defaultValues: {
       email: '',
       password: '',
@@ -30,15 +30,14 @@ const AdminLogin = () => {
     },
   });
 
-  async function onSubmit(data: AdminLoginSchema) {
+  async function onSubmit(data: LoginSchema) {
     try {
       const result = await adminLogin(data);
       toast({
         description: 'Halo, selamat datang kembali',
       });
-      // TODO: Change addAuth to accept role
-      addAuth(result.data);
-      // navigate('/admin');
+      addAuth(result.data, data.remember);
+      navigate('/admin');
     } catch (error) {
       toast({
         title: 'Oops! Sesuatu telah terjadi',

@@ -4,16 +4,16 @@ import ProtectedRoute from './protected-route';
 import Admin from '../pages/admin/old';
 import Register from '../pages/auth/register';
 import Login from '../pages/auth/login';
-import DataDiri from '../pages/data_diri';
+import Landing from '../pages/user/questionnaire';
+import DataDiri from '../pages/user/questionnaire/form';
+import VerifikasiEmail from '../pages/user/questionnaire/sent';
 import Kuisioner from '../pages/kuisioner';
 import ListUser from '../pages/list_user';
 import ListKuisioner from '../pages/list_kuisioner';
 import ListPasien from '../pages/list_pasien';
-import Landing from '../pages/landing';
 import Pertanyaan from '../pages/pertanyaan';
 import Success from '../pages/success';
 import Splash from '../pages/splash';
-import VerifikasiEmail from '../pages/verifikasi_email';
 import AdminLogin from '../pages/admin/login';
 import JadwalPraktik from '../pages/jadwal_praktik';
 import Dashboard from '../pages/admin';
@@ -51,23 +51,23 @@ const App = () => {
           element: <Register />,
         },
         {
-          path: '/verifikasi_email',
-          element: <VerifikasiEmail />,
+          path: '/questionnaire',
+          element: <Landing />,
         },
         {
-          path: '/data_diri',
+          path: '/questionnaire/form',
           element: <DataDiri />,
         },
         {
-          path: '/landing',
-          element: <Landing />,
+          path: '/questionnaire/sent',
+          element: <VerifikasiEmail />,
         },
         {
           path: '/landing/kuisioner',
           element: <LandingKuisioner />,
         },
         {
-          path: '/kuisioner',
+          path: '/landing',
           element: <Kuisioner />,
         },
         {

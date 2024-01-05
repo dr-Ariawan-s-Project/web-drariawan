@@ -1,25 +1,31 @@
 import { create } from 'zustand';
 import Cookies from 'js-cookie';
 
-import { IUserPayload, IAdminPayload } from '../apis/auth/api';
+import { IUserPayload } from '../apis/auth/api';
 
 interface AuthState {
   token: string;
   name: string;
   role: string;
-  addAuth: (data: IUserPayload & IAdminPayload) => void;
+  addAuth: (data: IUserPayload, remember: boolean) => void;
   resetAuth: () => void;
 }
 
 const useAuthStore = create<AuthState>()((set) => ({
-  token: Cookies.get('token') ?? '',
-  name: Cookies.get('userName') ?? '',
-  role: Cookies.get('userRole') ?? '',
-  addAuth: (data) =>
+  token: Cookies.get('token') ?? sessionStorage.getItem('token') ?? '',
+  name: Cookies.get('userName') ?? sessionStorage.getItem('userName') ?? '',
+  role: Cookies.get('userRole') ?? sessionStorage.getItem('userRole') ?? '',
+  addAuth: (data, remember) =>
     set(() => {
-      Cookies.set('token', data.token, { expires: 1 });
-      Cookies.set('userName', data.name, { expires: 1 });
-      Cookies.set('userRole', data.role, { expires: 1 });
+      if (remember) {
+        Cookies.set('token', data.token, { expires: 1 });
+        Cookies.set('userName', data.name, { expires: 1 });
+        Cookies.set('userRole', data.role, { expires: 1 });
+      } else {
+        sessionStorage.setItem('token', data.token);
+        sessionStorage.setItem('userName', data.name);
+        sessionStorage.setItem('userRole', data.role);
+      }
       return { token: data.token, name: data.name };
     }),
   resetAuth: () =>
@@ -27,6 +33,7 @@ const useAuthStore = create<AuthState>()((set) => ({
       Cookies.remove('token');
       Cookies.remove('userName');
       Cookies.remove('userRole');
+      sessionStorage.clear();
       return { token: '', name: '', role: '' };
     }),
 }));
