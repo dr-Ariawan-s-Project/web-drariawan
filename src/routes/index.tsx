@@ -27,7 +27,7 @@ import Appointment from '../pages/appointment';
 import PatientSchedule from '../pages/patient_schedule';
 import Assessment from '../pages/assessment';
 import Setting from '../pages/setting_admin';
-import Unauthorized from '../pages/unauthorized_page';
+import Unauthorized from '../pages/404';
 
 const App = () => {
   const router = createBrowserRouter([

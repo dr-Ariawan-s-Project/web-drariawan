@@ -14,7 +14,7 @@ const VerifikasiEmail = () => {
   }
 
   return (
-    <Layout centerX centerY classname="space-y-5">
+    <Layout centerX centerY className="space-y-5">
       <h2 className="text-4xl font-semibold">Terimakasih!</h2>
       <div className="space-y-3 flex flex-col items-center">
         <p className="text-center text-lg">

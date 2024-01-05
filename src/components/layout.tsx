@@ -10,7 +10,7 @@ interface Props {
   hideNavbar?: boolean;
   centerY?: boolean;
   centerX?: boolean;
-  classname?: string;
+  className?: string;
 }
 
 export const Layout = (props: Readonly<Props>) => {
@@ -19,7 +19,7 @@ export const Layout = (props: Readonly<Props>) => {
     hideNavbar,
     centerY = false,
     centerX = false,
-    classname,
+    className,
   } = props;
 
   return (
@@ -30,7 +30,7 @@ export const Layout = (props: Readonly<Props>) => {
           'w-full mx-auto flex-grow flex flex-col',
           centerY && 'justify-center',
           centerX && 'items-center px-5',
-          classname
+          className
         )}
         data-testid="content-container"
       >
