@@ -8,6 +8,7 @@ import { cn } from '@/lib/utils';
 interface Props {
   children: ReactNode;
   hideNavbar?: boolean;
+  showMenu?: boolean;
   centerY?: boolean;
   centerX?: boolean;
   className?: string;
@@ -17,6 +18,7 @@ export const Layout = (props: Readonly<Props>) => {
   const {
     children,
     hideNavbar,
+    showMenu,
     centerY = false,
     centerX = false,
     className,
@@ -24,10 +26,10 @@ export const Layout = (props: Readonly<Props>) => {
 
   return (
     <div className="bg-white h-screen w-full [&>*]:text-health-blue-dark flex flex-col">
-      {!hideNavbar && <Navbar />}
+      {!hideNavbar && <Navbar showMenu={showMenu} />}
       <div
         className={cn(
-          'w-full mx-auto flex-grow flex flex-col',
+          'w-full flex-grow flex flex-col',
           centerY && 'justify-center',
           centerX && 'items-center p-5',
           className
@@ -41,7 +43,13 @@ export const Layout = (props: Readonly<Props>) => {
 };
 
 export const AdminLayout = (props: Readonly<Props>) => {
-  const { children, hideNavbar, centerY = false, centerX = false } = props;
+  const {
+    children,
+    hideNavbar,
+    showMenu,
+    centerY = false,
+    centerX = false,
+  } = props;
   const { role } = useAuthStore((state) => state);
 
   return (
@@ -49,13 +57,13 @@ export const AdminLayout = (props: Readonly<Props>) => {
       {role !== 'patient' && <Sidebar />}
       <div
         className={cn(
-          'w-full mx-auto flex-grow flex flex-col',
+          'w-full flex-grow flex flex-col',
           centerY && 'justify-center',
           centerX && 'items-center'
         )}
         data-testid="content-container"
       >
-        {!hideNavbar && <Navbar />}
+        {!hideNavbar && <Navbar showMenu={showMenu} />}
         <div className="w-full h-full flex flex-col">{children}</div>
       </div>
     </div>

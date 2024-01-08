@@ -79,3 +79,15 @@ export const registerSchema = z.discriminatedUnion('partner_option', [
 
 export type LoginSchema = z.infer<typeof loginSchema>;
 export type RegisterSchema = z.infer<typeof registerSchema>;
+
+export interface MyProfile {
+  dob: string;
+  email: string;
+  gender: string;
+  id: string;
+  marriage_status: string;
+  name: string;
+  nationality: string;
+  nik: string;
+  phone: string;
+}

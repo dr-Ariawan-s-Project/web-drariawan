@@ -65,7 +65,9 @@ const Main = () => {
                 <Link to="/questionnaire">Isi Kuisioner</Link>
               </Button>
               <Button asChild>
-                <Link to={token ? '#' : '/login'}>Booking Jadwal</Link>
+                <Link to={token ? '/scheduling' : '/login'}>
+                  Booking Jadwal
+                </Link>
               </Button>
             </div>
           </div>

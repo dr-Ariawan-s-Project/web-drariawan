@@ -1,23 +1,18 @@
 import { Link, useNavigate } from 'react-router-dom';
-import { MenuIcon, LogOutIcon } from 'lucide-react';
+import { MenuIcon } from 'lucide-react';
 
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuLabel,
-  DropdownMenuPortal,
   DropdownMenuSeparator,
-  DropdownMenuSub,
-  DropdownMenuSubContent,
-  DropdownMenuSubTrigger,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { useSidebarStore } from '@/components/sidebar';
 import { useToast } from '@/components/ui/use-toast';
 import { Button } from '@/components/ui/button';
-import { cn } from '@/lib/utils';
 import useAuthStore from '@/utils/states/auth';
 
 interface Props {
@@ -35,20 +30,28 @@ const Navbar = (props: Props) => {
     toast({
       description: 'Logout Successfully',
     });
+    navigate('/login');
     resetAuth();
   }
 
   return (
     <header
-      className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60"
+      className="sticky top-0 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60"
       aria-label="navbar"
     >
       <div className="container flex h-14 max-w-screen-2xl items-center">
-        <div className="mr-4 hidden md:flex">
-          {showMenu && <MenuIcon onClick={() => changeSidebarOpen()} />}
-          <Link className="mr-6 flex items-center space-x-2" to="/">
-            <img src="/logo-blue.svg" alt="Logo" className="h-12 w-12" />
-          </Link>
+        <div className="mr-4 flex">
+          {showMenu ? (
+            <MenuIcon onClick={() => changeSidebarOpen()} />
+          ) : (
+            <Link className="mr-6 flex items-center space-x-2" to="/">
+              <img
+                src="/images/logo-blue.svg"
+                alt="Logo"
+                className="h-12 w-12"
+              />
+            </Link>
+          )}
         </div>
         <div className="flex gap-4 items-center justify-end h-full w-full">
           <Button variant="link" asChild>
@@ -65,6 +68,8 @@ const Navbar = (props: Props) => {
             <DropdownMenuContent className="w-44" align="end" forceMount>
               {token ? (
                 <>
+                  <DropdownMenuLabel>Halo, {name}!</DropdownMenuLabel>
+                  <DropdownMenuSeparator />
                   {role !== 'patient' ? (
                     <DropdownMenuItem
                       onClick={() => navigate('/admin/setting')}
@@ -73,7 +78,7 @@ const Navbar = (props: Props) => {
                     </DropdownMenuItem>
                   ) : (
                     <DropdownMenuItem
-                      onClick={() => navigate('/scheduling/schedule_list')}
+                      onClick={() => navigate('/scheduling/my-list')}
                     >
                       Jadwal Saya
                     </DropdownMenuItem>

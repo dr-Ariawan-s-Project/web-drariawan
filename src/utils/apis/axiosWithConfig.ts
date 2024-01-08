@@ -1,6 +1,7 @@
+import Cookies from 'js-cookie';
 import axios from 'axios';
 
-let bearerToken = '';
+let bearerToken = Cookies.get('token') ?? sessionStorage.getItem('token') ?? '';
 const axiosWithConfig = axios.create();
 
 export const setAxiosConfig = (token: string) => {

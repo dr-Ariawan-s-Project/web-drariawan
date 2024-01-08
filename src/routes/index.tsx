@@ -1,33 +1,30 @@
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 
 import ProtectedRoute from './protected-route';
-import Admin from '../pages/admin/old';
+import Main from '@/pages';
 import Register from '@/pages/auth/register';
 import Login from '@/pages/auth/login';
+import Scheduling from '@/pages/user/scheduling';
+import SchedulingSuccess from '@/pages/user/scheduling/success';
+import PatientSchedule from '@/pages/user/scheduling/patient-schedule';
 import Questionnaire from '@/pages/user/questionnaire';
 import QuestionnaireForm from '@/pages/user/questionnaire/form';
 import QuestionnaireSent from '@/pages/user/questionnaire/sent';
 import QuestionnaireStart from '@/pages/user/questionnaire/start';
 import QuestionnaireFinish from '@/pages/user/questionnaire/finish';
-import ListUser from '../pages/list_user';
 import ListKuisioner from '../pages/list_kuisioner';
-import ListPasien from '../pages/list_pasien';
-import Pertanyaan from '../pages/pertanyaan';
-import Splash from '../pages/splash';
-import AdminLogin from '../pages/admin/login';
+import Dashboard from '@/pages/admin';
+import AdminLogin from '@/pages/admin/login';
+import AdminUsers from '@/pages/admin/users';
+import AdminPatients from '@/pages/list_pasien';
 import JadwalPraktik from '../pages/jadwal_praktik';
-import Dashboard from '../pages/admin';
-import Scheduling from '../pages/scheduling';
-import Main from '../pages';
-import KonfirmasiPraktik from '../pages/konfirmasi_praktik';
 import LandingKuisioner from '../pages/landing_kuisioner';
 import Responden from '../pages/responden';
 import DetailResponden from '../pages/detail_responden';
 import Appointment from '../pages/appointment';
-import PatientSchedule from '../pages/patient_schedule';
 import Assessment from '../pages/assessment';
 import Setting from '../pages/setting_admin';
-import Unauthorized from '../pages/404';
+import Unauthorized from '@/pages/404';
 
 const App = () => {
   const router = createBrowserRouter([
@@ -45,6 +42,18 @@ const App = () => {
         {
           path: '/register',
           element: <Register />,
+        },
+        {
+          path: '/scheduling',
+          element: <Scheduling />,
+        },
+        {
+          path: '/scheduling/success',
+          element: <SchedulingSuccess />,
+        },
+        {
+          path: '/scheduling/my-list',
+          element: <PatientSchedule />,
         },
         {
           path: '/questionnaire',
@@ -71,18 +80,6 @@ const App = () => {
           element: <LandingKuisioner />,
         },
         {
-          path: '/scheduling',
-          element: <Scheduling />,
-        },
-        {
-          path: '/scheduling/success',
-          element: <KonfirmasiPraktik />,
-        },
-        {
-          path: '/scheduling/schedule_list',
-          element: <PatientSchedule />,
-        },
-        {
           path: '/admin',
           element: <Dashboard />,
         },
@@ -91,16 +88,16 @@ const App = () => {
           element: <AdminLogin />,
         },
         {
+          path: '/admin/patients',
+          element: <AdminPatients />,
+        },
+        {
+          path: '/admin/users',
+          element: <AdminUsers />,
+        },
+        {
           path: '/list/kuisioner',
           element: <ListKuisioner />,
-        },
-        {
-          path: '/list/user',
-          element: <ListUser />,
-        },
-        {
-          path: '/list/pasien',
-          element: <ListPasien />,
         },
         {
           path: '/jadwal/praktik',

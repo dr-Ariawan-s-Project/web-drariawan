@@ -6,7 +6,7 @@ import { useAuth } from '../../store/apiAuth';
 import Sidebar from '../../components/Sidebar';
 import Navbar from '../../components/Navbar-old';
 
-import ListUser from '../list_user';
+import ListUser from './users';
 import ListPasien from '../list_pasien';
 import JadwalPraktik from '../jadwal_praktik';
 import Dashboard from '.';

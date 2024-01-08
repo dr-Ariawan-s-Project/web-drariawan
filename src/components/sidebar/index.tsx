@@ -2,11 +2,8 @@ import { create } from 'zustand';
 import {
   LayoutDashboardIcon,
   UserRoundIcon,
-  BookCopyIcon,
-  BookTypeIcon,
   BookMarkedIcon,
   MailIcon,
-  SettingsIcon,
 } from 'lucide-react';
 
 import { ISidebarList, ISidebarState } from '@/components/sidebar/types';
@@ -32,13 +29,13 @@ const sidebarList: ISidebarList[] = [
       {
         id: 'patient',
         label: 'Patients',
-        to: '/admin/list/pasien',
+        to: '/admin/patients',
         icon: UserRoundIcon,
       },
       {
         id: 'user',
         label: 'Users',
-        to: '/admin/list/user',
+        to: '/admin/users',
         icon: UserRoundIcon,
       },
     ],
@@ -71,20 +68,20 @@ export const Sidebar = () => {
     <>
       {isSidebarOpen && (
         <div
-          className="absolute h-full w-full bg-black/50 md:invisible md:hidden"
+          className="absolute h-full w-full bg-black/50 md:invisible md:hidden z-50"
           onClick={() => changeSidebarOpen()}
         />
       )}
       <div
         className={cn(
-          'absolute flex h-full w-0 select-none flex-col overflow-y-auto bg-white duration-300 md:relative',
+          'absolute flex h-full w-0 select-none flex-col overflow-y-auto bg-white duration-300 md:relative z-50',
           isSidebarOpen ? 'w-72' : 'md:w-20'
         )}
       >
         <div className="flex h-24 w-full items-center justify-center px-4">
           <img
             className="h-full w-full object-contain"
-            src="/klinik_sehat.svg"
+            src="/images/klinik-sehat.svg"
             alt="logo alterra academy"
           />
         </div>

@@ -9,7 +9,9 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Form } from '@/components/ui/form';
 import Layout from '@/components/layout';
+
 import { LoginSchema, loginSchema } from '@/utils/apis/auth/types';
+import { setAxiosConfig } from '@/utils/apis/axiosWithConfig';
 import { userLogin } from '@/utils/apis/auth/api';
 import useAuthStore from '@/utils/states/auth';
 
@@ -34,6 +36,7 @@ const Login = () => {
         description: 'Hello, welcome back!',
       });
       addAuth(result.data, data.remember);
+      setAxiosConfig(result.data.token);
       navigate('/scheduling');
     } catch (error) {
       toast({
