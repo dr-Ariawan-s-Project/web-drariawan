@@ -40,7 +40,7 @@ interface Props<T extends FieldValues> {
   name: FieldPath<T>;
   label: string;
   placeholder?: string;
-  options?: any[];
+  options?: string[];
   description?: string;
   control: Control<T>;
 }
@@ -118,7 +118,7 @@ export function CustomFormSelect<T extends FieldValues>(
                 <SelectLabel>{label}</SelectLabel>
                 {options?.map((option) => (
                   <SelectItem value={option} key={option}>
-                    {option}
+                    {option.replace(/_/g, ' ')}
                   </SelectItem>
                 ))}
               </SelectGroup>
