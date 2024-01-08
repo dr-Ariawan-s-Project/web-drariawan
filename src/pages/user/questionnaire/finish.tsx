@@ -39,7 +39,7 @@ const Success = () => {
             </p>
           </div>
           <Button asChild className="w-fit">
-            <Link to="/main">Kembali ke halaman utama</Link>
+            <Link to="/">Kembali ke halaman utama</Link>
           </Button>
         </div>
       </div>

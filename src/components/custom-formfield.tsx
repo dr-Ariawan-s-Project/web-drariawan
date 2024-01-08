@@ -155,7 +155,7 @@ export function CustomFormDatePicker<T extends FieldValues>(
                   )}
                 >
                   {field.value ? (
-                    format(field.value, 'iii, dd MMM yyyy')
+                    format(field.value, 'dd MMMM yyyy')
                   ) : (
                     <span>{placeholder}</span>
                   )}

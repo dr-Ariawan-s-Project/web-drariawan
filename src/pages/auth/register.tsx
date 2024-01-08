@@ -1,25 +1,31 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useNavigate, Link } from 'react-router-dom';
+import { getCountryDataList } from 'countries-list';
 import { useForm } from 'react-hook-form';
 import { Loader2 } from 'lucide-react';
-import Cookies from 'js-cookie';
+import { useMemo } from 'react';
 
 import {
   CustomFormField,
   CustomFormSelect,
   CustomFormDatePicker,
 } from '@/components/custom-formfield';
+import { useToast } from '@/components/ui/use-toast';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Form } from '@/components/ui/form';
 import Layout from '@/components/layout';
-import { useToast } from '@/components/ui/use-toast';
+
 import { RegisterSchema, registerSchema } from '@/utils/apis/auth/types';
 import { userRegister } from '@/utils/apis/auth/api';
 
 const Register = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
+
+  const countries = useMemo(() => {
+    return getCountryDataList().map((country) => country.name);
+  }, []);
 
   const form = useForm<RegisterSchema>({
     resolver: zodResolver(registerSchema),
@@ -28,25 +34,23 @@ const Register = () => {
       email: '',
       password: '',
       nik: '',
-      birthDate: '',
+      dob: '',
       phone_number: '',
       gender: 'Male',
       marriage_status: 'Not_Married',
-      nationality: '',
+      nationality: 'Indonesia',
+      partner_email: '',
       partner_option: 'Myself',
     },
   });
 
   async function onSubmit(data: RegisterSchema) {
     try {
-      const result = await userRegister(data);
+      await userRegister(data);
       toast({
-        description: 'Hello, welcome back!',
+        description: 'Berhasil registrasi, silahkan login terlebih dahulu',
       });
-      // TODO: Change response when it is known
-      // addAuth(result.data);
-      // Cookies.set('token', userData.token, { expires: 1 });
-      navigate('/scheduling');
+      navigate('/login');
     } catch (error) {
       toast({
         title: 'Oops! Sesuatu telah terjadi',
@@ -76,6 +80,7 @@ const Register = () => {
                 type="email"
                 disabled={form.formState.isSubmitting}
                 aria-disabled={form.formState.isSubmitting}
+                value={field.value as string}
               />
             )}
           </CustomFormField>
@@ -92,6 +97,7 @@ const Register = () => {
                 type="password"
                 disabled={form.formState.isSubmitting}
                 aria-disabled={form.formState.isSubmitting}
+                value={field.value as string}
               />
             )}
           </CustomFormField>
@@ -107,6 +113,7 @@ const Register = () => {
                 placeholder="Nama"
                 disabled={form.formState.isSubmitting}
                 aria-disabled={form.formState.isSubmitting}
+                value={field.value as string}
               />
             )}
           </CustomFormField>
@@ -134,12 +141,13 @@ const Register = () => {
                 placeholder="NIK"
                 disabled={form.formState.isSubmitting}
                 aria-disabled={form.formState.isSubmitting}
+                value={field.value as string}
               />
             )}
           </CustomFormField>
           <CustomFormDatePicker
             control={form.control}
-            name="birthDate"
+            name="dob"
             label="Tanggal lahir"
             placeholder="mm/dd/yyyy"
           />
@@ -156,24 +164,17 @@ const Register = () => {
                 type="tel"
                 disabled={form.formState.isSubmitting}
                 aria-disabled={form.formState.isSubmitting}
+                value={field.value as string}
               />
             )}
           </CustomFormField>
-          <CustomFormField
+          <CustomFormSelect
             control={form.control}
             name="nationality"
             label="Kewarganegaraan"
-          >
-            {(field) => (
-              <Input
-                {...field}
-                data-testid="input-nationality"
-                placeholder="Kewarganegaraan"
-                disabled={form.formState.isSubmitting}
-                aria-disabled={form.formState.isSubmitting}
-              />
-            )}
-          </CustomFormField>
+            placeholder="Kewarganegaraan"
+            options={countries}
+          />
           <CustomFormSelect
             control={form.control}
             name="partner_option"
@@ -195,6 +196,7 @@ const Register = () => {
                   type="email"
                   disabled={form.formState.isSubmitting}
                   aria-disabled={form.formState.isSubmitting}
+                  value={field.value as string}
                 />
               )}
             </CustomFormField>

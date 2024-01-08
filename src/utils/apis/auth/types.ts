@@ -1,3 +1,4 @@
+import { format } from 'date-fns';
 import * as z from 'zod';
 
 export const loginSchema = z.object({
@@ -20,7 +21,9 @@ const baseSchema = z.object({
     .string()
     .min(16, { message: 'NIK wajib diisi' })
     .max(16, { message: 'Format NIK tidak sesuai' }),
-  birthDate: z.string().min(1, { message: 'Tanggal lahir wajib diisi' }),
+  dob: z
+    .date({ required_error: 'Tanggal lahir wajib diisi' })
+    .transform((value) => format(value, 'yyyy-MM-dd')),
   phone_number: z.string().min(1, { message: 'Nomor telepon wajib diisi' }),
   gender: z.enum(['Male', 'Female'], {
     errorMap: (issue) => {
@@ -52,6 +55,7 @@ const baseSchema = z.object({
 const selfSchema = z
   .object({
     partner_option: z.literal('Myself'),
+    partner_email: z.string().default(''),
   })
   .merge(baseSchema);
 

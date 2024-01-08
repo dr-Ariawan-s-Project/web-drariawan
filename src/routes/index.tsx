@@ -18,7 +18,7 @@ import AdminLogin from '../pages/admin/login';
 import JadwalPraktik from '../pages/jadwal_praktik';
 import Dashboard from '../pages/admin';
 import Scheduling from '../pages/scheduling';
-import Main from '../pages/main';
+import Main from '../pages';
 import KonfirmasiPraktik from '../pages/konfirmasi_praktik';
 import LandingKuisioner from '../pages/landing_kuisioner';
 import Responden from '../pages/responden';
@@ -36,10 +36,6 @@ const App = () => {
       children: [
         {
           path: '/',
-          element: <Splash />,
-        },
-        {
-          path: '/main',
           element: <Main />,
         },
         {

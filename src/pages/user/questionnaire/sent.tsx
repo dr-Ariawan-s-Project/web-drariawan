@@ -25,7 +25,7 @@ const VerifikasiEmail = () => {
           Anda dapat menutup halaman ini atau kembali ke halaman utama
         </p>
         <Button asChild className="w-fit">
-          <Link to="/main">Kembali</Link>
+          <Link to="/">Kembali</Link>
         </Button>
       </div>
       <Lottie
