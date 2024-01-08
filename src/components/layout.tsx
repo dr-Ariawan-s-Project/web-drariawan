@@ -29,7 +29,7 @@ export const Layout = (props: Readonly<Props>) => {
         className={cn(
           'w-full mx-auto flex-grow flex flex-col',
           centerY && 'justify-center',
-          centerX && 'items-center px-5',
+          centerX && 'items-center p-5',
           className
         )}
         data-testid="content-container"

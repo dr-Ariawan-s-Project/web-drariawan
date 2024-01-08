@@ -2,17 +2,17 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 
 import ProtectedRoute from './protected-route';
 import Admin from '../pages/admin/old';
-import Register from '../pages/auth/register';
-import Login from '../pages/auth/login';
-import Landing from '../pages/user/questionnaire';
-import DataDiri from '../pages/user/questionnaire/form';
-import VerifikasiEmail from '../pages/user/questionnaire/sent';
-import Kuisioner from '../pages/kuisioner';
+import Register from '@/pages/auth/register';
+import Login from '@/pages/auth/login';
+import Questionnaire from '@/pages/user/questionnaire';
+import QuestionnaireForm from '@/pages/user/questionnaire/form';
+import QuestionnaireSent from '@/pages/user/questionnaire/sent';
+import QuestionnaireStart from '@/pages/user/questionnaire/start';
+import QuestionnaireFinish from '@/pages/user/questionnaire/finish';
 import ListUser from '../pages/list_user';
 import ListKuisioner from '../pages/list_kuisioner';
 import ListPasien from '../pages/list_pasien';
 import Pertanyaan from '../pages/pertanyaan';
-import Success from '../pages/success';
 import Splash from '../pages/splash';
 import AdminLogin from '../pages/admin/login';
 import JadwalPraktik from '../pages/jadwal_praktik';
@@ -52,31 +52,27 @@ const App = () => {
         },
         {
           path: '/questionnaire',
-          element: <Landing />,
+          element: <Questionnaire />,
         },
         {
           path: '/questionnaire/form',
-          element: <DataDiri />,
+          element: <QuestionnaireForm />,
         },
         {
           path: '/questionnaire/sent',
-          element: <VerifikasiEmail />,
+          element: <QuestionnaireSent />,
+        },
+        {
+          path: '/questionnaire/start',
+          element: <QuestionnaireStart />,
+        },
+        {
+          path: '/questionnaire/finish',
+          element: <QuestionnaireFinish />,
         },
         {
           path: '/landing/kuisioner',
           element: <LandingKuisioner />,
-        },
-        {
-          path: '/landing',
-          element: <Kuisioner />,
-        },
-        {
-          path: '/kuisioner/:questionId',
-          element: <Pertanyaan />,
-        },
-        {
-          path: '/kuisioner/finish',
-          element: <Success />,
         },
         {
           path: '/scheduling',

@@ -9,7 +9,9 @@ export const setAxiosConfig = (token: string) => {
 
 axiosWithConfig.interceptors.request.use((axiosConfig) => {
   axiosConfig.baseURL = 'https://drariawan-api.alta.id/';
-  axiosConfig.headers.Authorization = `Bearer ${bearerToken}`;
+  if (bearerToken !== '') {
+    axiosConfig.headers.Authorization = `Bearer ${bearerToken}`;
+  }
 
   return axiosConfig;
 });

@@ -60,7 +60,7 @@ export interface ProgressBarProps {
 }
 
 export interface VideoPlayerProps {
-  src?: string;
+  src: string;
 }
 
 export interface AudioRecorderProps {
@@ -107,9 +107,9 @@ export interface SearchBarProps {
   setSearchTerm: (term: string) => void;
 }
 
-export interface ScheduleData  {
+export interface ScheduleData {
   user?: UserData;
-  schedule_id?: number | undefined; 
+  schedule_id?: number | undefined;
   user_id?: number | undefined;
   health_care_address?: string | undefined;
   day?: string | undefined;

@@ -1,4 +1,12 @@
+export interface Request {
+  code?: string;
+}
+
 export type Response<T = any> = {
-  message: string;
   data: T;
+  message: string[];
+  meta: {
+    code: string;
+    status: string;
+  };
 };

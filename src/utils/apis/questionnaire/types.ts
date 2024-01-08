@@ -30,3 +30,34 @@ export const questionnaireSchema = z.discriminatedUnion('as', [
 ]);
 
 export type QuestionnaireSchema = z.infer<typeof questionnaireSchema>;
+
+export interface IQuestionnaire {
+  choices: null | IChoice[];
+  description: string;
+  goto: null | number;
+  id: number;
+  question: string;
+  section: string;
+  type: 'choices' | 'text';
+  url_video: string;
+}
+
+export interface IAnswer {
+  question_id: number;
+  description: string;
+  score: number;
+}
+
+export interface IChoice {
+  goto: number;
+  id: number;
+  option: string;
+  question_id: number;
+  score: number;
+  slugs: string;
+}
+
+export interface QuestionnaireBody {
+  code_attempt: string;
+  answer: IAnswer[];
+}

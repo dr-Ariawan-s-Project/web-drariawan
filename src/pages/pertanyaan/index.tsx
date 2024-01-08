@@ -6,7 +6,7 @@ import SpeechRecognition, {
   useSpeechRecognition,
 } from 'react-speech-recognition';
 
-import AudioRecorder from '../../components/AudioRecorder';
+import AudioRecorder from '../../components/audio-recorder';
 import Button from '../../components/Button';
 import AnimatedWrapper from '../../components/AnimatedWrapper';
 import RadioButton from '../../components/RadioButton';
@@ -14,7 +14,7 @@ import ModalInformation from '../../components/ModalInformation';
 import IconInfo from '../../assets/icons/information.svg';
 
 import { useQuestionaire } from '../../store/apiQuestionaire';
-import VideoPlayer from '../../components/VideoPlayer';
+import VideoPlayer from '../../components/video-player';
 
 const Pertanyaan = () => {
   const navigate = useNavigate();
