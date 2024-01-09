@@ -14,9 +14,9 @@ export const userLogin = async (body: LoginSchema) => {
 
     return response.data as Response<IUserPayload>;
   } catch (error: any) {
-    const { code, message } = error.response.data.meta;
+    const { messages } = error.response.data;
 
-    throw Error(`${code}: ${message}`);
+    throw Error(messages[0]);
   }
 };
 
@@ -26,9 +26,9 @@ export const adminLogin = async (body: LoginSchema) => {
 
     return response.data as Response<IUserPayload>;
   } catch (error: any) {
-    const { code, message } = error.response.data.meta;
+    const { messages } = error.response.data;
 
-    throw Error(`${code}: ${message}`);
+    throw Error(messages[0]);
   }
 };
 
@@ -39,9 +39,9 @@ export const userRegister = async (body: RegisterSchema) => {
     // TODO: Change response when it is known
     return response.data as Response;
   } catch (error: any) {
-    const { code, message } = error.response.data.meta;
+    const { messages } = error.response.data;
 
-    throw Error(`${code}: ${message}`);
+    throw Error(messages[0]);
   }
 };
 
@@ -51,8 +51,8 @@ export const getMyProfile = async () => {
 
     return response.data as Response<MyProfile>;
   } catch (error: any) {
-    const { code, message } = error.response.data.meta;
+    const { messages } = error.response.data;
 
-    throw Error(`${code}: ${message}`);
+    throw Error(messages[0]);
   }
 };

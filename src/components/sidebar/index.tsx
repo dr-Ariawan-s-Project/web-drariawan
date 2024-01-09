@@ -23,19 +23,19 @@ const sidebarList: ISidebarList[] = [
       {
         id: 'dashboard',
         label: 'Dashboard',
-        to: '/',
+        to: '/dashboard',
         icon: LayoutDashboardIcon,
       },
       {
         id: 'patient',
         label: 'Patients',
-        to: '/admin/patients',
+        to: '/dashboard/patients',
         icon: UserRoundIcon,
       },
       {
         id: 'user',
         label: 'Users',
-        to: '/admin/users',
+        to: '/dashboard/users',
         icon: UserRoundIcon,
       },
     ],
@@ -46,7 +46,7 @@ const sidebarList: ISidebarList[] = [
       {
         id: 'schedules',
         label: 'Schedules',
-        to: '/my-class',
+        to: '/dashboard/schedules',
         icon: BookMarkedIcon,
       },
       {

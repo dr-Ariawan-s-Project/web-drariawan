@@ -1,16 +1,20 @@
+import { IBookPayload, IMySchedule, ISchedule } from './types';
 import axiosWithConfig from '@/utils/apis/axiosWithConfig';
-import { Response } from '@/utils/types/api';
-import { IBookPayload, IMySchedule, IScheduleResponse } from './types';
+import { Request, Response } from '@/utils/types/api';
+import { buildQueryString } from '@/utils/formatter';
 
-export const getListSchedule = async () => {
+export const getSchedules = async (params?: Request) => {
   try {
-    const response = await axiosWithConfig.get(`/v1/schedule/list`);
+    const query = buildQueryString(params);
+    const url = query ? `/v1/schedule/list${query}&rp=10` : '/v1/schedule/list';
 
-    return response.data as Response<IScheduleResponse[]>;
+    const response = await axiosWithConfig.get(url);
+
+    return response.data as Response<ISchedule[]>;
   } catch (error: any) {
-    const { code, message } = error.response.data.meta;
+    const { messages } = error.response.data;
 
-    throw Error(`${code}: ${message}`);
+    throw Error(messages[0]);
   }
 };
 
@@ -20,9 +24,9 @@ export const postBookSchedule = async (body: IBookPayload) => {
 
     return response.data as Response;
   } catch (error: any) {
-    const { code, message } = error.response.data.meta;
+    const { messages } = error.response.data;
 
-    throw Error(`${code}: ${message}`);
+    throw Error(messages[0]);
   }
 };
 
@@ -34,8 +38,8 @@ export const getMySchedule = async (id: string) => {
 
     return response.data as Response<IMySchedule[]>;
   } catch (error: any) {
-    const { code, message } = error.response.data.meta;
+    const { messages } = error.response.data;
 
-    throw Error(`${code}: ${message}`);
+    throw Error(messages[0]);
   }
 };

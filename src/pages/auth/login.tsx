@@ -8,7 +8,7 @@ import { useToast } from '@/components/ui/use-toast';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Form } from '@/components/ui/form';
-import Layout from '@/components/layout';
+import { Layout } from '@/components/layout';
 
 import { LoginSchema, loginSchema } from '@/utils/apis/auth/types';
 import { setAxiosConfig } from '@/utils/apis/axiosWithConfig';

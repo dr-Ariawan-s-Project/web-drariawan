@@ -2,14 +2,12 @@ import { useSearchParams } from 'react-router-dom';
 import { ColumnDef } from '@tanstack/react-table';
 import { MoreHorizontal } from 'lucide-react';
 import { useState, useEffect } from 'react';
-import { capitalize } from 'lodash';
 
 import { useToast } from '@/components/ui/use-toast';
 import { AdminLayout } from '@/components/layout';
 import Pagination from '@/components/pagination';
 import { Button } from '@/components/ui/button';
 import DataTable from '@/components/data-table';
-import { Badge } from '@/components/ui/badge';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -19,21 +17,26 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 
-import { getUsers } from '@/utils/apis/dashboard/api';
-import { IUser } from '@/utils/apis/dashboard/types';
+import { getPatients } from '@/utils/apis/dashboard/api';
+import { IPatient } from '@/utils/apis/dashboard/types';
 import useAuthStore from '@/utils/states/auth';
 
-const DashboardUsers = () => {
+const DashboardPatients = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const role = useAuthStore((state) => state.role);
   const { toast } = useToast();
 
-  const [users, setUsers] = useState<IUser[]>([]);
+  const [patients, setPatients] = useState<IPatient[]>([]);
 
-  const columns: ColumnDef<IUser>[] = [
+  const columns: ColumnDef<IPatient>[] = [
     {
       accessorKey: 'name',
       header: 'Nama',
+      cell: ({ row }) => {
+        const cellValue = row.original.name;
+
+        return cellValue ? cellValue : '-';
+      },
     },
     {
       accessorKey: 'email',
@@ -46,15 +49,6 @@ const DashboardUsers = () => {
         const cellValue = row.original.phone;
 
         return cellValue !== '' ? cellValue : '-';
-      },
-    },
-    {
-      accessorKey: 'role',
-      header: 'Role',
-      cell: ({ row }) => {
-        const cellValue = row.original.role;
-
-        return <Badge variant="outline">{capitalize(cellValue)}</Badge>;
       },
     },
     {
@@ -71,8 +65,7 @@ const DashboardUsers = () => {
             <DropdownMenuContent align="end">
               <DropdownMenuLabel>Actions</DropdownMenuLabel>
               <DropdownMenuSeparator />
-              <DropdownMenuItem>Hapus pengguna</DropdownMenuItem>
-              <DropdownMenuItem>TEST 2</DropdownMenuItem>
+              <DropdownMenuItem>Hapus</DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
         );
@@ -90,8 +83,8 @@ const DashboardUsers = () => {
         [...searchParams].filter((param) => param[0] !== 'tab')
       );
 
-      const result = await getUsers({ ...query });
-      setUsers(result.data);
+      const result = await getPatients({ ...query });
+      setPatients(result.data);
     } catch (error) {
       toast({
         title: 'Oops! Sesuatu telah terjadi',
@@ -105,12 +98,12 @@ const DashboardUsers = () => {
     <AdminLayout className="space-y-4" showMenu>
       {['superadmin'].includes(role) && (
         <div className="w-full flex justify-end">
-          <Button>Tambah user</Button>
+          <Button>Tambah pasien</Button>
         </div>
       )}
       <DataTable
         columns={columns}
-        data={users}
+        data={patients}
         noFoundMessage="Tidak ada data tersedia"
       />
       <Pagination />
@@ -118,4 +111,4 @@ const DashboardUsers = () => {
   );
 };
 
-export default DashboardUsers;
+export default DashboardPatients;

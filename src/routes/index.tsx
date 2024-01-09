@@ -13,11 +13,11 @@ import QuestionnaireSent from '@/pages/user/questionnaire/sent';
 import QuestionnaireStart from '@/pages/user/questionnaire/start';
 import QuestionnaireFinish from '@/pages/user/questionnaire/finish';
 import Dashboard from '@/pages/admin';
-import AdminLogin from '@/pages/admin/login';
-import AdminUsers from '@/pages/admin/users';
-import AdminPatients from '@/pages/list_pasien';
+import DashboardLogin from '@/pages/admin/login';
+import DashboardUsers from '@/pages/admin/users';
+import DashboardPatients from '@/pages/admin/patients';
+import DashboardSchedules from '@/pages/admin/schedules';
 import ListKuisioner from '../pages/list_kuisioner';
-import JadwalPraktik from '../pages/jadwal_praktik';
 import LandingKuisioner from '../pages/landing_kuisioner';
 import Responden from '../pages/responden';
 import DetailResponden from '../pages/detail_responden';
@@ -80,28 +80,32 @@ const App = () => {
           element: <LandingKuisioner />,
         },
         {
-          path: '/admin',
+          path: '/dashboard',
           element: <Dashboard />,
         },
         {
-          path: '/admin/login',
-          element: <AdminLogin />,
+          path: '/dashboard/login',
+          element: <DashboardLogin />,
         },
         {
-          path: '/admin/patients',
-          element: <AdminPatients />,
+          path: '/dashboard/patients',
+          element: <DashboardPatients />,
         },
         {
-          path: '/admin/users',
-          element: <AdminUsers />,
+          path: '/dashboard/users',
+          element: <DashboardUsers />,
         },
         {
-          path: '/list/kuisioner',
+          path: '/dashboard/schedules',
+          element: <DashboardSchedules />,
+        },
+        {
+          path: '/dashboard/appointment',
+          element: <Appointment />,
+        },
+        {
+          path: '/dashboard/questionnaire',
           element: <ListKuisioner />,
-        },
-        {
-          path: '/jadwal/praktik',
-          element: <JadwalPraktik />,
         },
         {
           path: '/responden',
@@ -110,10 +114,6 @@ const App = () => {
         {
           path: '/detail_responden/:attempt_id',
           element: <DetailResponden />,
-        },
-        {
-          path: '/appointment',
-          element: <Appointment />,
         },
         {
           path: '/assessment',

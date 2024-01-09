@@ -7,7 +7,7 @@ import Cookies from 'js-cookie';
 import { useToast } from '@/components/ui/use-toast';
 import DatePicker from '@/components/datepicker';
 import { Button } from '@/components/ui/button';
-import Layout from '@/components/layout';
+import { Layout } from '@/components/layout';
 import {
   Dialog,
   DialogContent,
@@ -17,8 +17,8 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog';
 
-import { getListSchedule, postBookSchedule } from '@/utils/apis/schedule/api';
-import { IScheduleResponse } from '@/utils/apis/schedule/types';
+import { getSchedules, postBookSchedule } from '@/utils/apis/schedule/api';
+import { ISchedule } from '@/utils/apis/schedule/types';
 import { getMyProfile } from '@/utils/apis/auth/api';
 import { MyProfile } from '@/utils/apis/auth/types';
 
@@ -37,10 +37,10 @@ const Scheduling = () => {
   const { toast } = useToast();
 
   const token = Cookies.get('token');
-  const [reserve, setReserve] = useState<IScheduleResponse[]>([]);
+  const [reserve, setReserve] = useState<ISchedule[]>([]);
   const [patient, setPatient] = useState<MyProfile>();
   const [selectedDate, setSelectedDate] = useState<Date>();
-  const [selectedSchedule, setSelectedSchedule] = useState<IScheduleResponse>();
+  const [selectedSchedule, setSelectedSchedule] = useState<ISchedule>();
   const [isOpen, setIsOpen] = useState(false);
 
   useEffect(() => {
@@ -50,7 +50,7 @@ const Scheduling = () => {
 
   const getBookedSchedule = async () => {
     try {
-      const result = await getListSchedule();
+      const result = await getSchedules();
       setReserve(result.data);
     } catch (error) {
       toast({
@@ -61,7 +61,7 @@ const Scheduling = () => {
     }
   };
 
-  const handleBooking = async (schedule: IScheduleResponse) => {
+  const handleBooking = async (schedule: ISchedule) => {
     try {
       const body = {
         patient_id: patient!.id,
@@ -112,7 +112,7 @@ const Scheduling = () => {
     }
   }, [navigate, token]);
 
-  function handleSelectSchedule(schedule: IScheduleResponse) {
+  function handleSelectSchedule(schedule: ISchedule) {
     setSelectedSchedule(schedule);
     setIsOpen(true);
   }
@@ -171,9 +171,9 @@ const Scheduling = () => {
 
 interface Props {
   isOpen: boolean;
-  schedule?: IScheduleResponse;
+  schedule?: ISchedule;
   selectedDate?: Date;
-  handleBooking: (schedule: IScheduleResponse) => void;
+  handleBooking: (schedule: ISchedule) => void;
   onSelectDate?: SelectSingleEventHandler;
   onOpenChange?: (open: boolean) => void;
 }

@@ -1,5 +1,6 @@
 export interface Request {
   code?: string;
+  page?: string | number;
 }
 
 export type Response<T = any> = {
@@ -10,3 +11,8 @@ export type Response<T = any> = {
     status: string;
   };
 };
+
+export interface Meta {
+  currentPage: number;
+  totalPages: number;
+}

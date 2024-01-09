@@ -4,7 +4,7 @@ export interface IBookPayload {
   booking_date: string;
 }
 
-export interface IScheduleResponse {
+export interface ISchedule {
   booking: any[];
   day: string;
   health_care_address: string;

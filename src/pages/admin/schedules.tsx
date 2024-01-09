@@ -19,42 +19,36 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 
-import { getUsers } from '@/utils/apis/dashboard/api';
-import { IUser } from '@/utils/apis/dashboard/types';
+import { getSchedules } from '@/utils/apis/schedule/api';
+import { ISchedule } from '@/utils/apis/schedule/types';
 import useAuthStore from '@/utils/states/auth';
 
-const DashboardUsers = () => {
+const DashboardSchedules = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const role = useAuthStore((state) => state.role);
   const { toast } = useToast();
 
-  const [users, setUsers] = useState<IUser[]>([]);
+  const [users, setUsers] = useState<ISchedule[]>([]);
 
-  const columns: ColumnDef<IUser>[] = [
+  const columns: ColumnDef<ISchedule>[] = [
     {
-      accessorKey: 'name',
-      header: 'Nama',
+      accessorKey: 'user.name',
+      header: 'Nama Doktor',
     },
     {
-      accessorKey: 'email',
-      header: 'Email',
+      accessorKey: 'day',
+      header: 'Hari Jadwal',
     },
     {
-      accessorKey: 'phone',
-      header: 'Nomor Telepon',
+      accessorKey: 'health_care_address',
+      header: 'Alamat',
+    },
+    {
+      accessorKey: '',
+      header: 'Waktu',
       cell: ({ row }) => {
-        const cellValue = row.original.phone;
-
-        return cellValue !== '' ? cellValue : '-';
-      },
-    },
-    {
-      accessorKey: 'role',
-      header: 'Role',
-      cell: ({ row }) => {
-        const cellValue = row.original.role;
-
-        return <Badge variant="outline">{capitalize(cellValue)}</Badge>;
+        const { time_start, time_end } = row.original;
+        return `${time_start} - ${time_end}`;
       },
     },
     {
@@ -90,7 +84,7 @@ const DashboardUsers = () => {
         [...searchParams].filter((param) => param[0] !== 'tab')
       );
 
-      const result = await getUsers({ ...query });
+      const result = await getSchedules({ ...query });
       setUsers(result.data);
     } catch (error) {
       toast({
@@ -118,4 +112,4 @@ const DashboardUsers = () => {
   );
 };
 
-export default DashboardUsers;
+export default DashboardSchedules;

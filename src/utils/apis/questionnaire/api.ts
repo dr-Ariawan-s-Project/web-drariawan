@@ -15,9 +15,9 @@ export const validateQuestionaire = async (body: QuestionnaireSchema) => {
 
     return response.data as Response<string>;
   } catch (error: any) {
-    const { code, message } = error.response.data.meta;
+    const { messages } = error.response.data;
 
-    throw Error(`${code}: ${message}`);
+    throw Error(messages[0]);
   }
 };
 
@@ -27,9 +27,9 @@ export const getQuestionnaire = async () => {
 
     return response.data as Response<IQuestionnaire[]>;
   } catch (error: any) {
-    const { code, message } = error.response.data.meta;
+    const { messages } = error.response.data;
 
-    throw Error(`${code}: ${message}`);
+    throw Error(messages[0]);
   }
 };
 
@@ -39,8 +39,8 @@ export const postQuestionnaire = async (body: QuestionnaireBody) => {
 
     return response.data as Response<string>;
   } catch (error: any) {
-    const { code, message } = error.response.data.meta;
+    const { messages } = error.response.data;
 
-    throw Error(`${code}: ${message}`);
+    throw Error(messages[0]);
   }
 };

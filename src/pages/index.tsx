@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 
 import { Button } from '@/components/ui/button';
-import Layout from '@/components/layout';
+import { Layout } from '@/components/layout';
 import Background from '@/assets/illustrations/main-background.jpeg';
 
 import useAuthStore from '@/utils/states/auth';

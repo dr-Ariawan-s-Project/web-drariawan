@@ -111,6 +111,7 @@ const SidebarLink = (props: ISidebarItem) => {
         )
       }
       to={to}
+      end
     >
       <div
         className={cn(

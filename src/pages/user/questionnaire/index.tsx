@@ -3,7 +3,7 @@ import { useState } from 'react';
 
 import { buttonVariants } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
-import Layout from '@/components/layout';
+import { Layout } from '@/components/layout';
 import { cn } from '@/lib/utils';
 
 const Landing = () => {

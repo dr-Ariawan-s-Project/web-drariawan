@@ -1,7 +1,7 @@
 import { useLocation, Navigate, Link } from 'react-router-dom';
 
 import { Button } from '@/components/ui/button';
-import Layout from '@/components/layout';
+import { Layout } from '@/components/layout';
 
 const KonfirmasiPraktik = () => {
   const { state } = useLocation();

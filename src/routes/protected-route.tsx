@@ -6,7 +6,7 @@ const nonLoggedInAccess = [
   '/',
   '/login',
   '/register',
-  '/admin/login',
+  '/dashboard/login',
   '/questionnaire',
   '/questionnaire/form',
   '/questionnaire/sent',
@@ -15,10 +15,25 @@ const nonLoggedInAccess = [
 ];
 
 const routeWhitelist: Record<string, string[]> = {
-  suster: ['/admin'],
-  dokter: ['/admin'],
-  admin: ['/admin', '/admin/patients'],
-  superadmin: ['/admin', '/admin/patients', '/admin/users'],
+  suster: ['/dashboard', '/dashboard/schedules', '/dashboard/appointment'],
+  dokter: [
+    '/dashboard',
+    '/dashboard/schedules',
+    '/dashboard/appointment',
+    '/dashboard/questionnaire',
+  ],
+  admin: [
+    '/dashboard',
+    '/dashboard/patients',
+    '/dashboard/schedules',
+    '/dashboard/questionnaire',
+  ],
+  superadmin: [
+    '/dashboard',
+    '/dashboard/users',
+    '/dashboard/patients',
+    '/dashboard/schedules',
+  ],
   patient: [
     '/',
     '/scheduling',
@@ -40,7 +55,7 @@ const ProtectedRoute = () => {
     if (!routeWhitelist[role].includes(pathname)) {
       if (role === 'patient') return <Navigate to="/" />;
 
-      return <Navigate to="/admin" />;
+      return <Navigate to="/dashboard" />;
     } else {
       return <Outlet />;
     }

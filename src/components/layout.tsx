@@ -49,12 +49,12 @@ export const AdminLayout = (props: Readonly<Props>) => {
     showMenu,
     centerY = false,
     centerX = false,
+    className,
   } = props;
-  const { role } = useAuthStore((state) => state);
 
   return (
-    <div className="bg-white flex h-screen w-full [&>*]:text-health-blue-dark">
-      {role !== 'patient' && <Sidebar />}
+    <div className="flex h-screen w-full [&>*]:text-health-blue-dark">
+      <Sidebar />
       <div
         className={cn(
           'w-full flex-grow flex flex-col',
@@ -64,10 +64,17 @@ export const AdminLayout = (props: Readonly<Props>) => {
         data-testid="content-container"
       >
         {!hideNavbar && <Navbar showMenu={showMenu} />}
-        <div className="w-full h-full flex flex-col">{children}</div>
+        <div className="w-full h-full flex flex-col overflow-auto bg-gray-100 p-4">
+          <div
+            className={cn(
+              'flex h-fit w-full flex-col rounded-lg bg-white p-4',
+              className
+            )}
+          >
+            {children}
+          </div>
+        </div>
       </div>
     </div>
   );
 };
-
-export default Layout;
