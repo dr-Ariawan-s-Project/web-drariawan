@@ -1,6 +1,5 @@
 import 'regenerator-runtime/runtime';
 import ReactDOM from 'react-dom/client';
-import React from 'react';
 
 import { Toaster } from '@/components/ui/toaster';
 import App from '@/routes';

@@ -139,6 +139,8 @@ const PatientSchedule = () => {
     return schedule;
   }, [schedule, selectedMonth]);
 
+  // TODO: Remove after deployment
+  console.log(selectedStatus);
   return (
     <Layout className="p-5 space-y-5">
       <div className="text-center flex flex-col">
