@@ -1,6 +1,6 @@
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useNavigate, Link } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
+import { Link } from 'react-router-dom';
 import { Loader2 } from 'lucide-react';
 
 import { CustomFormField } from '@/components/custom-formfield';
@@ -17,7 +17,6 @@ import useAuthStore from '@/utils/states/auth';
 
 const Login = () => {
   const addAuth = useAuthStore((state) => state.addAuth);
-  const navigate = useNavigate();
   const { toast } = useToast();
 
   const form = useForm<LoginSchema>({
@@ -33,11 +32,10 @@ const Login = () => {
     try {
       const result = await userLogin(data);
       toast({
-        description: 'Hello, welcome back!',
+        description: `Halo ${result.data.name}, selamat datang kembali`,
       });
       addAuth(result.data, data.remember);
       setAxiosConfig(result.data.token);
-      navigate('/scheduling');
     } catch (error) {
       toast({
         title: 'Oops! Sesuatu telah terjadi',

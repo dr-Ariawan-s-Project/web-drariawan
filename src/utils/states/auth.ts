@@ -26,7 +26,7 @@ const useAuthStore = create<AuthState>()((set) => ({
         sessionStorage.setItem('userName', data.name);
         sessionStorage.setItem('userRole', data.role);
       }
-      return { token: data.token, name: data.name };
+      return { token: data.token, name: data.name, role: data.role };
     }),
   resetAuth: () =>
     set(() => {

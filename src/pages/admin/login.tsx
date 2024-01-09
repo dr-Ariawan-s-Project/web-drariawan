@@ -1,6 +1,6 @@
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useNavigate, Link } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
+import { Link } from 'react-router-dom';
 import { Loader2 } from 'lucide-react';
 
 import {
@@ -15,10 +15,10 @@ import Layout from '@/components/layout';
 import { LoginSchema, loginSchema } from '@/utils/apis/auth/types';
 import { adminLogin } from '@/utils/apis/auth/api';
 import useAuthStore from '@/utils/states/auth';
+import { setAxiosConfig } from '@/utils/apis/axiosWithConfig';
 
 const AdminLogin = () => {
   const addAuth = useAuthStore((state) => state.addAuth);
-  const navigate = useNavigate();
   const { toast } = useToast();
 
   const form = useForm<LoginSchema>({
@@ -34,10 +34,10 @@ const AdminLogin = () => {
     try {
       const result = await adminLogin(data);
       toast({
-        description: 'Halo, selamat datang kembali',
+        description: `Halo ${result.data.name}, selamat datang kembali`,
       });
       addAuth(result.data, data.remember);
-      navigate('/admin');
+      setAxiosConfig(result.data.token);
     } catch (error) {
       toast({
         title: 'Oops! Sesuatu telah terjadi',

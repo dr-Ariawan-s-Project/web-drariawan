@@ -133,6 +133,7 @@ const Scheduling = () => {
             {getDoctorScheduleForDay(day).map((doctorSchedule) => {
               return (
                 <div
+                  key={doctorSchedule.schedule_id}
                   className="border rounded-md cursor-pointer mb-4 text-left px-5 py-3"
                   onClick={() => handleSelectSchedule(doctorSchedule)}
                 >

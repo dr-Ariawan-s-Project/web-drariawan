@@ -2,6 +2,18 @@ import { Navigate, Outlet, useLocation } from 'react-router-dom';
 
 import useAuthStore from '@/utils/states/auth';
 
+const nonLoggedInAccess = [
+  '/',
+  '/login',
+  '/register',
+  '/admin/login',
+  '/questionnaire',
+  '/questionnaire/form',
+  '/questionnaire/sent',
+  '/questionnaire/start',
+  '/questionnaire/finish',
+];
+
 const routeWhitelist: Record<string, string[]> = {
   suster: ['/admin'],
   dokter: ['/admin'],
@@ -24,19 +36,19 @@ const ProtectedRoute = () => {
   const { token, role } = useAuthStore((state) => state);
   const { pathname } = useLocation();
 
-  const authProtected = ['/login', '/register', '/admin/login'];
+  if (token) {
+    if (!routeWhitelist[role].includes(pathname)) {
+      if (role === 'patient') return <Navigate to="/" />;
 
-  if (authProtected.includes(pathname)) {
-    if (token) return <Navigate to="/" />;
+      return <Navigate to="/admin" />;
+    } else {
+      return <Outlet />;
+    }
+  } else {
+    if (nonLoggedInAccess.includes(pathname)) return <Outlet />;
+
+    return <Navigate to="/" />;
   }
-
-  if (!routeWhitelist[role].includes(pathname)) {
-    if (role === 'patient') return <Navigate to="/" />;
-
-    return <Navigate to="/admin" />;
-  }
-
-  return <Outlet />;
 };
 
 export default ProtectedRoute;
