@@ -5,14 +5,20 @@ export interface Request {
 
 export type Response<T = any> = {
   data: T;
-  message: string[];
+  messages: string[];
   meta: {
     code: string;
     status: string;
   };
 };
 
-export interface Meta {
-  currentPage: number;
-  totalPages: number;
+export interface ResponsePagination<T = any> extends Response<T> {
+  pagination: IPagination;
+}
+
+export interface IPagination {
+  limit: number;
+  page: number;
+  total_pages: number;
+  total_records: number;
 }

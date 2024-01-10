@@ -10,17 +10,17 @@ import {
 } from '@/components/ui/pagination';
 
 import { generatePagesToDisplay } from '@/utils/formatter';
-import { Meta } from '@/utils/types/api';
+import { IPagination } from '@/utils/types/api';
 
 interface Props {
-  meta?: Meta;
+  meta?: IPagination;
 }
 
 const Pagination = (props: Props) => {
   const { meta } = props;
 
   const pagesToDisplay = useMemo(
-    () => generatePagesToDisplay(meta?.currentPage!, meta?.totalPages!),
+    () => generatePagesToDisplay(meta?.page!, meta?.total_pages!),
     [meta]
   );
 
@@ -30,23 +30,23 @@ const Pagination = (props: Props) => {
         <PaginationPrevious
           href={
             meta
-              ? meta?.currentPage === 1
+              ? meta?.page === 1
                 ? undefined
-                : `?page=${meta?.currentPage! - 1}`
+                : `?page=${meta?.page! - 1}`
               : undefined
           }
         />
         {meta ? (
-          pagesToDisplay.map((page) => {
+          pagesToDisplay.map((page, index) => {
             if (page === '...') {
-              return <PaginationEllipsis />;
+              return <PaginationEllipsis key={`${page}-${index}`} />;
             }
 
             return (
               <PaginationLink
-                key={page}
-                href={meta?.currentPage === page ? undefined : `?page=${page}`}
-                isActive={meta?.currentPage === page}
+                key={`${page}-${index}`}
+                href={meta?.page === page ? undefined : `?page=${page}`}
+                isActive={meta?.page === page}
               >
                 {page}
               </PaginationLink>
@@ -58,9 +58,9 @@ const Pagination = (props: Props) => {
         <PaginationNext
           href={
             meta
-              ? meta?.currentPage === meta?.totalPages
+              ? meta?.page === meta?.total_pages
                 ? undefined
-                : `?page=${meta?.currentPage! + 1}`
+                : `?page=${meta?.page! + 1}`
               : undefined
           }
         />
