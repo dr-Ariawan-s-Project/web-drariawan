@@ -18,6 +18,46 @@ export const getSchedules = async (params?: Request) => {
   }
 };
 
+// TODO: Change this body
+export const postSchedule = async (body: any) => {
+  try {
+    const response = await axiosWithConfig.post('/v1/schedule', body);
+
+    return response.data as Response;
+  } catch (error: any) {
+    const { messages } = error.response.data;
+
+    throw Error(messages[0]);
+  }
+};
+
+// TODO: Change this body
+export const updateSchedule = async (body: any) => {
+  try {
+    const response = await axiosWithConfig.put('/v1/schedule', body);
+
+    return response.data as Response;
+  } catch (error: any) {
+    const { messages } = error.response.data;
+
+    throw Error(messages[0]);
+  }
+};
+
+export const deleteSchedule = async (id_schedule: number) => {
+  try {
+    const response = await axiosWithConfig.delete(
+      `/v1/schedule/delete/${id_schedule}`
+    );
+
+    return response.data as Response;
+  } catch (error: any) {
+    const { messages } = error.response.data;
+
+    throw Error(messages[0]);
+  }
+};
+
 export const postBookSchedule = async (body: IBookPayload) => {
   try {
     const response = await axiosWithConfig.post(`/v1/booking`, body);

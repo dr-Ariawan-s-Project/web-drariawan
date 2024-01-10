@@ -30,8 +30,8 @@ const Navbar = (props: Props) => {
     toast({
       description: 'Logout Successfully',
     });
-    navigate('/login');
     resetAuth();
+    role === 'patient' ? navigate('/login') : navigate('/dashboard/login');
   }
 
   return (

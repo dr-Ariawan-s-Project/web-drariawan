@@ -2,8 +2,8 @@ import { create } from 'zustand';
 import {
   LayoutDashboardIcon,
   UserRoundIcon,
-  BookMarkedIcon,
-  MailIcon,
+  CalendarDaysIcon,
+  CalendarClockIcon,
 } from 'lucide-react';
 
 import { ISidebarList, ISidebarState } from '@/components/sidebar/types';
@@ -47,13 +47,13 @@ const sidebarList: ISidebarList[] = [
         id: 'schedules',
         label: 'Schedules',
         to: '/dashboard/schedules',
-        icon: BookMarkedIcon,
+        icon: CalendarDaysIcon,
       },
       {
-        id: 'appointment',
-        label: 'Appointment',
-        to: '/email',
-        icon: MailIcon,
+        id: 'appointments',
+        label: 'Appointments',
+        to: '/dashboard/appointments',
+        icon: CalendarClockIcon,
       },
     ],
   },

@@ -1,78 +1,87 @@
+import { useState, useEffect, useMemo } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { ColumnDef } from '@tanstack/react-table';
 import { MoreHorizontal } from 'lucide-react';
-import { useState, useEffect } from 'react';
-import { capitalize } from 'lodash';
 
 import { useToast } from '@/components/ui/use-toast';
 import { AdminLayout } from '@/components/layout';
 import Pagination from '@/components/pagination';
 import { Button } from '@/components/ui/button';
 import DataTable from '@/components/data-table';
-import { Badge } from '@/components/ui/badge';
+import Alert from '@/components/alert';
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import AddEditSchedule from './module/add-edit-schedule';
 
-import { getSchedules } from '@/utils/apis/schedule/api';
-import { ISchedule } from '@/utils/apis/schedule/types';
+import {
+  getSchedules,
+  deleteSchedule,
+  updateSchedule,
+  postSchedule,
+} from '@/utils/apis/schedule/api';
+import { ISchedule, ScheduleSchema } from '@/utils/apis/schedule/types';
 import useAuthStore from '@/utils/states/auth';
 
 const DashboardSchedules = () => {
-  const [searchParams, setSearchParams] = useSearchParams();
+  const [searchParams] = useSearchParams();
   const role = useAuthStore((state) => state.role);
   const { toast } = useToast();
 
   const [users, setUsers] = useState<ISchedule[]>([]);
+  const [selectedData, setSelectedData] = useState<ISchedule>();
+  const [showAddEditDialog, setShowAddEditDialog] = useState(false);
 
-  const columns: ColumnDef<ISchedule>[] = [
-    {
-      accessorKey: 'user.name',
-      header: 'Nama Doktor',
-    },
-    {
-      accessorKey: 'day',
-      header: 'Hari Jadwal',
-    },
-    {
-      accessorKey: 'health_care_address',
-      header: 'Alamat',
-    },
-    {
-      accessorKey: '',
-      header: 'Waktu',
-      cell: ({ row }) => {
-        const { time_start, time_end } = row.original;
-        return `${time_start} - ${time_end}`;
+  const columns = useMemo<ColumnDef<ISchedule>[]>(
+    () => [
+      {
+        accessorKey: 'user.name',
+        header: 'Nama Doktor',
       },
-    },
-    {
-      id: 'actions',
-      cell: ({ row }) => {
-        return (
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="ghost" className="h-8 w-8 p-0">
-                <span className="sr-only">Open menu</span>
-                <MoreHorizontal className="h-4 w-4" />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              <DropdownMenuLabel>Actions</DropdownMenuLabel>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem>Hapus pengguna</DropdownMenuItem>
-              <DropdownMenuItem>TEST 2</DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
-        );
+      {
+        accessorKey: 'day',
+        header: 'Hari Jadwal',
       },
-    },
-  ];
+      {
+        accessorKey: 'health_care_address',
+        header: 'Alamat',
+      },
+      {
+        accessorKey: '',
+        header: 'Waktu',
+        cell: ({ row }) => {
+          const { time_start, time_end } = row.original;
+          return `${time_start} - ${time_end}`;
+        },
+      },
+      {
+        id: 'actions',
+        cell: ({ row }) => {
+          return (
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="ghost" className="h-8 w-8 p-0">
+                  <span className="sr-only">Open menu</span>
+                  <MoreHorizontal className="h-4 w-4" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end">
+                {/* TODO: Add onClick on edit */}
+                <DropdownMenuItem>Edit</DropdownMenuItem>
+                <DropdownMenuItem onClick={() => setSelectedData(row.original)}>
+                  Hapus
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          );
+        },
+      },
+    ],
+    []
+  );
 
   useEffect(() => {
     fetchData();
@@ -95,11 +104,49 @@ const DashboardSchedules = () => {
     }
   };
 
+  async function onSubmitData(data: ScheduleSchema) {
+    try {
+      const result = selectedData
+        ? await updateSchedule(data)
+        : await postSchedule(data);
+      toast({
+        description: result.messages[0],
+      });
+      fetchData();
+      setShowAddEditDialog(false);
+    } catch (error: any) {
+      toast({
+        title: 'Oops! Something went wrong.',
+        description: error.message.toString(),
+        variant: 'destructive',
+      });
+    }
+  }
+
+  async function onDeleteUser(id_schedule: number) {
+    try {
+      const result = await deleteSchedule(id_schedule);
+      toast({
+        description: result.messages[0],
+      });
+      fetchData();
+      setSelectedData(undefined);
+    } catch (error: any) {
+      toast({
+        title: 'Oops! Something went wrong.',
+        description: error.message.toString(),
+        variant: 'destructive',
+      });
+    }
+  }
+
   return (
     <AdminLayout className="space-y-4" showMenu>
-      {['superadmin'].includes(role) && (
+      {['superadmin', 'dokter', 'admin'].includes(role) && (
         <div className="w-full flex justify-end">
-          <Button>Tambah user</Button>
+          <Button onClick={() => setShowAddEditDialog(true)}>
+            Tambah jadwal
+          </Button>
         </div>
       )}
       <DataTable
@@ -108,6 +155,19 @@ const DashboardSchedules = () => {
         noFoundMessage="Tidak ada data tersedia"
       />
       <Pagination />
+      <Alert
+        open={selectedData ? true : false}
+        title="Peringatan"
+        description={`Apakah anda yakin ingin menghapus jadwal "${selectedData?.user.name} pada hari ${selectedData?.day}"?`}
+        onAction={() => onDeleteUser(selectedData?.schedule_id!)}
+        onCancel={() => setSelectedData(undefined)}
+      />
+      <AddEditSchedule
+        open={showAddEditDialog}
+        onOpenChange={setShowAddEditDialog}
+        editData={selectedData}
+        onSubmit={(data) => onSubmitData(data)}
+      />
     </AdminLayout>
   );
 };

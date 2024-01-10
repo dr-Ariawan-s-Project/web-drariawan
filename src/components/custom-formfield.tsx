@@ -59,7 +59,7 @@ export function CustomFormField<T extends FieldValues>(
       control={control}
       name={name}
       render={({ field }) => (
-        <FormItem>
+        <FormItem className="w-full">
           <FormLabel>{label}</FormLabel>
           <FormControl>{children(field)}</FormControl>
           {description && <FormDescription>{description}</FormDescription>}
