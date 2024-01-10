@@ -63,11 +63,11 @@ const VideoPlayer = (props: Props) => {
 
   return (
     <div className="w-full flex flex-col items-center">
-      <div className="relative">
+      <div className="relative w-full h-full">
         <video
           ref={videoRef}
           src={src}
-          className="rounded-md"
+          className="rounded-md w-full h-full"
           onLoadedMetadata={() => handleLoadedMetadata()}
           onTimeUpdate={() => handleTimeUpdate()}
         />

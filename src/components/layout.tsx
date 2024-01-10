@@ -2,7 +2,6 @@ import { ReactNode } from 'react';
 
 import { Sidebar } from '@/components/sidebar';
 import Navbar from '@/components/navbar';
-import useAuthStore from '@/utils/states/auth';
 import { cn } from '@/lib/utils';
 
 interface Props {
@@ -25,11 +24,11 @@ export const Layout = (props: Readonly<Props>) => {
   } = props;
 
   return (
-    <div className="bg-white h-screen w-full [&>*]:text-health-blue-dark flex flex-col">
+    <div className="bg-white h-screen w-full [&>*]:text-health-blue-dark flex flex-col bg-[url(/images/pattern.svg)] overflow-auto">
       {!hideNavbar && <Navbar showMenu={showMenu} />}
       <div
         className={cn(
-          'w-full flex-grow flex flex-col',
+          'container flex-grow flex flex-col relative',
           centerY && 'justify-center',
           centerX && 'items-center p-5',
           className

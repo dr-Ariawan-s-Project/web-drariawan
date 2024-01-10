@@ -118,7 +118,7 @@ const Scheduling = () => {
   }
 
   return (
-    <Layout>
+    <Layout className="p-4">
       <div className="text-center flex flex-col space-y-4">
         <p className="font-semibold text-2xl">Pilih Jadwal Praktik Dokter</p>
         <p className="font-semibold text-sm">
@@ -126,15 +126,15 @@ const Scheduling = () => {
           melakukan pendaftaran
         </p>
       </div>
-      <div className="w-full grid grid-cols-7 gap-4 mx-20 my-10 overflow-x-auto">
+      <div className="w-full grid grid-flow-col gap-4 my-10 overflow-x-auto">
         {DAYS_OF_WEEK.map((day) => (
-          <div key={day} className="text-center min-w-40">
+          <div key={day} className="text-center col-span-12">
             <p className="font-semibold mb-2">{day}</p>
             {getDoctorScheduleForDay(day).map((doctorSchedule) => {
               return (
                 <div
                   key={doctorSchedule.schedule_id}
-                  className="border rounded-md cursor-pointer mb-4 text-left px-5 py-3"
+                  className="border rounded-md cursor-pointer mb-4 text-left px-5 py-3 bg-white"
                   onClick={() => handleSelectSchedule(doctorSchedule)}
                 >
                   <div className="text-md font-semibold">

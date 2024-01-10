@@ -39,21 +39,26 @@ const Main = () => {
   if (finishSplash) {
     return (
       <Layout>
-        <div className="flex flex-grow w-full">
+        <div className="flex h-full w-full">
           <div
             className="bg-center bg-cover h-full w-1/2 hidden md:flex"
             style={{
               backgroundImage: `linear-gradient(
-            rgba(0, 0, 0, 0.3),
-            rgba(0, 0, 0, 0.3)
-          ), url(${Background})`,
+              rgba(0, 0, 0, 0.3),
+              rgba(0, 0, 0, 0.3)
+            ), url(${Background})`,
             }}
           />
           <div className="flex flex-col h-full w-full p-8 justify-center md:w-1/2 space-y-3">
-            <h2 className="font-bold tracking-wider text-3xl">
+            <img
+              src="/images/logo-blue.svg"
+              alt="Logo"
+              className="w-40 h-w-40 object-contain bg-white rounded-full"
+            />
+            <p className="font-bold tracking-wider text-3xl">
               Kesehatan Reproduksi adalah Hak Anda
-            </h2>
-            <p className="tracking-wider text-justify">
+            </p>
+            <p className="tracking-wider text-justify break-all md:break-normal">
               Selamat datang di laman kesehatan kami, kesehatan anda menjadi
               perhatian dan usaha kami untuk mengupayakan kesehatan anda. Kami
               menyediakan pelayanan dan konseling kesehatan yang anda butuhkan

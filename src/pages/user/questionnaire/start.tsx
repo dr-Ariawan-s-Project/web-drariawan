@@ -1,5 +1,6 @@
 import { Navigate, useSearchParams, useNavigate } from 'react-router-dom';
 import { useEffect, useState, useMemo, useCallback } from 'react';
+import { Loader2 } from 'lucide-react';
 import { Info } from 'lucide-react';
 import { debounce } from 'lodash';
 import SpeechRecognition, {
@@ -29,6 +30,7 @@ import useQuestionnaireStore from '@/utils/states/questionnaire';
 
 interface IStartProps {
   handleClick: () => void;
+  isLoading: boolean;
 }
 
 interface IQuestionProps {
@@ -36,6 +38,7 @@ interface IQuestionProps {
   count: number;
   transcript: string;
   isRecording: boolean;
+  isLoading: boolean;
   handleStartRecording: () => void;
   handleStopRecording: () => void;
   handleNext: () => void;
@@ -60,6 +63,7 @@ const QuestionnaireStart = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
 
+  const [isLoading, setIsLoading] = useState(true);
   const [isStart, setIsStart] = useState(false);
   const [idQuestion, setIdQuestion] = useState(1);
   const [datas, setDatas] = useState<IQuestionnaire[]>([]);
@@ -93,6 +97,7 @@ const QuestionnaireStart = () => {
       });
       setDatas(result.data);
       addAnswer(initialAnswer);
+      setIsLoading(false);
     } catch (error) {
       toast({
         title: 'Oops! Sesuatu telah terjadi',
@@ -121,6 +126,7 @@ const QuestionnaireStart = () => {
       });
       resetTranscript();
     } else {
+      setIsLoading(true);
       handleSubmit();
     }
   }
@@ -144,6 +150,8 @@ const QuestionnaireStart = () => {
         description: (error as Error).message,
         variant: 'destructive',
       });
+    } finally {
+      setIsLoading(false);
     }
   }
 
@@ -210,7 +218,9 @@ const QuestionnaireStart = () => {
   );
 
   if (!isStart) {
-    return <StartPage handleClick={() => setIsStart(true)} />;
+    return (
+      <StartPage handleClick={() => setIsStart(true)} isLoading={isLoading} />
+    );
   } else {
     return (
       <QuestionPage
@@ -218,6 +228,7 @@ const QuestionnaireStart = () => {
         count={datas.length}
         transcript={transcript}
         isRecording={listening}
+        isLoading={isLoading}
         handleStartRecording={startListening}
         handleStopRecording={stopListening}
         handleNext={handleNext}
@@ -228,14 +239,24 @@ const QuestionnaireStart = () => {
 };
 
 const StartPage = (props: IStartProps) => {
-  const { handleClick } = props;
+  const { handleClick, isLoading } = props;
+
   return (
     <Layout centerX centerY className="space-y-5">
       <img src="/images/phone-doctor.svg" width={200} height={200} />
       <p className="text-center text-lg">
         Silahkan klik tombol dibawah untuk memulai mengisi kuesioner!
       </p>
-      <Button onClick={handleClick}>Mulai isi kuesioner</Button>
+      <Button onClick={handleClick} disabled={isLoading}>
+        {isLoading ? (
+          <>
+            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+            Sedang memuat
+          </>
+        ) : (
+          'Mulai isi kuesioner'
+        )}
+      </Button>
     </Layout>
   );
 };
@@ -247,6 +268,7 @@ const QuestionPage = (props: IQuestionProps) => {
     count,
     transcript,
     isRecording,
+    isLoading,
     handleStartRecording,
     handleStopRecording,
     handleNext,
@@ -269,7 +291,7 @@ const QuestionPage = (props: IQuestionProps) => {
         </p>
         <p className="font-bold text-2xl text-center">
           {data.question}{' '}
-          <span>
+          <span className="align-middle">
             <Popover>
               <PopoverTrigger>
                 <Info />
@@ -291,9 +313,14 @@ const QuestionPage = (props: IQuestionProps) => {
             </Popover>
           </span>
         </p>
-        <VideoPlayer src={data.url_video} />
+        {data.url_video && <VideoPlayer src={data.url_video} />}
       </div>
       <div className="flex flex-col w-full md:w-3/4 lg:w-1/2 items-center space-y-5">
+        {data.description && (
+          <div>
+            <p>{data.description}</p>
+          </div>
+        )}
         <RadioGroup
           onValueChange={handleRadioChange}
           defaultValue={selectedOption?.slugs}
@@ -323,11 +350,14 @@ const QuestionPage = (props: IQuestionProps) => {
             handleStopRecording={handleStopRecording}
           />
         </div>
-        <Button disabled={isDisabled} onClick={handleNext}>
+        <Button disabled={isDisabled || isLoading} onClick={handleNext}>
           Selanjutnya
         </Button>
       </div>
-      <audio controls className="m-10 absolute bottom-0 right-0">
+      <audio
+        controls
+        className="absolute bottom-8 m-auto right-auto md:right-8"
+      >
         <source src="/background-questionnaire.mp3" type="audio/mp3" />
       </audio>
     </Layout>
