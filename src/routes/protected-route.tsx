@@ -15,11 +15,11 @@ const nonLoggedInAccess = [
 ];
 
 const routeWhitelist: Record<string, string[]> = {
-  suster: ['/dashboard', '/dashboard/schedules', '/dashboard/appointment'],
+  suster: ['/dashboard', '/dashboard/schedules', '/dashboard/books'],
   dokter: [
     '/dashboard',
     '/dashboard/schedules',
-    '/dashboard/appointment',
+    '/dashboard/books',
     '/dashboard/questionnaire',
   ],
   admin: [

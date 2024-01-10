@@ -10,17 +10,17 @@ import { Layout } from '@/components/layout';
 import Select from '@/components/select';
 
 import { getMySchedule } from '@/utils/apis/schedule/api';
-import { IMySchedule } from '@/utils/apis/schedule/types';
 import { getMyProfile } from '@/utils/apis/auth/api';
+import { IBook } from '@/utils/apis/books/types';
 
 const PatientSchedule = () => {
   const { toast } = useToast();
 
-  const [schedule, setSchedule] = useState<IMySchedule[]>([]);
+  const [schedule, setSchedule] = useState<IBook[]>([]);
   const [selectedMonth, setSelectedMonth] = useState<string>('');
   const [selectedStatus, setSelectedStatus] = useState<string>('');
 
-  const columns: ColumnDef<IMySchedule>[] = [
+  const columns: ColumnDef<IBook>[] = [
     {
       accessorKey: 'booking_code',
       header: 'Booking Code',

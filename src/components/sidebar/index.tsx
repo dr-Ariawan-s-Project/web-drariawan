@@ -1,13 +1,10 @@
 import { create } from 'zustand';
-import {
-  LayoutDashboardIcon,
-  UserRoundIcon,
-  CalendarDaysIcon,
-  CalendarClockIcon,
-} from 'lucide-react';
 
-import { ISidebarList, ISidebarState } from '@/components/sidebar/types';
 import { SidebarItem } from '@/components/sidebar/sidebar-item';
+import { ISidebarState } from '@/components/sidebar/types';
+
+import { sidebarList } from '@/utils/constants';
+import useAuthStore from '@/utils/states/auth';
 import { cn } from '@/lib/utils';
 
 export const useSidebarStore = create<ISidebarState>()((set) => ({
@@ -16,50 +13,8 @@ export const useSidebarStore = create<ISidebarState>()((set) => ({
     set((state) => ({ isSidebarOpen: !state.isSidebarOpen })),
 }));
 
-const sidebarList: ISidebarList[] = [
-  {
-    heading: 'Main',
-    child: [
-      {
-        id: 'dashboard',
-        label: 'Dashboard',
-        to: '/dashboard',
-        icon: LayoutDashboardIcon,
-      },
-      {
-        id: 'patient',
-        label: 'Patients',
-        to: '/dashboard/patients',
-        icon: UserRoundIcon,
-      },
-      {
-        id: 'user',
-        label: 'Users',
-        to: '/dashboard/users',
-        icon: UserRoundIcon,
-      },
-    ],
-  },
-  {
-    heading: 'Other',
-    child: [
-      {
-        id: 'schedules',
-        label: 'Schedules',
-        to: '/dashboard/schedules',
-        icon: CalendarDaysIcon,
-      },
-      {
-        id: 'appointments',
-        label: 'Appointments',
-        to: '/dashboard/appointments',
-        icon: CalendarClockIcon,
-      },
-    ],
-  },
-];
-
 export const Sidebar = () => {
+  const role = useAuthStore((state) => state.role);
   const { isSidebarOpen, changeSidebarOpen } = useSidebarStore(
     (state) => state
   );
@@ -86,7 +41,7 @@ export const Sidebar = () => {
           />
         </div>
         <div className="flex w-full flex-grow flex-col">
-          {sidebarList.map((list) => (
+          {sidebarList[role].map((list) => (
             <div
               className="flex h-fit w-full flex-col gap-2 p-3"
               key={list.heading}

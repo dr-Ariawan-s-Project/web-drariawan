@@ -17,11 +17,11 @@ import DashboardLogin from '@/pages/dashboard/login';
 import DashboardUsers from '@/pages/dashboard/users';
 import DashboardPatients from '@/pages/dashboard/patients';
 import DashboardSchedules from '@/pages/dashboard/schedules';
+import DashboardBooks from '@/pages/dashboard/books';
 import ListKuisioner from '../pages/list_kuisioner';
 import LandingKuisioner from '../pages/landing_kuisioner';
 import Responden from '../pages/responden';
 import DetailResponden from '../pages/detail_responden';
-import Appointment from '../pages/appointment';
 import Assessment from '../pages/assessment';
 import Setting from '../pages/setting_admin';
 import Unauthorized from '@/pages/404';
@@ -100,8 +100,8 @@ const App = () => {
           element: <DashboardSchedules />,
         },
         {
-          path: '/dashboard/appointment',
-          element: <Appointment />,
+          path: '/dashboard/books',
+          element: <DashboardBooks />,
         },
         {
           path: '/dashboard/questionnaire',
