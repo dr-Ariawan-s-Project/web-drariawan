@@ -196,6 +196,7 @@ const DashboardBooks = () => {
         data={data}
         noFoundMessage="Tidak ada data tersedia"
       />
+      {/* TODO: Add pagination */}
       <Pagination />
       <Alert
         open={showDeleteDialog}

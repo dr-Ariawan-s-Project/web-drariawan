@@ -21,10 +21,6 @@ import DashboardBooks from '@/pages/dashboard/books';
 import DashboardQuestionnaires from '@/pages/dashboard/questionnaires';
 import DashboardAttempt from '@/pages/dashboard/module/detail-attempt';
 import Setting from '@/pages/dashboard/settings';
-import LandingKuisioner from '../pages/landing_kuisioner';
-import Responden from '../pages/responden';
-import DetailResponden from '../pages/detail_responden';
-import Assessment from '../pages/assessment';
 import Unauthorized from '@/pages/404';
 
 const App = () => {
@@ -77,10 +73,6 @@ const App = () => {
           element: <QuestionnaireFinish />,
         },
         {
-          path: '/landing/kuisioner',
-          element: <LandingKuisioner />,
-        },
-        {
           path: '/dashboard',
           element: <Dashboard />,
         },
@@ -115,18 +107,6 @@ const App = () => {
         {
           path: '/dashboard/settings',
           element: <Setting />,
-        },
-        {
-          path: '/responden',
-          element: <Responden />,
-        },
-        {
-          path: '/detail_responden/:attempt_id',
-          element: <DetailResponden />,
-        },
-        {
-          path: '/assessment',
-          element: <Assessment />,
         },
         {
           path: '*',

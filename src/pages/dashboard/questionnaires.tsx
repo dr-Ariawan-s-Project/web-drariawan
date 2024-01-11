@@ -29,6 +29,14 @@ const ListKuisioner = () => {
 
   const columns = useMemo<ColumnDef<IAttempt>[]>(
     () => [
+      // TODO: Uncomment this when pagination is added
+      // {
+      //   accessorKey: '',
+      //   header: 'No',
+      //   cell: ({ row }) => {
+      //     return (pagination?.page! - 1) * pagination?.limit! + row.index + 1;
+      //   },
+      // },
       {
         accessorKey: 'patient.name',
         header: 'Nama Pasien',
@@ -110,7 +118,11 @@ const ListKuisioner = () => {
 
   async function fetchData() {
     try {
-      const result = await getQuestionnaireAttempt();
+      const query = Object.fromEntries(
+        [...searchParams].filter((param) => param[0] !== 'tab')
+      );
+
+      const result = await getQuestionnaireAttempt({ ...query });
 
       setData(result.data);
     } catch (error) {

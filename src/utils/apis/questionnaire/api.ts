@@ -1,7 +1,9 @@
 import axiosWithConfig from '@/utils/apis/axiosWithConfig';
-import { Response } from '@/utils/types/api';
+import { buildQueryString } from '@/utils/formatter';
+import { Request, Response } from '@/utils/types/api';
 import {
   IAttempt,
+  IAttemptAnswer,
   IQuestionnaire,
   QuestionnaireBody,
   QuestionnaireSchema,
@@ -46,9 +48,14 @@ export const postQuestionnaire = async (body: QuestionnaireBody) => {
   }
 };
 
-export const getQuestionnaireAttempt = async () => {
+export const getQuestionnaireAttempt = async (params?: Request) => {
   try {
-    const response = await axiosWithConfig.get('/v1/questioner/attempts');
+    const query = buildQueryString(params);
+    const url = query
+      ? `/v1/questioner/attempts${query}&limit=10`
+      : '/v1/questioner/attempts';
+
+    const response = await axiosWithConfig.get(url);
 
     return response.data as Response<IAttempt[]>;
   } catch (error: any) {
@@ -64,7 +71,7 @@ export const getAttemptAnswers = async (attempt_id: string) => {
       `/v1/questioner/attempts/${attempt_id}/answers`
     );
 
-    return response.data as Response<IQuestionnaire[]>;
+    return response.data as Response<IAttemptAnswer[]>;
   } catch (error: any) {
     const { messages } = error.response.data;
 

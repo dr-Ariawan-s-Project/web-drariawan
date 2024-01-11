@@ -63,6 +63,17 @@ export interface IAttempt {
   updated_at: string;
 }
 
+export interface IAttemptAnswer {
+  attempt_id: string;
+  description: string;
+  id: string;
+  question: IQuestionnaire;
+  question_id: number;
+  score: number;
+  created_at: string;
+  updated_at: string;
+}
+
 export interface IAnswer {
   question_id: number;
   description: string;
