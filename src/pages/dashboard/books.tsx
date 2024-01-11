@@ -37,6 +37,7 @@ const DashboardBooks = () => {
   const [data, setData] = useState<IBook[]>([]);
   const [selectedData, setSelectedData] = useState<IBook>();
   const [showAddEditDialog, setShowAddEditDialog] = useState(false);
+  const [showDeleteDialog, setShowDeleteDialog] = useState(false);
 
   const columns = useMemo<ColumnDef<IBook>[]>(
     () => [
@@ -103,7 +104,12 @@ const DashboardBooks = () => {
                 >
                   Edit
                 </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => setSelectedData(row.original)}>
+                <DropdownMenuItem
+                  onClick={() => {
+                    setSelectedData(row.original);
+                    setShowDeleteDialog(true);
+                  }}
+                >
                   Hapus
                 </DropdownMenuItem>
               </DropdownMenuContent>
@@ -192,11 +198,14 @@ const DashboardBooks = () => {
       />
       <Pagination />
       <Alert
-        open={selectedData && showAddEditDialog ? true : false}
+        open={showDeleteDialog}
         title="Peringatan"
         description={`Apakah anda yakin ingin menghapus booking "${selectedData?.booking_code}"?`}
         onAction={() => onDeleteData(selectedData?.id!)}
-        onCancel={() => setSelectedData(undefined)}
+        onCancel={() => {
+          setSelectedData(undefined);
+          setShowDeleteDialog(false);
+        }}
       />
       <AddEditBooking
         open={showAddEditDialog}

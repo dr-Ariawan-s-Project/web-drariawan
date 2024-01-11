@@ -3,21 +3,27 @@ import { useSearchParams } from 'react-router-dom';
 import { ColumnDef } from '@tanstack/react-table';
 import { MoreHorizontal } from 'lucide-react';
 
-import { useToast } from '@/components/ui/use-toast';
-import { AdminLayout } from '@/components/layout';
-import Pagination from '@/components/pagination';
-import { Button } from '@/components/ui/button';
-import DataTable from '@/components/data-table';
-import Alert from '@/components/alert';
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import { useToast } from '@/components/ui/use-toast';
+import { AdminLayout } from '@/components/layout';
+import Pagination from '@/components/pagination';
+import { Button } from '@/components/ui/button';
+import DataTable from '@/components/data-table';
+import Alert from '@/components/alert';
+import AddEditPatient from './module/add-edit-patient';
 
-import { getPatients, deletePatient } from '@/utils/apis/patient/api';
-import { IPatient } from '@/utils/apis/patient/types';
+import {
+  getPatients,
+  deletePatient,
+  postPatient,
+  updatePatient,
+} from '@/utils/apis/patient/api';
+import { IPatient, PatientSchema } from '@/utils/apis/patient/types';
 import { IPagination } from '@/utils/types/api';
 import useAuthStore from '@/utils/states/auth';
 
@@ -26,9 +32,11 @@ const DashboardPatients = () => {
   const role = useAuthStore((state) => state.role);
   const { toast } = useToast();
 
-  const [patients, setPatients] = useState<IPatient[]>([]);
+  const [data, setData] = useState<IPatient[]>([]);
+  const [selectedData, setSelectedData] = useState<IPatient>();
   const [pagination, setPagination] = useState<IPagination>();
-  const [showDeleteDialog, setShowDeleteDialog] = useState<IPatient>();
+  const [showAddEditDialog, setShowAddEditDialog] = useState(false);
+  const [showDeleteDialog, setShowDeleteDialog] = useState(false);
 
   const columns = useMemo<ColumnDef<IPatient>[]>(
     () => [
@@ -75,7 +83,18 @@ const DashboardPatients = () => {
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end">
                   <DropdownMenuItem
-                    onClick={() => setShowDeleteDialog(row.original)}
+                    onClick={() => {
+                      setSelectedData(row.original);
+                      setShowAddEditDialog(true);
+                    }}
+                  >
+                    Edit
+                  </DropdownMenuItem>
+                  <DropdownMenuItem
+                    onClick={() => {
+                      setSelectedData(row.original);
+                      setShowDeleteDialog(true);
+                    }}
                   >
                     Hapus
                   </DropdownMenuItem>
@@ -100,7 +119,8 @@ const DashboardPatients = () => {
       );
 
       const result = await getPatients({ ...query });
-      setPatients(result.data);
+
+      setData(result.data);
       setPagination(result.pagination);
     } catch (error) {
       toast({
@@ -111,14 +131,37 @@ const DashboardPatients = () => {
     }
   }
 
-  async function onDelete(id_patient: string) {
+  async function onSubmitData(data: PatientSchema) {
     try {
-      const result = await deletePatient(id_patient);
+      const result = selectedData
+        ? await updatePatient(data, selectedData.id)
+        : await postPatient(data);
+
       toast({
         description: result.messages[0],
       });
+
       fetchData();
-      setShowDeleteDialog(undefined);
+      setShowAddEditDialog(false);
+    } catch (error: any) {
+      toast({
+        title: 'Oops! Something went wrong.',
+        description: error.message.toString(),
+        variant: 'destructive',
+      });
+    }
+  }
+
+  async function onDeleteData(id_patient: string) {
+    try {
+      const result = await deletePatient(id_patient);
+
+      toast({
+        description: result.messages[0],
+      });
+
+      fetchData();
+      setSelectedData(undefined);
     } catch (error: any) {
       toast({
         title: 'Oops! Something went wrong.',
@@ -132,22 +175,32 @@ const DashboardPatients = () => {
     <AdminLayout className="space-y-4" showMenu>
       {['superadmin'].includes(role) && (
         <div className="w-full flex justify-end">
-          {/* TODO: Add functionality to add and update patient */}
-          <Button>Tambah pasien</Button>
+          <Button onClick={() => setShowAddEditDialog(true)}>
+            Tambah pasien
+          </Button>
         </div>
       )}
       <DataTable
         columns={columns}
-        data={patients}
+        data={data}
         noFoundMessage="Tidak ada data tersedia"
       />
       <Pagination meta={pagination} />
       <Alert
-        open={showDeleteDialog ? true : false}
+        open={showDeleteDialog}
         title="Peringatan"
-        description={`Apakah anda yakin ingin menghapus data "${showDeleteDialog?.name}"?`}
-        onAction={() => onDelete(showDeleteDialog?.id!)}
-        onCancel={() => setShowDeleteDialog(undefined)}
+        description={`Apakah anda yakin ingin menghapus data "${selectedData?.name}"?`}
+        onAction={() => onDeleteData(selectedData?.id!)}
+        onCancel={() => {
+          setSelectedData(undefined);
+          setShowDeleteDialog(false);
+        }}
+      />
+      <AddEditPatient
+        open={showAddEditDialog}
+        onOpenChange={setShowAddEditDialog}
+        editData={selectedData}
+        onSubmit={(data) => onSubmitData(data)}
       />
     </AdminLayout>
   );

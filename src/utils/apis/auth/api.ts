@@ -1,6 +1,6 @@
 import axiosWithConfig from '@/utils/apis/axiosWithConfig';
 import { Response } from '@/utils/types/api';
-import { LoginSchema, MyProfile, RegisterSchema } from './types';
+import { LoginSchema, MyProfile } from './types';
 
 export interface IUserPayload {
   token: string;
@@ -25,19 +25,6 @@ export const adminLogin = async (body: LoginSchema) => {
     const response = await axiosWithConfig.post(`/login`, body);
 
     return response.data as Response<IUserPayload>;
-  } catch (error: any) {
-    const { messages } = error.response.data;
-
-    throw Error(messages[0]);
-  }
-};
-
-export const userRegister = async (body: RegisterSchema) => {
-  try {
-    const response = await axiosWithConfig.post(`/v1/patients`, body);
-
-    // TODO: Change response when it is known
-    return response.data as Response;
   } catch (error: any) {
     const { messages } = error.response.data;
 

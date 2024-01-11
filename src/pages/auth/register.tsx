@@ -16,8 +16,8 @@ import { Input } from '@/components/ui/input';
 import { Layout } from '@/components/layout';
 import { Form } from '@/components/ui/form';
 
-import { RegisterSchema, registerSchema } from '@/utils/apis/auth/types';
-import { userRegister } from '@/utils/apis/auth/api';
+import { PatientSchema, patientSchema } from '@/utils/apis/patient/types';
+import { postPatient } from '@/utils/apis/patient/api';
 import { forWho } from '@/utils/constants';
 
 const Register = () => {
@@ -31,15 +31,15 @@ const Register = () => {
     }));
   }, []);
 
-  const form = useForm<RegisterSchema>({
-    resolver: zodResolver(registerSchema),
+  const form = useForm<PatientSchema>({
+    resolver: zodResolver(patientSchema),
     defaultValues: {
       name: '',
       email: '',
       password: '',
       nik: '',
       dob: '',
-      phone_number: '',
+      phone: '',
       gender: 'Male',
       marriage_status: 'Not_Married',
       nationality: 'Indonesia',
@@ -48,9 +48,9 @@ const Register = () => {
     },
   });
 
-  async function onSubmit(data: RegisterSchema) {
+  async function onSubmit(data: PatientSchema) {
     try {
-      await userRegister(data);
+      await postPatient(data);
       toast({
         description: 'Berhasil registrasi, silahkan login terlebih dahulu',
       });
@@ -179,7 +179,7 @@ const Register = () => {
           />
           <CustomFormField
             control={form.control}
-            name="phone_number"
+            name="phone"
             label="Nomor telepon"
           >
             {(field) => (

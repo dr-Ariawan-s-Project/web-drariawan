@@ -31,7 +31,7 @@ const DashboardSchedules = () => {
   const role = useAuthStore((state) => state.role);
   const { toast } = useToast();
 
-  const [users, setUsers] = useState<ISchedule[]>([]);
+  const [data, setData] = useState<ISchedule[]>([]);
   const [selectedData, setSelectedData] = useState<ISchedule>();
   const [showAddEditDialog, setShowAddEditDialog] = useState(false);
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
@@ -106,7 +106,8 @@ const DashboardSchedules = () => {
       );
 
       const result = await getSchedules({ ...query });
-      setUsers(result.data);
+
+      setData(result.data);
     } catch (error) {
       toast({
         title: 'Oops! Sesuatu telah terjadi',
@@ -121,9 +122,11 @@ const DashboardSchedules = () => {
       const result = selectedData
         ? await updateSchedule(data)
         : await postSchedule(data);
+
       toast({
         description: result.messages[0],
       });
+
       fetchData();
       setShowAddEditDialog(false);
     } catch (error: any) {
@@ -135,12 +138,14 @@ const DashboardSchedules = () => {
     }
   }
 
-  async function onDeleteUser(id_schedule: number) {
+  async function onDeleteData(id_schedule: number) {
     try {
       const result = await deleteSchedule(id_schedule);
+
       toast({
         description: result.messages[0],
       });
+
       fetchData();
       setSelectedData(undefined);
     } catch (error: any) {
@@ -163,7 +168,7 @@ const DashboardSchedules = () => {
       )}
       <DataTable
         columns={columns}
-        data={users}
+        data={data}
         noFoundMessage="Tidak ada data tersedia"
       />
       <Pagination />
@@ -171,7 +176,7 @@ const DashboardSchedules = () => {
         open={showDeleteDialog}
         title="Peringatan"
         description={`Apakah anda yakin ingin menghapus jadwal "${selectedData?.user.name} pada hari ${selectedData?.day}"?`}
-        onAction={() => onDeleteUser(selectedData?.schedule_id!)}
+        onAction={() => onDeleteData(selectedData?.schedule_id!)}
         onCancel={() => {
           setSelectedData(undefined);
           setShowDeleteDialog(false);

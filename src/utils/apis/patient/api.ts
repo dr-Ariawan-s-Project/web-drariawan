@@ -1,7 +1,7 @@
 import { Request, Response, ResponsePagination } from '@/utils/types/api';
 import axiosWithConfig from '@/utils/apis/axiosWithConfig';
 import { buildQueryString } from '@/utils/formatter';
-import { IPatient } from './types';
+import { IPatient, PatientSchema } from './types';
 
 export const getPatients = async (params?: Request) => {
   try {
@@ -11,6 +11,38 @@ export const getPatients = async (params?: Request) => {
     const response = await axiosWithConfig.get(url);
 
     return response.data as ResponsePagination<IPatient[]>;
+  } catch (error: any) {
+    const { messages } = error.response.data;
+
+    throw Error(messages[0]);
+  }
+};
+
+export const postPatient = async (body: PatientSchema) => {
+  try {
+    const response = await axiosWithConfig.post(`/v1/patients`, body);
+
+    // TODO: Change response when it is known
+    return response.data as Response;
+  } catch (error: any) {
+    const { messages } = error.response.data;
+
+    throw Error(messages[0]);
+  }
+};
+
+export const updatePatient = async (
+  body: PatientSchema,
+  patient_id: string
+) => {
+  try {
+    const response = await axiosWithConfig.post(
+      `/v1/patients/${patient_id}`,
+      body
+    );
+
+    // TODO: Change response when it is known
+    return response.data as Response;
   } catch (error: any) {
     const { messages } = error.response.data;
 

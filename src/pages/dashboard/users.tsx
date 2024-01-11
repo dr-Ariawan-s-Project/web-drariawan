@@ -38,6 +38,7 @@ const DashboardUsers = () => {
   const [pagination, setPagination] = useState<IPagination>();
   const [selectedData, setSelectedData] = useState<IUser>();
   const [showAddEditDialog, setShowAddEditDialog] = useState(false);
+  const [showDeleteDialog, setShowDeleteDialog] = useState(false);
 
   const columns = useMemo<ColumnDef<IUser>[]>(
     () => [
@@ -88,7 +89,10 @@ const DashboardUsers = () => {
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end">
                   <DropdownMenuItem
-                    onClick={() => setSelectedData(row.original)}
+                    onClick={() => {
+                      setSelectedData(row.original);
+                      setShowDeleteDialog(true);
+                    }}
                   >
                     Hapus
                   </DropdownMenuItem>
@@ -143,7 +147,7 @@ const DashboardUsers = () => {
     }
   }
 
-  async function onDeleteUser(id_user: number) {
+  async function onDeleteData(id_user: number) {
     try {
       const result = await deactivateUser(id_user);
       toast({
@@ -176,11 +180,14 @@ const DashboardUsers = () => {
       />
       <Pagination meta={pagination} />
       <Alert
-        open={selectedData ? true : false}
+        open={showDeleteDialog}
         title="Peringatan"
         description={`Apakah anda yakin ingin menghapus data "${selectedData?.name}"?`}
-        onAction={() => onDeleteUser(selectedData?.id!)}
-        onCancel={() => setSelectedData(undefined)}
+        onAction={() => onDeleteData(selectedData?.id!)}
+        onCancel={() => {
+          setSelectedData(undefined);
+          setShowDeleteDialog(false);
+        }}
       />
       <AddEditUser
         open={showAddEditDialog}
