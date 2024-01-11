@@ -15,6 +15,7 @@ import { Form } from '@/components/ui/form';
 
 import { UpdateSchema, updateSchema } from '@/utils/apis/user/types';
 import { getProfile, updateProfile } from '@/utils/apis/user/api';
+import { roles } from '@/utils/constants';
 
 const Setting = () => {
   const { toast } = useToast();
@@ -134,7 +135,7 @@ const Setting = () => {
             name="role"
             label="Role"
             placeholder="Role"
-            options={['suster', 'dokter', 'admin', 'superadmin']}
+            options={roles}
           />
           <CustomFormField
             control={form.control}

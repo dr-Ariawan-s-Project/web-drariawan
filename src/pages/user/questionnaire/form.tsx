@@ -17,6 +17,7 @@ import {
   questionnaireSchema,
 } from '@/utils/apis/questionnaire/types';
 import { validateQuestionaire } from '@/utils/apis/questionnaire/api';
+import { forWho } from '@/utils/constants';
 
 const DataDiri = () => {
   const navigate = useNavigate();
@@ -91,7 +92,7 @@ const DataDiri = () => {
             name="as"
             label="Data ini untuk siapa?"
             placeholder="Pilih"
-            options={['myself', 'partner']}
+            options={forWho}
           />
           {form.watch('as') === 'partner' && (
             <CustomFormField

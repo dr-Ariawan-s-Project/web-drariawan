@@ -65,7 +65,7 @@ export interface IBook {
     };
     user_id: number;
   };
-  schedule_id: string;
+  schedule_id: number;
   state: string;
   created_at: string;
   updated_at: string;

@@ -19,6 +19,7 @@ import { Input } from '@/components/ui/input';
 import { Form } from '@/components/ui/form';
 
 import { IUser, UserSchema, userSchema } from '@/utils/apis/user/types';
+import { roles } from '@/utils/constants';
 
 interface Props {
   open: boolean;
@@ -65,7 +66,6 @@ const AddEditUser = (props: Props) => {
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange} key={editData?.id}>
-      {/* <DialogTrigger asChild>{children}</DialogTrigger> */}
       <DialogContent className="w-full md:w-1/2 lg:w-2/3">
         <DialogHeader>
           <DialogTitle>{editData ? 'Update user' : 'Tambah user'}</DialogTitle>
@@ -116,7 +116,7 @@ const AddEditUser = (props: Props) => {
               name="role"
               label="Role"
               placeholder="Role"
-              options={['suster', 'dokter', 'admin', 'superadmin']}
+              options={roles}
             />
             <CustomFormField
               control={form.control}

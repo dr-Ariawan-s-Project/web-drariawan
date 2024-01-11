@@ -7,6 +7,7 @@ import {
 } from 'lucide-react';
 
 import { ISidebarList } from '@/components/sidebar/types';
+import { ISelect } from './types/data';
 
 export const sidebarList: Record<string, ISidebarList[]> = {
   suster: [
@@ -160,3 +161,64 @@ export const sidebarList: Record<string, ISidebarList[]> = {
     },
   ],
 };
+
+export const roles: ISelect[] = [
+  {
+    label: 'Suster',
+    value: 'suster',
+  },
+  {
+    label: 'Dokter',
+    value: 'dokter',
+  },
+  {
+    label: 'Admin',
+    value: 'admin',
+  },
+  {
+    label: 'Superadmin',
+    value: 'superadmin',
+  },
+];
+
+export const forWho: ISelect[] = [
+  {
+    label: 'Diri sendiri',
+    value: 'myself',
+  },
+  {
+    label: 'Partner',
+    value: 'partner',
+  },
+];
+
+export const daysInWeek: ISelect[] = [
+  {
+    label: 'Senin',
+    value: 'Senin',
+  },
+  {
+    label: 'Selasa',
+    value: 'Selasa',
+  },
+  {
+    label: 'Rabu',
+    value: 'Rabu',
+  },
+  {
+    label: 'Kamis',
+    value: 'Kamis',
+  },
+  {
+    label: 'Jumat',
+    value: 'Jumat',
+  },
+  {
+    label: 'Sabtu',
+    value: 'Sabtu',
+  },
+  {
+    label: 'Minggu',
+    value: 'Minggu',
+  },
+];

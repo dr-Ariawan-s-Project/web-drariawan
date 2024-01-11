@@ -13,18 +13,22 @@ import {
 import { useToast } from '@/components/ui/use-toast';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Form } from '@/components/ui/form';
 import { Layout } from '@/components/layout';
+import { Form } from '@/components/ui/form';
 
 import { RegisterSchema, registerSchema } from '@/utils/apis/auth/types';
 import { userRegister } from '@/utils/apis/auth/api';
+import { forWho } from '@/utils/constants';
 
 const Register = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
 
   const countries = useMemo(() => {
-    return getCountryDataList().map((country) => country.name);
+    return getCountryDataList().map((country) => ({
+      label: country.name,
+      value: country.name,
+    }));
   }, []);
 
   const form = useForm<RegisterSchema>({
@@ -123,14 +127,36 @@ const Register = () => {
               name="gender"
               label="Jenis kelamin"
               placeholder="Pilih jenis kelamin"
-              options={['Male', 'Female']}
+              options={[
+                {
+                  label: 'Male',
+                  value: 'Male',
+                },
+                {
+                  label: 'Female',
+                  value: 'Female',
+                },
+              ]}
             />
             <CustomFormSelect
               control={form.control}
               name="marriage_status"
               label="Status"
               placeholder="Pilih status"
-              options={['Married', 'Not_Married', 'Divorce']}
+              options={[
+                {
+                  label: 'Menikah',
+                  value: 'Married',
+                },
+                {
+                  label: 'Belum menikah',
+                  value: 'Not_Married',
+                },
+                {
+                  label: 'Cerai',
+                  value: 'Divorce',
+                },
+              ]}
             />
           </div>
           <CustomFormField control={form.control} name="nik" label="NIK">
@@ -180,7 +206,7 @@ const Register = () => {
             name="partner_option"
             label="Data ini untuk siapa?"
             placeholder="Pilih"
-            options={['Myself', 'Partner']}
+            options={forWho}
           />
           {form.watch('partner_option') === 'Partner' && (
             <CustomFormField

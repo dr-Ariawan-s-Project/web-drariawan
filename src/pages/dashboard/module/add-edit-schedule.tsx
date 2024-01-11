@@ -23,6 +23,7 @@ import {
   ScheduleSchema,
   scheduleSchema,
 } from '@/utils/apis/schedule/types';
+import { daysInWeek } from '@/utils/constants';
 
 interface Props {
   open: boolean;
@@ -79,30 +80,14 @@ const AddEditSchedule = (props: Props) => {
               name="user_id"
               label="Dokter"
               placeholder="Dokter"
-              options={[
-                'Senin',
-                'Selasa',
-                'Rabu',
-                'Kamis',
-                'Jumat',
-                'Sabtu',
-                'Minggu',
-              ]}
+              options={daysInWeek}
             />
             <CustomFormSelect
               control={form.control}
               name="day"
               label="Hari"
               placeholder="Silahkan pilih hari"
-              options={[
-                'Senin',
-                'Selasa',
-                'Rabu',
-                'Kamis',
-                'Jumat',
-                'Sabtu',
-                'Minggu',
-              ]}
+              options={daysInWeek}
             />
             <CustomFormField
               control={form.control}

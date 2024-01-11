@@ -34,13 +34,15 @@ import {
 import { Checkbox } from '@/components/ui/checkbox';
 import { Calendar } from '@/components/ui/calendar';
 import { Button } from '@/components/ui/button';
+
+import { ISelect } from '@/utils/types/data';
 import { cn } from '@/lib/utils';
 
 interface Props<T extends FieldValues> {
   name: FieldPath<T>;
   label: string;
   placeholder?: string;
-  options?: string[];
+  options?: ISelect[];
   description?: string;
   control: Control<T>;
 }
@@ -117,8 +119,8 @@ export function CustomFormSelect<T extends FieldValues>(
               <SelectGroup>
                 <SelectLabel>{label}</SelectLabel>
                 {options?.map((option) => (
-                  <SelectItem value={option} key={option}>
-                    {option.replace(/_/g, ' ')}
+                  <SelectItem value={option.value} key={option.value}>
+                    {option.label}
                   </SelectItem>
                 ))}
               </SelectGroup>
