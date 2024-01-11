@@ -1,6 +1,8 @@
 export interface Request {
   code?: string;
   page?: string | number;
+  role?: string;
+  rp?: string;
 }
 
 export type Response<T = any> = {

@@ -3,18 +3,18 @@ import { useSearchParams } from 'react-router-dom';
 import { ColumnDef } from '@tanstack/react-table';
 import { MoreHorizontal } from 'lucide-react';
 
-import { useToast } from '@/components/ui/use-toast';
-import { AdminLayout } from '@/components/layout';
-import Pagination from '@/components/pagination';
-import { Button } from '@/components/ui/button';
-import DataTable from '@/components/data-table';
-import Alert from '@/components/alert';
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import { useToast } from '@/components/ui/use-toast';
+import { AdminLayout } from '@/components/layout';
+import Pagination from '@/components/pagination';
+import { Button } from '@/components/ui/button';
+import DataTable from '@/components/data-table';
+import Alert from '@/components/alert';
 import AddEditSchedule from './module/add-edit-schedule';
 
 import {
@@ -34,6 +34,7 @@ const DashboardSchedules = () => {
   const [users, setUsers] = useState<ISchedule[]>([]);
   const [selectedData, setSelectedData] = useState<ISchedule>();
   const [showAddEditDialog, setShowAddEditDialog] = useState(false);
+  const [showDeleteDialog, setShowDeleteDialog] = useState(false);
 
   const columns = useMemo<ColumnDef<ISchedule>[]>(
     () => [
@@ -69,9 +70,20 @@ const DashboardSchedules = () => {
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end">
-                {/* TODO: Add onClick on edit */}
-                <DropdownMenuItem>Edit</DropdownMenuItem>
-                <DropdownMenuItem onClick={() => setSelectedData(row.original)}>
+                <DropdownMenuItem
+                  onClick={() => {
+                    setSelectedData(row.original);
+                    setShowAddEditDialog(true);
+                  }}
+                >
+                  Edit
+                </DropdownMenuItem>
+                <DropdownMenuItem
+                  onClick={() => {
+                    setSelectedData(row.original);
+                    setShowDeleteDialog(true);
+                  }}
+                >
                   Hapus
                 </DropdownMenuItem>
               </DropdownMenuContent>
@@ -156,11 +168,14 @@ const DashboardSchedules = () => {
       />
       <Pagination />
       <Alert
-        open={selectedData ? true : false}
+        open={showDeleteDialog}
         title="Peringatan"
         description={`Apakah anda yakin ingin menghapus jadwal "${selectedData?.user.name} pada hari ${selectedData?.day}"?`}
         onAction={() => onDeleteUser(selectedData?.schedule_id!)}
-        onCancel={() => setSelectedData(undefined)}
+        onCancel={() => {
+          setSelectedData(undefined);
+          setShowDeleteDialog(false);
+        }}
       />
       <AddEditSchedule
         open={showAddEditDialog}

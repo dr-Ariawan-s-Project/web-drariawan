@@ -1,7 +1,7 @@
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { Loader2 } from 'lucide-react';
-import { useEffect } from 'react';
 
 import {
   Dialog,
@@ -14,6 +14,7 @@ import {
   CustomFormField,
   CustomFormSelect,
 } from '@/components/custom-formfield';
+import { useToast } from '@/components/ui/use-toast';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Form } from '@/components/ui/form';
@@ -23,7 +24,9 @@ import {
   ScheduleSchema,
   scheduleSchema,
 } from '@/utils/apis/schedule/types';
+import { getUsers } from '@/utils/apis/user/api';
 import { daysInWeek } from '@/utils/constants';
+import { ISelect } from '@/utils/types/data';
 
 interface Props {
   open: boolean;
@@ -34,6 +37,9 @@ interface Props {
 
 const AddEditSchedule = (props: Props) => {
   const { open, editData, onOpenChange, onSubmit } = props;
+  const { toast } = useToast();
+
+  const [doctors, setDoctors] = useState<ISelect[]>([]);
 
   const form = useForm<ScheduleSchema>({
     resolver: zodResolver(scheduleSchema),
@@ -47,6 +53,10 @@ const AddEditSchedule = (props: Props) => {
   });
 
   useEffect(() => {
+    fetchDoctors();
+  }, []);
+
+  useEffect(() => {
     setEditData();
   }, [editData, form.formState.isSubmitSuccessful]);
 
@@ -57,8 +67,27 @@ const AddEditSchedule = (props: Props) => {
     }
   }, [form.formState]);
 
+  const fetchDoctors = async () => {
+    try {
+      const result = await getUsers({ role: 'dokter' });
+      const newData = result.data.map((doctor) => ({
+        label: doctor.name,
+        value: String(doctor.id),
+      }));
+
+      setDoctors(newData);
+    } catch (error) {
+      toast({
+        title: 'Oops! Sesuatu telah terjadi',
+        description: (error as Error).message,
+        variant: 'destructive',
+      });
+    }
+  };
+
   function setEditData() {
     if (editData) {
+      form.setValue('user_id', String(editData.user_id));
       form.setValue('health_care_address', editData.health_care_address);
       form.setValue('day', editData.day);
       form.setValue('time_start', editData.time_start);
@@ -67,20 +96,25 @@ const AddEditSchedule = (props: Props) => {
   }
 
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
+    <Dialog
+      open={open}
+      onOpenChange={(open) => {
+        onOpenChange(open);
+        form.reset();
+      }}
+    >
       <DialogContent className="w-full md:w-1/2 lg:w-2/3">
         <DialogHeader>
           <DialogTitle>{editData ? 'Update user' : 'Tambah user'}</DialogTitle>
         </DialogHeader>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-            {/* TODO: Change this select data to doctor list */}
             <CustomFormSelect
               control={form.control}
               name="user_id"
               label="Dokter"
-              placeholder="Dokter"
-              options={daysInWeek}
+              placeholder="Nama dokter"
+              options={doctors}
             />
             <CustomFormSelect
               control={form.control}

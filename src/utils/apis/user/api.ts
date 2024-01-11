@@ -6,7 +6,7 @@ import { IUser, UserSchema } from './types';
 export const getUsers = async (params?: Request) => {
   try {
     const query = buildQueryString(params);
-    const url = query ? `/v1/user/list${query}&rp=10` : '/v1/user/list';
+    const url = query ? `/v1/user/list${query}` : '/v1/user/list';
 
     const response = await axiosWithConfig.get(url);
 
