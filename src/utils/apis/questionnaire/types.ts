@@ -42,6 +42,27 @@ export interface IQuestionnaire {
   url_video: string;
 }
 
+export interface IAttempt {
+  ai_accuracy: number;
+  ai_diagnosis: string;
+  ai_probability: number;
+  code_attempt: string;
+  diagnosis: string;
+  feedback: string;
+  id: string;
+  notes_attempt: string;
+  patient: {
+    email: string;
+    id: string;
+    name: string;
+  };
+  patient_id: string;
+  score: number;
+  status: string;
+  created_at: string;
+  updated_at: string;
+}
+
 export interface IAnswer {
   question_id: number;
   description: string;

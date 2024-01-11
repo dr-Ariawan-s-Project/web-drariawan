@@ -68,6 +68,12 @@ export const sidebarList: Record<string, ISidebarList[]> = {
           to: '/dashboard/books',
           icon: CalendarClockIcon,
         },
+        {
+          id: 'questionnaires',
+          label: 'Kuesioner',
+          to: '/dashboard/questionnaires',
+          icon: CalendarClockIcon,
+        },
       ],
     },
     {
@@ -103,6 +109,12 @@ export const sidebarList: Record<string, ISidebarList[]> = {
           label: 'Pasien',
           to: '/dashboard/patients',
           icon: UserRoundIcon,
+        },
+        {
+          id: 'questionnaires',
+          label: 'Kuesioner',
+          to: '/dashboard/questionnaires',
+          icon: CalendarClockIcon,
         },
       ],
     },

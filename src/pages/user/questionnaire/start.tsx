@@ -22,7 +22,7 @@ import {
 } from '@/components/ui/popover';
 
 import {
-  getQuestionnaire,
+  getQuestionnaires,
   postQuestionnaire,
 } from '@/utils/apis/questionnaire/api';
 import { IQuestionnaire } from '@/utils/apis/questionnaire/types';
@@ -87,7 +87,7 @@ const QuestionnaireStart = () => {
 
   async function fetchData() {
     try {
-      const result = await getQuestionnaire();
+      const result = await getQuestionnaires();
       const initialAnswer = result.data.map((item) => {
         return {
           question_id: item.id,

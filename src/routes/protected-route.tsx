@@ -1,4 +1,4 @@
-import { Navigate, Outlet, useLocation } from 'react-router-dom';
+import { Navigate, Outlet, useLocation, useParams } from 'react-router-dom';
 
 import useAuthStore from '@/utils/states/auth';
 
@@ -25,14 +25,14 @@ const routeWhitelist: Record<string, string[]> = {
     '/dashboard',
     '/dashboard/schedules',
     '/dashboard/books',
-    '/dashboard/questionnaire',
+    '/dashboard/questionnaires',
     '/dashboard/settings',
   ],
   admin: [
     '/dashboard',
     '/dashboard/patients',
     '/dashboard/schedules',
-    '/dashboard/questionnaire',
+    '/dashboard/questionnaires',
     '/dashboard/settings',
   ],
   superadmin: [
@@ -40,6 +40,7 @@ const routeWhitelist: Record<string, string[]> = {
     '/dashboard/users',
     '/dashboard/patients',
     '/dashboard/schedules',
+    '/dashboard/questionnaires',
     '/dashboard/settings',
   ],
   patient: [
@@ -58,8 +59,13 @@ const routeWhitelist: Record<string, string[]> = {
 const ProtectedRoute = () => {
   const { token, role } = useAuthStore((state) => state);
   const { pathname } = useLocation();
+  const params = useParams();
 
   if (token) {
+    if (params.attempt_id) {
+      return <Outlet />;
+    }
+
     if (!routeWhitelist[role].includes(pathname)) {
       if (role === 'patient') return <Navigate to="/" />;
 
