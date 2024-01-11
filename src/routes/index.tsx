@@ -18,12 +18,12 @@ import DashboardUsers from '@/pages/dashboard/users';
 import DashboardPatients from '@/pages/dashboard/patients';
 import DashboardSchedules from '@/pages/dashboard/schedules';
 import DashboardBooks from '@/pages/dashboard/books';
+import Setting from '@/pages/dashboard/settings';
 import ListKuisioner from '../pages/list_kuisioner';
 import LandingKuisioner from '../pages/landing_kuisioner';
 import Responden from '../pages/responden';
 import DetailResponden from '../pages/detail_responden';
 import Assessment from '../pages/assessment';
-import Setting from '../pages/setting_admin';
 import Unauthorized from '@/pages/404';
 
 const App = () => {
@@ -108,6 +108,10 @@ const App = () => {
           element: <ListKuisioner />,
         },
         {
+          path: '/dashboard/settings',
+          element: <Setting />,
+        },
+        {
           path: '/responden',
           element: <Responden />,
         },
@@ -118,10 +122,6 @@ const App = () => {
         {
           path: '/assessment',
           element: <Assessment />,
-        },
-        {
-          path: '/setting',
-          element: <Setting />,
         },
         {
           path: '*',

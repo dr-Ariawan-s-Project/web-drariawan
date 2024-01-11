@@ -107,7 +107,7 @@ export function CustomFormSelect<T extends FieldValues>(
       render={({ field }) => (
         <FormItem className="w-full">
           <FormLabel>{label}</FormLabel>
-          <Select onValueChange={field.onChange} defaultValue={field.value}>
+          <Select onValueChange={field.onChange} value={field.value}>
             <FormControl>
               <SelectTrigger className="w-full">
                 <SelectValue placeholder={placeholder} />

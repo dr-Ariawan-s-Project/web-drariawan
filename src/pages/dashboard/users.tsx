@@ -25,7 +25,7 @@ import useAuthStore from '@/utils/states/auth';
 import {
   getUsers,
   postUser,
-  updateUser,
+  updateProfile,
   deactivateUser,
 } from '@/utils/apis/user/api';
 
@@ -127,7 +127,7 @@ const DashboardUsers = () => {
   async function onSubmitData(data: UserSchema) {
     try {
       const result = selectedData
-        ? await updateUser(data)
+        ? await updateProfile(data)
         : await postUser(data);
       toast({
         description: result.messages[0],

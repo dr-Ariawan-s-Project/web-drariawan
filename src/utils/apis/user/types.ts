@@ -1,5 +1,9 @@
 import * as z from 'zod';
 
+const MAX_MB = 2;
+const MAX_UPLOAD_SIZE = 1024 * 1024 * MAX_MB;
+const ACCEPTED_IMAGE_TYPES = ['image/jpeg', 'image/jpg', 'image/png'];
+
 export const userSchema = z.object({
   name: z.string().min(1, { message: 'Nama lengkap wajib diisi' }),
   email: z
@@ -12,7 +16,25 @@ export const userSchema = z.object({
   specialization: z.string().min(1, { message: 'Password wajib diisi' }),
 });
 
+export const updateSchema = z
+  .object({
+    picture: z
+      .instanceof(File)
+      .optional()
+      .refine(
+        (file) => !file || file.size <= MAX_UPLOAD_SIZE,
+        `Maksimal ukuran gambar adalah ${MAX_MB}MB`
+      )
+      .refine(
+        (file) =>
+          !file || file.type === '' || ACCEPTED_IMAGE_TYPES.includes(file.type),
+        'Hanya mendukung format .jpg, .jpeg, and .png saja'
+      ),
+  })
+  .merge(userSchema);
+
 export type UserSchema = z.infer<typeof userSchema>;
+export type UpdateSchema = z.infer<typeof updateSchema>;
 
 export interface IUser {
   email: string;
