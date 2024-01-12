@@ -357,6 +357,8 @@ const QuestionPage = (props: IQuestionProps) => {
       <audio
         controls
         className="absolute bottom-8 m-auto right-auto md:right-8"
+        autoPlay
+        loop
       >
         <source src="/background-questionnaire.mp3" type="audio/mp3" />
       </audio>

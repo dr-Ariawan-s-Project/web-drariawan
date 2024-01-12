@@ -196,11 +196,11 @@ export const roles: ISelect[] = [
 export const forWho: ISelect[] = [
   {
     label: 'Diri sendiri',
-    value: 'myself',
+    value: 'Myself',
   },
   {
     label: 'Partner',
-    value: 'partner',
+    value: 'Partner',
   },
 ];
 

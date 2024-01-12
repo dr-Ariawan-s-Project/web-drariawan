@@ -36,6 +36,10 @@ const DashboardSchedules = () => {
   const [showAddEditDialog, setShowAddEditDialog] = useState(false);
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
 
+  const checkRole = useMemo(() => {
+    return ['superadmin', 'dokter', 'admin'].includes(role);
+  }, [role]);
+
   const columns = useMemo<ColumnDef<ISchedule>[]>(
     () => [
       {
@@ -75,6 +79,7 @@ const DashboardSchedules = () => {
                     setSelectedData(row.original);
                     setShowAddEditDialog(true);
                   }}
+                  disabled={!checkRole}
                 >
                   Edit
                 </DropdownMenuItem>
@@ -83,6 +88,7 @@ const DashboardSchedules = () => {
                     setSelectedData(row.original);
                     setShowDeleteDialog(true);
                   }}
+                  disabled={!checkRole}
                 >
                   Hapus
                 </DropdownMenuItem>
@@ -159,7 +165,7 @@ const DashboardSchedules = () => {
 
   return (
     <AdminLayout className="space-y-4" showMenu>
-      {['superadmin', 'dokter', 'admin'].includes(role) && (
+      {checkRole && (
         <div className="w-full flex justify-end">
           <Button onClick={() => setShowAddEditDialog(true)}>
             Tambah jadwal

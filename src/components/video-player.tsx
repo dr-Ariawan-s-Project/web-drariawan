@@ -62,14 +62,15 @@ const VideoPlayer = (props: Props) => {
   }
 
   return (
-    <div className="w-full flex flex-col items-center">
-      <div className="relative w-full h-full">
+    <div className="w-full h-fit flex justify-center">
+      <div className="relative w-fit h-full xl:max-h-96">
         <video
           ref={videoRef}
           src={src}
           className="rounded-md w-full h-full"
           onLoadedMetadata={() => handleLoadedMetadata()}
           onTimeUpdate={() => handleTimeUpdate()}
+          onEnded={() => setIsPlaying(false)}
         />
         <div className="items-end absolute w-full h-full bottom-0 flex opacity-0 hover:opacity-100 duration-200">
           <div className="w-full flex items-center justify-center bg-black/50 rounded-b-md space-x-3 px-4">

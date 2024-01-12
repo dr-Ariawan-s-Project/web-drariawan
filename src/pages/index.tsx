@@ -56,7 +56,7 @@ const Main = () => {
               className="w-40 h-w-40 object-contain bg-white rounded-full"
             />
             <p className="font-bold tracking-wider text-3xl">
-              Kesehatan Reproduksi adalah Hak Anda
+              “Eterna Medica” House of Health, Your Health is Our Concern
             </p>
             <p className="tracking-wider text-justify break-all md:break-normal">
               Selamat datang di laman kesehatan kami, kesehatan anda menjadi
