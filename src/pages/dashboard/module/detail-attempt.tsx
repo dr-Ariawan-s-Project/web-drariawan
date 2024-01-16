@@ -3,7 +3,6 @@ import { useEffect, useState } from 'react';
 
 import { useToast } from '@/components/ui/use-toast';
 import { AdminLayout } from '@/components/layout';
-import { Button } from '@/components/ui/button';
 
 import { getAttemptAnswers } from '@/utils/apis/questionnaire/api';
 import { IAttemptAnswer } from '@/utils/apis/questionnaire/types';

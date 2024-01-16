@@ -11,16 +11,16 @@ import Select from '@/components/select';
 
 import { getMySchedule } from '@/utils/apis/schedule/api';
 import { getMyProfile } from '@/utils/apis/auth/api';
-import { IBook } from '@/utils/apis/books/types';
+import { IMySchedule } from '@/utils/apis/schedule/types';
 
 const PatientSchedule = () => {
   const { toast } = useToast();
 
-  const [schedule, setSchedule] = useState<IBook[]>([]);
+  const [schedule, setSchedule] = useState<IMySchedule[]>([]);
   const [selectedMonth, setSelectedMonth] = useState<string>('');
   const [selectedStatus, setSelectedStatus] = useState<string>('');
 
-  const columns: ColumnDef<IBook>[] = [
+  const columns: ColumnDef<IMySchedule>[] = [
     {
       accessorKey: 'booking_code',
       header: 'Booking Code',

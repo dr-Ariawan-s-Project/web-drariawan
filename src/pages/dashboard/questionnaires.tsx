@@ -16,13 +16,13 @@ import {
 } from '@/components/ui/dropdown-menu';
 
 import { IAttempt } from '@/utils/apis/questionnaire/types';
-import useAuthStore from '@/utils/states/auth';
+// import useAuthStore from '@/utils/states/auth';
 import { getQuestionnaireAttempt } from '@/utils/apis/questionnaire/api';
 
 const ListKuisioner = () => {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
-  const role = useAuthStore((state) => state.role);
+  // const role = useAuthStore((state) => state.role);
   const { toast } = useToast();
 
   const [data, setData] = useState<IAttempt[]>([]);
