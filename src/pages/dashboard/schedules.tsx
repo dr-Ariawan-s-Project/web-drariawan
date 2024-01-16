@@ -25,6 +25,7 @@ import {
 } from '@/utils/apis/schedule/api';
 import { ISchedule, ScheduleSchema } from '@/utils/apis/schedule/types';
 import useAuthStore from '@/utils/states/auth';
+import { IPagination } from '@/utils/types/api';
 
 const DashboardSchedules = () => {
   const [searchParams] = useSearchParams();
@@ -32,6 +33,7 @@ const DashboardSchedules = () => {
   const { toast } = useToast();
 
   const [data, setData] = useState<ISchedule[]>([]);
+  const [pagination, setPagination] = useState<IPagination>();
   const [selectedData, setSelectedData] = useState<ISchedule>();
   const [showAddEditDialog, setShowAddEditDialog] = useState(false);
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
@@ -42,6 +44,13 @@ const DashboardSchedules = () => {
 
   const columns = useMemo<ColumnDef<ISchedule>[]>(
     () => [
+      {
+        accessorKey: '',
+        header: 'No',
+        cell: ({ row }) => {
+          return (pagination?.page! - 1) * pagination?.limit! + row.index + 1;
+        },
+      },
       {
         accessorKey: 'user.name',
         header: 'Nama Doktor',
@@ -98,7 +107,7 @@ const DashboardSchedules = () => {
         },
       },
     ],
-    []
+    [pagination]
   );
 
   useEffect(() => {
@@ -114,6 +123,7 @@ const DashboardSchedules = () => {
       const result = await getSchedules({ ...query });
 
       setData(result.data);
+      setPagination(result.pagination);
     } catch (error) {
       toast({
         title: 'Oops! Sesuatu telah terjadi',
@@ -177,8 +187,7 @@ const DashboardSchedules = () => {
         data={data}
         noFoundMessage="Tidak ada data tersedia"
       />
-      {/* TODO: Add pagination */}
-      <Pagination />
+      <Pagination meta={pagination} />
       <Alert
         open={showDeleteDialog}
         title="Peringatan"

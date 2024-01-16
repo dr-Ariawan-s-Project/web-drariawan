@@ -27,6 +27,7 @@ import {
   updateBooking,
 } from '@/utils/apis/books/api';
 import { BookingSchema, IBook } from '@/utils/apis/books/types';
+import { IPagination } from '@/utils/types/api';
 import useAuthStore from '@/utils/states/auth';
 
 const DashboardBooks = () => {
@@ -35,12 +36,20 @@ const DashboardBooks = () => {
   const { toast } = useToast();
 
   const [data, setData] = useState<IBook[]>([]);
+  const [pagination, setPagination] = useState<IPagination>();
   const [selectedData, setSelectedData] = useState<IBook>();
   const [showAddEditDialog, setShowAddEditDialog] = useState(false);
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
 
   const columns = useMemo<ColumnDef<IBook>[]>(
     () => [
+      {
+        accessorKey: '',
+        header: 'No',
+        cell: ({ row }) => {
+          return (pagination?.page! - 1) * pagination?.limit! + row.index + 1;
+        },
+      },
       {
         accessorKey: 'booking_code',
         header: 'Kode Booking',
@@ -118,7 +127,7 @@ const DashboardBooks = () => {
         },
       },
     ],
-    []
+    [pagination]
   );
 
   useEffect(() => {
@@ -132,6 +141,7 @@ const DashboardBooks = () => {
       const result = await getBooking({ ...query });
 
       setData(result.data);
+      setPagination(result.pagination);
     } catch (error) {
       toast({
         title: 'Oops! Sesuatu telah terjadi',
@@ -196,8 +206,7 @@ const DashboardBooks = () => {
         data={data}
         noFoundMessage="Tidak ada data tersedia"
       />
-      {/* TODO: Add pagination */}
-      <Pagination />
+      <Pagination meta={pagination} />
       <Alert
         open={showDeleteDialog}
         title="Peringatan"

@@ -34,7 +34,7 @@ const DashboardUsers = () => {
   const role = useAuthStore((state) => state.role);
   const { toast } = useToast();
 
-  const [users, setUsers] = useState<IUser[]>([]);
+  const [data, setData] = useState<IUser[]>([]);
   const [pagination, setPagination] = useState<IPagination>();
   const [selectedData, setSelectedData] = useState<IUser>();
   const [showAddEditDialog, setShowAddEditDialog] = useState(false);
@@ -117,7 +117,8 @@ const DashboardUsers = () => {
       );
 
       const result = await getUsers({ ...query });
-      setUsers(result.data);
+
+      setData(result.data);
       setPagination(result.pagination);
     } catch (error) {
       toast({
@@ -175,7 +176,7 @@ const DashboardUsers = () => {
       )}
       <DataTable
         columns={columns}
-        data={users}
+        data={data}
         noFoundMessage="Tidak ada data tersedia"
       />
       <Pagination meta={pagination} />

@@ -29,8 +29,8 @@ export const Sidebar = () => {
       )}
       <div
         className={cn(
-          'absolute flex h-full w-0 select-none flex-col overflow-y-auto bg-white duration-300 md:relative z-50',
-          isSidebarOpen ? 'w-72' : 'md:w-20'
+          'absolute flex h-full select-none flex-col overflow-y-auto bg-white duration-300 md:relative z-50',
+          isSidebarOpen ? 'w-72' : 'w-0 md:w-20'
         )}
       >
         <div className="flex h-24 w-full items-center justify-center px-4">

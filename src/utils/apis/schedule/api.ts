@@ -1,6 +1,6 @@
 import { IBookPayload, IMySchedule, ISchedule } from './types';
 import axiosWithConfig from '@/utils/apis/axiosWithConfig';
-import { Request, Response } from '@/utils/types/api';
+import { Request, Response, ResponsePagination } from '@/utils/types/api';
 import { buildQueryString } from '@/utils/formatter';
 
 export const getSchedules = async (params?: Request) => {
@@ -10,7 +10,7 @@ export const getSchedules = async (params?: Request) => {
 
     const response = await axiosWithConfig.get(url);
 
-    return response.data as Response<ISchedule[]>;
+    return response.data as ResponsePagination<ISchedule[]>;
   } catch (error: any) {
     const { messages } = error.response.data;
 

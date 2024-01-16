@@ -1,6 +1,6 @@
 import axiosWithConfig from '@/utils/apis/axiosWithConfig';
 import { buildQueryString } from '@/utils/formatter';
-import { Request, Response } from '@/utils/types/api';
+import { Request, Response, ResponsePagination } from '@/utils/types/api';
 import {
   IAttempt,
   IAttemptAnswer,
@@ -57,7 +57,7 @@ export const getQuestionnaireAttempt = async (params?: Request) => {
 
     const response = await axiosWithConfig.get(url);
 
-    return response.data as Response<IAttempt[]>;
+    return response.data as ResponsePagination<IAttempt[]>;
   } catch (error: any) {
     const { messages } = error.response.data;
 

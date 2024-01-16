@@ -1,10 +1,11 @@
-import { useState, useEffect, useMemo } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
+import { useState, useEffect, useMemo } from 'react';
 import { ColumnDef } from '@tanstack/react-table';
 import { MoreHorizontal } from 'lucide-react';
+import { format, parseISO } from 'date-fns';
 
 import { useToast } from '@/components/ui/use-toast';
-import { AdminLayout } from '@/components/layout';
+import { AdminLayout, Layout } from '@/components/layout';
 import Pagination from '@/components/pagination';
 import { Button } from '@/components/ui/button';
 import DataTable from '@/components/data-table';
@@ -15,28 +16,27 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 
-import { IAttempt } from '@/utils/apis/questionnaire/types';
-// import useAuthStore from '@/utils/states/auth';
 import { getQuestionnaireAttempt } from '@/utils/apis/questionnaire/api';
+import { IAttempt } from '@/utils/apis/questionnaire/types';
+import { IPagination } from '@/utils/types/api';
 
 const ListKuisioner = () => {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
-  // const role = useAuthStore((state) => state.role);
   const { toast } = useToast();
 
   const [data, setData] = useState<IAttempt[]>([]);
+  const [pagination, setPagination] = useState<IPagination>();
 
   const columns = useMemo<ColumnDef<IAttempt>[]>(
     () => [
-      // TODO: Uncomment this when pagination is added
-      // {
-      //   accessorKey: '',
-      //   header: 'No',
-      //   cell: ({ row }) => {
-      //     return (pagination?.page! - 1) * pagination?.limit! + row.index + 1;
-      //   },
-      // },
+      {
+        accessorKey: '',
+        header: 'No',
+        cell: ({ row }) => {
+          return (pagination?.page! - 1) * pagination?.limit! + row.index + 1;
+        },
+      },
       {
         accessorKey: 'patient.name',
         header: 'Nama Pasien',
@@ -82,6 +82,24 @@ const ListKuisioner = () => {
         },
       },
       {
+        accessorKey: 'created_at',
+        header: 'Diambil',
+        cell: (info) =>
+          format(parseISO(info.row.getValue('created_at')), 'PPpp'),
+      },
+      {
+        accessorKey: 'updated_at',
+        header: 'Selesai',
+        cell: ({ row }) => {
+          const createdAt = row.original.created_at;
+          const updatedAt = row.original.updated_at;
+
+          return createdAt === updatedAt
+            ? '-'
+            : format(parseISO(updatedAt), 'PPpp');
+        },
+      },
+      {
         id: 'actions',
         cell: ({ row }) => {
           const { id, status } = row.original;
@@ -109,7 +127,7 @@ const ListKuisioner = () => {
         },
       },
     ],
-    []
+    [pagination]
   );
 
   useEffect(() => {
@@ -125,6 +143,7 @@ const ListKuisioner = () => {
       const result = await getQuestionnaireAttempt({ ...query });
 
       setData(result.data);
+      setPagination(result.pagination);
     } catch (error) {
       toast({
         title: 'Oops! Sesuatu telah terjadi',
@@ -135,15 +154,14 @@ const ListKuisioner = () => {
   }
 
   return (
-    <AdminLayout>
+    <Layout showMenu variant="admin">
       <DataTable
         columns={columns}
         data={data}
         noFoundMessage="Tidak ada data tersedia"
       />
-      {/* TODO: Add pagination */}
-      <Pagination />
-    </AdminLayout>
+      <Pagination meta={pagination} />
+    </Layout>
   );
 };
 

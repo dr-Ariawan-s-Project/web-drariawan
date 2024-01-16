@@ -36,7 +36,7 @@ const Navbar = (props: Props) => {
 
   return (
     <header
-      className="sticky z-50 top-0 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60"
+      className="sticky z-40 top-0 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60"
       aria-label="navbar"
     >
       <div className="container flex h-14 items-center px-8">

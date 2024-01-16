@@ -19,20 +19,27 @@ interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
   noFoundMessage?: string;
+  manualPagination?: boolean;
 }
 
 const DataTable = <TData, TValue>(props: DataTableProps<TData, TValue>) => {
-  const { columns, data, noFoundMessage = 'No results' } = props;
+  const {
+    columns,
+    data,
+    noFoundMessage = 'No results',
+    manualPagination,
+  } = props;
 
   const table = useReactTable({
     data,
     columns,
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
+    manualPagination: manualPagination,
   });
 
   return (
-    <div className="rounded-md border">
+    <div className="rounded-md border h-full w-full">
       <Table>
         <TableHeader>
           {table.getHeaderGroups().map((headerGroup) => (

@@ -1,6 +1,6 @@
 import { IBook, BookingSchema } from './types';
 import axiosWithConfig from '@/utils/apis/axiosWithConfig';
-import { Request, Response } from '@/utils/types/api';
+import { Request, Response, ResponsePagination } from '@/utils/types/api';
 import { buildQueryString } from '@/utils/formatter';
 
 export const getBooking = async (params?: Request) => {
@@ -10,7 +10,7 @@ export const getBooking = async (params?: Request) => {
 
     const response = await axiosWithConfig.get(url);
 
-    return response.data as Response<IBook[]>;
+    return response.data as ResponsePagination<IBook[]>;
   } catch (error: any) {
     const { messages } = error.response.data;
 
