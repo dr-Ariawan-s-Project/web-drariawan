@@ -10,7 +10,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { useToast } from '@/components/ui/use-toast';
-import { AdminLayout } from '@/components/layout';
+import { Layout } from '@/components/layout';
 import Pagination from '@/components/pagination';
 import { Button } from '@/components/ui/button';
 import DataTable from '@/components/data-table';
@@ -174,7 +174,7 @@ const DashboardSchedules = () => {
   }
 
   return (
-    <AdminLayout className="space-y-4" showMenu>
+    <Layout variant="admin">
       {checkRole && (
         <div className="w-full flex justify-end">
           <Button onClick={() => setShowAddEditDialog(true)}>
@@ -204,7 +204,7 @@ const DashboardSchedules = () => {
         editData={selectedData}
         onSubmit={(data) => onSubmitData(data)}
       />
-    </AdminLayout>
+    </Layout>
   );
 };
 

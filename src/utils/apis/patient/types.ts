@@ -48,14 +48,14 @@ const baseSchema = z.object({
 
 const selfSchema = z
   .object({
-    partner_option: z.literal('Myself'),
+    partner_option: z.literal('myself'),
     partner_email: z.string().default(''),
   })
   .merge(baseSchema);
 
 const partnerSchema = z
   .object({
-    partner_option: z.literal('Partner'),
+    partner_option: z.literal('partner'),
     partner_email: z
       .string()
       .min(1, { message: 'Email partner wajib diisi' })

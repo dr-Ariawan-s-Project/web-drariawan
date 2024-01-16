@@ -5,7 +5,7 @@ import { MoreHorizontal } from 'lucide-react';
 import { format, parseISO } from 'date-fns';
 
 import { useToast } from '@/components/ui/use-toast';
-import { AdminLayout, Layout } from '@/components/layout';
+import { Layout } from '@/components/layout';
 import Pagination from '@/components/pagination';
 import { Button } from '@/components/ui/button';
 import DataTable from '@/components/data-table';
@@ -154,7 +154,7 @@ const ListKuisioner = () => {
   }
 
   return (
-    <Layout showMenu variant="admin">
+    <Layout variant="admin">
       <DataTable
         columns={columns}
         data={data}

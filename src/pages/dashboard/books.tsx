@@ -6,7 +6,7 @@ import { format, parseISO } from 'date-fns';
 import { capitalize } from 'lodash';
 
 import { useToast } from '@/components/ui/use-toast';
-import { AdminLayout } from '@/components/layout';
+import { Layout } from '@/components/layout';
 import Pagination from '@/components/pagination';
 import { Button } from '@/components/ui/button';
 import DataTable from '@/components/data-table';
@@ -193,7 +193,7 @@ const DashboardBooks = () => {
   }
 
   return (
-    <AdminLayout className="space-y-4" showMenu>
+    <Layout variant="admin">
       {['suster'].includes(role) && (
         <div className="w-full flex justify-end">
           <Button onClick={() => setShowAddEditDialog(true)}>
@@ -223,7 +223,7 @@ const DashboardBooks = () => {
         editData={selectedData}
         onSubmit={(data) => onSubmitData(data)}
       />
-    </AdminLayout>
+    </Layout>
   );
 };
 

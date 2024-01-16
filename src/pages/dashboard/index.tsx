@@ -11,7 +11,7 @@ import { startCase } from 'lodash';
 
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { useToast } from '@/components/ui/use-toast';
-import { AdminLayout } from '@/components/layout';
+import { Layout } from '@/components/layout';
 
 import { getDashboardData, getChartData } from '@/utils/apis/dashboard/api';
 import {
@@ -59,7 +59,7 @@ const Dashboard = () => {
   };
 
   return (
-    <AdminLayout className="space-y-4" showMenu>
+    <Layout variant="admin">
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
         {data &&
           Object.keys(data).map((item) => (
@@ -116,7 +116,7 @@ const Dashboard = () => {
           </CardContent>
         </Card>
       </div>
-    </AdminLayout>
+    </Layout>
   );
 };
 

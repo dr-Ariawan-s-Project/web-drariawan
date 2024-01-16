@@ -3,7 +3,7 @@ import { ColumnDef } from '@tanstack/react-table';
 import { useParams } from 'react-router-dom';
 
 import { useToast } from '@/components/ui/use-toast';
-import { AdminLayout } from '@/components/layout';
+import { Layout } from '@/components/layout';
 
 import { getAttemptAnswers } from '@/utils/apis/questionnaire/api';
 import { IAttemptAnswer } from '@/utils/apis/questionnaire/types';
@@ -64,7 +64,7 @@ const DetailAttempt = () => {
   }
 
   return (
-    <AdminLayout>
+    <Layout variant="admin">
       {/* TODO: Change this when we know what showed to user */}
       <p>Jawaban responden</p>
       <DataTable
@@ -81,7 +81,7 @@ const DetailAttempt = () => {
           </li>
         ))}
       </ol> */}
-    </AdminLayout>
+    </Layout>
   );
 };
 

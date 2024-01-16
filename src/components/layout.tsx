@@ -7,7 +7,6 @@ import { cn } from '@/lib/utils';
 interface Props {
   children: ReactNode;
   variant?: 'default' | 'admin';
-  showMenu?: boolean;
   centerY?: boolean;
   centerX?: boolean;
   className?: string;
@@ -17,7 +16,6 @@ export const Layout = (props: Readonly<Props>) => {
   const {
     children,
     variant = 'default',
-    showMenu,
     centerY = false,
     centerX = false,
     className,
@@ -31,8 +29,8 @@ export const Layout = (props: Readonly<Props>) => {
       )}
     >
       {variant === 'admin' ? <Sidebar /> : null}
-      <div className="w-full flex-grow flex flex-col">
-        <Navbar showMenu={showMenu} />
+      <div className="grow h-full flex flex-col">
+        <Navbar showMenu={variant === 'admin'} />
         {variant === 'admin' ? (
           <div className="w-full flex-grow flex flex-col p-5 overflow-auto">
             <div
@@ -56,42 +54,6 @@ export const Layout = (props: Readonly<Props>) => {
             {children}
           </div>
         )}
-      </div>
-    </div>
-  );
-};
-
-export const AdminLayout = (props: Readonly<Props>) => {
-  const {
-    children,
-    showMenu,
-    centerY = false,
-    centerX = false,
-    className,
-  } = props;
-
-  return (
-    <div className="flex h-screen w-full [&>*]:text-health-blue-dark">
-      <Sidebar />
-      <div
-        className={cn(
-          'w-full flex-grow flex flex-col',
-          centerY && 'justify-center',
-          centerX && 'items-center'
-        )}
-        data-testid="content-container"
-      >
-        <Navbar showMenu={showMenu} />
-        <div className="w-full h-full flex flex-col bg-gray-100 p-4">
-          <div
-            className={cn(
-              'flex h-fit w-full flex-col rounded-lg bg-white p-4',
-              className
-            )}
-          >
-            {children}
-          </div>
-        </div>
       </div>
     </div>
   );

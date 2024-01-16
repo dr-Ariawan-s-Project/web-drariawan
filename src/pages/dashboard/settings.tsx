@@ -8,7 +8,7 @@ import {
   CustomFormSelect,
 } from '@/components/custom-formfield';
 import { useToast } from '@/components/ui/use-toast';
-import { AdminLayout } from '@/components/layout';
+import { Layout } from '@/components/layout';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Form } from '@/components/ui/form';
@@ -72,7 +72,7 @@ const Setting = () => {
   }
 
   return (
-    <AdminLayout showMenu>
+    <Layout variant="admin">
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)}>
           <CustomFormField control={form.control} name="name" label="Nama">
@@ -189,7 +189,7 @@ const Setting = () => {
           </div>
         </form>
       </Form>
-    </AdminLayout>
+    </Layout>
   );
 };
 

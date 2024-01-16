@@ -44,7 +44,7 @@ const Register = () => {
       marriage_status: 'Not_Married',
       nationality: 'Indonesia',
       partner_email: '',
-      partner_option: 'Myself',
+      partner_option: 'myself',
     },
   });
 
@@ -208,7 +208,7 @@ const Register = () => {
             placeholder="Pilih"
             options={forWho}
           />
-          {form.watch('partner_option') === 'Partner' && (
+          {form.watch('partner_option') === 'partner' && (
             <CustomFormField
               control={form.control}
               name="partner_email"
