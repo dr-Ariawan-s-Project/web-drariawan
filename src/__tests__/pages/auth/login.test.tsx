@@ -1,0 +1,142 @@
+import '@testing-library/jest-dom';
+import { Mocked, vi } from 'vitest';
+
+import { render, screen, within, fireEvent, act } from '@/__tests__/test-utils';
+
+import App from '@/pages/auth/login';
+import axiosWithConfig from '@/utils/apis/axiosWithConfig';
+
+vi.mock('@/utils/apis/axiosWithConfig');
+
+const mockedAxios = axiosWithConfig as Mocked<typeof axiosWithConfig>;
+
+describe('Login Page', () => {
+  beforeEach(async () => {
+    await act(async () => {
+      render(<App />);
+    });
+  });
+
+  describe('Renders the page', () => {
+    it('should render the page', () => {
+      const form = screen.getByTestId('form-login');
+      expect(form).toBeTruthy();
+
+      expect(within(form).getByTestId('input-email')).toBeTruthy();
+      expect(within(form).getByTestId('input-password')).toBeTruthy();
+      expect(within(form).getByTestId('btn-submit')).toBeTruthy();
+    });
+
+    it('should displays value inside input', () => {
+      const form = screen.getByTestId('form-login');
+      const email = within(form).getByTestId('input-email');
+      const password = within(form).getByTestId('input-password');
+
+      fireEvent.change(email, {
+        target: { value: 'test@mail.com' },
+      });
+      fireEvent.change(password, {
+        target: { value: 'testing123' },
+      });
+
+      expect(email).toHaveValue('test@mail.com');
+      expect(password).toHaveValue('testing123');
+    });
+  });
+
+  describe('Action for Login', () => {
+    it('should show error message when some of input is missing a value', async () => {
+      await act(async () => {
+        fireEvent.click(screen.getByTestId('btn-submit'));
+      });
+      const form = screen.getByTestId('form-login');
+
+      expect(within(form).getByText('Email wajib diisi')).toBeTruthy();
+      expect(within(form).getByText('Password wajib diisi')).toBeTruthy();
+    });
+
+    it('should display failed toast when using incorrect credential (password)', async () => {
+      const form = screen.getByTestId('form-login');
+      const email = within(form).getByTestId('input-email');
+      const password = within(form).getByTestId('input-password');
+
+      fireEvent.change(email, {
+        target: { value: 'test@mail.com' },
+      });
+      fireEvent.change(password, {
+        target: { value: 'abc5dasa' },
+      });
+
+      mockedAxios.post.mockRejectedValueOnce({
+        data: {
+          message: 'Invalid password.',
+        },
+      });
+
+      await act(async () => {
+        fireEvent.click(screen.getByTestId('btn-submit'));
+      });
+
+      setTimeout(() => {
+        expect(screen.getByText('Invalid password.')).toBeTruthy();
+      }, 2000);
+    });
+
+    it('should display failed toast when using incorrect credential (email)', async () => {
+      const form = screen.getByTestId('form-login');
+      const email = within(form).getByTestId('input-email');
+      const password = within(form).getByTestId('input-password');
+
+      fireEvent.change(email, {
+        target: { value: 'tester@mail.com' },
+      });
+      fireEvent.change(password, {
+        target: { value: 'abc5dasa' },
+      });
+
+      mockedAxios.post.mockRejectedValueOnce({
+        data: {
+          message: 'User not found, you must register first.',
+        },
+      });
+
+      await act(async () => {
+        fireEvent.click(screen.getByTestId('btn-submit'));
+      });
+
+      setTimeout(() => {
+        expect(
+          screen.getByText('User not found, you must register first.')
+        ).toBeTruthy();
+      }, 2000);
+    });
+
+    it('should display successful toast when using correct credential', async () => {
+      const form = screen.getByTestId('form-login');
+      const email = within(form).getByTestId('input-email');
+      const password = within(form).getByTestId('input-password');
+
+      fireEvent.change(email, {
+        target: { value: 'test@mail.com' },
+      });
+      fireEvent.change(password, {
+        target: { value: 'testing123' },
+      });
+
+      mockedAxios.post.mockResolvedValueOnce({
+        data: {
+          message: 'Login successfully',
+          payload: { token: 'random-string' },
+        },
+      });
+
+      await act(async () => {
+        fireEvent.click(screen.getByTestId('btn-submit'));
+      });
+
+      setTimeout(() => {
+        expect(screen.getByText('Login successfully')).toBeTruthy();
+      }, 2000);
+    });
+  });
+});

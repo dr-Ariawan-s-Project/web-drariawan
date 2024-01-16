@@ -53,6 +53,7 @@ const Login = () => {
       </p>
       <Form {...form}>
         <form
+          data-testid="form-login"
           onSubmit={form.handleSubmit(onSubmit)}
           className="max-w-sm space-y-8 mt-10 w-full md:max-w-md lg:max-w-lg"
         >
@@ -102,7 +103,7 @@ const Login = () => {
                 'Login'
               )}
             </Button>
-            <Button variant="link" asChild>
+            <Button data-testid="btn-navigate-register" variant="link" asChild>
               <Link to="/register">
                 Belum memiliki akun? Silakan klik disini!
               </Link>

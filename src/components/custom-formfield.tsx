@@ -45,6 +45,7 @@ interface Props<T extends FieldValues> {
   options?: ISelect[];
   description?: string;
   control: Control<T>;
+  'data-testid'?: string;
 }
 
 interface ChildrenProps<T extends FieldValues> extends Props<T> {
@@ -111,7 +112,10 @@ export function CustomFormSelect<T extends FieldValues>(
           <FormLabel>{label}</FormLabel>
           <Select onValueChange={field.onChange} value={field.value}>
             <FormControl>
-              <SelectTrigger className="w-full">
+              <SelectTrigger
+                data-testid={props['data-testid']}
+                className="w-full"
+              >
                 <SelectValue placeholder={placeholder} />
               </SelectTrigger>
             </FormControl>
@@ -119,7 +123,11 @@ export function CustomFormSelect<T extends FieldValues>(
               <SelectGroup>
                 <SelectLabel>{label}</SelectLabel>
                 {options?.map((option) => (
-                  <SelectItem value={option.value} key={option.value}>
+                  <SelectItem
+                    data-testid={`option-${option.value}`}
+                    value={option.value}
+                    key={option.value}
+                  >
                     {option.label}
                   </SelectItem>
                 ))}

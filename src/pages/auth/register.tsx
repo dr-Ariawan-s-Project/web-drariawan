@@ -64,6 +64,7 @@ const Register = () => {
     }
   }
 
+  console.log(form.watch('partner_option'));
   return (
     <Layout centerX centerY>
       <p className="font-bold text-center mb-4 text-4xl">Register</p>
@@ -72,6 +73,7 @@ const Register = () => {
       </p>
       <Form {...form}>
         <form
+          data-testid="form-register"
           onSubmit={form.handleSubmit(onSubmit)}
           className="space-y-8 mt-10 w-full md:max-w-md lg:max-w-lg"
         >
@@ -123,6 +125,7 @@ const Register = () => {
           </CustomFormField>
           <div className="flex space-x-8 w-full">
             <CustomFormSelect
+              data-testid="input-gender"
               control={form.control}
               name="gender"
               label="Jenis kelamin"
@@ -139,6 +142,7 @@ const Register = () => {
               ]}
             />
             <CustomFormSelect
+              data-testid="input-status"
               control={form.control}
               name="marriage_status"
               label="Status"
@@ -195,6 +199,7 @@ const Register = () => {
             )}
           </CustomFormField>
           <CustomFormSelect
+            data-testid="input-nationality"
             control={form.control}
             name="nationality"
             label="Kewarganegaraan"
@@ -202,6 +207,7 @@ const Register = () => {
             options={countries}
           />
           <CustomFormSelect
+            data-testid="input-option"
             control={form.control}
             name="partner_option"
             label="Data ini untuk siapa?"
