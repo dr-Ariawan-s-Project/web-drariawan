@@ -16,9 +16,20 @@ export default defineConfig({
   test: {
     globals: true,
     environment: 'jsdom',
+    setupFiles: ['./src/__tests__/setup-vitest.ts'],
     coverage: {
       provider: 'v8',
-      exclude: ['src/utils/apis/axiosWithConfig.ts'],
+      exclude: [
+        'src/utils/apis/axiosWithConfig.ts',
+        'src/__mocks__',
+        'src/routes',
+        'src/utils/types',
+        'src/utils/states',
+        '**/{postcss,tailwind}.config.*',
+        '**/.eslintrc.cjs',
+        'src/main.tsx',
+        'src/vite-env.d.ts',
+      ],
     },
   },
 });

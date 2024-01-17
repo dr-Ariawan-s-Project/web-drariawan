@@ -39,9 +39,9 @@ const DataTable = <TData, TValue>(props: DataTableProps<TData, TValue>) => {
   });
 
   return (
-    <div className="rounded-md border h-full w-full">
+    <div data-testid="data-table" className="rounded-md border h-full w-full">
       <Table>
-        <TableHeader>
+        <TableHeader data-testid="data-table-header">
           {table.getHeaderGroups().map((headerGroup) => (
             <TableRow key={headerGroup.id}>
               {headerGroup.headers.map((header) => {
@@ -59,10 +59,11 @@ const DataTable = <TData, TValue>(props: DataTableProps<TData, TValue>) => {
             </TableRow>
           ))}
         </TableHeader>
-        <TableBody>
+        <TableBody data-testid="data-table-body">
           {table.getRowModel().rows?.length ? (
             table.getRowModel().rows.map((row) => (
               <TableRow
+                data-testid="data-table-row"
                 key={row.id}
                 data-state={row.getIsSelected() && 'selected'}
               >

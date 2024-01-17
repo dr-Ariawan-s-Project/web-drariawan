@@ -60,10 +60,13 @@ const Dashboard = () => {
 
   return (
     <Layout variant="admin">
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+      <div
+        data-testid="card-group"
+        className="grid gap-4 md:grid-cols-2 lg:grid-cols-4"
+      >
         {data &&
           Object.keys(data).map((item) => (
-            <Card key={item}>
+            <Card data-testid={`card-${item}`} key={item}>
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                 <CardTitle className="text-sm font-medium">
                   {startCase(
@@ -82,40 +85,38 @@ const Dashboard = () => {
             </Card>
           ))}
       </div>
-      <div>
-        <Card>
-          <CardHeader>
-            <CardTitle>Kuesioner per Bulan</CardTitle>
-          </CardHeader>
-          <CardContent className="pl-2">
-            <ResponsiveContainer width="100%" height={350}>
-              <BarChart data={charts}>
-                <XAxis
-                  dataKey="month"
-                  stroke="#888888"
-                  fontSize={12}
-                  tickLine={false}
-                  axisLine={false}
-                />
-                <YAxis
-                  stroke="#888888"
-                  fontSize={12}
-                  tickLine={false}
-                  axisLine={false}
-                  tickFormatter={(value) => `${value}`}
-                />
-                <Tooltip />
-                <Bar
-                  dataKey="count"
-                  fill="currentColor"
-                  radius={[4, 4, 0, 0]}
-                  className="fill-primary"
-                />
-              </BarChart>
-            </ResponsiveContainer>
-          </CardContent>
-        </Card>
-      </div>
+      <Card data-testid="card-chart">
+        <CardHeader>
+          <CardTitle>Kuesioner per Bulan</CardTitle>
+        </CardHeader>
+        <CardContent className="pl-2">
+          <ResponsiveContainer width="100%" height={350}>
+            <BarChart data={charts}>
+              <XAxis
+                dataKey="month"
+                stroke="#888888"
+                fontSize={12}
+                tickLine={false}
+                axisLine={false}
+              />
+              <YAxis
+                stroke="#888888"
+                fontSize={12}
+                tickLine={false}
+                axisLine={false}
+                tickFormatter={(value) => `${value}`}
+              />
+              <Tooltip />
+              <Bar
+                dataKey="count"
+                fill="currentColor"
+                radius={[4, 4, 0, 0]}
+                className="fill-primary"
+              />
+            </BarChart>
+          </ResponsiveContainer>
+        </CardContent>
+      </Card>
     </Layout>
   );
 };

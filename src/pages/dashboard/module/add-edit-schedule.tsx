@@ -108,7 +108,11 @@ const AddEditSchedule = (props: Props) => {
           <DialogTitle>{editData ? 'Update user' : 'Tambah user'}</DialogTitle>
         </DialogHeader>
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+          <form
+            data-testid="form-add-edit"
+            onSubmit={form.handleSubmit(onSubmit)}
+            className="space-y-8"
+          >
             <CustomFormSelect
               control={form.control}
               name="user_id"

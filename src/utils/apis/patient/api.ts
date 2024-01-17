@@ -6,7 +6,7 @@ import { IPatient, PatientSchema } from './types';
 export const getPatients = async (params?: Request) => {
   try {
     const query = buildQueryString(params);
-    const url = query ? `/v1/patients${query}&limit=10` : '/v1/patients';
+    const url = query ? `/v1/patients${query}` : '/v1/patients';
 
     const response = await axiosWithConfig.get(url);
 

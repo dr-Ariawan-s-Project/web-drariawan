@@ -13,7 +13,7 @@ import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { useSidebarStore } from '@/components/sidebar';
 import { useToast } from '@/components/ui/use-toast';
 import { Button } from '@/components/ui/button';
-import useAuthStore from '@/utils/states/auth';
+import { useAuthStore } from '@/utils/states';
 
 interface Props {
   showMenu?: boolean;

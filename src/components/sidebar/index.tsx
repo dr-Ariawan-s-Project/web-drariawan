@@ -4,7 +4,7 @@ import { SidebarItem } from '@/components/sidebar/sidebar-item';
 import { ISidebarState } from '@/components/sidebar/types';
 
 import { sidebarList } from '@/utils/constants';
-import useAuthStore from '@/utils/states/auth';
+import { useAuthStore } from '@/utils/states';
 import { cn } from '@/lib/utils';
 
 export const useSidebarStore = create<ISidebarState>()((set) => ({

@@ -6,7 +6,7 @@ import { buildQueryString } from '@/utils/formatter';
 export const getSchedules = async (params?: Request) => {
   try {
     const query = buildQueryString(params);
-    const url = query ? `/v1/schedule/list${query}&rp=10` : '/v1/schedule/list';
+    const url = query ? `/v1/schedule/list${query}` : '/v1/schedule/list';
 
     const response = await axiosWithConfig.get(url);
 

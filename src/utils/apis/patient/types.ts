@@ -73,6 +73,11 @@ export type PatientSchema = z.infer<typeof patientSchema>;
 export interface IPatient {
   email: string;
   id: string;
-  name: string;
   phone: string;
+  name?: string;
+  nik?: string;
+  dob?: string;
+  gender?: string;
+  marriage_status?: string;
+  nationality?: string;
 }

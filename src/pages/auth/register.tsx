@@ -64,7 +64,6 @@ const Register = () => {
     }
   }
 
-  console.log(form.watch('partner_option'));
   return (
     <Layout centerX centerY>
       <p className="font-bold text-center mb-4 text-4xl">Register</p>

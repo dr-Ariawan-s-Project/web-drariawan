@@ -77,11 +77,16 @@ const AddEditUser = (props: Props) => {
           <DialogTitle>{editData ? 'Update user' : 'Tambah user'}</DialogTitle>
         </DialogHeader>
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+          <form
+            data-testid="form-add-edit"
+            onSubmit={form.handleSubmit(onSubmit)}
+            className="space-y-8"
+          >
             <CustomFormField control={form.control} name="name" label="Nama">
               {(field) => (
                 <Input
                   {...field}
+                  data-testid="input-name"
                   placeholder="Nama"
                   disabled={form.formState.isSubmitting}
                   aria-disabled={form.formState.isSubmitting}
@@ -93,6 +98,7 @@ const AddEditUser = (props: Props) => {
               {(field) => (
                 <Input
                   {...field}
+                  data-testid="input-email"
                   placeholder="nama@mail.com"
                   disabled={form.formState.isSubmitting}
                   aria-disabled={form.formState.isSubmitting}
@@ -109,6 +115,7 @@ const AddEditUser = (props: Props) => {
               {(field) => (
                 <Input
                   {...field}
+                  data-testid="input-phone-number"
                   placeholder="Nomor Telepon"
                   disabled={form.formState.isSubmitting}
                   aria-disabled={form.formState.isSubmitting}
@@ -118,6 +125,7 @@ const AddEditUser = (props: Props) => {
               )}
             </CustomFormField>
             <CustomFormSelect
+              data-testid="input-role"
               control={form.control}
               name="role"
               label="Role"
@@ -132,6 +140,7 @@ const AddEditUser = (props: Props) => {
               {(field) => (
                 <Input
                   {...field}
+                  data-testid="input-password"
                   placeholder="Password"
                   disabled={form.formState.isSubmitting}
                   aria-disabled={form.formState.isSubmitting}
@@ -148,6 +157,7 @@ const AddEditUser = (props: Props) => {
               {(field) => (
                 <Input
                   {...field}
+                  data-testid="input-specialization"
                   placeholder="Spesialisasi"
                   disabled={form.formState.isSubmitting}
                   aria-disabled={form.formState.isSubmitting}
@@ -157,6 +167,7 @@ const AddEditUser = (props: Props) => {
             </CustomFormField>
             <DialogFooter>
               <Button
+                data-testid="btn-submit"
                 type="submit"
                 disabled={form.formState.isSubmitting}
                 aria-disabled={form.formState.isSubmitting}

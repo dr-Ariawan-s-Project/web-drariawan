@@ -1,9 +1,9 @@
-import { create } from 'zustand';
+import { type StateCreator } from 'zustand';
 import Cookies from 'js-cookie';
 
 import { IUserPayload } from '../apis/auth/api';
 
-interface AuthState {
+export interface AuthStore {
   token: string;
   name: string;
   role: string;
@@ -11,7 +11,7 @@ interface AuthState {
   resetAuth: () => void;
 }
 
-const useAuthStore = create<AuthState>()((set) => ({
+export const authStoreCreator: StateCreator<AuthStore> = (set) => ({
   token: Cookies.get('token') ?? sessionStorage.getItem('token') ?? '',
   name: Cookies.get('userName') ?? sessionStorage.getItem('userName') ?? '',
   role: Cookies.get('userRole') ?? sessionStorage.getItem('userRole') ?? '',
@@ -36,6 +36,4 @@ const useAuthStore = create<AuthState>()((set) => ({
       sessionStorage.clear();
       return { token: '', name: '', role: '' };
     }),
-}));
-
-export default useAuthStore;
+});

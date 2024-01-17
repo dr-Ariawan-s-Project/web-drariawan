@@ -10,12 +10,13 @@ import {
 import { useToast } from '@/components/ui/use-toast';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Form } from '@/components/ui/form';
 import { Layout } from '@/components/layout';
+import { Form } from '@/components/ui/form';
+
 import { LoginSchema, loginSchema } from '@/utils/apis/auth/types';
-import { adminLogin } from '@/utils/apis/auth/api';
-import useAuthStore from '@/utils/states/auth';
 import { setAxiosConfig } from '@/utils/apis/axiosWithConfig';
+import { adminLogin } from '@/utils/apis/auth/api';
+import { useAuthStore } from '@/utils/states';
 
 const AdminLogin = () => {
   const addAuth = useAuthStore((state) => state.addAuth);
@@ -57,6 +58,7 @@ const AdminLogin = () => {
       </div>
       <Form {...form}>
         <form
+          data-testid="form-login"
           onSubmit={form.handleSubmit(onSubmit)}
           className="max-w-sm space-y-8 mt-10 w-full md:max-w-md lg:max-w-lg"
         >

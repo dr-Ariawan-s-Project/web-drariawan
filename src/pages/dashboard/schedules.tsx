@@ -24,7 +24,7 @@ import {
   postSchedule,
 } from '@/utils/apis/schedule/api';
 import { ISchedule, ScheduleSchema } from '@/utils/apis/schedule/types';
-import useAuthStore from '@/utils/states/auth';
+import { useAuthStore } from '@/utils/states';
 import { IPagination } from '@/utils/types/api';
 
 const DashboardSchedules = () => {
@@ -120,7 +120,7 @@ const DashboardSchedules = () => {
         [...searchParams].filter((param) => param[0] !== 'tab')
       );
 
-      const result = await getSchedules({ ...query });
+      const result = await getSchedules({ ...query, limit: 10 });
 
       setData(result.data);
       setPagination(result.pagination);
@@ -147,7 +147,7 @@ const DashboardSchedules = () => {
       setShowAddEditDialog(false);
     } catch (error: any) {
       toast({
-        title: 'Oops! Something went wrong.',
+        title: 'Oops! Sesuatu telah terjadi',
         description: error.message.toString(),
         variant: 'destructive',
       });
@@ -166,7 +166,7 @@ const DashboardSchedules = () => {
       setSelectedData(undefined);
     } catch (error: any) {
       toast({
-        title: 'Oops! Something went wrong.',
+        title: 'Oops! Sesuatu telah terjadi',
         description: error.message.toString(),
         variant: 'destructive',
       });
@@ -177,7 +177,10 @@ const DashboardSchedules = () => {
     <Layout variant="admin">
       {checkRole && (
         <div className="w-full flex justify-end">
-          <Button onClick={() => setShowAddEditDialog(true)}>
+          <Button
+            data-testid="btn-add-data"
+            onClick={() => setShowAddEditDialog(true)}
+          >
             Tambah jadwal
           </Button>
         </div>

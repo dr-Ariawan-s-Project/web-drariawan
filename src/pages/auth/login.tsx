@@ -7,13 +7,13 @@ import { CustomFormField } from '@/components/custom-formfield';
 import { useToast } from '@/components/ui/use-toast';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Form } from '@/components/ui/form';
 import { Layout } from '@/components/layout';
+import { Form } from '@/components/ui/form';
 
 import { LoginSchema, loginSchema } from '@/utils/apis/auth/types';
 import { setAxiosConfig } from '@/utils/apis/axiosWithConfig';
 import { userLogin } from '@/utils/apis/auth/api';
-import useAuthStore from '@/utils/states/auth';
+import { useAuthStore } from '@/utils/states';
 
 const Login = () => {
   const addAuth = useAuthStore((state) => state.addAuth);

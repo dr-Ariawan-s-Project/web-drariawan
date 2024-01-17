@@ -11,9 +11,9 @@ export const userSchema = z.object({
     .min(1, { message: 'Email wajib diisi' })
     .email('Email tidak valid'),
   phone: z.string().min(1, { message: 'Nomor telepon wajib diisi' }),
-  role: z.string().min(1, { message: 'Nomor telepon wajib diisi' }),
+  role: z.string().min(1, { message: 'Role wajib diisi' }),
   password: z.string().min(1, { message: 'Password wajib diisi' }),
-  specialization: z.string().min(1, { message: 'Password wajib diisi' }),
+  specialization: z.string().min(1, { message: 'Spesialisasi wajib diisi' }),
 });
 
 export const updateSchema = z

@@ -1,6 +1,6 @@
 import { Navigate, Outlet, useLocation, useParams } from 'react-router-dom';
 
-import useAuthStore from '@/utils/states/auth';
+import { useAuthStore } from '@/utils/states';
 
 const nonLoggedInAccess = [
   '/',

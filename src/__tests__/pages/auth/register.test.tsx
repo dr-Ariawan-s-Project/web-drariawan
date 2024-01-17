@@ -111,7 +111,11 @@ describe('Register Page', () => {
 
       mockedAxios.post.mockResolvedValueOnce({
         data: {
-          message: 'Berhasil registrasi, silahkan login terlebih dahulu',
+          messages: ['[success]'],
+          meta: {
+            code: '200-007-OK',
+            status: 'success',
+          },
         },
       });
 

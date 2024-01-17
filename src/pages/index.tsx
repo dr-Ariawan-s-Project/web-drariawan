@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Layout } from '@/components/layout';
 import Background from '@/assets/illustrations/main-background.jpeg';
 
-import useAuthStore from '@/utils/states/auth';
+import { useAuthStore } from '@/utils/states';
 
 const TEXT_TO_TYPE = 'Selamat datang di Klinik Sehat  ';
 const TYPING_SPEED = 100;

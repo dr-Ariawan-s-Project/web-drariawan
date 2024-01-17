@@ -50,7 +50,7 @@ const AddEditPatient = (props: Props) => {
       marriage_status: 'Not_Married',
       nationality: 'Indonesia',
       partner_email: '',
-      partner_option: 'Myself',
+      partner_option: 'myself',
     },
   });
 
@@ -74,7 +74,6 @@ const AddEditPatient = (props: Props) => {
 
   function setEditData() {
     if (editData) {
-      form.setValue('name', editData.name);
       form.setValue('email', editData.email);
       form.setValue('phone', editData.phone);
     }
@@ -93,7 +92,11 @@ const AddEditPatient = (props: Props) => {
           <DialogTitle>{editData ? 'Update user' : 'Tambah user'}</DialogTitle>
         </DialogHeader>
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+          <form
+            data-testid="form-add-edit"
+            onSubmit={form.handleSubmit(onSubmit)}
+            className="space-y-8"
+          >
             <CustomFormField control={form.control} name="email" label="Email">
               {(field) => (
                 <Input
@@ -227,7 +230,7 @@ const AddEditPatient = (props: Props) => {
               placeholder="Pilih"
               options={forWho}
             />
-            {form.watch('partner_option') === 'Partner' && (
+            {form.watch('partner_option') === 'partner' && (
               <CustomFormField
                 control={form.control}
                 name="partner_email"

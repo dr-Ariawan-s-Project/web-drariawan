@@ -3,6 +3,7 @@ export interface Request {
   page?: string | number;
   role?: string;
   rp?: string;
+  limit?: string | number;
 }
 
 export type Response<T = any> = {

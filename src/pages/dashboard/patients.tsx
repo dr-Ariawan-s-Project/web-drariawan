@@ -25,7 +25,7 @@ import {
 } from '@/utils/apis/patient/api';
 import { IPatient, PatientSchema } from '@/utils/apis/patient/types';
 import { IPagination } from '@/utils/types/api';
-import useAuthStore from '@/utils/states/auth';
+import { useAuthStore } from '@/utils/states';
 
 const DashboardPatients = () => {
   const [searchParams] = useSearchParams();
@@ -118,7 +118,7 @@ const DashboardPatients = () => {
         [...searchParams].filter((param) => param[0] !== 'tab')
       );
 
-      const result = await getPatients({ ...query });
+      const result = await getPatients({ ...query, limit: 10 });
 
       setData(result.data);
       setPagination(result.pagination);
@@ -145,7 +145,7 @@ const DashboardPatients = () => {
       setShowAddEditDialog(false);
     } catch (error: any) {
       toast({
-        title: 'Oops! Something went wrong.',
+        title: 'Oops! Sesuatu telah terjadi',
         description: error.message.toString(),
         variant: 'destructive',
       });
@@ -164,7 +164,7 @@ const DashboardPatients = () => {
       setSelectedData(undefined);
     } catch (error: any) {
       toast({
-        title: 'Oops! Something went wrong.',
+        title: 'Oops! Sesuatu telah terjadi',
         description: error.message.toString(),
         variant: 'destructive',
       });
@@ -175,7 +175,10 @@ const DashboardPatients = () => {
     <Layout variant="admin">
       {['superadmin'].includes(role) && (
         <div className="w-full flex justify-end">
-          <Button onClick={() => setShowAddEditDialog(true)}>
+          <Button
+            data-testid="btn-add-data"
+            onClick={() => setShowAddEditDialog(true)}
+          >
             Tambah pasien
           </Button>
         </div>

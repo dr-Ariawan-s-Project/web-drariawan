@@ -21,7 +21,7 @@ import AddEditUser from './module/add-edit-user';
 
 import { IUser, UserSchema } from '@/utils/apis/user/types';
 import { IPagination } from '@/utils/types/api';
-import useAuthStore from '@/utils/states/auth';
+import { useAuthStore } from '@/utils/states';
 import {
   getUsers,
   postUser,
@@ -131,6 +131,7 @@ const DashboardUsers = () => {
 
   async function onSubmitData(data: UserSchema) {
     try {
+      console.log(data);
       const result = selectedData
         ? await updateProfile(data)
         : await postUser(data);
@@ -141,7 +142,7 @@ const DashboardUsers = () => {
       setShowAddEditDialog(false);
     } catch (error: any) {
       toast({
-        title: 'Oops! Something went wrong.',
+        title: 'Oops! Sesuatu telah terjadi',
         description: error.message.toString(),
         variant: 'destructive',
       });
@@ -158,7 +159,7 @@ const DashboardUsers = () => {
       setSelectedData(undefined);
     } catch (error: any) {
       toast({
-        title: 'Oops! Something went wrong.',
+        title: 'Oops! Sesuatu telah terjadi',
         description: error.message.toString(),
         variant: 'destructive',
       });
@@ -169,7 +170,10 @@ const DashboardUsers = () => {
     <Layout variant="admin">
       {['superadmin'].includes(role) && (
         <div className="w-full flex justify-end">
-          <Button onClick={() => setShowAddEditDialog(true)}>
+          <Button
+            data-testid="btn-add-data"
+            onClick={() => setShowAddEditDialog(true)}
+          >
             Tambah user
           </Button>
         </div>

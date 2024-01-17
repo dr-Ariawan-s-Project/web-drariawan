@@ -28,7 +28,7 @@ import {
 } from '@/utils/apis/books/api';
 import { BookingSchema, IBook } from '@/utils/apis/books/types';
 import { IPagination } from '@/utils/types/api';
-import useAuthStore from '@/utils/states/auth';
+import { useAuthStore } from '@/utils/states';
 
 const DashboardBooks = () => {
   const [searchParams] = useSearchParams();
