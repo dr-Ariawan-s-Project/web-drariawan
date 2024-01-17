@@ -12,7 +12,7 @@ const Unauthorized = () => {
         Anda belum melakukan pengisian daftar diri sebelumnya, silahkan klik
         tombol di bawah
       </p>
-      <Button asChild>
+      <Button data-testid="btn-go-back" asChild>
         <Link to="/questionnaire/form">Kembali ke pengisian data diri</Link>
       </Button>
     </Layout>

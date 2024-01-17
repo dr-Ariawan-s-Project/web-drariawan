@@ -1,5 +1,5 @@
 import '@testing-library/jest-dom';
-import { Mocked, vi } from 'vitest';
+import { Mocked } from 'vitest';
 
 import { render, screen, within, fireEvent, act } from '@/__tests__/test-utils';
 

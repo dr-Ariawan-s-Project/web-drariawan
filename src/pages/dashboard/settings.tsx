@@ -74,11 +74,12 @@ const Setting = () => {
   return (
     <Layout variant="admin">
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)}>
+        <form data-testid="form-setting" onSubmit={form.handleSubmit(onSubmit)}>
           <CustomFormField control={form.control} name="name" label="Nama">
             {(field) => (
               <Input
                 {...field}
+                data-testid="input-name"
                 placeholder="Nama"
                 disabled={form.formState.isSubmitting}
                 aria-disabled={form.formState.isSubmitting}
@@ -90,6 +91,7 @@ const Setting = () => {
             {(field) => (
               <Input
                 {...field}
+                data-testid="input-email"
                 placeholder="Email"
                 disabled={form.formState.isSubmitting}
                 aria-disabled={form.formState.isSubmitting}
@@ -106,6 +108,7 @@ const Setting = () => {
             {(field) => (
               <Input
                 {...field}
+                data-testid="input-phone-number"
                 placeholder="Nomor Telepon"
                 disabled={form.formState.isSubmitting}
                 aria-disabled={form.formState.isSubmitting}
@@ -122,6 +125,7 @@ const Setting = () => {
             {(field) => (
               <Input
                 {...field}
+                data-testid="input-password"
                 placeholder="Password"
                 disabled={form.formState.isSubmitting}
                 aria-disabled={form.formState.isSubmitting}
@@ -131,6 +135,7 @@ const Setting = () => {
             )}
           </CustomFormField>
           <CustomFormSelect
+            data-testid="input-role"
             control={form.control}
             name="role"
             label="Role"
@@ -144,6 +149,7 @@ const Setting = () => {
           >
             {(field) => (
               <Input
+                data-testid="input-picture"
                 type="file"
                 accept="image/png, image/jpeg, image/jpg"
                 multiple={false}
@@ -163,6 +169,7 @@ const Setting = () => {
             {(field) => (
               <Input
                 {...field}
+                data-testid="input-specialization"
                 placeholder="Spesialisasi"
                 disabled={form.formState.isSubmitting}
                 aria-disabled={form.formState.isSubmitting}

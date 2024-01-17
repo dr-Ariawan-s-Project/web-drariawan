@@ -66,10 +66,10 @@ const Main = () => {
               atas kunjungan anda di laman kami, kesehatan anda perhatian kami.
             </p>
             <div className="flex space-x-5">
-              <Button asChild>
+              <Button data-testid="to-questionnaire" asChild>
                 <Link to="/questionnaire">Isi Kuisioner</Link>
               </Button>
-              <Button asChild>
+              <Button data-testid="to-scheduling" asChild>
                 <Link to={token ? '/scheduling' : '/login'}>
                   Booking Jadwal
                 </Link>
