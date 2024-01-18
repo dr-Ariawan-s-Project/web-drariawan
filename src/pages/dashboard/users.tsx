@@ -4,30 +4,26 @@ import { ColumnDef } from '@tanstack/react-table';
 import { MoreHorizontal } from 'lucide-react';
 import { capitalize } from 'lodash';
 
-import { useToast } from '@/components/ui/use-toast';
-import { Layout } from '@/components/layout';
-import Pagination from '@/components/pagination';
-import { Button } from '@/components/ui/button';
-import DataTable from '@/components/data-table';
-import { Badge } from '@/components/ui/badge';
-import Alert from '@/components/alert';
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { useToast } from '@/components/ui/use-toast';
+import Pagination from '@/components/pagination';
+import { Button } from '@/components/ui/button';
+import DataTable from '@/components/data-table';
+import { Badge } from '@/components/ui/badge';
+import { Layout } from '@/components/layout';
+import Alert from '@/components/alert';
 import AddEditUser from './module/add-edit-user';
 
+import { getUsers, postUser, deactivateUser } from '@/utils/apis/user/api';
 import { IUser, UserSchema } from '@/utils/apis/user/types';
 import { IPagination } from '@/utils/types/api';
 import { useAuthStore } from '@/utils/states';
-import {
-  getUsers,
-  postUser,
-  updateProfile,
-  deactivateUser,
-} from '@/utils/apis/user/api';
 
 const DashboardUsers = () => {
   const [searchParams] = useSearchParams();
@@ -52,6 +48,19 @@ const DashboardUsers = () => {
       {
         accessorKey: 'name',
         header: 'Nama',
+        cell: ({ row }) => {
+          const { name, picture } = row.original;
+
+          return (
+            <div className="flex gap-2 items-center">
+              <Avatar>
+                <AvatarImage src={picture} />
+                <AvatarFallback>KS</AvatarFallback>
+              </Avatar>
+              <p>{name}</p>
+            </div>
+          );
+        },
       },
       {
         accessorKey: 'email',
@@ -81,7 +90,7 @@ const DashboardUsers = () => {
           return (
             <>
               <DropdownMenu>
-                <DropdownMenuTrigger asChild>
+                <DropdownMenuTrigger data-testid="table-action" asChild>
                   <Button variant="ghost" className="h-8 w-8 p-0">
                     <span className="sr-only">Open menu</span>
                     <MoreHorizontal className="h-4 w-4" />
@@ -89,6 +98,7 @@ const DashboardUsers = () => {
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end">
                   <DropdownMenuItem
+                    data-testid="action-delete"
                     onClick={() => {
                       setSelectedData(row.original);
                       setShowDeleteDialog(true);
@@ -131,19 +141,17 @@ const DashboardUsers = () => {
 
   async function onSubmitData(data: UserSchema) {
     try {
-      console.log(data);
-      const result = selectedData
-        ? await updateProfile(data)
-        : await postUser(data);
+      const result = await postUser(data);
+
       toast({
         description: result.messages[0],
       });
       fetchData();
       setShowAddEditDialog(false);
-    } catch (error: any) {
+    } catch (error) {
       toast({
         title: 'Oops! Sesuatu telah terjadi',
-        description: error.message.toString(),
+        description: (error as Error).message,
         variant: 'destructive',
       });
     }
@@ -152,15 +160,17 @@ const DashboardUsers = () => {
   async function onDeleteData(id_user: number) {
     try {
       const result = await deactivateUser(id_user);
+
       toast({
         description: result.messages[0],
       });
       fetchData();
       setSelectedData(undefined);
-    } catch (error: any) {
+      setShowDeleteDialog(false);
+    } catch (error) {
       toast({
         title: 'Oops! Sesuatu telah terjadi',
-        description: error.message.toString(),
+        description: (error as Error).message,
         variant: 'destructive',
       });
     }

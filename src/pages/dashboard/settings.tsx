@@ -14,7 +14,7 @@ import { Input } from '@/components/ui/input';
 import { Form } from '@/components/ui/form';
 
 import { UpdateSchema, updateSchema } from '@/utils/apis/user/types';
-import { getProfile, updateProfile } from '@/utils/apis/user/api';
+import { getProfile, updateUser } from '@/utils/apis/user/api';
 import { roles } from '@/utils/constants';
 
 const Setting = () => {
@@ -57,7 +57,7 @@ const Setting = () => {
 
   async function onSubmit(data: UpdateSchema) {
     try {
-      const result = await updateProfile(data);
+      const result = await updateUser(data);
 
       toast({
         description: result.messages[0],

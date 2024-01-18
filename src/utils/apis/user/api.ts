@@ -30,10 +30,22 @@ export const postUser = async (body: UserSchema) => {
   }
 };
 
+export const updateUser = async (body: UserSchema) => {
+  try {
+    const response = await axiosWithConfig.put('/v1/user', body);
+
+    return response.data as Response;
+  } catch (error: any) {
+    const { messages } = error.response.data;
+
+    throw Error(messages[0]);
+  }
+};
+
 export const deactivateUser = async (id_user: number) => {
   try {
     const response = await axiosWithConfig.delete(
-      `/v1/user/deactive/${id_user}`
+      `/v1/user/deactive?id=${id_user}`
     );
 
     return response.data as Response<null>;
@@ -49,18 +61,6 @@ export const getProfile = async () => {
     const response = await axiosWithConfig.get('/v1/user/profile');
 
     return response.data as Response<IUser>;
-  } catch (error: any) {
-    const { messages } = error.response.data;
-
-    throw Error(messages[0]);
-  }
-};
-
-export const updateProfile = async (body: UserSchema) => {
-  try {
-    const response = await axiosWithConfig.put('/v1/user', body);
-
-    return response.data as Response;
   } catch (error: any) {
     const { messages } = error.response.data;
 

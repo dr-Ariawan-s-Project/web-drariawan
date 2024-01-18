@@ -9,6 +9,9 @@ HTMLCanvasElement.prototype.getContext = () => {
   };
 };
 
+window.HTMLElement.prototype.hasPointerCapture = vi.fn();
+window.HTMLElement.prototype.scrollIntoView = vi.fn();
+
 const ResizeObserverMock = vi.fn(() => ({
   observe: vi.fn(),
   unobserve: vi.fn(),

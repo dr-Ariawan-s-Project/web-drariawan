@@ -42,7 +42,6 @@ export const postQuestionnaire = async (body: QuestionnaireBody) => {
 
     return response.data as Response<string>;
   } catch (error: any) {
-    console.log('TEST', error);
     const { messages } = error.response.data;
 
     throw Error(messages[0]);

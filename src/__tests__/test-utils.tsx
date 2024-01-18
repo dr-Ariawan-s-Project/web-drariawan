@@ -2,8 +2,15 @@ import './matchMedia.mock';
 import { BrowserRouter } from 'react-router-dom';
 import { render } from '@testing-library/react';
 
+import { Toaster } from '@/components/ui/toaster';
+
 const Providers = ({ children }: any) => {
-  return <BrowserRouter>{children}</BrowserRouter>;
+  return (
+    <BrowserRouter>
+      {children}
+      <Toaster />
+    </BrowserRouter>
+  );
 };
 
 const customRender = (component: any) => {

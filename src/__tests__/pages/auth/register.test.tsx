@@ -7,9 +7,6 @@ import { render, screen, within, fireEvent, act } from '@/__tests__/test-utils';
 import App from '@/pages/auth/register';
 import axiosWithConfig from '@/utils/apis/axiosWithConfig';
 
-window.HTMLElement.prototype.hasPointerCapture = vi.fn();
-window.HTMLElement.prototype.scrollIntoView = vi.fn();
-
 const mockedUsedNavigate = vi.fn();
 
 vi.mock('@/utils/apis/axiosWithConfig');

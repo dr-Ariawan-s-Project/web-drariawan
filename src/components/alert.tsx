@@ -29,8 +29,12 @@ const Alert = (props: Props) => {
           <AlertDialogDescription>{description}</AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
-          <AlertDialogCancel onClick={onCancel}>Cancel</AlertDialogCancel>
-          <AlertDialogAction onClick={onAction}>Yes</AlertDialogAction>
+          <AlertDialogCancel data-testid="alert-cancel" onClick={onCancel}>
+            Cancel
+          </AlertDialogCancel>
+          <AlertDialogAction data-testid="alert-yes" onClick={onAction}>
+            Yes
+          </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>
