@@ -12,7 +12,6 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog';
 import {
-  CustomFormDatePicker,
   CustomFormField,
   CustomFormSelect,
 } from '@/components/custom-formfield';
@@ -145,6 +144,7 @@ const AddEditPatient = (props: Props) => {
             </CustomFormField>
             <div className="flex space-x-8 w-full">
               <CustomFormSelect
+                data-testid="input-gender"
                 control={form.control}
                 name="gender"
                 label="Jenis kelamin"
@@ -161,6 +161,7 @@ const AddEditPatient = (props: Props) => {
                 ]}
               />
               <CustomFormSelect
+                data-testid="input-status"
                 control={form.control}
                 name="marriage_status"
                 label="Status"
@@ -193,12 +194,23 @@ const AddEditPatient = (props: Props) => {
                 />
               )}
             </CustomFormField>
-            <CustomFormDatePicker
+            <CustomFormField
               control={form.control}
               name="dob"
               label="Tanggal lahir"
-              placeholder="mm/dd/yyyy"
-            />
+            >
+              {(field) => (
+                <Input
+                  {...field}
+                  data-testid="input-dob"
+                  placeholder="Tanggal lahir"
+                  type="date"
+                  disabled={form.formState.isSubmitting}
+                  aria-disabled={form.formState.isSubmitting}
+                  value={field.value as string}
+                />
+              )}
+            </CustomFormField>
             <CustomFormField
               control={form.control}
               name="phone"
@@ -217,6 +229,7 @@ const AddEditPatient = (props: Props) => {
               )}
             </CustomFormField>
             <CustomFormSelect
+              data-testid="input-nationality"
               control={form.control}
               name="nationality"
               label="Kewarganegaraan"
@@ -224,13 +237,14 @@ const AddEditPatient = (props: Props) => {
               options={countries}
             />
             <CustomFormSelect
+              data-testid="input-option"
               control={form.control}
               name="partner_option"
               label="Data ini untuk siapa?"
               placeholder="Pilih"
               options={forWho}
             />
-            {form.watch('partner_option') === 'partner' && (
+            {form.watch('partner_option') === 'partner' ? (
               <CustomFormField
                 control={form.control}
                 name="partner_email"
@@ -248,9 +262,10 @@ const AddEditPatient = (props: Props) => {
                   />
                 )}
               </CustomFormField>
-            )}
+            ) : null}
             <DialogFooter>
               <Button
+                data-testid="btn-submit"
                 type="submit"
                 disabled={form.formState.isSubmitting}
                 aria-disabled={form.formState.isSubmitting}

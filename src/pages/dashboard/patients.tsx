@@ -75,7 +75,7 @@ const DashboardPatients = () => {
           return (
             <>
               <DropdownMenu>
-                <DropdownMenuTrigger asChild>
+                <DropdownMenuTrigger data-testid="table-action" asChild>
                   <Button variant="ghost" className="h-8 w-8 p-0">
                     <span className="sr-only">Open menu</span>
                     <MoreHorizontal className="h-4 w-4" />
@@ -83,6 +83,7 @@ const DashboardPatients = () => {
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end">
                   <DropdownMenuItem
+                    data-testid="action-edit"
                     onClick={() => {
                       setSelectedData(row.original);
                       setShowAddEditDialog(true);
@@ -91,6 +92,7 @@ const DashboardPatients = () => {
                     Edit
                   </DropdownMenuItem>
                   <DropdownMenuItem
+                    data-testid="action-delete"
                     onClick={() => {
                       setSelectedData(row.original);
                       setShowDeleteDialog(true);
@@ -142,11 +144,12 @@ const DashboardPatients = () => {
       });
 
       fetchData();
+      setSelectedData(undefined);
       setShowAddEditDialog(false);
-    } catch (error: any) {
+    } catch (error) {
       toast({
         title: 'Oops! Sesuatu telah terjadi',
-        description: error.message.toString(),
+        description: (error as Error).message.toString(),
         variant: 'destructive',
       });
     }
@@ -162,10 +165,11 @@ const DashboardPatients = () => {
 
       fetchData();
       setSelectedData(undefined);
-    } catch (error: any) {
+      setShowDeleteDialog(false);
+    } catch (error) {
       toast({
         title: 'Oops! Sesuatu telah terjadi',
-        description: error.message.toString(),
+        description: (error as Error).message.toString(),
         variant: 'destructive',
       });
     }

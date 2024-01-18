@@ -36,7 +36,7 @@ export const updatePatient = async (
   patient_id: string
 ) => {
   try {
-    const response = await axiosWithConfig.post(
+    const response = await axiosWithConfig.put(
       `/v1/patients/${patient_id}`,
       body
     );
