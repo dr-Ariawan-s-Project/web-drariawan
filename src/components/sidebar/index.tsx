@@ -28,6 +28,7 @@ export const Sidebar = () => {
         />
       )}
       <div
+        data-testid="sidebar"
         className={cn(
           'absolute flex h-full select-none flex-col overflow-y-auto bg-white duration-300 md:relative z-50',
           isSidebarOpen ? 'w-72' : 'w-0 md:w-20'
@@ -43,6 +44,7 @@ export const Sidebar = () => {
         <div className="flex w-full flex-grow flex-col">
           {sidebarList[role].map((list) => (
             <div
+              data-testid={`sidebar-${list.heading}`}
               className="flex h-fit w-full flex-col gap-2 p-3"
               key={list.heading}
             >

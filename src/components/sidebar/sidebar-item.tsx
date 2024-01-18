@@ -104,6 +104,7 @@ const SidebarLink = (props: ISidebarItem) => {
 
   return (
     <NavLink
+      data-testid="sidebar-child"
       className={({ isActive }) =>
         cn(
           'flex h-fit w-full items-center p-3 duration-300 hover:bg-primary hover:text-primary-foreground',

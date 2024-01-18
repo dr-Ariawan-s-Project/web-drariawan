@@ -5,9 +5,9 @@ import { render, screen, within, act, fireEvent } from '@/__tests__/test-utils';
 
 import App from '@/pages/dashboard/schedules';
 import { sampleSchedules } from '@/utils/apis/schedule/sample-data';
+import { sampleDoctors } from '@/utils/apis/user/sample-data';
 import axiosWithConfig from '@/utils/apis/axiosWithConfig';
 import { useAuthStore } from '@/utils/states';
-import { sampleDoctors } from '@/utils/apis/user/sample-data';
 
 vi.mock('@/utils/apis/axiosWithConfig');
 
