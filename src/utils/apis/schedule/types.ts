@@ -1,13 +1,18 @@
 import * as z from 'zod';
 
 export const scheduleSchema = z.object({
-  user_id: z.string().min(1, { message: 'Dokter wajib diisi' }),
+  user_id: z.coerce
+    .number({
+      required_error: 'Dokter wajib diisi',
+      invalid_type_error: 'Dokter wajib diisi',
+    })
+    .min(1, { message: 'Dokter wajib diisi' }),
   health_care_address: z
     .string()
     .min(1, { message: 'Alamat praktek wajib diisi' }),
   day: z.string().min(1, { message: 'Hari wajib diisi' }),
-  time_start: z.string().min(1, { message: 'Waktu mulai wajib diisi' }),
-  time_end: z.string().min(1, { message: 'Waktu selesai wajib diisi' }),
+  time_start: z.string().min(1, { message: 'Jam mulai wajib diisi' }),
+  time_end: z.string().min(1, { message: 'Jam selesai wajib diisi' }),
 });
 
 export type ScheduleSchema = z.infer<typeof scheduleSchema>;

@@ -125,7 +125,7 @@ export function CustomFormSelect<T extends FieldValues>(
                 {options?.map((option) => (
                   <SelectItem
                     data-testid={`option-${option.value}`}
-                    value={option.value}
+                    value={String(option.value)}
                     key={option.value}
                   >
                     {option.label}

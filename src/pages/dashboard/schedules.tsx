@@ -9,6 +9,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { useToast } from '@/components/ui/use-toast';
 import { Layout } from '@/components/layout';
 import Pagination from '@/components/pagination';
@@ -54,14 +55,27 @@ const DashboardSchedules = () => {
       {
         accessorKey: 'user.name',
         header: 'Nama Doktor',
-      },
-      {
-        accessorKey: 'day',
-        header: 'Hari Jadwal',
+        cell: ({ row }) => {
+          const { name, picture } = row.original.user;
+
+          return (
+            <div className="flex gap-3 items-center">
+              <Avatar>
+                <AvatarImage src={picture} />
+                <AvatarFallback>KS</AvatarFallback>
+              </Avatar>
+              <p>{name}</p>
+            </div>
+          );
+        },
       },
       {
         accessorKey: 'health_care_address',
         header: 'Alamat',
+      },
+      {
+        accessorKey: 'day',
+        header: 'Hari Jadwal',
       },
       {
         accessorKey: '',
@@ -76,7 +90,7 @@ const DashboardSchedules = () => {
         cell: ({ row }) => {
           return (
             <DropdownMenu>
-              <DropdownMenuTrigger asChild>
+              <DropdownMenuTrigger data-testid="table-action" asChild>
                 <Button variant="ghost" className="h-8 w-8 p-0">
                   <span className="sr-only">Open menu</span>
                   <MoreHorizontal className="h-4 w-4" />
@@ -84,6 +98,7 @@ const DashboardSchedules = () => {
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end">
                 <DropdownMenuItem
+                  data-testid="action-edit"
                   onClick={() => {
                     setSelectedData(row.original);
                     setShowAddEditDialog(true);
@@ -93,6 +108,7 @@ const DashboardSchedules = () => {
                   Edit
                 </DropdownMenuItem>
                 <DropdownMenuItem
+                  data-testid="action-delete"
                   onClick={() => {
                     setSelectedData(row.original);
                     setShowDeleteDialog(true);
@@ -136,7 +152,7 @@ const DashboardSchedules = () => {
   async function onSubmitData(data: ScheduleSchema) {
     try {
       const result = selectedData
-        ? await updateSchedule(data)
+        ? await updateSchedule(data, selectedData.schedule_id)
         : await postSchedule(data);
 
       toast({
@@ -144,19 +160,20 @@ const DashboardSchedules = () => {
       });
 
       fetchData();
+      setSelectedData(undefined);
       setShowAddEditDialog(false);
-    } catch (error: any) {
+    } catch (error) {
       toast({
         title: 'Oops! Sesuatu telah terjadi',
-        description: error.message.toString(),
+        description: (error as Error).message.toString(),
         variant: 'destructive',
       });
     }
   }
 
-  async function onDeleteData(id_schedule: number) {
+  async function onDeleteData(schedule_id: number) {
     try {
-      const result = await deleteSchedule(id_schedule);
+      const result = await deleteSchedule(schedule_id);
 
       toast({
         description: result.messages[0],
@@ -164,10 +181,11 @@ const DashboardSchedules = () => {
 
       fetchData();
       setSelectedData(undefined);
-    } catch (error: any) {
+      setShowDeleteDialog(false);
+    } catch (error) {
       toast({
         title: 'Oops! Sesuatu telah terjadi',
-        description: error.message.toString(),
+        description: (error as Error).message.toString(),
         variant: 'destructive',
       });
     }

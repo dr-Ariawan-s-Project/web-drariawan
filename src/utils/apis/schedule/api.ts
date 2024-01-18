@@ -1,6 +1,6 @@
-import { IBookPayload, IMySchedule, ISchedule } from './types';
-import axiosWithConfig from '@/utils/apis/axiosWithConfig';
+import { IBookPayload, IMySchedule, ISchedule, ScheduleSchema } from './types';
 import { Request, Response, ResponsePagination } from '@/utils/types/api';
+import axiosWithConfig from '@/utils/apis/axiosWithConfig';
 import { buildQueryString } from '@/utils/formatter';
 
 export const getSchedules = async (params?: Request) => {
@@ -18,8 +18,7 @@ export const getSchedules = async (params?: Request) => {
   }
 };
 
-// TODO: Change this body
-export const postSchedule = async (body: any) => {
+export const postSchedule = async (body: ScheduleSchema) => {
   try {
     const response = await axiosWithConfig.post('/v1/schedule', body);
 
@@ -31,10 +30,15 @@ export const postSchedule = async (body: any) => {
   }
 };
 
-// TODO: Change this body
-export const updateSchedule = async (body: any) => {
+export const updateSchedule = async (
+  body: ScheduleSchema,
+  schedule_id: number
+) => {
   try {
-    const response = await axiosWithConfig.put('/v1/schedule', body);
+    const response = await axiosWithConfig.put(
+      `/v1/schedule?id=${schedule_id}`,
+      body
+    );
 
     return response.data as Response;
   } catch (error: any) {
@@ -44,10 +48,10 @@ export const updateSchedule = async (body: any) => {
   }
 };
 
-export const deleteSchedule = async (id_schedule: number) => {
+export const deleteSchedule = async (schedule_id: number) => {
   try {
     const response = await axiosWithConfig.delete(
-      `/v1/schedule/delete/${id_schedule}`
+      `/v1/schedule/delete?id=${schedule_id}`
     );
 
     return response.data as Response;

@@ -1,4 +1,4 @@
 export interface ISelect {
   label: string;
-  value: string;
+  value: string | number;
 }

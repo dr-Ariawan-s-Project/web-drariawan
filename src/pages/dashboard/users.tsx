@@ -52,7 +52,7 @@ const DashboardUsers = () => {
           const { name, picture } = row.original;
 
           return (
-            <div className="flex gap-2 items-center">
+            <div className="flex gap-3 items-center">
               <Avatar>
                 <AvatarImage src={picture} />
                 <AvatarFallback>KS</AvatarFallback>
@@ -146,6 +146,7 @@ const DashboardUsers = () => {
       toast({
         description: result.messages[0],
       });
+
       fetchData();
       setShowAddEditDialog(false);
     } catch (error) {
@@ -164,6 +165,7 @@ const DashboardUsers = () => {
       toast({
         description: result.messages[0],
       });
+
       fetchData();
       setSelectedData(undefined);
       setShowDeleteDialog(false);

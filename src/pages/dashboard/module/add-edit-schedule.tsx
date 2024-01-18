@@ -44,7 +44,7 @@ const AddEditSchedule = (props: Props) => {
   const form = useForm<ScheduleSchema>({
     resolver: zodResolver(scheduleSchema),
     defaultValues: {
-      user_id: '',
+      user_id: 0,
       day: '',
       health_care_address: '',
       time_end: '',
@@ -65,14 +65,14 @@ const AddEditSchedule = (props: Props) => {
       onOpenChange(false);
       form.reset();
     }
-  }, [form.formState]);
+  }, [editData, form.formState]);
 
   const fetchDoctors = async () => {
     try {
       const result = await getUsers({ role: 'dokter' });
       const newData = result.data.map((doctor) => ({
         label: doctor.name,
-        value: String(doctor.id),
+        value: doctor.id,
       }));
 
       setDoctors(newData);
@@ -87,7 +87,7 @@ const AddEditSchedule = (props: Props) => {
 
   function setEditData() {
     if (editData) {
-      form.setValue('user_id', String(editData.user_id));
+      form.setValue('user_id', editData.user_id);
       form.setValue('health_care_address', editData.health_care_address);
       form.setValue('day', editData.day);
       form.setValue('time_start', editData.time_start);
@@ -114,6 +114,7 @@ const AddEditSchedule = (props: Props) => {
             className="space-y-8"
           >
             <CustomFormSelect
+              data-testid="input-doctor"
               control={form.control}
               name="user_id"
               label="Dokter"
@@ -121,6 +122,7 @@ const AddEditSchedule = (props: Props) => {
               options={doctors}
             />
             <CustomFormSelect
+              data-testid="input-day"
               control={form.control}
               name="day"
               label="Hari"
@@ -135,6 +137,7 @@ const AddEditSchedule = (props: Props) => {
               {(field) => (
                 <Input
                   {...field}
+                  data-testid="input-address"
                   placeholder="Alamat Praktek"
                   disabled={form.formState.isSubmitting}
                   aria-disabled={form.formState.isSubmitting}
@@ -151,6 +154,7 @@ const AddEditSchedule = (props: Props) => {
                 {(field) => (
                   <Input
                     {...field}
+                    data-testid="input-start"
                     placeholder="Jam Mulai"
                     disabled={form.formState.isSubmitting}
                     aria-disabled={form.formState.isSubmitting}
@@ -167,6 +171,7 @@ const AddEditSchedule = (props: Props) => {
                 {(field) => (
                   <Input
                     {...field}
+                    data-testid="input-end"
                     placeholder="Jam Selesai"
                     disabled={form.formState.isSubmitting}
                     aria-disabled={form.formState.isSubmitting}
@@ -178,6 +183,7 @@ const AddEditSchedule = (props: Props) => {
             </div>
             <DialogFooter>
               <Button
+                data-testid="btn-submit"
                 type="submit"
                 disabled={form.formState.isSubmitting}
                 aria-disabled={form.formState.isSubmitting}
