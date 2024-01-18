@@ -155,7 +155,7 @@ export function CustomFormDatePicker<T extends FieldValues>(
         <FormItem className="flex flex-col">
           <FormLabel>{label}</FormLabel>
           <Popover>
-            <PopoverTrigger asChild>
+            <PopoverTrigger data-testid={props['data-testid']} asChild>
               <FormControl>
                 <Button
                   variant={'outline'}
@@ -175,6 +175,7 @@ export function CustomFormDatePicker<T extends FieldValues>(
             </PopoverTrigger>
             <PopoverContent className="w-auto p-0" align="start">
               <Calendar
+                data-testid={props['data-testid']}
                 mode="single"
                 selected={field.value}
                 onSelect={field.onChange}

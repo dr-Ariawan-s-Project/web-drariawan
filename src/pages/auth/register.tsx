@@ -8,7 +8,6 @@ import { useMemo } from 'react';
 import {
   CustomFormField,
   CustomFormSelect,
-  CustomFormDatePicker,
 } from '@/components/custom-formfield';
 import { useToast } from '@/components/ui/use-toast';
 import { Button } from '@/components/ui/button';
@@ -174,12 +173,23 @@ const Register = () => {
               />
             )}
           </CustomFormField>
-          <CustomFormDatePicker
+          <CustomFormField
             control={form.control}
             name="dob"
             label="Tanggal lahir"
-            placeholder="mm/dd/yyyy"
-          />
+          >
+            {(field) => (
+              <Input
+                {...field}
+                data-testid="input-dob"
+                placeholder="Tanggal lahir"
+                type="date"
+                disabled={form.formState.isSubmitting}
+                aria-disabled={form.formState.isSubmitting}
+                value={field.value as string}
+              />
+            )}
+          </CustomFormField>
           <CustomFormField
             control={form.control}
             name="phone"
@@ -213,7 +223,7 @@ const Register = () => {
             placeholder="Pilih"
             options={forWho}
           />
-          {form.watch('partner_option') === 'partner' && (
+          {form.watch('partner_option') === 'partner' ? (
             <CustomFormField
               control={form.control}
               name="partner_email"
@@ -231,7 +241,7 @@ const Register = () => {
                 />
               )}
             </CustomFormField>
-          )}
+          ) : null}
           <div className="flex flex-col mt-20 gap-y-5">
             <Button
               data-testid="btn-submit"

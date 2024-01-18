@@ -13,10 +13,8 @@ const baseSchema = z.object({
     .min(16, { message: 'NIK wajib diisi' })
     .max(16, { message: 'Format NIK tidak sesuai' }),
   dob: z
-    .date({
-      required_error: 'Tanggal lahir wajib diisi',
-      invalid_type_error: 'Tanggal lahir wajib diisi',
-    })
+    .string()
+    .min(1, { message: 'Tanggal lahir wajib diisi' })
     .transform((value) => format(value, 'yyyy-MM-dd')),
   phone: z.string().min(1, { message: 'Nomor telepon wajib diisi' }),
   gender: z.enum(['Male', 'Female'], {
