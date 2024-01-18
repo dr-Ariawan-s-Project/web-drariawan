@@ -1,6 +1,6 @@
-import { IAttempt } from './types';
+import { IAttempt, IQuestionnaire } from './types';
 
-export const sampleQuestionnaires: IAttempt[] = [
+export const sampleAttempts: IAttempt[] = [
   {
     id: '26cb4199-2e81-4e98-bf21-118c09bed891',
     patient_id: '645e3d0a-d889-4b5c-8f2d-b1a12e5f198a',
@@ -210,5 +210,97 @@ export const sampleQuestionnaires: IAttempt[] = [
       name: '',
       email: 'jzdc3ziwc@mozmail.com',
     },
+  },
+];
+
+export const sampleQuestionnaires: IQuestionnaire[] = [
+  {
+    id: 1,
+    type: 'choices',
+    question: 'Sudah berapa lama pernikahan Anda dengan pasangan sekarang ini?',
+    description: '',
+    url_video:
+      'https://storage.googleapis.com/drariawanbucket/questionaire-video/QB_7_v.mov',
+    section: 'informasi awal',
+    choices: [
+      {
+        id: 1,
+        question_id: 1,
+        option: 'Kurang dari 1 tahun',
+        slugs: 'satu tahun;',
+        score: 1,
+        goto: 2,
+      },
+      {
+        id: 2,
+        question_id: 1,
+        option: 'Lebih dari 1 tahun',
+        slugs: 'lebih;dua tahun;',
+        score: 2,
+        goto: 2,
+      },
+      {
+        id: 3,
+        question_id: 1,
+        option: 'Belum menikah/berpasangan',
+        slugs: 'belum menikah;belum;',
+        score: 3,
+        goto: 2,
+      },
+    ],
+    goto: null,
+  },
+  {
+    id: 2,
+    type: 'choices',
+    question:
+      'Apa pekerjaan / aktifitas sehari-hari (Sebagian besar waktu sehari-harinya digunakan untuk aktifitas ini)',
+    description: 'test',
+    url_video:
+      'https://storage.googleapis.com/drariawanbucket/questionaire-video/QB_8_v.mov',
+    section: 'informasi awal',
+    choices: [
+      {
+        id: 4,
+        question_id: 2,
+        option: 'Pegawai/pekerja kantor (dalam ruangan)',
+        slugs: 'kantor;',
+        score: 5,
+        goto: 4,
+      },
+      {
+        id: 5,
+        question_id: 2,
+        option: 'Pegawai/pekerja lapangan (di luar ruangan)',
+        slugs: 'lapangan;luar;',
+        score: 4,
+        goto: 4,
+      },
+      {
+        id: 6,
+        question_id: 2,
+        option: 'Juru masak/Cheft/Koki/Tukang roti',
+        slugs: 'masak;chef;koki;roti;',
+        score: 3,
+        goto: 4,
+      },
+      {
+        id: 7,
+        question_id: 2,
+        option: 'Olahragawan/Instruktur pelatih',
+        slugs: 'olahragawan;instruktur;olahraga;altet;atlit;',
+        score: 2,
+        goto: 4,
+      },
+      {
+        id: 8,
+        question_id: 2,
+        option: 'Lainnya',
+        slugs: 'lain;',
+        score: 1,
+        goto: 3,
+      },
+    ],
+    goto: null,
   },
 ];

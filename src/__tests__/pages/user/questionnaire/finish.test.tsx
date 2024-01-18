@@ -1,6 +1,6 @@
 import { render, screen, act, fireEvent } from '@/__tests__/test-utils';
 
-import App from '@/pages/user/scheduling/success';
+import App from '@/pages/user/questionnaire/finish';
 
 vi.mock('react-router-dom', async () => {
   const mod = await vi.importActual('react-router-dom');
@@ -8,7 +8,7 @@ vi.mock('react-router-dom', async () => {
     ...mod,
     useLocation: () => ({
       state: {
-        from: 'scheduling',
+        from: 'questionnaire-start',
       },
     }),
   };
@@ -28,9 +28,7 @@ describe('Scheduling Page', () => {
 
   describe('Renders the page', () => {
     it('should render the page when state location is exist', () => {
-      expect(
-        screen.getByText('Pendaftaran Anda Terverifikasi!')
-      ).toBeInTheDocument();
+      expect(screen.getByText('Selesai!')).toBeInTheDocument();
     });
   });
 

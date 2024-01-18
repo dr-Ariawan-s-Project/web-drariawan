@@ -1,12 +1,13 @@
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 
-import { buttonVariants } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
+import { Button } from '@/components/ui/button';
 import { Layout } from '@/components/layout';
-import { cn } from '@/lib/utils';
 
 const Landing = () => {
+  const navigate = useNavigate();
+
   const [agree, setAgree] = useState<boolean | 'indeterminate'>(false);
 
   return (
@@ -32,6 +33,7 @@ const Landing = () => {
           </p>
           <div className="flex items-center space-x-2">
             <Checkbox
+              data-testid="checkbox-agreement"
               checked={agree}
               onCheckedChange={(checked) => setAgree(checked)}
             />
@@ -42,15 +44,14 @@ const Landing = () => {
               Saya menyetujui lembar persetujuan diatas
             </label>
           </div>
-          <Link
-            to="/questionnaire/form"
-            className={cn(
-              buttonVariants(),
-              !agree && 'pointer-events-none opacity-50'
-            )}
+          <Button
+            data-testid="to-questionnaire-form"
+            onClick={() => navigate('/questionnaire/form')}
+            disabled={!agree}
+            aria-disabled={!agree}
           >
             Mulai
-          </Link>
+          </Button>
         </div>
       </div>
     </Layout>

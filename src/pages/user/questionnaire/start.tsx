@@ -247,7 +247,11 @@ const StartPage = (props: IStartProps) => {
       <p className="text-center text-lg">
         Silahkan klik tombol dibawah untuk memulai mengisi kuesioner!
       </p>
-      <Button onClick={handleClick} disabled={isLoading}>
+      <Button
+        data-testid="btn-start"
+        onClick={handleClick}
+        disabled={isLoading}
+      >
         {isLoading ? (
           <>
             <Loader2 className="mr-2 h-4 w-4 animate-spin" />
@@ -286,7 +290,7 @@ const QuestionPage = (props: IQuestionProps) => {
   return (
     <Layout centerX>
       <div className="flex flex-col space-y-5 mb-5 w-full md:w-3/4 lg:w-1/2">
-        <p className="text-lg text-center">
+        <p data-testid="question-number" className="text-lg text-center">
           Pertanyaan ke {data.id} dari {count}
         </p>
         <p className="font-bold text-2xl text-center">
@@ -350,7 +354,11 @@ const QuestionPage = (props: IQuestionProps) => {
             handleStopRecording={handleStopRecording}
           />
         </div>
-        <Button disabled={isDisabled || isLoading} onClick={handleNext}>
+        <Button
+          data-testid="btn-next"
+          disabled={isDisabled || isLoading}
+          onClick={handleNext}
+        >
           Selanjutnya
         </Button>
       </div>

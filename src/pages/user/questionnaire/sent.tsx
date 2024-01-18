@@ -32,7 +32,7 @@ const VerifikasiEmail = () => {
         style={{ maxWidth: '30%', height: 'auto' }}
         className="mx-auto"
       />
-      <Button asChild className="w-fit">
+      <Button data-testid="to-homepage" asChild className="w-fit">
         <Link to="/">Kembali ke halaman utama</Link>
       </Button>
     </Layout>

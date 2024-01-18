@@ -38,7 +38,7 @@ const Success = () => {
               Fakultas Kedokteran Universitas Brawijaya
             </p>
           </div>
-          <Button asChild className="w-fit">
+          <Button data-testid="to-homepage" asChild className="w-fit">
             <Link to="/">Kembali ke halaman utama</Link>
           </Button>
         </div>

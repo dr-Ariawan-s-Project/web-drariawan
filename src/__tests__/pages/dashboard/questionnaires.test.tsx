@@ -3,7 +3,7 @@ import { Mocked } from 'vitest';
 import { render, screen, within, act, fireEvent } from '@/__tests__/test-utils';
 
 import App from '@/pages/dashboard/questionnaires';
-import { sampleQuestionnaires } from '@/utils/apis/questionnaire/sample-data';
+import { sampleAttempts } from '@/utils/apis/questionnaire/sample-data';
 import axiosWithConfig from '@/utils/apis/axiosWithConfig';
 import { useAuthStore } from '@/utils/states';
 
@@ -29,7 +29,7 @@ describe('Questionnaires Dashboard Page', () => {
       await act(async () => {
         mockedAxios.get.mockResolvedValueOnce({
           data: {
-            data: sampleQuestionnaires,
+            data: sampleAttempts,
             messages: ['[success] read data'],
             meta: {
               code: '200-003-OK',
@@ -53,7 +53,7 @@ describe('Questionnaires Dashboard Page', () => {
       const tableBody = within(dataTable).getByTestId('data-table-body');
       expect(tableBody).toBeInTheDocument();
       expect(within(tableBody).getAllByTestId('data-table-row')).toHaveLength(
-        sampleQuestionnaires.length
+        sampleAttempts.length
       );
     });
 
@@ -87,7 +87,7 @@ describe('Questionnaires Dashboard Page', () => {
       await act(async () => {
         mockedAxios.get.mockResolvedValueOnce({
           data: {
-            data: sampleQuestionnaires,
+            data: sampleAttempts,
             messages: ['[success] read data'],
             meta: {
               code: '200-003-OK',

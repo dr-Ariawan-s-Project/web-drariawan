@@ -55,6 +55,7 @@ const DataDiri = () => {
       </p>
       <Form {...form}>
         <form
+          data-testid="form-questionnaire"
           onSubmit={form.handleSubmit(onSubmit)}
           className="max-w-sm space-y-8 mt-10 w-full md:max-w-md lg:max-w-lg"
         >
@@ -88,6 +89,7 @@ const DataDiri = () => {
             )}
           </CustomFormField>
           <CustomFormSelect
+            data-testid="input-option"
             control={form.control}
             name="as"
             label="Data ini untuk siapa?"

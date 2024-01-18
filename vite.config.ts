@@ -22,6 +22,7 @@ export default defineConfig({
       exclude: [
         'src/utils/apis/axiosWithConfig.ts',
         'src/__mocks__',
+        'src/__tests__',
         'src/routes',
         'src/utils/types',
         'src/utils/states',
