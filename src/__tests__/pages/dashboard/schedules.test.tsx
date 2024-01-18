@@ -106,6 +106,7 @@ describe('Schedules Dashboard Page', () => {
     });
   });
 
+  // TODO: remove skip when action button can be use properly
   describe.skip('Action', () => {
     beforeEach(async () => {
       await act(async () => {

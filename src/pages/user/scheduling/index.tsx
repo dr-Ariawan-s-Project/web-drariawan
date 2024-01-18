@@ -2,7 +2,6 @@ import { SelectSingleEventHandler } from 'react-day-picker';
 import { useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import { format } from 'date-fns';
-import Cookies from 'js-cookie';
 
 import { useToast } from '@/components/ui/use-toast';
 import DatePicker from '@/components/datepicker';
@@ -21,22 +20,12 @@ import { getSchedules, postBookSchedule } from '@/utils/apis/schedule/api';
 import { ISchedule } from '@/utils/apis/schedule/types';
 import { getMyProfile } from '@/utils/apis/auth/api';
 import { MyProfile } from '@/utils/apis/auth/types';
-
-const DAYS_OF_WEEK: string[] = [
-  'Minggu',
-  'Senin',
-  'Selasa',
-  'Rabu',
-  'Kamis',
-  'Jumat',
-  'Sabtu',
-];
+import { DAYS_OF_WEEK } from '@/utils/constants';
 
 const Scheduling = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
 
-  const token = Cookies.get('token');
   const [reserve, setReserve] = useState<ISchedule[]>([]);
   const [patient, setPatient] = useState<MyProfile>();
   const [selectedDate, setSelectedDate] = useState<Date>();
@@ -106,12 +95,6 @@ const Scheduling = () => {
     return reserve.filter((schedule) => schedule.day === day);
   };
 
-  useEffect(() => {
-    if (!token) {
-      navigate('/auth/option/login');
-    }
-  }, [navigate, token]);
-
   function handleSelectSchedule(schedule: ISchedule) {
     setSelectedSchedule(schedule);
     setIsOpen(true);
@@ -126,13 +109,21 @@ const Scheduling = () => {
           melakukan pendaftaran
         </p>
       </div>
-      <div className="w-full grid grid-flow-col gap-4 my-10 overflow-x-auto">
+      <div
+        data-testid="schedule-board"
+        className="w-full grid grid-flow-col gap-4 my-10 overflow-x-auto"
+      >
         {DAYS_OF_WEEK.map((day) => (
-          <div key={day} className="text-center col-span-12">
+          <div
+            data-testid={`column-${day}`}
+            key={day}
+            className="text-center col-span-12"
+          >
             <p className="font-semibold mb-2">{day}</p>
             {getDoctorScheduleForDay(day).map((doctorSchedule) => {
               return (
                 <div
+                  data-testid="schedule-data"
                   key={doctorSchedule.schedule_id}
                   className="border rounded-md cursor-pointer mb-4 text-left px-5 py-3 bg-white"
                   onClick={() => handleSelectSchedule(doctorSchedule)}

@@ -25,7 +25,7 @@ const KonfirmasiPraktik = () => {
         className="object-contain w-full h-1/2 md:w-1/2"
         src="/images/verification.svg"
       />
-      <Button asChild>
+      <Button data-testid="to-homepage" asChild>
         <Link to="/">Kembali ke halaman utama</Link>
       </Button>
     </Layout>

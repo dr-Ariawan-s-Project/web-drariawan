@@ -234,3 +234,13 @@ export const daysInWeek: ISelect[] = [
     value: 'Minggu',
   },
 ];
+
+export const DAYS_OF_WEEK: string[] = [
+  'Minggu',
+  'Senin',
+  'Selasa',
+  'Rabu',
+  'Kamis',
+  'Jumat',
+  'Sabtu',
+];
