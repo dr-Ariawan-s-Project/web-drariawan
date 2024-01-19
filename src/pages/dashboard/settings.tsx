@@ -74,7 +74,11 @@ const Setting = () => {
   return (
     <Layout variant="admin">
       <Form {...form}>
-        <form data-testid="form-setting" onSubmit={form.handleSubmit(onSubmit)}>
+        <form
+          data-testid="form-setting"
+          onSubmit={form.handleSubmit(onSubmit)}
+          className="space-y-8"
+        >
           <CustomFormField control={form.control} name="name" label="Nama">
             {(field) => (
               <Input

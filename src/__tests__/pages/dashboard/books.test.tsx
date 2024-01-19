@@ -34,7 +34,7 @@ describe('Books Dashboard Page', () => {
     vi.clearAllMocks();
   });
 
-  describe.skip('Renders the page', () => {
+  describe('Renders the page', () => {
     it('should render the table row when fetch is resolve', async () => {
       await act(async () => {
         mockedAxios.get.mockResolvedValueOnce({

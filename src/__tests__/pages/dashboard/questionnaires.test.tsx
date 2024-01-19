@@ -1,27 +1,29 @@
+import { userEvent } from '@testing-library/user-event';
 import { Mocked } from 'vitest';
 
-import { render, screen, within, act, fireEvent } from '@/__tests__/test-utils';
+import { render, screen, within, act } from '@/__tests__/test-utils';
 
 import App from '@/pages/dashboard/questionnaires';
 import { sampleAttempts } from '@/utils/apis/questionnaire/sample-data';
 import axiosWithConfig from '@/utils/apis/axiosWithConfig';
 import { useAuthStore } from '@/utils/states';
 
+const mockedUsedNavigate = vi.fn();
+
 vi.mock('@/utils/apis/axiosWithConfig');
+vi.mock('react-router-dom', async () => {
+  const mod = await vi.importActual('react-router-dom');
+  return {
+    ...mod,
+    useNavigate: () => mockedUsedNavigate,
+  };
+});
 
 const mockedAxios = axiosWithConfig as Mocked<typeof axiosWithConfig>;
-const formInput = {
-  'input-name': 'Test',
-  'input-email': 'test@mail.com',
-  'input-phone-number': '6282222222222',
-  'input-role': 'admin',
-  'input-password': 'admin123',
-  'input-specialization': 'Testing',
-};
 
 describe('Questionnaires Dashboard Page', () => {
   beforeEach(async () => {
-    useAuthStore.setState({ role: 'suster' }, true);
+    useAuthStore.setState({ role: 'dokter' }, true);
   });
 
   describe('Renders the page', () => {
@@ -81,8 +83,7 @@ describe('Questionnaires Dashboard Page', () => {
     });
   });
 
-  // TODO: remove skip when action button can be use properly
-  describe.skip('Action', () => {
+  describe('Action', () => {
     beforeEach(async () => {
       await act(async () => {
         mockedAxios.get.mockResolvedValueOnce({
@@ -104,79 +105,31 @@ describe('Questionnaires Dashboard Page', () => {
 
         render(<App />);
       });
-
-      fireEvent.click(screen.getByTestId('btn-add-data'));
     });
 
-    it('should show modal for add new data', () => {
-      expect(screen.getByRole('dialog')).toBeInTheDocument();
+    it('should disable detail menu when attempt is not complete', async () => {
+      await userEvent.click(screen.getAllByTestId('table-action')[1]);
+
+      expect(
+        within(screen.getByRole('menu')).getByTestId('action-detail')
+      ).toHaveAttribute('aria-disabled');
     });
 
-    it('should display error message below input when all inputs have not been filled in', async () => {
-      await act(async () => {
-        fireEvent.click(screen.getByTestId('btn-submit'));
-      });
+    it('should enable detail menu when attempt is completed', async () => {
+      await userEvent.click(screen.getAllByTestId('table-action')[0]);
 
-      const form = screen.getByTestId('form-add-edit');
-
-      expect(within(form).getByText('Nama lengkap wajib diisi')).toBeTruthy();
-      expect(within(form).getByText('Email wajib diisi')).toBeTruthy();
-      expect(within(form).getByText('Nomor telepon wajib diisi')).toBeTruthy();
-      expect(within(form).getByText('Role wajib diisi')).toBeTruthy();
-      expect(within(form).getByText('Password wajib diisi')).toBeTruthy();
-      expect(within(form).getByText('Spesialisasi wajib diisi')).toBeTruthy();
+      expect(
+        within(screen.getByRole('menu')).getByTestId('action-detail')
+      ).toBeEnabled();
     });
 
-    it('should add new data when fetch is resolve', async () => {
-      const form = screen.getByTestId('form-add-edit');
+    it('should navigate to detail attempt when click on detail menu', async () => {
+      await userEvent.click(screen.getAllByTestId('table-action')[0]);
+      await userEvent.click(
+        within(screen.getByRole('menu')).getByTestId('action-detail')
+      );
 
-      let input: keyof typeof formInput;
-      for (input in formInput) {
-        const component = within(form).getByTestId(input);
-        fireEvent.change(component, {
-          target: { value: formInput[input] },
-        });
-      }
-
-      mockedAxios.get.mockResolvedValueOnce({
-        data: {
-          messages: ['[success]'],
-          meta: {
-            code: '200-003-OK',
-            status: 'success',
-          },
-        },
-      });
-
-      await act(async () => {
-        fireEvent.click(screen.getByTestId('btn-submit'));
-      });
-    });
-
-    it('should not add new data when fetch is reject', async () => {
-      const form = screen.getByTestId('form-add-edit');
-
-      let input: keyof typeof formInput;
-      for (input in formInput) {
-        const component = within(form).getByTestId(input);
-        fireEvent.change(component, {
-          target: { value: formInput[input] },
-        });
-      }
-
-      mockedAxios.get.mockRejectedValueOnce({
-        data: {
-          messages: ['[failed]'],
-          meta: {
-            code: '',
-            status: 'failed',
-          },
-        },
-      });
-
-      await act(async () => {
-        fireEvent.click(screen.getByTestId('btn-submit'));
-      });
+      expect(mockedUsedNavigate).toHaveBeenCalledTimes(1);
     });
   });
 });

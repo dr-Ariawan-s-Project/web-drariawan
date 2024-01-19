@@ -107,7 +107,7 @@ const ListKuisioner = () => {
           return (
             <>
               <DropdownMenu>
-                <DropdownMenuTrigger asChild>
+                <DropdownMenuTrigger data-testid="table-action" asChild>
                   <Button variant="ghost" className="h-8 w-8 p-0">
                     <span className="sr-only">Open menu</span>
                     <MoreHorizontal className="h-4 w-4" />
@@ -115,6 +115,7 @@ const ListKuisioner = () => {
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end">
                   <DropdownMenuItem
+                    data-testid="action-detail"
                     onClick={() => navigate(`/dashboard/questionnaires/${id}`)}
                     disabled={!status}
                   >

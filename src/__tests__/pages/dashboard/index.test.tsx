@@ -15,37 +15,36 @@ vi.mock('@/utils/apis/axiosWithConfig');
 const mockedAxios = axiosWithConfig as Mocked<typeof axiosWithConfig>;
 
 describe('Dashboard Page', () => {
-  beforeEach(async () => {
-    await act(async () => {
-      useAuthStore.setState({ role: 'superadmin' }, true);
-
-      mockedAxios.get.mockResolvedValueOnce({
-        data: {
-          data: sampleDashboardData,
-          messages: ['[success] read data'],
-          meta: {
-            code: '200-007-OK',
-            status: 'success',
-          },
-        },
-      });
-      mockedAxios.get.mockResolvedValueOnce({
-        data: {
-          data: sampleChartData,
-          messages: ['[success] read data'],
-          meta: {
-            code: '200-007-OK',
-            status: 'success',
-          },
-        },
-      });
-
-      render(<App />);
-    });
+  beforeEach(() => {
+    useAuthStore.setState({ role: 'superadmin' }, true);
   });
 
   describe('Renders the page', () => {
-    it('should render the page', () => {
+    it('should render the page', async () => {
+      await act(async () => {
+        mockedAxios.get.mockResolvedValueOnce({
+          data: {
+            data: sampleDashboardData,
+            messages: ['[success] read data'],
+            meta: {
+              code: '200-007-OK',
+              status: 'success',
+            },
+          },
+        });
+        mockedAxios.get.mockResolvedValueOnce({
+          data: {
+            data: sampleChartData,
+            messages: ['[success] read data'],
+            meta: {
+              code: '200-007-OK',
+              status: 'success',
+            },
+          },
+        });
+
+        render(<App />);
+      });
       const cardGroup = screen.getByTestId('card-group');
       expect(cardGroup).toBeInTheDocument();
 
@@ -59,6 +58,35 @@ describe('Dashboard Page', () => {
       expect(cardChart).toBeInTheDocument();
       expect(
         within(cardChart).getByText('Kuesioner per Bulan')
+      ).toBeInTheDocument();
+    });
+
+    it('should display failed toast when get is reject', async () => {
+      await act(async () => {
+        mockedAxios.get.mockRejectedValueOnce({
+          data: {
+            messages: ['[failed]'],
+            meta: {
+              code: '',
+              status: 'failed',
+            },
+          },
+        });
+        mockedAxios.get.mockRejectedValueOnce({
+          data: {
+            messages: ['[failed]'],
+            meta: {
+              code: '',
+              status: 'failed',
+            },
+          },
+        });
+
+        render(<App />);
+      });
+
+      expect(
+        screen.getByText('Oops! Sesuatu telah terjadi')
       ).toBeInTheDocument();
     });
   });
