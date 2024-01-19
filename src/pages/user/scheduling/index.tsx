@@ -3,10 +3,6 @@ import { useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import { format } from 'date-fns';
 
-import { useToast } from '@/components/ui/use-toast';
-import DatePicker from '@/components/datepicker';
-import { Button } from '@/components/ui/button';
-import { Layout } from '@/components/layout';
 import {
   Dialog,
   DialogContent,
@@ -15,6 +11,10 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog';
+import { useToast } from '@/components/ui/use-toast';
+import DatePicker from '@/components/datepicker';
+import { Button } from '@/components/ui/button';
+import { Layout } from '@/components/layout';
 
 import { getSchedules, postBookSchedule } from '@/utils/apis/schedule/api';
 import { ISchedule } from '@/utils/apis/schedule/types';
@@ -70,6 +70,7 @@ const Scheduling = () => {
         },
       });
     } catch (error) {
+      console.log('TEST', error);
       toast({
         title: 'Oops! Sesuatu telah terjadi',
         description: (error as Error).message,
@@ -234,18 +235,13 @@ const ScheduleModal = (props: Props) => {
                     },
                   ]}
                 />
-                {/* <DatePicker
-                  selected={selectedDate}
-                  onChange={handleSelectDate}
-                  dateFormat="yy-MM-dd"
-                  className="border border-health-blue-thin rounded-md"
-                /> */}
               </div>
             </div>
           </div>
         </div>
         <DialogFooter>
           <Button
+            data-testid="btn-submit"
             type="button"
             disabled={!selectedDate}
             onClick={() => handleBooking(schedule)}

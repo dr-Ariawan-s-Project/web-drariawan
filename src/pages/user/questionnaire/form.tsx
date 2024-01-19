@@ -29,6 +29,7 @@ const DataDiri = () => {
       email: '',
       phone: '',
       as: 'myself',
+      partner_email: '',
     },
   });
 

@@ -94,6 +94,9 @@ describe('Patient Schedule Page', () => {
       expect(
         within(tableBody).getByText('Belum ada jadwal booking untuk bulan ini')
       );
+      expect(
+        screen.getByText('Oops! Sesuatu telah terjadi')
+      ).toBeInTheDocument();
     });
   });
 });

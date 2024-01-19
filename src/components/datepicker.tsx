@@ -23,7 +23,7 @@ const DatePicker = (props: Props) => {
 
   return (
     <Popover>
-      <PopoverTrigger asChild>
+      <PopoverTrigger data-testid="input-date" asChild>
         <Button
           variant={'outline'}
           className={cn(
@@ -41,6 +41,7 @@ const DatePicker = (props: Props) => {
       </PopoverTrigger>
       <PopoverContent className="w-auto p-0">
         <Calendar
+          data-testid="calendar"
           mode="single"
           selected={selectedDate}
           onSelect={onSelectDate}

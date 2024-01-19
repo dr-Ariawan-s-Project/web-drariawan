@@ -11,6 +11,7 @@ const baseSchema = z.object({
 const selfSchema = z
   .object({
     as: z.literal('myself'),
+    partner_email: z.string().default(''),
   })
   .merge(baseSchema);
 

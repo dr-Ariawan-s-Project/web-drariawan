@@ -1,3 +1,4 @@
+import { userEvent } from '@testing-library/user-event';
 import { Mocked } from 'vitest';
 
 import { render, screen, act, fireEvent, within } from '@/__tests__/test-utils';
@@ -5,6 +6,7 @@ import { render, screen, act, fireEvent, within } from '@/__tests__/test-utils';
 import App from '@/pages/user/questionnaire/start';
 import { sampleQuestionnaires } from '@/utils/apis/questionnaire/sample-data';
 import axiosWithConfig from '@/utils/apis/axiosWithConfig';
+import useQuestionnaireStore from '@/utils/states/questionnaire';
 
 const mockedUsedNavigate = vi.fn();
 
@@ -25,32 +27,65 @@ vi.mock('react-router-dom', async () => {
 const mockedAxios = axiosWithConfig as Mocked<typeof axiosWithConfig>;
 
 describe('Questionnaire Start Page', () => {
-  beforeEach(async () => {
-    await act(async () => {
-      mockedAxios.get.mockResolvedValueOnce({
-        data: {
-          data: sampleQuestionnaires,
-          messages: ['[success] read data'],
-          meta: {
-            code: '200-007-OK',
-            status: 'success',
-          },
-        },
-      });
-
-      render(<App />);
-    });
+  afterEach(() => {
+    vi.clearAllMocks();
   });
 
   describe('Renders the page', () => {
-    it('should render the page (landing)', () => {
-      expect(screen.getByTestId('btn-start')).toBeInTheDocument();
+    it('should render the page (landing) and enable button when get is resolve', async () => {
+      await act(async () => {
+        mockedAxios.get.mockResolvedValueOnce({
+          data: {
+            data: sampleQuestionnaires,
+            messages: ['[success] read data'],
+            meta: {
+              code: '200-007-OK',
+              status: 'success',
+            },
+          },
+        });
+
+        render(<App />);
+      });
+
+      expect(screen.getByTestId('btn-start')).toBeEnabled();
+    });
+
+    it('should render the page (landing) and disable button when get is reject', async () => {
+      await act(async () => {
+        mockedAxios.get.mockRejectedValueOnce({
+          data: {
+            messages: ['[failed] read data'],
+            meta: {
+              code: '',
+              status: 'failed',
+            },
+          },
+        });
+
+        render(<App />);
+      });
+
+      expect(screen.getByTestId('btn-start')).toBeDisabled();
     });
 
     it('should render the page (start) when click on button', async () => {
       await act(async () => {
-        fireEvent.click(screen.getByTestId('btn-start'));
+        mockedAxios.get.mockResolvedValueOnce({
+          data: {
+            data: sampleQuestionnaires,
+            messages: ['[success] read data'],
+            meta: {
+              code: '200-007-OK',
+              status: 'success',
+            },
+          },
+        });
+
+        render(<App />);
       });
+
+      await userEvent.click(screen.getByTestId('btn-start'));
 
       expect(screen.getByTestId('question-number')).toBeInTheDocument();
     });
@@ -58,9 +93,24 @@ describe('Questionnaire Start Page', () => {
 
   describe('Actions', () => {
     beforeEach(async () => {
+      useQuestionnaireStore.setState({ answers: [] });
+
       await act(async () => {
-        fireEvent.click(screen.getByTestId('btn-start'));
+        mockedAxios.get.mockResolvedValueOnce({
+          data: {
+            data: sampleQuestionnaires,
+            messages: ['[success] read data'],
+            meta: {
+              code: '200-007-OK',
+              status: 'success',
+            },
+          },
+        });
+
+        render(<App />);
       });
+
+      await userEvent.click(screen.getByTestId('btn-start'));
     });
 
     it('should disable button when user not selecting an answer', () => {
@@ -108,10 +158,12 @@ describe('Questionnaire Start Page', () => {
         fireEvent.click(screen.getByTestId('btn-next'));
       });
 
-      expect(mockedUsedNavigate).toHaveBeenCalledTimes(0);
+      expect(
+        screen.getByText('Oops! Sesuatu telah terjadi')
+      ).toBeInTheDocument();
     });
 
-    it.skip('should be navigate to questionnaire finish when post is resolve', async () => {
+    it('should be navigate to questionnaire finish when post is resolve', async () => {
       // Question #1
       await act(async () => {
         const radioGroup = screen.getByRole('radiogroup');

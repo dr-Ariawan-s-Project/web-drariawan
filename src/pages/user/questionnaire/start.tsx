@@ -119,16 +119,17 @@ const QuestionnaireStart = () => {
       } else {
         setIdQuestion(newIdQuestion);
       }
-      resetSelectedOption({
-        question_id: question.id,
-        description: transcript,
-        score: selectedOption?.score ?? 0,
-      });
-      resetTranscript();
     } else {
       setIsLoading(true);
       handleSubmit();
     }
+
+    resetSelectedOption({
+      question_id: question.id,
+      description: transcript,
+      score: selectedOption?.score ?? 0,
+    });
+    resetTranscript();
   }
 
   async function handleSubmit() {
@@ -137,10 +138,13 @@ const QuestionnaireStart = () => {
         code_attempt: searchParams.get('code') as string,
         answer: answers,
       };
+
       const result = await postQuestionnaire(body);
+
       toast({
         description: result.data,
       });
+
       navigate('/questionnaire/finish', {
         state: { from: 'questionnaire-start' },
       });

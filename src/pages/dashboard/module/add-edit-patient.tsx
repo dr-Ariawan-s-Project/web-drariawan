@@ -204,6 +204,7 @@ const AddEditPatient = (props: Props) => {
                   {...field}
                   data-testid="input-dob"
                   placeholder="Tanggal lahir"
+                  // TODO: Change this component to using CustomFormDatePicker with proper data-testid
                   type="date"
                   disabled={form.formState.isSubmitting}
                   aria-disabled={form.formState.isSubmitting}
