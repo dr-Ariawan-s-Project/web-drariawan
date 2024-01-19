@@ -51,8 +51,21 @@ const ListKuisioner = () => {
         header: 'Email Pasien',
       },
       {
-        accessorKey: 'score',
-        header: 'Skor',
+        accessorKey: 'created_at',
+        header: 'Diambil',
+        cell: (info) =>
+          format(parseISO(info.row.getValue('created_at')), 'PPpp'),
+      },
+      {
+        accessorKey: 'updated_at',
+        header: 'Selesai',
+        cell: ({ row }) => {
+          const { created_at, updated_at } = row.original;
+
+          return created_at === updated_at
+            ? '-'
+            : format(parseISO(updated_at), 'PPpp');
+        },
       },
       {
         accessorKey: 'diagnosis',
@@ -82,27 +95,13 @@ const ListKuisioner = () => {
         },
       },
       {
-        accessorKey: 'created_at',
-        header: 'Diambil',
-        cell: (info) =>
-          format(parseISO(info.row.getValue('created_at')), 'PPpp'),
-      },
-      {
-        accessorKey: 'updated_at',
-        header: 'Selesai',
-        cell: ({ row }) => {
-          const createdAt = row.original.created_at;
-          const updatedAt = row.original.updated_at;
-
-          return createdAt === updatedAt
-            ? '-'
-            : format(parseISO(updatedAt), 'PPpp');
-        },
+        accessorKey: 'score',
+        header: 'Skor',
       },
       {
         id: 'actions',
         cell: ({ row }) => {
-          const { id, status } = row.original;
+          const { id, created_at, updated_at } = row.original;
 
           return (
             <>
@@ -117,7 +116,7 @@ const ListKuisioner = () => {
                   <DropdownMenuItem
                     data-testid="action-detail"
                     onClick={() => navigate(`/dashboard/questionnaires/${id}`)}
-                    disabled={!status}
+                    disabled={created_at === updated_at}
                   >
                     Detail
                   </DropdownMenuItem>

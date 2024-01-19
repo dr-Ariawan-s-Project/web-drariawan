@@ -31,6 +31,10 @@ describe('Patients Dashboard Page', () => {
     useAuthStore.setState({ role: 'superadmin' }, true);
   });
 
+  afterEach(() => {
+    vi.clearAllMocks();
+  });
+
   describe('Renders the page', () => {
     it('should render the table row when fetch is resolve', async () => {
       await act(async () => {
@@ -156,6 +160,20 @@ describe('Patients Dashboard Page', () => {
                 `option-${inputValue}`
               )
             );
+          } else if (inputType === 'datepicker') {
+            await userEvent.click(component);
+
+            const calendar = screen.getByTestId('calendar');
+            expect(calendar).toBeInTheDocument();
+
+            const allDay = within(screen.getByRole('grid')).getAllByRole(
+              'gridcell'
+            );
+            const filterAvailableDay = allDay.filter(
+              (element) => !element.hasAttribute('disabled')
+            );
+
+            await userEvent.click(filterAvailableDay[0]);
           } else {
             await act(async () => {
               fireEvent.change(component, { target: { value: inputValue } });
@@ -196,6 +214,21 @@ describe('Patients Dashboard Page', () => {
                 `option-${inputValue}`
               )
             );
+          } else if (inputType === 'datepicker') {
+            await userEvent.click(component);
+
+            const calendar = screen.getByTestId('calendar');
+            expect(calendar).toBeInTheDocument();
+
+            const allDay = within(screen.getByRole('grid')).getAllByRole(
+              'gridcell'
+            );
+            const filterAvailableDay = allDay.filter(
+              (element) => !element.hasAttribute('disabled')
+            );
+
+            await userEvent.click(filterAvailableDay[0]);
+            expect(calendar).not.toBeInTheDocument();
           } else {
             await act(async () => {
               fireEvent.change(component, { target: { value: inputValue } });
@@ -205,7 +238,7 @@ describe('Patients Dashboard Page', () => {
 
         mockedAxios.post.mockResolvedValueOnce({
           data: {
-            messages: ['[success]'],
+            messages: ['[success] create data'],
             meta: {
               code: '200-007-OK',
               status: 'success',
@@ -231,7 +264,7 @@ describe('Patients Dashboard Page', () => {
 
         await userEvent.click(screen.getByTestId('btn-submit'));
 
-        expect(screen.getByText('[success]')).toBeInTheDocument();
+        expect(screen.getByText('[success] create data')).toBeInTheDocument();
       });
     });
 
@@ -267,6 +300,20 @@ describe('Patients Dashboard Page', () => {
                 `option-${inputValue}`
               )
             );
+          } else if (inputType === 'datepicker') {
+            await userEvent.click(component);
+
+            const calendar = screen.getByTestId('calendar');
+            expect(calendar).toBeInTheDocument();
+
+            const allDay = within(screen.getByRole('grid')).getAllByRole(
+              'gridcell'
+            );
+            const filterAvailableDay = allDay.filter(
+              (element) => !element.hasAttribute('disabled')
+            );
+
+            await userEvent.click(filterAvailableDay[0]);
           } else {
             await act(async () => {
               fireEvent.change(component, { target: { value: inputValue } });
@@ -311,6 +358,20 @@ describe('Patients Dashboard Page', () => {
                 `option-${inputValue}`
               )
             );
+          } else if (inputType === 'datepicker') {
+            await userEvent.click(component);
+
+            const calendar = screen.getByTestId('calendar');
+            expect(calendar).toBeInTheDocument();
+
+            const allDay = within(screen.getByRole('grid')).getAllByRole(
+              'gridcell'
+            );
+            const filterAvailableDay = allDay.filter(
+              (element) => !element.hasAttribute('disabled')
+            );
+
+            await userEvent.click(filterAvailableDay[0]);
           } else {
             await act(async () => {
               fireEvent.change(component, { target: { value: inputValue } });

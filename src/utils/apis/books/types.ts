@@ -10,8 +10,10 @@ export const bookingSchema = z.object({
     })
     .min(1, { message: 'Jadwal wajib diisi' }),
   booking_date: z
-    .string()
-    .min(1, { message: 'Tanggal booking wajib diisi' })
+    .date({
+      required_error: 'Tanggal booking wajib diisi',
+      invalid_type_error: 'Tanggal booking wajib diisi',
+    })
     .transform((value) => format(value, 'yyyy-MM-dd')),
 });
 

@@ -15,7 +15,7 @@ import Pagination from '@/components/pagination';
 import { Button } from '@/components/ui/button';
 import DataTable from '@/components/data-table';
 import Alert from '@/components/alert';
-import AddEditPatient from './module/add-edit-patient';
+import ModalPatient from './module/modal-patient';
 
 import {
   getPatients,
@@ -35,8 +35,12 @@ const DashboardPatients = () => {
   const [data, setData] = useState<IPatient[]>([]);
   const [selectedData, setSelectedData] = useState<IPatient>();
   const [pagination, setPagination] = useState<IPagination>();
-  const [showAddEditDialog, setShowAddEditDialog] = useState(false);
+  const [showDialog, setShowDialog] = useState(false);
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
+
+  const checkRole = useMemo(() => {
+    return ['superadmin'].includes(role);
+  }, [role]);
 
   const columns = useMemo<ColumnDef<IPatient>[]>(
     () => [
@@ -86,7 +90,7 @@ const DashboardPatients = () => {
                     data-testid="action-edit"
                     onClick={() => {
                       setSelectedData(row.original);
-                      setShowAddEditDialog(true);
+                      setShowDialog(true);
                     }}
                   >
                     Edit
@@ -145,7 +149,7 @@ const DashboardPatients = () => {
 
       fetchData();
       setSelectedData(undefined);
-      setShowAddEditDialog(false);
+      setShowDialog(false);
     } catch (error) {
       toast({
         title: 'Oops! Sesuatu telah terjadi',
@@ -177,16 +181,16 @@ const DashboardPatients = () => {
 
   return (
     <Layout variant="admin">
-      {['superadmin'].includes(role) && (
+      {checkRole ? (
         <div className="w-full flex justify-end">
           <Button
             data-testid="btn-add-data"
-            onClick={() => setShowAddEditDialog(true)}
+            onClick={() => setShowDialog(true)}
           >
             Tambah pasien
           </Button>
         </div>
-      )}
+      ) : null}
       <DataTable
         columns={columns}
         data={data}
@@ -203,9 +207,9 @@ const DashboardPatients = () => {
           setShowDeleteDialog(false);
         }}
       />
-      <AddEditPatient
-        open={showAddEditDialog}
-        onOpenChange={setShowAddEditDialog}
+      <ModalPatient
+        open={showDialog}
+        onOpenChange={setShowDialog}
         editData={selectedData}
         onSubmit={(data) => onSubmitData(data)}
       />

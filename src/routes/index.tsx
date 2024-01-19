@@ -19,7 +19,7 @@ import DashboardPatients from '@/pages/dashboard/patients';
 import DashboardSchedules from '@/pages/dashboard/schedules';
 import DashboardBooks from '@/pages/dashboard/books';
 import DashboardQuestionnaires from '@/pages/dashboard/questionnaires';
-import DashboardAttempt from '@/pages/dashboard/module/detail-attempt';
+import DashboardAttempt from '@/pages/dashboard/detail-attempt';
 import Setting from '@/pages/dashboard/settings';
 import Unauthorized from '@/pages/404';
 

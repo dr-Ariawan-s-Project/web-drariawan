@@ -30,7 +30,23 @@ export const questionnaireSchema = z.discriminatedUnion('as', [
   partnerSchema,
 ]);
 
+export const assessmentSchema = z.object({
+  diagnosis: z
+    .string()
+    .min(1, { message: 'Diagnosis wajib diisi' })
+    .email('Diagnosis tidak valid'),
+  feedback: z
+    .string()
+    .min(1, { message: 'Feedback wajib diisi' })
+    .email('Feedback tidak valid'),
+  status: z
+    .string()
+    .min(1, { message: 'Status wajib diisi' })
+    .email('Status tidak valid'),
+});
+
 export type QuestionnaireSchema = z.infer<typeof questionnaireSchema>;
+export type AssessmentSchema = z.infer<typeof assessmentSchema>;
 
 export interface IQuestionnaire {
   choices: null | IChoice[];

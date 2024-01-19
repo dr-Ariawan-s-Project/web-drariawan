@@ -6,7 +6,7 @@ import {
   Path,
 } from 'react-hook-form';
 import { CalendarIcon } from 'lucide-react';
-import { ReactNode } from 'react';
+import { ReactNode, useState } from 'react';
 import { format } from 'date-fns';
 
 import {
@@ -147,6 +147,8 @@ export function CustomFormDatePicker<T extends FieldValues>(
 ) {
   const { name, label, placeholder, description, control } = props;
 
+  const [isPopoverOpen, setIsPopoverOpen] = useState(false);
+
   return (
     <FormField
       control={control}
@@ -154,7 +156,7 @@ export function CustomFormDatePicker<T extends FieldValues>(
       render={({ field }) => (
         <FormItem className="flex flex-col">
           <FormLabel>{label}</FormLabel>
-          <Popover>
+          <Popover open={isPopoverOpen} onOpenChange={setIsPopoverOpen}>
             <PopoverTrigger data-testid={props['data-testid']} asChild>
               <FormControl>
                 <Button
@@ -175,10 +177,13 @@ export function CustomFormDatePicker<T extends FieldValues>(
             </PopoverTrigger>
             <PopoverContent className="w-auto p-0" align="start">
               <Calendar
-                data-testid={props['data-testid']}
+                data-testid="calendar"
                 mode="single"
                 selected={field.value}
-                onSelect={field.onChange}
+                onSelect={(date) => {
+                  field.onChange(date);
+                  setIsPopoverOpen(false);
+                }}
                 disabled={(date) =>
                   date > new Date() || date < new Date('1900-01-01')
                 }

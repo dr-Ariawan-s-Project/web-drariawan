@@ -28,7 +28,7 @@ interface Props {
   onSubmit: (data: UserSchema) => void;
 }
 
-const AddEditUser = (props: Props) => {
+const ModalUser = (props: Props) => {
   const { open, editData, onOpenChange, onSubmit } = props;
 
   const form = useForm<UserSchema>({
@@ -192,4 +192,4 @@ const AddEditUser = (props: Props) => {
   );
 };
 
-export default AddEditUser;
+export default ModalUser;

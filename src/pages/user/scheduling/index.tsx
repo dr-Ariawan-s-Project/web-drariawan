@@ -70,7 +70,6 @@ const Scheduling = () => {
         },
       });
     } catch (error) {
-      console.log('TEST', error);
       toast({
         title: 'Oops! Sesuatu telah terjadi',
         description: (error as Error).message,

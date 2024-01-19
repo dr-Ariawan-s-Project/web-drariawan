@@ -16,7 +16,7 @@ import Pagination from '@/components/pagination';
 import { Button } from '@/components/ui/button';
 import DataTable from '@/components/data-table';
 import Alert from '@/components/alert';
-import AddEditSchedule from './module/add-edit-schedule';
+import ModalSchedule from './module/modal-schedule';
 
 import {
   getSchedules,
@@ -193,7 +193,7 @@ const DashboardSchedules = () => {
 
   return (
     <Layout variant="admin">
-      {checkRole && (
+      {checkRole ? (
         <div className="w-full flex justify-end">
           <Button
             data-testid="btn-add-data"
@@ -202,7 +202,7 @@ const DashboardSchedules = () => {
             Tambah jadwal
           </Button>
         </div>
-      )}
+      ) : null}
       <DataTable
         columns={columns}
         data={data}
@@ -219,7 +219,7 @@ const DashboardSchedules = () => {
           setShowDeleteDialog(false);
         }}
       />
-      <AddEditSchedule
+      <ModalSchedule
         open={showAddEditDialog}
         onOpenChange={setShowAddEditDialog}
         editData={selectedData}

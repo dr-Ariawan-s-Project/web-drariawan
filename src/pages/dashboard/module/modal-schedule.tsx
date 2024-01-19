@@ -35,7 +35,7 @@ interface Props {
   onSubmit: (data: ScheduleSchema) => void;
 }
 
-const AddEditSchedule = (props: Props) => {
+const ModalSchedule = (props: Props) => {
   const { open, editData, onOpenChange, onSubmit } = props;
   const { toast } = useToast();
 
@@ -205,4 +205,4 @@ const AddEditSchedule = (props: Props) => {
   );
 };
 
-export default AddEditSchedule;
+export default ModalSchedule;

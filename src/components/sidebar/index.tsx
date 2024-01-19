@@ -30,7 +30,7 @@ export const Sidebar = () => {
       <div
         data-testid="sidebar"
         className={cn(
-          'absolute flex h-full select-none flex-col overflow-y-auto bg-white duration-300 md:relative z-50',
+          'absolute flex h-full select-none flex-col overflow-y-auto bg-white duration-300 md:relative z-50 border-r border-border/40',
           isSidebarOpen ? 'w-72' : 'w-0 md:w-20'
         )}
       >

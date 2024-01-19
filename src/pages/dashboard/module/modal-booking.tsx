@@ -11,12 +11,11 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog';
 import {
-  CustomFormField,
+  CustomFormDatePicker,
   CustomFormSelect,
 } from '@/components/custom-formfield';
 import { useToast } from '@/components/ui/use-toast';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
 import { Form } from '@/components/ui/form';
 
 import { BookingSchema, IBook, bookingSchema } from '@/utils/apis/books/types';
@@ -31,7 +30,7 @@ interface Props {
   onSubmit: (data: BookingSchema) => void;
 }
 
-const AddEditBooking = (props: Props) => {
+const ModalBooking = (props: Props) => {
   const { open, editData, onOpenChange, onSubmit } = props;
   const { toast } = useToast();
 
@@ -143,25 +142,13 @@ const AddEditBooking = (props: Props) => {
               placeholder="Silahkan pilih jadwal"
               options={schedules}
             />
-            <CustomFormField
+            <CustomFormDatePicker
+              data-testid="input-dob"
               control={form.control}
               name="booking_date"
               label="Tanggal booking"
-            >
-              {(field) => (
-                <Input
-                  {...field}
-                  data-testid="input-dob"
-                  placeholder="Tanggal booking"
-                  // TODO: Change this component to using CustomFormDatePicker with proper data-testid
-                  type="date"
-                  disabled={form.formState.isSubmitting}
-                  aria-disabled={form.formState.isSubmitting}
-                  value={field.value as string}
-                  min={'2024-01-18'}
-                />
-              )}
-            </CustomFormField>
+              placeholder="mm/dd/yyyy"
+            />
             <DialogFooter>
               <Button
                 data-testid="btn-submit"
@@ -186,4 +173,4 @@ const AddEditBooking = (props: Props) => {
   );
 };
 
-export default AddEditBooking;
+export default ModalBooking;

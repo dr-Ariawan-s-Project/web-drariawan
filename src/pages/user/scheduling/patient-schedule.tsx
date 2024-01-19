@@ -1,13 +1,13 @@
-import { useEffect, useState, useMemo } from 'react';
 import { ColumnDef } from '@tanstack/react-table';
+import { useEffect, useState } from 'react';
 import { format, parseISO } from 'date-fns';
 import { capitalize } from 'lodash';
 
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { useToast } from '@/components/ui/use-toast';
 import DataTable from '@/components/data-table';
 import { Badge } from '@/components/ui/badge';
 import { Layout } from '@/components/layout';
-import Select from '@/components/select';
 
 import { getMySchedule } from '@/utils/apis/schedule/api';
 import { getMyProfile } from '@/utils/apis/auth/api';
@@ -17,8 +17,6 @@ const PatientSchedule = () => {
   const { toast } = useToast();
 
   const [schedule, setSchedule] = useState<IMySchedule[]>([]);
-  const [selectedMonth, setSelectedMonth] = useState<string>('');
-  const [selectedStatus, setSelectedStatus] = useState<string>('');
 
   const columns: ColumnDef<IMySchedule>[] = [
     {
@@ -98,73 +96,20 @@ const PatientSchedule = () => {
     }
   };
 
-  const getMonthsFromSchedule = () => {
-    const monthsSet = new Set<number>();
-    schedule.forEach((item) => {
-      const date = new Date(item?.booking_date);
-      const monthIndex = date.getMonth();
-      monthsSet.add(monthIndex);
-    });
-
-    const sortedMonths = Array.from(monthsSet).sort(
-      (a: number, b: number) => b - a
-    );
-    const formattedMonths = sortedMonths.map((monthIndex) => {
-      const date = new Date(2000, monthIndex);
-      return date.toLocaleString('en-US', { month: 'long' });
-    });
-
-    return formattedMonths;
-  };
-
-  const getStatusOptions = () => {
-    const statusSet = new Set<string>();
-    schedule.forEach((item) => {
-      statusSet.add(item.state);
-    });
-    return Array.from(statusSet);
-  };
-
-  const filteredSchedule = useMemo(() => {
-    if (selectedMonth) {
-      schedule.filter((item) => {
-        const date = new Date(item?.booking_date);
-        const formattedMonth = date
-          .toLocaleString('en-US', { month: 'long' })
-          .toLowerCase();
-        return formattedMonth === selectedMonth.toLowerCase();
-      });
-    }
-
-    return schedule;
-  }, [schedule, selectedMonth]);
-
-  // TODO: Remove after deployment
-  console.log(selectedStatus);
   return (
     <Layout className="p-5 space-y-5">
-      <div className="text-center flex flex-col">
-        <p className="font-semibold text-2xl">Daftar Jadwal Saya</p>
-      </div>
-      <div className="flex space-x-5 w-1/3">
-        <Select
-          label="Pilih Bulan"
-          placeholder="Pilih Bulan"
-          onValueChange={setSelectedMonth}
-          options={getMonthsFromSchedule()}
-        />
-        <Select
-          label="Pilih Status"
-          placeholder="Pilih Status"
-          onValueChange={setSelectedStatus}
-          options={getStatusOptions()}
-        />
-      </div>
-      <DataTable
-        columns={columns}
-        data={filteredSchedule}
-        noFoundMessage="Belum ada jadwal booking untuk bulan ini"
-      />
+      <Card>
+        <CardHeader>
+          <CardTitle>Daftar Jadwal Saya</CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-5">
+          <DataTable
+            columns={columns}
+            data={schedule}
+            noFoundMessage="Belum ada jadwal booking untuk bulan ini"
+          />
+        </CardContent>
+      </Card>
     </Layout>
   );
 };

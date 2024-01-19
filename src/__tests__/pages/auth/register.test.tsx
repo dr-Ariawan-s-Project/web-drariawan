@@ -41,6 +41,10 @@ describe('Register Page', () => {
     });
   });
 
+  afterEach(() => {
+    vi.clearAllMocks();
+  });
+
   describe('Renders the page', () => {
     it('should render the page', () => {
       const form = screen.getByTestId('form-register');
@@ -98,10 +102,34 @@ describe('Register Page', () => {
         for (input in formInput) {
           const component = within(form).getByTestId(input);
           const inputValue = formInput[input].value;
+          const inputType = formInput[input].type;
 
-          await act(async () => {
-            fireEvent.change(component, { target: { value: inputValue } });
-          });
+          if (inputType === 'dropdown') {
+            await userEvent.click(component);
+            await userEvent.click(
+              within(screen.getByRole('presentation')).getByTestId(
+                `option-${inputValue}`
+              )
+            );
+          } else if (inputType === 'datepicker') {
+            await userEvent.click(component);
+
+            const calendar = screen.getByTestId('calendar');
+            expect(calendar).toBeInTheDocument();
+
+            const allDay = within(screen.getByRole('grid')).getAllByRole(
+              'gridcell'
+            );
+            const filterAvailableDay = allDay.filter(
+              (element) => !element.hasAttribute('disabled')
+            );
+
+            await userEvent.click(filterAvailableDay[0]);
+          } else {
+            await act(async () => {
+              fireEvent.change(component, { target: { value: inputValue } });
+            });
+          }
         }
 
         mockedAxios.post.mockRejectedValueOnce({
@@ -128,10 +156,34 @@ describe('Register Page', () => {
         for (input in formInput) {
           const component = within(form).getByTestId(input);
           const inputValue = formInput[input].value;
+          const inputType = formInput[input].type;
 
-          await act(async () => {
-            fireEvent.change(component, { target: { value: inputValue } });
-          });
+          if (inputType === 'dropdown') {
+            await userEvent.click(component);
+            await userEvent.click(
+              within(screen.getByRole('presentation')).getByTestId(
+                `option-${inputValue}`
+              )
+            );
+          } else if (inputType === 'datepicker') {
+            await userEvent.click(component);
+
+            const calendar = screen.getByTestId('calendar');
+            expect(calendar).toBeInTheDocument();
+
+            const allDay = within(screen.getByRole('grid')).getAllByRole(
+              'gridcell'
+            );
+            const filterAvailableDay = allDay.filter(
+              (element) => !element.hasAttribute('disabled')
+            );
+
+            await userEvent.click(filterAvailableDay[0]);
+          } else {
+            await act(async () => {
+              fireEvent.change(component, { target: { value: inputValue } });
+            });
+          }
         }
 
         mockedAxios.post.mockResolvedValueOnce({
@@ -195,10 +247,34 @@ describe('Register Page', () => {
         for (input in dupeFormInput) {
           const component = within(form).getByTestId(input);
           const inputValue = dupeFormInput[input].value;
+          const inputType = dupeFormInput[input].type;
 
-          await act(async () => {
-            fireEvent.change(component, { target: { value: inputValue } });
-          });
+          if (inputType === 'dropdown') {
+            await userEvent.click(component);
+            await userEvent.click(
+              within(screen.getByRole('presentation')).getByTestId(
+                `option-${inputValue}`
+              )
+            );
+          } else if (inputType === 'datepicker') {
+            await userEvent.click(component);
+
+            const calendar = screen.getByTestId('calendar');
+            expect(calendar).toBeInTheDocument();
+
+            const allDay = within(screen.getByRole('grid')).getAllByRole(
+              'gridcell'
+            );
+            const filterAvailableDay = allDay.filter(
+              (element) => !element.hasAttribute('disabled')
+            );
+
+            await userEvent.click(filterAvailableDay[0]);
+          } else {
+            await act(async () => {
+              fireEvent.change(component, { target: { value: inputValue } });
+            });
+          }
         }
 
         mockedAxios.post.mockRejectedValueOnce({
@@ -229,10 +305,34 @@ describe('Register Page', () => {
         for (input in dupeFormInput) {
           const component = within(form).getByTestId(input);
           const inputValue = dupeFormInput[input].value;
+          const inputType = dupeFormInput[input].type;
 
-          await act(async () => {
-            fireEvent.change(component, { target: { value: inputValue } });
-          });
+          if (inputType === 'dropdown') {
+            await userEvent.click(component);
+            await userEvent.click(
+              within(screen.getByRole('presentation')).getByTestId(
+                `option-${inputValue}`
+              )
+            );
+          } else if (inputType === 'datepicker') {
+            await userEvent.click(component);
+
+            const calendar = screen.getByTestId('calendar');
+            expect(calendar).toBeInTheDocument();
+
+            const allDay = within(screen.getByRole('grid')).getAllByRole(
+              'gridcell'
+            );
+            const filterAvailableDay = allDay.filter(
+              (element) => !element.hasAttribute('disabled')
+            );
+
+            await userEvent.click(filterAvailableDay[0]);
+          } else {
+            await act(async () => {
+              fireEvent.change(component, { target: { value: inputValue } });
+            });
+          }
         }
 
         mockedAxios.post.mockResolvedValueOnce({

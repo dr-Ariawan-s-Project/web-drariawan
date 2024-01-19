@@ -12,6 +12,7 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog';
 import {
+  CustomFormDatePicker,
   CustomFormField,
   CustomFormSelect,
 } from '@/components/custom-formfield';
@@ -33,7 +34,7 @@ interface Props {
   onSubmit: (data: PatientSchema) => void;
 }
 
-const AddEditPatient = (props: Props) => {
+const ModalPatient = (props: Props) => {
   const { open, editData, onOpenChange, onSubmit } = props;
 
   const form = useForm<PatientSchema>({
@@ -88,7 +89,9 @@ const AddEditPatient = (props: Props) => {
     >
       <DialogContent className="w-11/12 md:w-1/2 lg:w-2/3">
         <DialogHeader>
-          <DialogTitle>{editData ? 'Update user' : 'Tambah user'}</DialogTitle>
+          <DialogTitle>
+            {editData ? 'Update pasien' : 'Tambah pasien'}
+          </DialogTitle>
         </DialogHeader>
         <Form {...form}>
           <form
@@ -194,24 +197,13 @@ const AddEditPatient = (props: Props) => {
                 />
               )}
             </CustomFormField>
-            <CustomFormField
+            <CustomFormDatePicker
+              data-testid="input-dob"
               control={form.control}
               name="dob"
               label="Tanggal lahir"
-            >
-              {(field) => (
-                <Input
-                  {...field}
-                  data-testid="input-dob"
-                  placeholder="Tanggal lahir"
-                  // TODO: Change this component to using CustomFormDatePicker with proper data-testid
-                  type="date"
-                  disabled={form.formState.isSubmitting}
-                  aria-disabled={form.formState.isSubmitting}
-                  value={field.value as string}
-                />
-              )}
-            </CustomFormField>
+              placeholder="mm/dd/yyyy"
+            />
             <CustomFormField
               control={form.control}
               name="phone"
@@ -288,4 +280,4 @@ const AddEditPatient = (props: Props) => {
   );
 };
 
-export default AddEditPatient;
+export default ModalPatient;

@@ -61,17 +61,3 @@ export const deleteBooking = async (booking_id: string) => {
     throw Error(messages[0]);
   }
 };
-
-export const getMyBooking = async (patient_id: string) => {
-  try {
-    const response = await axiosWithConfig.get(
-      `v1/booking/patients?patient_id=${patient_id}`
-    );
-
-    return response.data as Response<IBook[]>;
-  } catch (error: any) {
-    const { messages } = error.response.data;
-
-    throw Error(messages[0]);
-  }
-};

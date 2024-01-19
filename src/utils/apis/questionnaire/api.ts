@@ -2,6 +2,7 @@ import axiosWithConfig from '@/utils/apis/axiosWithConfig';
 import { buildQueryString } from '@/utils/formatter';
 import { Request, Response, ResponsePagination } from '@/utils/types/api';
 import {
+  AssessmentSchema,
   IAttempt,
   IAttemptAnswer,
   IQuestionnaire,
@@ -79,13 +80,17 @@ export const getAttemptAnswers = async (attempt_id: string) => {
   }
 };
 
-export const postAttemptAssessments = async (attempt_id: string) => {
+export const postAttemptAssessments = async (
+  body: AssessmentSchema,
+  attempt_id: string
+) => {
   try {
     const response = await axiosWithConfig.post(
-      `/v1/questioner/attempts/${attempt_id}/assesments`
+      `/v1/questioner/attempts/${attempt_id}/assesments`,
+      body
     );
 
-    return response.data as Response<IQuestionnaire[]>;
+    return response.data as Response;
   } catch (error: any) {
     const { messages } = error.response.data;
 

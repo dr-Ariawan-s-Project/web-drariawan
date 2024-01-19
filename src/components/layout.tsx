@@ -1,5 +1,6 @@
 import { ReactNode } from 'react';
 
+import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { Sidebar } from '@/components/sidebar';
 import Navbar from '@/components/navbar';
 import { cn } from '@/lib/utils';
@@ -33,14 +34,10 @@ export const Layout = (props: Readonly<Props>) => {
         <Navbar showMenu={variant === 'admin'} />
         {variant === 'admin' ? (
           <div className="w-full flex-grow flex flex-col p-5 overflow-auto">
-            <div
-              className={cn(
-                'flex h-fit w-full flex-col rounded-lg bg-white p-5 space-y-5',
-                className
-              )}
-            >
-              {children}
-            </div>
+            <Card>
+              <CardHeader></CardHeader>
+              <CardContent className="space-y-5">{children}</CardContent>
+            </Card>
           </div>
         ) : (
           <div

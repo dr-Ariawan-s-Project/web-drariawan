@@ -18,7 +18,7 @@ import DataTable from '@/components/data-table';
 import { Badge } from '@/components/ui/badge';
 import { Layout } from '@/components/layout';
 import Alert from '@/components/alert';
-import AddEditUser from './module/add-edit-user';
+import ModalUser from './module/modal-user';
 
 import { getUsers, postUser, deactivateUser } from '@/utils/apis/user/api';
 import { IUser, UserSchema } from '@/utils/apis/user/types';
@@ -33,8 +33,12 @@ const DashboardUsers = () => {
   const [data, setData] = useState<IUser[]>([]);
   const [pagination, setPagination] = useState<IPagination>();
   const [selectedData, setSelectedData] = useState<IUser>();
-  const [showAddEditDialog, setShowAddEditDialog] = useState(false);
+  const [showDialog, setShowDialog] = useState(false);
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
+
+  const checkRole = useMemo(() => {
+    return ['superadmin'].includes(role);
+  }, [role]);
 
   const columns = useMemo<ColumnDef<IUser>[]>(
     () => [
@@ -120,7 +124,7 @@ const DashboardUsers = () => {
     fetchData();
   }, []);
 
-  const fetchData = async () => {
+  async function fetchData() {
     try {
       const query = Object.fromEntries(
         [...searchParams].filter((param) => param[0] !== 'tab')
@@ -137,7 +141,7 @@ const DashboardUsers = () => {
         variant: 'destructive',
       });
     }
-  };
+  }
 
   async function onSubmitData(data: UserSchema) {
     try {
@@ -148,7 +152,7 @@ const DashboardUsers = () => {
       });
 
       fetchData();
-      setShowAddEditDialog(false);
+      setShowDialog(false);
     } catch (error) {
       toast({
         title: 'Oops! Sesuatu telah terjadi',
@@ -180,16 +184,16 @@ const DashboardUsers = () => {
 
   return (
     <Layout variant="admin">
-      {['superadmin'].includes(role) && (
+      {checkRole ? (
         <div className="w-full flex justify-end">
           <Button
             data-testid="btn-add-data"
-            onClick={() => setShowAddEditDialog(true)}
+            onClick={() => setShowDialog(true)}
           >
             Tambah user
           </Button>
         </div>
-      )}
+      ) : null}
       <DataTable
         columns={columns}
         data={data}
@@ -206,9 +210,9 @@ const DashboardUsers = () => {
           setShowDeleteDialog(false);
         }}
       />
-      <AddEditUser
-        open={showAddEditDialog}
-        onOpenChange={setShowAddEditDialog}
+      <ModalUser
+        open={showDialog}
+        onOpenChange={setShowDialog}
         editData={selectedData}
         onSubmit={(data) => onSubmitData(data)}
       />

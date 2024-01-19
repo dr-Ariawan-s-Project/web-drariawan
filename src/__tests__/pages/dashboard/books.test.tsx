@@ -231,6 +231,20 @@ describe('Books Dashboard Page', () => {
                 `option-${inputValue}`
               )
             );
+          } else if (inputType === 'datepicker') {
+            await userEvent.click(component);
+
+            const calendar = screen.getByTestId('calendar');
+            expect(calendar).toBeInTheDocument();
+
+            const allDay = within(screen.getByRole('grid')).getAllByRole(
+              'gridcell'
+            );
+            const filterAvailableDay = allDay.filter(
+              (element) => !element.hasAttribute('disabled')
+            );
+
+            await userEvent.click(filterAvailableDay[0]);
           } else {
             await act(async () => {
               fireEvent.change(component, { target: { value: inputValue } });
@@ -271,6 +285,20 @@ describe('Books Dashboard Page', () => {
                 `option-${inputValue}`
               )
             );
+          } else if (inputType === 'datepicker') {
+            await userEvent.click(component);
+
+            const calendar = screen.getByTestId('calendar');
+            expect(calendar).toBeInTheDocument();
+
+            const allDay = within(screen.getByRole('grid')).getAllByRole(
+              'gridcell'
+            );
+            const filterAvailableDay = allDay.filter(
+              (element) => !element.hasAttribute('disabled')
+            );
+
+            await userEvent.click(filterAvailableDay[0]);
           } else {
             await act(async () => {
               fireEvent.change(component, { target: { value: inputValue } });
@@ -349,6 +377,20 @@ describe('Books Dashboard Page', () => {
                 `option-${inputValue}`
               )
             );
+          } else if (inputType === 'datepicker') {
+            await userEvent.click(component);
+
+            const calendar = screen.getByTestId('calendar');
+            expect(calendar).toBeInTheDocument();
+
+            const allDay = within(screen.getByRole('grid')).getAllByRole(
+              'gridcell'
+            );
+            const filterAvailableDay = allDay.filter(
+              (element) => !element.hasAttribute('disabled')
+            );
+
+            await userEvent.click(filterAvailableDay[0]);
           } else {
             await act(async () => {
               fireEvent.change(component, { target: { value: inputValue } });
@@ -396,6 +438,20 @@ describe('Books Dashboard Page', () => {
                 `option-${inputValue}`
               )
             );
+          } else if (inputType === 'datepicker') {
+            await userEvent.click(component);
+
+            const calendar = screen.getByTestId('calendar');
+            expect(calendar).toBeInTheDocument();
+
+            const allDay = within(screen.getByRole('grid')).getAllByRole(
+              'gridcell'
+            );
+            const filterAvailableDay = allDay.filter(
+              (element) => !element.hasAttribute('disabled')
+            );
+
+            await userEvent.click(filterAvailableDay[0]);
           } else {
             await act(async () => {
               fireEvent.change(component, { target: { value: inputValue } });

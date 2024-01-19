@@ -18,7 +18,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import AddEditBooking from './module/add-edit-booking';
+import ModalBooking from './module/modal-booking';
 
 import {
   deleteBooking,
@@ -231,7 +231,7 @@ const DashboardBooks = () => {
           setShowDeleteDialog(false);
         }}
       />
-      <AddEditBooking
+      <ModalBooking
         open={showAddEditDialog}
         onOpenChange={setShowAddEditDialog}
         editData={selectedData}
