@@ -41,6 +41,10 @@ const DashboardBooks = () => {
   const [showAddEditDialog, setShowAddEditDialog] = useState(false);
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
 
+  const checkRole = useMemo(() => {
+    return ['suster'].includes(role);
+  }, [role]);
+
   const columns = useMemo<ColumnDef<IBook>[]>(
     () => [
       {
@@ -65,11 +69,13 @@ const DashboardBooks = () => {
       {
         accessorKey: 'booking_date',
         header: 'Tanggal Booking',
-        cell: (info) =>
-          format(
-            parseISO(info.row.getValue('booking_date')),
-            'EEEE, dd MMMM yyyy'
-          ),
+        cell: (info) => {
+          const cellValue = info.row.original.booking_date;
+
+          return cellValue
+            ? format(parseISO(cellValue), 'EEEE, dd MMMM yyyy')
+            : '-';
+        },
       },
       {
         accessorKey: 'schedule.user.name',
@@ -98,7 +104,7 @@ const DashboardBooks = () => {
         cell: ({ row }) => {
           return (
             <DropdownMenu>
-              <DropdownMenuTrigger asChild>
+              <DropdownMenuTrigger data-testid="table-action" asChild>
                 <Button variant="ghost" className="h-8 w-8 p-0">
                   <span className="sr-only">Open menu</span>
                   <MoreHorizontal className="h-4 w-4" />
@@ -106,18 +112,22 @@ const DashboardBooks = () => {
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end">
                 <DropdownMenuItem
+                  data-testid="action-edit"
                   onClick={() => {
                     setSelectedData(row.original);
                     setShowAddEditDialog(true);
                   }}
+                  disabled={!checkRole}
                 >
                   Edit
                 </DropdownMenuItem>
                 <DropdownMenuItem
+                  data-testid="action-delete"
                   onClick={() => {
                     setSelectedData(row.original);
                     setShowDeleteDialog(true);
                   }}
+                  disabled={!checkRole}
                 >
                   Hapus
                 </DropdownMenuItem>
@@ -183,6 +193,7 @@ const DashboardBooks = () => {
 
       fetchData();
       setSelectedData(undefined);
+      setShowDeleteDialog(false);
     } catch (error) {
       toast({
         title: 'Oops! Sesuatu telah terjadi',
@@ -194,13 +205,16 @@ const DashboardBooks = () => {
 
   return (
     <Layout variant="admin">
-      {['suster'].includes(role) && (
+      {checkRole ? (
         <div className="w-full flex justify-end">
-          <Button onClick={() => setShowAddEditDialog(true)}>
+          <Button
+            data-testid="btn-add-data"
+            onClick={() => setShowAddEditDialog(true)}
+          >
             Tambah booking
           </Button>
         </div>
-      )}
+      ) : null}
       <DataTable
         columns={columns}
         data={data}

@@ -52,9 +52,15 @@ export const samplePatients: IPatient[] = [
     phone: '081234567',
   },
   {
-    id: '497480d9-8e83-4a07-9b6a-96b3e6b3f78c',
-    email: 'lospujukka@gufum.com',
-    phone: '0877112233',
+    id: '237071bb-908a-4f5c-8c7a-922bf7d68715',
+    name: 'patient 123',
+    email: 'patient123@mail.com',
+    nik: 'zOnYvcDSYVHyBwgknIeyUprbKQsm9Bdn5cwFxAGpf+9o7ZC486NcgA==',
+    dob: '2020-01-01',
+    phone: '08123456235',
+    gender: 'male',
+    marriage_status: 'married',
+    nationality: 'indonesia',
   },
   {
     id: '50f1b178-58cc-40f7-bd07-9692c1a0883e',

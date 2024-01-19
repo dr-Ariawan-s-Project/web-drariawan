@@ -185,17 +185,17 @@ describe('Schedules Dashboard Page', () => {
           const inputValue = formInput[input].value;
           const inputType = formInput[input].type;
 
-          if (inputType === 'input') {
-            await act(async () => {
-              fireEvent.change(component, { target: { value: inputValue } });
-            });
-          } else {
+          if (inputType === 'dropdown') {
             await userEvent.click(component);
             await userEvent.click(
               within(screen.getByRole('presentation')).getByTestId(
                 `option-${inputValue}`
               )
             );
+          } else {
+            await act(async () => {
+              fireEvent.change(component, { target: { value: inputValue } });
+            });
           }
         }
 
@@ -225,25 +225,26 @@ describe('Schedules Dashboard Page', () => {
           const inputValue = formInput[input].value;
           const inputType = formInput[input].type;
 
-          if (inputType === 'input') {
-            await act(async () => {
-              fireEvent.change(component, { target: { value: inputValue } });
-            });
-          } else {
+          if (inputType === 'dropdown') {
             await userEvent.click(component);
             await userEvent.click(
               within(screen.getByRole('presentation')).getByTestId(
                 `option-${inputValue}`
               )
             );
+          } else {
+            await act(async () => {
+              fireEvent.change(component, { target: { value: inputValue } });
+            });
           }
         }
 
         mockedAxios.post.mockResolvedValueOnce({
           data: {
-            messages: ['[success]'],
+            data: null,
+            messages: ['[success] create data'],
             meta: {
-              code: '200-007-OK',
+              code: '201-006-OK',
               status: 'success',
             },
           },
@@ -267,7 +268,7 @@ describe('Schedules Dashboard Page', () => {
 
         await userEvent.click(screen.getByTestId('btn-submit'));
 
-        expect(screen.getByText('[success]')).toBeInTheDocument();
+        expect(screen.getByText('[success] create data')).toBeInTheDocument();
       });
     });
 
@@ -296,17 +297,17 @@ describe('Schedules Dashboard Page', () => {
           const inputValue = dupeFormInput[input].value;
           const inputType = dupeFormInput[input].type;
 
-          if (inputType === 'input') {
-            await act(async () => {
-              fireEvent.change(component, { target: { value: inputValue } });
-            });
-          } else {
+          if (inputType === 'dropdown') {
             await userEvent.click(component);
             await userEvent.click(
               within(screen.getByRole('presentation')).getByTestId(
                 `option-${inputValue}`
               )
             );
+          } else {
+            await act(async () => {
+              fireEvent.change(component, { target: { value: inputValue } });
+            });
           }
         }
 
@@ -340,17 +341,17 @@ describe('Schedules Dashboard Page', () => {
           const inputValue = dupeFormInput[input].value;
           const inputType = dupeFormInput[input].type;
 
-          if (inputType === 'input') {
-            await act(async () => {
-              fireEvent.change(component, { target: { value: inputValue } });
-            });
-          } else {
+          if (inputType === 'dropdown') {
             await userEvent.click(component);
             await userEvent.click(
               within(screen.getByRole('presentation')).getByTestId(
                 `option-${inputValue}`
               )
             );
+          } else {
+            await act(async () => {
+              fireEvent.change(component, { target: { value: inputValue } });
+            });
           }
         }
 

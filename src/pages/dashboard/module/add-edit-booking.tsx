@@ -11,11 +11,12 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog';
 import {
-  CustomFormDatePicker,
+  CustomFormField,
   CustomFormSelect,
 } from '@/components/custom-formfield';
 import { useToast } from '@/components/ui/use-toast';
 import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
 import { Form } from '@/components/ui/form';
 
 import { BookingSchema, IBook, bookingSchema } from '@/utils/apis/books/types';
@@ -41,7 +42,7 @@ const AddEditBooking = (props: Props) => {
     resolver: zodResolver(bookingSchema),
     defaultValues: {
       patient_id: '',
-      schedule_id: '',
+      schedule_id: 0,
       booking_date: '',
     },
   });
@@ -101,7 +102,7 @@ const AddEditBooking = (props: Props) => {
   function setEditData() {
     if (editData) {
       form.setValue('patient_id', editData.patient_id);
-      form.setValue('schedule_id', String(editData.schedule_id));
+      form.setValue('schedule_id', editData.schedule_id);
       form.setValue('booking_date', editData.booking_date);
     }
   }
@@ -121,8 +122,13 @@ const AddEditBooking = (props: Props) => {
           </DialogTitle>
         </DialogHeader>
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+          <form
+            data-testid="form-add-edit"
+            onSubmit={form.handleSubmit(onSubmit)}
+            className="space-y-8"
+          >
             <CustomFormSelect
+              data-testid="input-patient"
               control={form.control}
               name="patient_id"
               label="Nama pasien"
@@ -130,20 +136,34 @@ const AddEditBooking = (props: Props) => {
               options={patients}
             />
             <CustomFormSelect
+              data-testid="input-schedule"
               control={form.control}
               name="schedule_id"
               label="Jadwal"
               placeholder="Silahkan pilih jadwal"
               options={schedules}
             />
-            <CustomFormDatePicker
+            <CustomFormField
               control={form.control}
               name="booking_date"
-              label="Tanggal lahir"
-              placeholder="mm/dd/yyyy"
-            />
+              label="Tanggal booking"
+            >
+              {(field) => (
+                <Input
+                  {...field}
+                  data-testid="input-dob"
+                  placeholder="Tanggal booking"
+                  type="date"
+                  disabled={form.formState.isSubmitting}
+                  aria-disabled={form.formState.isSubmitting}
+                  value={field.value as string}
+                  min={'2024-01-18'}
+                />
+              )}
+            </CustomFormField>
             <DialogFooter>
               <Button
+                data-testid="btn-submit"
                 type="submit"
                 disabled={form.formState.isSubmitting}
                 aria-disabled={form.formState.isSubmitting}

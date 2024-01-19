@@ -3,12 +3,15 @@ import * as z from 'zod';
 
 export const bookingSchema = z.object({
   patient_id: z.string().min(1, { message: 'Data pasien wajib diisi' }),
-  schedule_id: z.string().min(1, { message: 'Jadwal wajib diisi' }),
-  booking_date: z
-    .date({
-      required_error: 'Tanggal lahir wajib diisi',
-      invalid_type_error: 'Tanggal lahir wajib diisi',
+  schedule_id: z.coerce
+    .number({
+      required_error: 'Jadwal wajib diisi',
+      invalid_type_error: 'Jadwal wajib diisi',
     })
+    .min(1, { message: 'Jadwal wajib diisi' }),
+  booking_date: z
+    .string()
+    .min(1, { message: 'Tanggal booking wajib diisi' })
     .transform((value) => format(value, 'yyyy-MM-dd')),
 });
 

@@ -143,17 +143,17 @@ describe('Users Dashboard Page', () => {
           const inputValue = formInput[input].value;
           const inputType = formInput[input].type;
 
-          if (inputType === 'input') {
-            await act(async () => {
-              fireEvent.change(component, { target: { value: inputValue } });
-            });
-          } else {
+          if (inputType === 'dropdown') {
             await userEvent.click(component);
             await userEvent.click(
               within(screen.getByRole('presentation')).getByTestId(
                 `option-${inputValue}`
               )
             );
+          } else {
+            await act(async () => {
+              fireEvent.change(component, { target: { value: inputValue } });
+            });
           }
         }
 
@@ -183,17 +183,17 @@ describe('Users Dashboard Page', () => {
           const inputValue = formInput[input].value;
           const inputType = formInput[input].type;
 
-          if (inputType === 'input') {
-            await act(async () => {
-              fireEvent.change(component, { target: { value: inputValue } });
-            });
-          } else {
+          if (inputType === 'dropdown') {
             await userEvent.click(component);
             await userEvent.click(
               within(screen.getByRole('presentation')).getByTestId(
                 `option-${inputValue}`
               )
             );
+          } else {
+            await act(async () => {
+              fireEvent.change(component, { target: { value: inputValue } });
+            });
           }
         }
 

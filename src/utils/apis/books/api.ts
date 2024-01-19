@@ -22,7 +22,7 @@ export const postBooking = async (body: BookingSchema) => {
   try {
     const response = await axiosWithConfig.post(`/v1/booking`, body);
 
-    return response.data as Response;
+    return response.data as Response<null>;
   } catch (error: any) {
     const { messages } = error.response.data;
 
@@ -40,7 +40,7 @@ export const updateBooking = async (
       body
     );
 
-    return response.data as Response;
+    return response.data as Response<null>;
   } catch (error: any) {
     const { messages } = error.response.data;
 
