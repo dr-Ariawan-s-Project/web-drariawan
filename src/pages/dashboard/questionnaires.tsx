@@ -57,17 +57,6 @@ const ListKuisioner = () => {
           format(parseISO(info.row.getValue('created_at')), 'PPpp'),
       },
       {
-        accessorKey: 'updated_at',
-        header: 'Selesai',
-        cell: ({ row }) => {
-          const { created_at, updated_at } = row.original;
-
-          return created_at === updated_at
-            ? '-'
-            : format(parseISO(updated_at), 'PPpp');
-        },
-      },
-      {
         accessorKey: 'diagnosis',
         header: 'Diagnosis',
         cell: ({ row }) => {

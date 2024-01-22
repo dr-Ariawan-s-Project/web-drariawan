@@ -1,6 +1,7 @@
+import { Params, useMatches } from 'react-router-dom';
 import { ReactNode } from 'react';
 
-import { Card, CardContent, CardHeader } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Sidebar } from '@/components/sidebar';
 import Navbar from '@/components/navbar';
 import { cn } from '@/lib/utils';
@@ -13,6 +14,18 @@ interface Props {
   className?: string;
 }
 
+interface IMatches {
+  id: string;
+  pathname: string;
+  params: Params<string>;
+  data: unknown;
+  handle: unknown;
+}
+
+type HandleType = {
+  crumb: string;
+};
+
 export const Layout = (props: Readonly<Props>) => {
   const {
     children,
@@ -21,6 +34,16 @@ export const Layout = (props: Readonly<Props>) => {
     centerX = false,
     className,
   } = props;
+  let matches: IMatches[] = useMatches();
+
+  let crumbs = matches
+    .filter((match) =>
+      Boolean(match.handle && (match.handle as HandleType).crumb)
+    )
+    .map((match) => {
+      const crumb = (match.handle as HandleType).crumb;
+      return crumb;
+    });
 
   return (
     <div
@@ -35,7 +58,9 @@ export const Layout = (props: Readonly<Props>) => {
         {variant === 'admin' ? (
           <div className="w-full flex-grow flex flex-col p-5 overflow-auto">
             <Card>
-              <CardHeader></CardHeader>
+              <CardHeader>
+                <CardTitle>{crumbs[0]}</CardTitle>
+              </CardHeader>
               <CardContent className="space-y-5">{children}</CardContent>
             </Card>
           </div>

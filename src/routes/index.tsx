@@ -75,6 +75,9 @@ const App = () => {
         {
           path: '/dashboard',
           element: <Dashboard />,
+          handle: {
+            crumb: 'Dashboard',
+          },
         },
         {
           path: '/dashboard/login',
@@ -83,30 +86,51 @@ const App = () => {
         {
           path: '/dashboard/patients',
           element: <DashboardPatients />,
+          handle: {
+            crumb: 'Daftar Pasien',
+          },
         },
         {
           path: '/dashboard/users',
           element: <DashboardUsers />,
+          handle: {
+            crumb: 'Daftar Pengguna',
+          },
         },
         {
           path: '/dashboard/schedules',
           element: <DashboardSchedules />,
+          handle: {
+            crumb: 'Daftar Jadwal',
+          },
         },
         {
           path: '/dashboard/books',
           element: <DashboardBooks />,
+          handle: {
+            crumb: 'Daftar Booking',
+          },
         },
         {
           path: '/dashboard/questionnaires',
           element: <DashboardQuestionnaires />,
+          handle: {
+            crumb: 'Daftar Kuesioner',
+          },
         },
         {
           path: '/dashboard/questionnaires/:attempt_id',
           element: <DashboardAttempt />,
+          handle: {
+            crumb: 'Detail Jawaban Kuesioner',
+          },
         },
         {
           path: '/dashboard/settings',
           element: <Setting />,
+          handle: {
+            crumb: 'Pengaturan Akun',
+          },
         },
         {
           path: '*',
