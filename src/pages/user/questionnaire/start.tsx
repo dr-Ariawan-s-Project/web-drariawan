@@ -1,32 +1,37 @@
-import { Navigate, useSearchParams, useNavigate } from 'react-router-dom';
-import { useEffect, useState, useMemo, useCallback } from 'react';
-import { Loader2 } from 'lucide-react';
-import { Info } from 'lucide-react';
-import { debounce } from 'lodash';
+import {
+  Navigate,
+  useSearchParams,
+  useNavigate,
+  useLocation,
+} from "react-router-dom";
+import { useEffect, useState, useMemo, useCallback } from "react";
+import { Loader2 } from "lucide-react";
+import { Info } from "lucide-react";
+import { debounce } from "lodash";
 import SpeechRecognition, {
   useSpeechRecognition,
-} from 'react-speech-recognition';
+} from "react-speech-recognition";
 
-import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
-import AudioRecorder from '@/components/audio-recorder';
-import { useToast } from '@/components/ui/use-toast';
-import { Textarea } from '@/components/ui/textarea';
-import VideoPlayer from '@/components/video-player';
-import { Button } from '@/components/ui/button';
-import { Label } from '@/components/ui/label';
-import { Layout } from '@/components/layout';
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import AudioRecorder from "@/components/audio-recorder";
+import { useToast } from "@/components/ui/use-toast";
+import { Textarea } from "@/components/ui/textarea";
+import VideoPlayer from "@/components/video-player";
+import { Button } from "@/components/ui/button";
+import { Label } from "@/components/ui/label";
+import { Layout } from "@/components/layout";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from '@/components/ui/popover';
+} from "@/components/ui/popover";
 
 import {
   getQuestionnaires,
   postQuestionnaire,
-} from '@/utils/apis/questionnaire/api';
-import { IQuestionnaire } from '@/utils/apis/questionnaire/types';
-import useQuestionnaireStore from '@/utils/states/questionnaire';
+} from "@/utils/apis/questionnaire/api";
+import { IChoice, IQuestionnaire } from "@/utils/apis/questionnaire/types";
+import useQuestionnaireStore from "@/utils/states/questionnaire";
 
 interface IStartProps {
   handleClick: () => void;
@@ -39,6 +44,7 @@ interface IQuestionProps {
   transcript: string;
   isRecording: boolean;
   isLoading: boolean;
+  selectedOption: IChoice | null;
   handleStartRecording: () => void;
   handleStopRecording: () => void;
   handleNext: () => void;
@@ -60,6 +66,7 @@ const QuestionnaireStart = () => {
     browserSupportsSpeechRecognition,
   } = useSpeechRecognition();
   const [searchParams] = useSearchParams();
+  const location = useLocation();
   const navigate = useNavigate();
   const { toast } = useToast();
 
@@ -68,7 +75,7 @@ const QuestionnaireStart = () => {
   const [idQuestion, setIdQuestion] = useState(1);
   const [datas, setDatas] = useState<IQuestionnaire[]>([]);
 
-  if (!searchParams.get('code')) {
+  if (!searchParams.get("code")) {
     return <Navigate to="/not-found" />;
   }
 
@@ -91,7 +98,7 @@ const QuestionnaireStart = () => {
       const initialAnswer = result.data.map((item) => {
         return {
           question_id: item.id,
-          description: '',
+          description: "",
           score: 0,
         };
       });
@@ -100,9 +107,9 @@ const QuestionnaireStart = () => {
       setIsLoading(false);
     } catch (error) {
       toast({
-        title: 'Oops! Sesuatu telah terjadi',
+        title: "Oops! Sesuatu telah terjadi",
         description: (error as Error).message,
-        variant: 'destructive',
+        variant: "destructive",
       });
     }
   }
@@ -110,6 +117,13 @@ const QuestionnaireStart = () => {
   function handleNext() {
     const newIdQuestion = idQuestion + 1;
     const checkNextQuestion = datas.find((data) => data.id === newIdQuestion);
+
+    resetSelectedOption({
+      question_id: question.id,
+      description: transcript,
+      score: selectedOption?.score ?? 0,
+    });
+    resetTranscript();
 
     if (checkNextQuestion) {
       if (question.goto) {
@@ -123,36 +137,25 @@ const QuestionnaireStart = () => {
       setIsLoading(true);
       handleSubmit();
     }
-
-    resetSelectedOption({
-      question_id: question.id,
-      description: transcript,
-      score: selectedOption?.score ?? 0,
-    });
-    resetTranscript();
   }
 
   async function handleSubmit() {
     try {
       const body = {
-        code_attempt: searchParams.get('code') as string,
+        code_attempt: location.search.slice(6),
         answer: answers,
       };
 
-      const result = await postQuestionnaire(body);
+      await postQuestionnaire(body);
 
-      toast({
-        description: result.data,
-      });
-
-      navigate('/questionnaire/finish', {
-        state: { from: 'questionnaire-start' },
+      navigate("/questionnaire/finish", {
+        state: { from: "questionnaire-start" },
       });
     } catch (error) {
       toast({
-        title: 'Oops! Sesuatu telah terjadi',
+        title: "Oops! Sesuatu telah terjadi",
         description: (error as Error).message,
-        variant: 'destructive',
+        variant: "destructive",
       });
     } finally {
       setIsLoading(false);
@@ -160,23 +163,22 @@ const QuestionnaireStart = () => {
   }
 
   const checkTranscript = useCallback(async () => {
-    if (transcript === '') return;
+    if (transcript === "") return;
 
-    if (question.type === 'choices') {
-      const slugs =
-        question.choices?.map((choice) => choice.slugs).flat() || [];
+    if (question.type === "choices") {
       const transcriptLowerCase = transcript.toLowerCase();
-      let correctOption = '';
+      let correctOption = "";
 
-      const isMatch = slugs.some((slug) => {
-        const slugParts = slug.split(';').filter((s) => s.trim());
+      const isMatch = question.choices!.some((choice) => {
+        const { id, slugs } = choice;
+        const slugParts = slugs.split(";").filter((s) => s.trim());
 
         return slugParts.some((part) => {
-          const regexPattern = '\\b' + transcriptLowerCase + '\\b';
-          const temp = new RegExp(regexPattern, 'g');
+          const regexPattern = "\\b" + transcriptLowerCase + "\\b";
+          const temp = new RegExp(regexPattern, "g");
 
           if (part.match(temp)) {
-            correctOption = slug;
+            correctOption = String(id);
 
             return true;
           }
@@ -195,7 +197,7 @@ const QuestionnaireStart = () => {
   const startListening = useCallback(() => {
     if (browserSupportsSpeechRecognition) {
       SpeechRecognition.getRecognition()?.continuous;
-      SpeechRecognition.startListening({ language: 'id', continuous: true });
+      SpeechRecognition.startListening({ language: "id", continuous: true });
       SpeechRecognition.startListening();
     }
   }, []);
@@ -209,7 +211,7 @@ const QuestionnaireStart = () => {
   const onRadioChange = useCallback(
     async (value: string) => {
       const findOptionById = question.choices?.find(
-        (choice) => choice.slugs === value
+        (choice) => String(choice.id) === value
       );
       changeSelectedOption(findOptionById!);
     },
@@ -233,6 +235,7 @@ const QuestionnaireStart = () => {
         transcript={transcript}
         isRecording={listening}
         isLoading={isLoading}
+        selectedOption={selectedOption}
         handleStartRecording={startListening}
         handleStopRecording={stopListening}
         handleNext={handleNext}
@@ -262,21 +265,22 @@ const StartPage = (props: IStartProps) => {
             Sedang memuat
           </>
         ) : (
-          'Mulai isi kuesioner'
+          "Mulai isi kuesioner"
         )}
       </Button>
     </Layout>
   );
 };
 
+/* TODO: Save temporary answer to localstorage when user close the app */
 const QuestionPage = (props: IQuestionProps) => {
-  const { selectedOption } = useQuestionnaireStore((state) => state);
   const {
     data,
     count,
     transcript,
     isRecording,
     isLoading,
+    selectedOption,
     handleStartRecording,
     handleStopRecording,
     handleNext,
@@ -284,10 +288,10 @@ const QuestionPage = (props: IQuestionProps) => {
   } = props;
 
   const isDisabled = useMemo(() => {
-    if (data.type === 'choices') {
+    if (data.type === "choices") {
       return !selectedOption;
     } else {
-      return !selectedOption && (isRecording || transcript === '');
+      return !selectedOption && (isRecording || transcript === "");
     }
   }, [data, selectedOption, transcript, isRecording]);
 
@@ -298,7 +302,7 @@ const QuestionPage = (props: IQuestionProps) => {
           Pertanyaan ke {data.id} dari {count}
         </p>
         <p className="font-bold text-2xl text-center">
-          {data.question}{' '}
+          {data.question}{" "}
           <span className="align-middle">
             <Popover>
               <PopoverTrigger>
@@ -331,20 +335,24 @@ const QuestionPage = (props: IQuestionProps) => {
         )}
         <RadioGroup
           onValueChange={handleRadioChange}
-          defaultValue={selectedOption?.slugs}
-          value={selectedOption?.slugs}
+          defaultValue={String(selectedOption?.id)}
+          value={String(selectedOption?.id)}
         >
-          {data.choices &&
-            data.choices.map((choice) => {
-              return (
-                <div className="flex items-center space-x-2" key={choice.id}>
-                  <RadioGroupItem value={choice.slugs} id={`r${choice.id}`} />
-                  <Label htmlFor={`r${choice.id}`} className="tracking-wider">
-                    {choice.option}
-                  </Label>
-                </div>
-              );
-            })}
+          {data.choices
+            ? data.choices.map((choice) => {
+                return (
+                  <div className="flex items-center space-x-2" key={choice.id}>
+                    <RadioGroupItem
+                      value={String(choice.id)}
+                      id={`r${choice.id}`}
+                    />
+                    <Label htmlFor={`r${choice.id}`} className="tracking-wider">
+                      {choice.option}
+                    </Label>
+                  </div>
+                );
+              })
+            : null}
         </RadioGroup>
         <div className="flex space-x-1 w-full items-center">
           <Textarea

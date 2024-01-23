@@ -1,21 +1,21 @@
-import { zodResolver } from '@hookform/resolvers/zod';
-import { useForm } from 'react-hook-form';
-import { Loader2 } from 'lucide-react';
-import { useEffect } from 'react';
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import { Loader2 } from "lucide-react";
+import { useEffect } from "react";
 
 import {
   CustomFormField,
   CustomFormSelect,
-} from '@/components/custom-formfield';
-import { useToast } from '@/components/ui/use-toast';
-import { Layout } from '@/components/layout';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Form } from '@/components/ui/form';
+} from "@/components/custom-formfield";
+import { useToast } from "@/components/ui/use-toast";
+import { Layout } from "@/components/layout";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Form } from "@/components/ui/form";
 
-import { UpdateSchema, updateSchema } from '@/utils/apis/user/types';
-import { getProfile, updateUser } from '@/utils/apis/user/api';
-import { roles } from '@/utils/constants';
+import { UpdateSchema, updateSchema } from "@/utils/apis/user/types";
+import { getProfile, updateUser } from "@/utils/apis/user/api";
+import { roles } from "@/utils/constants";
 
 const Setting = () => {
   const { toast } = useToast();
@@ -23,13 +23,13 @@ const Setting = () => {
   const form = useForm<UpdateSchema>({
     resolver: zodResolver(updateSchema),
     defaultValues: {
-      name: '',
-      email: '',
-      phone: '',
-      password: '',
-      role: '',
-      picture: new File([], ''),
-      specialization: '',
+      name: "",
+      email: "",
+      phone: "",
+      password: "",
+      role: "",
+      picture: new File([], ""),
+      specialization: "",
     },
   });
 
@@ -41,16 +41,16 @@ const Setting = () => {
     try {
       const { data } = await getProfile();
 
-      form.setValue('name', data.name);
-      form.setValue('email', data.email);
-      form.setValue('phone', data.phone);
-      form.setValue('role', data.role);
-      form.setValue('specialization', data.specialization);
+      form.setValue("name", data.name);
+      form.setValue("email", data.email);
+      form.setValue("phone", data.phone);
+      form.setValue("role", data.role);
+      form.setValue("specialization", data.specialization);
     } catch (error) {
       toast({
-        title: 'Oops! Sesuatu telah terjadi',
+        title: "Oops! Sesuatu telah terjadi",
         description: (error as Error).message,
-        variant: 'destructive',
+        variant: "destructive",
       });
     }
   };
@@ -64,9 +64,9 @@ const Setting = () => {
       });
     } catch (error) {
       toast({
-        title: 'Oops! Sesuatu telah terjadi',
+        title: "Oops! Sesuatu telah terjadi",
         description: (error as Error).message,
-        variant: 'destructive',
+        variant: "destructive",
       });
     }
   }
@@ -145,6 +145,7 @@ const Setting = () => {
             label="Role"
             placeholder="Role"
             options={roles}
+            disabled
           />
           <CustomFormField
             control={form.control}
@@ -194,7 +195,7 @@ const Setting = () => {
                   Please wait
                 </>
               ) : (
-                'Simpan'
+                "Simpan"
               )}
             </Button>
           </div>

@@ -1,32 +1,32 @@
-import { useState, useEffect, useMemo } from 'react';
-import { useSearchParams } from 'react-router-dom';
-import { ColumnDef } from '@tanstack/react-table';
-import { MoreHorizontal } from 'lucide-react';
+import { useState, useEffect, useMemo } from "react";
+import { useSearchParams } from "react-router-dom";
+import { ColumnDef } from "@tanstack/react-table";
+import { MoreHorizontal } from "lucide-react";
 
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { useToast } from '@/components/ui/use-toast';
-import { Layout } from '@/components/layout';
-import Pagination from '@/components/pagination';
-import { Button } from '@/components/ui/button';
-import DataTable from '@/components/data-table';
-import Alert from '@/components/alert';
-import ModalSchedule from './module/modal-schedule';
+} from "@/components/ui/dropdown-menu";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { useToast } from "@/components/ui/use-toast";
+import { Layout } from "@/components/layout";
+import Pagination from "@/components/pagination";
+import { Button } from "@/components/ui/button";
+import DataTable from "@/components/data-table";
+import Alert from "@/components/alert";
+import ModalSchedule from "./module/modal-schedule";
 
 import {
   getSchedules,
   deleteSchedule,
   updateSchedule,
   postSchedule,
-} from '@/utils/apis/schedule/api';
-import { ISchedule, ScheduleSchema } from '@/utils/apis/schedule/types';
-import { useAuthStore } from '@/utils/states';
-import { IPagination } from '@/utils/types/api';
+} from "@/utils/apis/schedule/api";
+import { ISchedule, ScheduleSchema } from "@/utils/apis/schedule/types";
+import { useAuthStore } from "@/utils/states";
+import { IPagination } from "@/utils/types/api";
 
 const DashboardSchedules = () => {
   const [searchParams] = useSearchParams();
@@ -40,21 +40,21 @@ const DashboardSchedules = () => {
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
 
   const checkRole = useMemo(() => {
-    return ['superadmin', 'dokter', 'admin'].includes(role);
+    return ["dokter", "admin"].includes(role);
   }, [role]);
 
   const columns = useMemo<ColumnDef<ISchedule>[]>(
     () => [
       {
-        accessorKey: '',
-        header: 'No',
+        accessorKey: "",
+        header: "No",
         cell: ({ row }) => {
           return (pagination?.page! - 1) * pagination?.limit! + row.index + 1;
         },
       },
       {
-        accessorKey: 'user.name',
-        header: 'Nama Doktor',
+        accessorKey: "user.name",
+        header: "Nama Doktor",
         cell: ({ row }) => {
           const { name, picture } = row.original.user;
 
@@ -70,23 +70,23 @@ const DashboardSchedules = () => {
         },
       },
       {
-        accessorKey: 'health_care_address',
-        header: 'Alamat',
+        accessorKey: "health_care_address",
+        header: "Alamat",
       },
       {
-        accessorKey: 'day',
-        header: 'Hari Jadwal',
+        accessorKey: "day",
+        header: "Hari Jadwal",
       },
       {
-        accessorKey: '',
-        header: 'Waktu',
+        accessorKey: "",
+        header: "Waktu",
         cell: ({ row }) => {
           const { time_start, time_end } = row.original;
           return `${time_start} - ${time_end}`;
         },
       },
       {
-        id: 'actions',
+        id: "actions",
         cell: ({ row }) => {
           return (
             <DropdownMenu>
@@ -133,7 +133,7 @@ const DashboardSchedules = () => {
   const fetchData = async () => {
     try {
       const query = Object.fromEntries(
-        [...searchParams].filter((param) => param[0] !== 'tab')
+        [...searchParams].filter((param) => param[0] !== "tab")
       );
 
       const result = await getSchedules({ ...query, limit: 10 });
@@ -142,9 +142,9 @@ const DashboardSchedules = () => {
       setPagination(result.pagination);
     } catch (error) {
       toast({
-        title: 'Oops! Sesuatu telah terjadi',
+        title: "Oops! Sesuatu telah terjadi",
         description: (error as Error).message,
-        variant: 'destructive',
+        variant: "destructive",
       });
     }
   };
@@ -164,9 +164,9 @@ const DashboardSchedules = () => {
       setShowAddEditDialog(false);
     } catch (error) {
       toast({
-        title: 'Oops! Sesuatu telah terjadi',
+        title: "Oops! Sesuatu telah terjadi",
         description: (error as Error).message.toString(),
-        variant: 'destructive',
+        variant: "destructive",
       });
     }
   }
@@ -184,9 +184,9 @@ const DashboardSchedules = () => {
       setShowDeleteDialog(false);
     } catch (error) {
       toast({
-        title: 'Oops! Sesuatu telah terjadi',
+        title: "Oops! Sesuatu telah terjadi",
         description: (error as Error).message.toString(),
-        variant: 'destructive',
+        variant: "destructive",
       });
     }
   }

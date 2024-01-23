@@ -1,6 +1,6 @@
-import axiosWithConfig from '@/utils/apis/axiosWithConfig';
-import { buildQueryString } from '@/utils/formatter';
-import { Request, Response, ResponsePagination } from '@/utils/types/api';
+import axiosWithConfig from "@/utils/apis/axiosWithConfig";
+import { buildQueryString } from "@/utils/formatter";
+import { Request, Response, ResponsePagination } from "@/utils/types/api";
 import {
   AssessmentSchema,
   IAttempt,
@@ -8,12 +8,12 @@ import {
   IQuestionnaire,
   QuestionnaireBody,
   QuestionnaireSchema,
-} from './types';
+} from "./types";
 
 export const validateQuestionaire = async (body: QuestionnaireSchema) => {
   try {
     const response = await axiosWithConfig.post(
-      '/v1/questioner/validate',
+      "/v1/questioner/validate",
       body
     );
 
@@ -27,7 +27,7 @@ export const validateQuestionaire = async (body: QuestionnaireSchema) => {
 
 export const getQuestionnaires = async () => {
   try {
-    const response = await axiosWithConfig.get('/v1/questioner');
+    const response = await axiosWithConfig.get("/v1/questioner");
 
     return response.data as Response<IQuestionnaire[]>;
   } catch (error: any) {
@@ -39,9 +39,9 @@ export const getQuestionnaires = async () => {
 
 export const postQuestionnaire = async (body: QuestionnaireBody) => {
   try {
-    const response = await axiosWithConfig.post('/v1/questioner', body);
+    const response = await axiosWithConfig.post("/v1/questioner", body);
 
-    return response.data as Response<string>;
+    return response.data as Response<null>;
   } catch (error: any) {
     const { messages } = error.response.data;
 
@@ -54,7 +54,7 @@ export const getQuestionnaireAttempt = async (params?: Request) => {
     const query = buildQueryString(params);
     const url = query
       ? `/v1/questioner/attempts${query}&limit=10`
-      : '/v1/questioner/attempts';
+      : "/v1/questioner/attempts";
 
     const response = await axiosWithConfig.get(url);
 

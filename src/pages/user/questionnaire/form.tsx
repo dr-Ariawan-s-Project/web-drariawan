@@ -1,23 +1,23 @@
-import { zodResolver } from '@hookform/resolvers/zod';
-import { useNavigate } from 'react-router-dom';
-import { useForm } from 'react-hook-form';
-import { Loader2 } from 'lucide-react';
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useNavigate } from "react-router-dom";
+import { useForm } from "react-hook-form";
+import { Loader2 } from "lucide-react";
 
 import {
   CustomFormField,
   CustomFormSelect,
-} from '@/components/custom-formfield';
-import { useToast } from '@/components/ui/use-toast';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Form } from '@/components/ui/form';
-import { Layout } from '@/components/layout';
+} from "@/components/custom-formfield";
+import { useToast } from "@/components/ui/use-toast";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Form } from "@/components/ui/form";
+import { Layout } from "@/components/layout";
 import {
   QuestionnaireSchema,
   questionnaireSchema,
-} from '@/utils/apis/questionnaire/types';
-import { validateQuestionaire } from '@/utils/apis/questionnaire/api';
-import { forWho } from '@/utils/constants';
+} from "@/utils/apis/questionnaire/types";
+import { validateQuestionaire } from "@/utils/apis/questionnaire/api";
+import { forWho } from "@/utils/constants";
 
 const DataDiri = () => {
   const navigate = useNavigate();
@@ -26,24 +26,24 @@ const DataDiri = () => {
   const form = useForm<QuestionnaireSchema>({
     resolver: zodResolver(questionnaireSchema),
     defaultValues: {
-      email: '',
-      phone: '',
-      as: 'myself',
-      partner_email: '',
+      email: "",
+      phone: "",
+      as: "myself",
+      partner_email: "",
     },
   });
 
   async function onSubmit(data: QuestionnaireSchema) {
     try {
       await validateQuestionaire(data);
-      navigate('/questionnaire/sent', {
+      navigate("/questionnaire/sent", {
         state: { email: data.email },
       });
     } catch (error) {
       toast({
-        title: 'Oops! Sesuatu telah terjadi',
+        title: "Oops! Sesuatu telah terjadi",
         description: (error as Error).message,
-        variant: 'destructive',
+        variant: "destructive",
       });
     }
   }
@@ -54,6 +54,7 @@ const DataDiri = () => {
       <p className="text-lg lg:text-xl text-center">
         Silakan mengisi formulir ini dengan informasi yang diperlukan
       </p>
+      {/* TODO: If user already login, auto fill the form */}
       <Form {...form}>
         <form
           data-testid="form-questionnaire"
@@ -97,7 +98,7 @@ const DataDiri = () => {
             placeholder="Pilih"
             options={forWho}
           />
-          {form.watch('as') === 'partner' && (
+          {form.watch("as") === "partner" && (
             <CustomFormField
               control={form.control}
               name="partner_email"
@@ -128,7 +129,7 @@ const DataDiri = () => {
                   Please wait
                 </>
               ) : (
-                'Selanjutnya'
+                "Selanjutnya"
               )}
             </Button>
           </div>
