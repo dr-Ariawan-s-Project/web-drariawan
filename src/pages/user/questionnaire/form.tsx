@@ -2,6 +2,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { Loader2 } from "lucide-react";
+import { useEffect } from "react";
 
 import {
   CustomFormField,
@@ -17,11 +18,14 @@ import {
   questionnaireSchema,
 } from "@/utils/apis/questionnaire/types";
 import { validateQuestionaire } from "@/utils/apis/questionnaire/api";
+import { getMyProfile } from "@/utils/apis/patient/api";
+import { useAuthStore } from "@/utils/states";
 import { forWho } from "@/utils/constants";
 
 const DataDiri = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
+  const { token } = useAuthStore((state) => state);
 
   const form = useForm<QuestionnaireSchema>({
     resolver: zodResolver(questionnaireSchema),
@@ -32,6 +36,24 @@ const DataDiri = () => {
       partner_email: "",
     },
   });
+
+  useEffect(() => {
+    token && fetchData();
+  }, []);
+
+  async function fetchData() {
+    try {
+      const { data } = await getMyProfile();
+      form.setValue("email", data.email);
+      form.setValue("phone", data.phone);
+    } catch (error) {
+      toast({
+        title: "Oops! Sesuatu telah terjadi",
+        description: (error as Error).message,
+        variant: "destructive",
+      });
+    }
+  }
 
   async function onSubmit(data: QuestionnaireSchema) {
     try {
@@ -54,7 +76,6 @@ const DataDiri = () => {
       <p className="text-lg lg:text-xl text-center">
         Silakan mengisi formulir ini dengan informasi yang diperlukan
       </p>
-      {/* TODO: If user already login, auto fill the form */}
       <Form {...form}>
         <form
           data-testid="form-questionnaire"
@@ -97,6 +118,7 @@ const DataDiri = () => {
             label="Data ini untuk siapa?"
             placeholder="Pilih"
             options={forWho}
+            disabled={form.formState.isSubmitting}
           />
           {form.watch("as") === "partner" && (
             <CustomFormField

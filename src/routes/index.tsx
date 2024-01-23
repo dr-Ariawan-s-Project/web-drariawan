@@ -1,28 +1,28 @@
-import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
-import ProtectedRoute from './protected-route';
-import Main from '@/pages';
-import Register from '@/pages/auth/register';
-import Login from '@/pages/auth/login';
-import Profile from '@/pages/user/profile';
-import Scheduling from '@/pages/user/scheduling';
-import SchedulingSuccess from '@/pages/user/scheduling/success';
-import PatientSchedule from '@/pages/user/scheduling/patient-schedule';
-import Questionnaire from '@/pages/user/questionnaire';
-import QuestionnaireForm from '@/pages/user/questionnaire/form';
-import QuestionnaireSent from '@/pages/user/questionnaire/sent';
-import QuestionnaireStart from '@/pages/user/questionnaire/start';
-import QuestionnaireFinish from '@/pages/user/questionnaire/finish';
-import Dashboard from '@/pages/dashboard';
-import DashboardLogin from '@/pages/dashboard/login';
-import DashboardUsers from '@/pages/dashboard/users';
-import DashboardPatients from '@/pages/dashboard/patients';
-import DashboardSchedules from '@/pages/dashboard/schedules';
-import DashboardBooks from '@/pages/dashboard/books';
-import DashboardQuestionnaires from '@/pages/dashboard/questionnaires';
-import DashboardAttempt from '@/pages/dashboard/detail-attempt';
-import Setting from '@/pages/dashboard/settings';
-import Unauthorized from '@/pages/404';
+import ProtectedRoute from "./protected-route";
+import Main from "@/pages";
+import Register from "@/pages/auth/register";
+import Login from "@/pages/auth/login";
+import Profile from "@/pages/user/profile";
+import Scheduling from "@/pages/user/scheduling";
+import SchedulingSuccess from "@/pages/user/scheduling/success";
+import PatientSchedule from "@/pages/user/scheduling/patient-schedule";
+import Questionnaire from "@/pages/user/questionnaire";
+import QuestionnaireForm from "@/pages/user/questionnaire/form";
+import QuestionnaireSent from "@/pages/user/questionnaire/sent";
+import QuestionnaireStart from "@/pages/user/questionnaire/start";
+import QuestionnaireFinish from "@/pages/user/questionnaire/finish";
+import Dashboard from "@/pages/dashboard";
+import DashboardLogin from "@/pages/dashboard/login";
+import DashboardUsers from "@/pages/dashboard/users";
+import DashboardPatients from "@/pages/dashboard/patients";
+import DashboardSchedules from "@/pages/dashboard/schedules";
+import DashboardBooks from "@/pages/dashboard/books";
+import DashboardQuestionnaires from "@/pages/dashboard/questionnaires";
+import DashboardAttempt from "@/pages/dashboard/detail-attempt";
+import Setting from "@/pages/dashboard/settings";
+import Unauthorized from "@/pages/404";
 
 const App = () => {
   const router = createBrowserRouter([
@@ -30,115 +30,115 @@ const App = () => {
       element: <ProtectedRoute />,
       children: [
         {
-          path: '/',
+          path: "/",
           element: <Main />,
         },
         {
-          path: '/login',
+          path: "/login",
           element: <Login />,
         },
         {
-          path: '/register',
+          path: "/register",
           element: <Register />,
         },
         {
-          path: '/profile',
+          path: "/profile",
           element: <Profile />,
         },
         {
-          path: '/scheduling',
+          path: "/scheduling",
           element: <Scheduling />,
         },
         {
-          path: '/scheduling/success',
+          path: "/scheduling/success",
           element: <SchedulingSuccess />,
         },
         {
-          path: '/scheduling/my-list',
+          path: "/scheduling/my-list",
           element: <PatientSchedule />,
         },
         {
-          path: '/questionnaire',
+          path: "/questionnaire",
           element: <Questionnaire />,
         },
         {
-          path: '/questionnaire/form',
+          path: "/questionnaire/form",
           element: <QuestionnaireForm />,
         },
         {
-          path: '/questionnaire/sent',
+          path: "/questionnaire/sent",
           element: <QuestionnaireSent />,
         },
         {
-          path: '/questionnaire/start',
+          path: "/questionnaire/start",
           element: <QuestionnaireStart />,
         },
         {
-          path: '/questionnaire/finish',
+          path: "/questionnaire/finish",
           element: <QuestionnaireFinish />,
         },
         {
-          path: '/dashboard',
+          path: "/dashboard",
           element: <Dashboard />,
           handle: {
-            crumb: 'Dashboard',
+            crumb: "Dashboard",
           },
         },
         {
-          path: '/dashboard/login',
+          path: "/dashboard/login",
           element: <DashboardLogin />,
         },
         {
-          path: '/dashboard/patients',
+          path: "/dashboard/patients",
           element: <DashboardPatients />,
           handle: {
-            crumb: 'Daftar Pasien',
+            crumb: "Daftar Pasien",
           },
         },
         {
-          path: '/dashboard/users',
+          path: "/dashboard/users",
           element: <DashboardUsers />,
           handle: {
-            crumb: 'Daftar Pengguna',
+            crumb: "Daftar Pengguna",
           },
         },
         {
-          path: '/dashboard/schedules',
+          path: "/dashboard/schedules",
           element: <DashboardSchedules />,
           handle: {
-            crumb: 'Daftar Jadwal',
+            crumb: "Daftar Jadwal",
           },
         },
         {
-          path: '/dashboard/books',
+          path: "/dashboard/books",
           element: <DashboardBooks />,
           handle: {
-            crumb: 'Daftar Booking',
+            crumb: "Daftar Booking",
           },
         },
         {
-          path: '/dashboard/questionnaires',
+          path: "/dashboard/questionnaires",
           element: <DashboardQuestionnaires />,
           handle: {
-            crumb: 'Daftar Kuesioner',
+            crumb: "Daftar Kuesioner",
           },
         },
         {
-          path: '/dashboard/questionnaires/:attempt_id',
+          path: "/dashboard/questionnaires/:attempt_id",
           element: <DashboardAttempt />,
           handle: {
-            crumb: 'Detail Jawaban Kuesioner',
+            crumb: "Detail Jawaban Kuesioner",
           },
         },
         {
-          path: '/dashboard/settings',
+          path: "/dashboard/settings",
           element: <Setting />,
           handle: {
-            crumb: 'Pengaturan Akun',
+            crumb: "Pengaturan Akun",
           },
         },
         {
-          path: '*',
+          path: "*",
           element: <Unauthorized />,
         },
       ],
