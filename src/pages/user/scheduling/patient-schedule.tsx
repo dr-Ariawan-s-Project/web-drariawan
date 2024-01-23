@@ -10,7 +10,7 @@ import { Badge } from '@/components/ui/badge';
 import { Layout } from '@/components/layout';
 
 import { getMySchedule } from '@/utils/apis/schedule/api';
-import { getMyProfile } from '@/utils/apis/auth/api';
+import { getMyProfile } from '@/utils/apis/patient/api';
 import { IMySchedule } from '@/utils/apis/schedule/types';
 
 const PatientSchedule = () => {

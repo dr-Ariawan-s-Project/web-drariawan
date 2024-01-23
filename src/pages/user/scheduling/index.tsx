@@ -18,8 +18,8 @@ import { Layout } from '@/components/layout';
 
 import { getSchedules, postBookSchedule } from '@/utils/apis/schedule/api';
 import { ISchedule } from '@/utils/apis/schedule/types';
-import { getMyProfile } from '@/utils/apis/auth/api';
-import { MyProfile } from '@/utils/apis/auth/types';
+import { getMyProfile } from '@/utils/apis/patient/api';
+import { MyProfile } from '@/utils/apis/patient/types';
 import { DAYS_OF_WEEK } from '@/utils/constants';
 
 const Scheduling = () => {

@@ -46,6 +46,7 @@ interface Props<T extends FieldValues> {
   description?: string;
   control: Control<T>;
   'data-testid'?: string;
+  disabled?: boolean;
 }
 
 interface ChildrenProps<T extends FieldValues> extends Props<T> {
@@ -101,7 +102,8 @@ export function CustomFormCheckbox<T extends FieldValues>(
 export function CustomFormSelect<T extends FieldValues>(
   props: Readonly<Props<T>>
 ) {
-  const { name, label, placeholder, description, control, options } = props;
+  const { name, label, placeholder, description, control, options, disabled } =
+    props;
 
   return (
     <FormField
@@ -110,7 +112,11 @@ export function CustomFormSelect<T extends FieldValues>(
       render={({ field }) => (
         <FormItem className="w-full">
           <FormLabel>{label}</FormLabel>
-          <Select onValueChange={field.onChange} value={field.value}>
+          <Select
+            onValueChange={field.onChange}
+            value={field.value}
+            disabled={disabled}
+          >
             <FormControl>
               <SelectTrigger
                 data-testid={props['data-testid']}
@@ -145,7 +151,7 @@ export function CustomFormSelect<T extends FieldValues>(
 export function CustomFormDatePicker<T extends FieldValues>(
   props: Readonly<Props<T>>
 ) {
-  const { name, label, placeholder, description, control } = props;
+  const { name, label, placeholder, description, control, disabled } = props;
 
   const [isPopoverOpen, setIsPopoverOpen] = useState(false);
 
@@ -157,7 +163,11 @@ export function CustomFormDatePicker<T extends FieldValues>(
         <FormItem className="flex flex-col">
           <FormLabel>{label}</FormLabel>
           <Popover open={isPopoverOpen} onOpenChange={setIsPopoverOpen}>
-            <PopoverTrigger data-testid={props['data-testid']} asChild>
+            <PopoverTrigger
+              data-testid={props['data-testid']}
+              asChild
+              disabled={disabled}
+            >
               <FormControl>
                 <Button
                   variant={'outline'}

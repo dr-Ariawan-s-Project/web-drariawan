@@ -244,3 +244,8 @@ export const DAYS_OF_WEEK: string[] = [
   'Jumat',
   'Sabtu',
 ];
+
+export const GENDER = ['male', 'female'] as const;
+export const MARRIAGE_STATUS = ['married', 'not_married', 'divorce'] as const;
+export type GENDER = 'male' | 'female';
+export type MARRIAGE_STATUS = 'married' | 'not_married' | 'divorce';

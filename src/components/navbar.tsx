@@ -77,11 +77,16 @@ const Navbar = (props: Props) => {
                       Setting
                     </DropdownMenuItem>
                   ) : (
-                    <DropdownMenuItem
-                      onClick={() => navigate('/scheduling/my-list')}
-                    >
-                      Jadwal Saya
-                    </DropdownMenuItem>
+                    <>
+                      <DropdownMenuItem onClick={() => navigate('/profile')}>
+                        Profile
+                      </DropdownMenuItem>
+                      <DropdownMenuItem
+                        onClick={() => navigate('/scheduling/my-list')}
+                      >
+                        Jadwal Saya
+                      </DropdownMenuItem>
+                    </>
                   )}
                   <DropdownMenuItem onClick={() => handleLogout()}>
                     Logout

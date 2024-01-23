@@ -10,15 +10,3 @@ export const loginSchema = z.object({
 });
 
 export type LoginSchema = z.infer<typeof loginSchema>;
-
-export interface MyProfile {
-  dob: string;
-  email: string;
-  gender: string;
-  id: string;
-  marriage_status: string;
-  name: string;
-  nationality: string;
-  nik: string;
-  phone: string;
-}

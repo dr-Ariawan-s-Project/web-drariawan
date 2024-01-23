@@ -45,6 +45,7 @@ const routeWhitelist: Record<string, string[]> = {
   ],
   patient: [
     '/',
+    '/profile',
     '/scheduling',
     '/scheduling/success',
     '/scheduling/my-list',

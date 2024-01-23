@@ -1,7 +1,7 @@
 import { Request, Response, ResponsePagination } from '@/utils/types/api';
 import axiosWithConfig from '@/utils/apis/axiosWithConfig';
 import { buildQueryString } from '@/utils/formatter';
-import { IPatient, PatientSchema } from './types';
+import { IPatient, MyProfile, PatientSchema } from './types';
 
 export const getPatients = async (params?: Request) => {
   try {
@@ -55,6 +55,18 @@ export const deletePatient = async (id_patient: string) => {
     const response = await axiosWithConfig.delete(`/v1/patients/${id_patient}`);
 
     return response.data as Response<null>;
+  } catch (error: any) {
+    const { messages } = error.response.data;
+
+    throw Error(messages[0]);
+  }
+};
+
+export const getMyProfile = async () => {
+  try {
+    const response = await axiosWithConfig.get(`/v1/patients/profile`);
+
+    return response.data as Response<MyProfile>;
   } catch (error: any) {
     const { messages } = error.response.data;
 

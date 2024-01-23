@@ -4,6 +4,7 @@ import ProtectedRoute from './protected-route';
 import Main from '@/pages';
 import Register from '@/pages/auth/register';
 import Login from '@/pages/auth/login';
+import Profile from '@/pages/user/profile';
 import Scheduling from '@/pages/user/scheduling';
 import SchedulingSuccess from '@/pages/user/scheduling/success';
 import PatientSchedule from '@/pages/user/scheduling/patient-schedule';
@@ -39,6 +40,10 @@ const App = () => {
         {
           path: '/register',
           element: <Register />,
+        },
+        {
+          path: '/profile',
+          element: <Profile />,
         },
         {
           path: '/scheduling',
