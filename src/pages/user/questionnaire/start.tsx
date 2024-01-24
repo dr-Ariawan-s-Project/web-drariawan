@@ -31,7 +31,7 @@ import {
   postQuestionnaire,
 } from "@/utils/apis/questionnaire/api";
 import { IChoice, IQuestionnaire } from "@/utils/apis/questionnaire/types";
-import useQuestionnaireStore from "@/utils/states/questionnaire";
+import { useQuestionnaireStore } from "@/utils/states";
 
 interface IStartProps {
   handleClick: () => void;
@@ -54,9 +54,11 @@ interface IQuestionProps {
 const QuestionnaireStart = () => {
   const {
     answers,
-    addAnswer,
     selectedOption,
-    changeSelectedOption,
+    currentIdQuestion,
+    addAnswer,
+    setSelectedOption,
+    setCurrentIdQuestion,
     resetSelectedOption,
   } = useQuestionnaireStore((state) => state);
   const {
@@ -72,7 +74,6 @@ const QuestionnaireStart = () => {
 
   const [isLoading, setIsLoading] = useState(true);
   const [isStart, setIsStart] = useState(false);
-  const [idQuestion, setIdQuestion] = useState(1);
   const [datas, setDatas] = useState<IQuestionnaire[]>([]);
 
   if (!searchParams.get("code")) {
@@ -88,9 +89,10 @@ const QuestionnaireStart = () => {
   }, [listening, transcript]);
 
   const question = useMemo(() => {
-    const findById = datas.findIndex((data) => data.id === idQuestion);
+    const findById = datas.findIndex((data) => data.id === currentIdQuestion);
+
     return datas[findById];
-  }, [datas, idQuestion]);
+  }, [datas, currentIdQuestion]);
 
   async function fetchData() {
     try {
@@ -102,6 +104,7 @@ const QuestionnaireStart = () => {
           score: 0,
         };
       });
+
       setDatas(result.data);
       addAnswer(initialAnswer);
       setIsLoading(false);
@@ -115,7 +118,7 @@ const QuestionnaireStart = () => {
   }
 
   function handleNext() {
-    const newIdQuestion = idQuestion + 1;
+    const newIdQuestion = currentIdQuestion + 1;
     const checkNextQuestion = datas.find((data) => data.id === newIdQuestion);
 
     resetSelectedOption({
@@ -127,11 +130,11 @@ const QuestionnaireStart = () => {
 
     if (checkNextQuestion) {
       if (question.goto) {
-        setIdQuestion(question.goto);
+        setCurrentIdQuestion(question.goto);
       } else if (selectedOption?.goto) {
-        setIdQuestion(selectedOption.goto);
+        setCurrentIdQuestion(selectedOption.goto);
       } else {
-        setIdQuestion(newIdQuestion);
+        setCurrentIdQuestion(newIdQuestion);
       }
     } else {
       setIsLoading(true);
@@ -148,6 +151,7 @@ const QuestionnaireStart = () => {
 
       await postQuestionnaire(body);
 
+      localStorage.clear();
       navigate("/questionnaire/finish", {
         state: { from: "questionnaire-start" },
       });
@@ -213,7 +217,7 @@ const QuestionnaireStart = () => {
       const findOptionById = question.choices?.find(
         (choice) => String(choice.id) === value
       );
-      changeSelectedOption(findOptionById!);
+      setSelectedOption(findOptionById!);
     },
     [question]
   );
@@ -272,7 +276,6 @@ const StartPage = (props: IStartProps) => {
   );
 };
 
-/* TODO: Save temporary answer to localstorage when user close the app */
 const QuestionPage = (props: IQuestionProps) => {
   const {
     data,
