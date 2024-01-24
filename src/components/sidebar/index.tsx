@@ -34,12 +34,15 @@ export const Sidebar = () => {
           isSidebarOpen ? "w-72" : "w-0 md:w-20"
         )}
       >
-        <div className="flex h-24 w-full items-center justify-center px-4">
+        <div className="flex h-24 w-full items-center justify-center p-4">
           <img
             className="h-full w-full object-contain"
-            src="/images/klinik-sehat.svg"
+            src="/images/logo-blue.svg"
             alt="logo"
           />
+          {isSidebarOpen ? (
+            <p className="text-nowrap text-2xl font-bold">Eterna Medica</p>
+          ) : null}
         </div>
         <div className="flex w-full flex-grow flex-col">
           {sidebarList[role].map((list) => (
