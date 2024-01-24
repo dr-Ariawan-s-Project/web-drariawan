@@ -1,21 +1,20 @@
-import { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 
-import { Button } from '@/components/ui/button';
-import { Layout } from '@/components/layout';
-import Background from '@/assets/illustrations/main-background.jpeg';
+import { Button } from "@/components/ui/button";
+import { Layout } from "@/components/layout";
 
-import { useAuthStore } from '@/utils/states';
+import { useAuthStore } from "@/utils/states";
 
-const TEXT_TO_TYPE = 'Selamat datang di Klinik Sehat  ';
+const TEXT_TO_TYPE = "Selamat datang di Klinik Sehat  ";
 const TYPING_SPEED = 100;
 
 const Main = () => {
   const token = useAuthStore((state) => state.token);
 
-  const [typingText, setTypingText] = useState('');
+  const [typingText, setTypingText] = useState("");
   const [finishSplash, setFinishSplash] = useState(
-    sessionStorage.getItem('showSplash') ?? false
+    sessionStorage.getItem("showSplash") ?? false
   );
 
   useEffect(() => {
@@ -28,7 +27,7 @@ const Main = () => {
       setTypingText(TEXT_TO_TYPE.substring(0, currentIndex));
       currentIndex++;
       if (currentIndex >= TEXT_TO_TYPE.length) {
-        sessionStorage.setItem('showSplash', 'true');
+        sessionStorage.setItem("showSplash", "true");
         setFinishSplash(true);
       }
     }, TYPING_SPEED);
@@ -46,7 +45,7 @@ const Main = () => {
               backgroundImage: `linear-gradient(
               rgba(0, 0, 0, 0.3),
               rgba(0, 0, 0, 0.3)
-            ), url(${Background})`,
+            ), url(/images/main-background.jpg)`,
             }}
           />
           <div className="flex flex-col h-full w-full p-8 justify-center md:w-1/2 space-y-3">
@@ -70,7 +69,7 @@ const Main = () => {
                 <Link to="/questionnaire">Isi Kuisioner</Link>
               </Button>
               <Button data-testid="to-scheduling" asChild>
-                <Link to={token ? '/scheduling' : '/login'}>
+                <Link to={token ? "/scheduling" : "/login"}>
                   Booking Jadwal
                 </Link>
               </Button>

@@ -1,21 +1,21 @@
-import { useNavigate } from 'react-router-dom';
-import { useState } from 'react';
+import { useNavigate } from "react-router-dom";
+import { useState } from "react";
 
-import { Checkbox } from '@/components/ui/checkbox';
-import { Button } from '@/components/ui/button';
-import { Layout } from '@/components/layout';
+import { Checkbox } from "@/components/ui/checkbox";
+import { Button } from "@/components/ui/button";
+import { Layout } from "@/components/layout";
 
 const Landing = () => {
   const navigate = useNavigate();
 
-  const [agree, setAgree] = useState<boolean | 'indeterminate'>(false);
+  const [agree, setAgree] = useState<boolean | "indeterminate">(false);
 
   return (
     <Layout>
       <div className="flex w-full h-full">
         <div className="lg:flex w-1/2 h-full justify-center items-center hidden">
           <img
-            src="/illustration-1.svg"
+            src="/images/illustration-1.png"
             alt="Illustration"
             className="w-1/2 h-2/3 object-contain"
           />
@@ -46,7 +46,7 @@ const Landing = () => {
           </div>
           <Button
             data-testid="to-questionnaire-form"
-            onClick={() => navigate('/questionnaire/form')}
+            onClick={() => navigate("/questionnaire/form")}
             disabled={!agree}
             aria-disabled={!agree}
           >

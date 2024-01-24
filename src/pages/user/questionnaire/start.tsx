@@ -254,7 +254,7 @@ const StartPage = (props: IStartProps) => {
 
   return (
     <Layout centerX centerY className="space-y-5">
-      <img src="/images/phone-doctor.svg" width={200} height={200} />
+      <img src="/images/phone-doctor.png" width={200} height={200} />
       <p className="text-center text-lg">
         Silahkan klik tombol dibawah untuk memulai mengisi kuesioner!
       </p>

@@ -1,11 +1,11 @@
-import { create } from 'zustand';
+import { create } from "zustand";
 
-import { SidebarItem } from '@/components/sidebar/sidebar-item';
-import { ISidebarState } from '@/components/sidebar/types';
+import { SidebarItem } from "@/components/sidebar/sidebar-item";
+import { ISidebarState } from "@/components/sidebar/types";
 
-import { sidebarList } from '@/utils/constants';
-import { useAuthStore } from '@/utils/states';
-import { cn } from '@/lib/utils';
+import { sidebarList } from "@/utils/constants";
+import { useAuthStore } from "@/utils/states";
+import { cn } from "@/lib/utils";
 
 export const useSidebarStore = create<ISidebarState>()((set) => ({
   isSidebarOpen: true,
@@ -30,15 +30,15 @@ export const Sidebar = () => {
       <div
         data-testid="sidebar"
         className={cn(
-          'absolute flex h-full select-none flex-col overflow-y-auto bg-white duration-300 md:relative z-50 border-r border-border/40',
-          isSidebarOpen ? 'w-72' : 'w-0 md:w-20'
+          "absolute flex h-full select-none flex-col overflow-y-auto bg-white duration-300 md:relative z-50 border-r border-border/40",
+          isSidebarOpen ? "w-72" : "w-0 md:w-20"
         )}
       >
         <div className="flex h-24 w-full items-center justify-center px-4">
           <img
             className="h-full w-full object-contain"
             src="/images/klinik-sehat.svg"
-            alt="logo alterra academy"
+            alt="logo"
           />
         </div>
         <div className="flex w-full flex-grow flex-col">
@@ -50,11 +50,11 @@ export const Sidebar = () => {
             >
               <p
                 className={cn(
-                  'tracking-wide text-muted-foreground',
-                  isSidebarOpen ? 'text-left' : 'text-center'
+                  "tracking-wide text-muted-foreground",
+                  isSidebarOpen ? "text-left" : "text-center"
                 )}
               >
-                {isSidebarOpen ? list.heading : '-'}
+                {isSidebarOpen ? list.heading : "-"}
               </p>
               {list.child?.map((item) => (
                 <SidebarItem {...item} key={item.id} />

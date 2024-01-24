@@ -1,7 +1,7 @@
-import { useLocation, Navigate, Link } from 'react-router-dom';
+import { useLocation, Navigate, Link } from "react-router-dom";
 
-import { Button } from '@/components/ui/button';
-import { Layout } from '@/components/layout';
+import { Button } from "@/components/ui/button";
+import { Layout } from "@/components/layout";
 
 const KonfirmasiPraktik = () => {
   const { state } = useLocation();
@@ -23,7 +23,7 @@ const KonfirmasiPraktik = () => {
       </div>
       <img
         className="object-contain w-full h-1/2 md:w-1/2"
-        src="/images/verification.svg"
+        src="/images/verification.png"
       />
       <Button data-testid="to-homepage" asChild>
         <Link to="/">Kembali ke halaman utama</Link>

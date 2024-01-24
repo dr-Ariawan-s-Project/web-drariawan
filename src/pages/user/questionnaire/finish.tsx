@@ -1,7 +1,7 @@
-import { useLocation, Navigate, Link } from 'react-router-dom';
+import { useLocation, Navigate, Link } from "react-router-dom";
 
-import { Button } from '@/components/ui/button';
-import { Layout } from '@/components/layout';
+import { Button } from "@/components/ui/button";
+import { Layout } from "@/components/layout";
 
 const Success = () => {
   const { state } = useLocation();
@@ -15,7 +15,7 @@ const Success = () => {
       <div className="flex w-full h-full items-center space-x-0 lg:space-x-5">
         <div className="lg:flex w-2/5 h-full justify-center items-center hidden">
           <img
-            src="/images/doctor-finish.svg"
+            src="/images/doctor-finish.png"
             alt="Illustration finish"
             className="w-2/3 h-2/3 object-contain"
           />
