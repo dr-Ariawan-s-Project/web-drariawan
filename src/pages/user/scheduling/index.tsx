@@ -1,7 +1,7 @@
-import { SelectSingleEventHandler } from 'react-day-picker';
-import { useNavigate } from 'react-router-dom';
-import { useState, useEffect } from 'react';
-import { format } from 'date-fns';
+import { SelectSingleEventHandler } from "react-day-picker";
+import { useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { format } from "date-fns";
 
 import {
   Dialog,
@@ -10,17 +10,17 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from '@/components/ui/dialog';
-import { useToast } from '@/components/ui/use-toast';
-import DatePicker from '@/components/datepicker';
-import { Button } from '@/components/ui/button';
-import { Layout } from '@/components/layout';
+} from "@/components/ui/dialog";
+import { useToast } from "@/components/ui/use-toast";
+import DatePicker from "@/components/datepicker";
+import { Button } from "@/components/ui/button";
+import { Layout } from "@/components/layout";
 
-import { getSchedules, postBookSchedule } from '@/utils/apis/schedule/api';
-import { ISchedule } from '@/utils/apis/schedule/types';
-import { getMyProfile } from '@/utils/apis/patient/api';
-import { MyProfile } from '@/utils/apis/patient/types';
-import { DAYS_OF_WEEK } from '@/utils/constants';
+import { getSchedules, postBookSchedule } from "@/utils/apis/schedule/api";
+import { ISchedule } from "@/utils/apis/schedule/types";
+import { getMyProfile } from "@/utils/apis/patient/api";
+import { MyProfile } from "@/utils/apis/patient/types";
+import { DAYS_OF_WEEK } from "@/utils/constants";
 
 const Scheduling = () => {
   const navigate = useNavigate();
@@ -43,9 +43,9 @@ const Scheduling = () => {
       setReserve(result.data);
     } catch (error) {
       toast({
-        title: 'Oops! Sesuatu telah terjadi',
+        title: "Oops! Sesuatu telah terjadi",
         description: (error as Error).message,
-        variant: 'destructive',
+        variant: "destructive",
       });
     }
   };
@@ -55,25 +55,25 @@ const Scheduling = () => {
       const body = {
         patient_id: patient!.id,
         schedule_id: schedule.schedule_id,
-        booking_date: format(selectedDate!, 'yyyy-MM-dd'),
+        booking_date: format(selectedDate!, "yyyy-MM-dd"),
       };
 
       await postBookSchedule(body);
 
       setIsOpen(false);
       toast({
-        description: 'Sukses booking jadwal praktek',
+        description: "Sukses booking jadwal praktek",
       });
-      navigate('/scheduling/success', {
+      navigate("/scheduling/success", {
         state: {
-          from: 'scheduling',
+          from: "scheduling",
         },
       });
     } catch (error) {
       toast({
-        title: 'Oops! Sesuatu telah terjadi',
+        title: "Oops! Sesuatu telah terjadi",
         description: (error as Error).message,
-        variant: 'destructive',
+        variant: "destructive",
       });
     }
   };
@@ -84,15 +84,17 @@ const Scheduling = () => {
       setPatient(result.data);
     } catch (error) {
       toast({
-        title: 'Oops! Sesuatu telah terjadi',
+        title: "Oops! Sesuatu telah terjadi",
         description: (error as Error).message,
-        variant: 'destructive',
+        variant: "destructive",
       });
     }
   };
 
   const getDoctorScheduleForDay = (day: string) => {
-    return reserve.filter((schedule) => schedule.day === day);
+    return reserve
+      .filter((schedule) => schedule.day === day)
+      .sort((a, b) => a.time_start.localeCompare(b.time_start));
   };
 
   function handleSelectSchedule(schedule: ISchedule) {
@@ -101,9 +103,11 @@ const Scheduling = () => {
   }
 
   return (
-    <Layout className="p-4">
+    <Layout className="px-4 pt-4">
       <div className="text-center flex flex-col space-y-4">
-        <p className="font-semibold text-2xl">Pilih Jadwal Praktik Dokter</p>
+        <p className="font-semibold text-2xl tracking-wider">
+          Pilih Jadwal Praktik Dokter
+        </p>
         <p className="font-semibold text-sm">
           *Pasien hanya dapat memilih rentang tanggal selama 1 minggu untuk
           melakukan pendaftaran
@@ -111,32 +115,32 @@ const Scheduling = () => {
       </div>
       <div
         data-testid="schedule-board"
-        className="w-full grid grid-flow-col gap-4 my-10 overflow-x-auto"
+        className="w-full h-full grid grid-flow-col gap-4 mt-10 overflow-x-auto"
       >
         {DAYS_OF_WEEK.map((day) => (
           <div
             data-testid={`column-${day}`}
             key={day}
-            className="text-center col-span-12"
+            className="text-center space-y-4 w-64"
           >
-            <p className="font-semibold mb-2">{day}</p>
+            <p className="font-semibold">{day}</p>
             {getDoctorScheduleForDay(day).map((doctorSchedule) => {
               return (
                 <div
                   data-testid="schedule-data"
                   key={doctorSchedule.schedule_id}
-                  className="border rounded-md cursor-pointer mb-4 text-left px-5 py-3 bg-white"
+                  className="border rounded-md cursor-pointer text-left px-5 py-3 bg-white shadow-md"
                   onClick={() => handleSelectSchedule(doctorSchedule)}
                 >
-                  <div className="text-md font-semibold">
+                  <p className="text-md font-semibold">
                     {doctorSchedule.user.name}
-                  </div>
-                  <div className="text-sm text-gray-500">
+                  </p>
+                  <p className="text-sm text-gray-500">
                     {doctorSchedule.time_start} - {doctorSchedule.time_end}
-                  </div>
-                  <div className="mt-2 text-sm">
+                  </p>
+                  <p className="mt-2 text-sm">
                     {doctorSchedule.health_care_address}
-                  </div>
+                  </p>
                 </div>
               );
             })}
@@ -201,7 +205,7 @@ const ScheduleModal = (props: Props) => {
               <p className="w-2/3">
                 {schedule.user.specialization
                   ? schedule.user.specialization
-                  : 'N/A'}
+                  : "N/A"}
               </p>
             </div>
             <div className="flex gap-x-40">

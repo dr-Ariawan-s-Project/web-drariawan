@@ -1,14 +1,14 @@
-import { Params, useMatches } from 'react-router-dom';
-import { ReactNode } from 'react';
+import { Params, useMatches } from "react-router-dom";
+import { ReactNode } from "react";
 
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Sidebar } from '@/components/sidebar';
-import Navbar from '@/components/navbar';
-import { cn } from '@/lib/utils';
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Sidebar } from "@/components/sidebar";
+import Navbar from "@/components/navbar";
+import { cn } from "@/lib/utils";
 
 interface Props {
   children: ReactNode;
-  variant?: 'default' | 'admin';
+  variant?: "default" | "admin";
   centerY?: boolean;
   centerX?: boolean;
   className?: string;
@@ -29,7 +29,7 @@ type HandleType = {
 export const Layout = (props: Readonly<Props>) => {
   const {
     children,
-    variant = 'default',
+    variant = "default",
     centerY = false,
     centerX = false,
     className,
@@ -48,15 +48,20 @@ export const Layout = (props: Readonly<Props>) => {
   return (
     <div
       className={cn(
-        'bg-white h-dvh w-full [&>*]:text-health-blue-dark flex bg-[url(/images/pattern.svg)]',
-        variant === 'default' && 'overflow-auto'
+        "bg-white h-dvh w-full [&>*]:text-health-blue-dark flex bg-[url(/images/pattern.svg)] max-h-[100vh]",
+        variant === "default" && "overflow-auto"
       )}
     >
-      {variant === 'admin' ? <Sidebar /> : null}
-      <div className="grow h-full flex flex-col">
-        <Navbar showMenu={variant === 'admin'} />
-        {variant === 'admin' ? (
-          <div className="w-full flex-grow flex flex-col p-5 overflow-auto">
+      {variant === "admin" ? <Sidebar /> : null}
+      <div
+        className={cn(
+          "h-full flex flex-col",
+          variant === "admin" ? "w-full" : "w-full"
+        )}
+      >
+        <Navbar showMenu={variant === "admin"} />
+        {variant === "admin" ? (
+          <div className="w-full h-full p-5 overflow-auto">
             <Card>
               <CardHeader>
                 <CardTitle>{crumbs[0]}</CardTitle>
@@ -67,9 +72,9 @@ export const Layout = (props: Readonly<Props>) => {
         ) : (
           <div
             className={cn(
-              'container flex-grow flex flex-col relative',
-              centerY && 'justify-center',
-              centerX && 'items-center p-5',
+              "container flex-grow flex flex-col relative",
+              centerY && "justify-center",
+              centerX && "items-center p-5",
               className
             )}
           >
