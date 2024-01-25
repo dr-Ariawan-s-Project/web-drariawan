@@ -1,23 +1,34 @@
-import './matchMedia.mock';
-import { BrowserRouter } from 'react-router-dom';
-import { render } from '@testing-library/react';
+import "./matchMedia.mock";
+import { RouterProvider, createMemoryRouter } from "react-router-dom";
+import { RenderOptions, render } from "@testing-library/react";
+import { ReactElement } from "react";
 
-import { Toaster } from '@/components/ui/toaster';
+import { Toaster } from "@/components/ui/toaster";
 
-const Providers = ({ children }: any) => {
-  return (
-    <BrowserRouter>
-      {children}
-      <Toaster />
-    </BrowserRouter>
+const renderWithRouter = (
+  ui: ReactElement,
+  path = "/",
+  options?: Omit<RenderOptions, "wrapper">
+) => {
+  const { pathname } = new URL(`http://www.test.com${path}`);
+
+  const router = createMemoryRouter(
+    [
+      {
+        path: pathname,
+        element: (
+          <>
+            {ui}
+            <Toaster />
+          </>
+        ),
+      },
+    ],
+    { initialEntries: [path] }
   );
+
+  return render(<RouterProvider router={router} />, { ...options });
 };
 
-const customRender = (component: any) => {
-  return render(component, {
-    wrapper: Providers,
-  });
-};
-
-export * from '@testing-library/react';
-export { customRender as render };
+export * from "@testing-library/react";
+export { renderWithRouter as render };

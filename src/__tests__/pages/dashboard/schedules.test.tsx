@@ -1,44 +1,44 @@
-import { userEvent } from '@testing-library/user-event';
-import { Mocked } from 'vitest';
+import { userEvent } from "@testing-library/user-event";
+import { Mocked } from "vitest";
 
-import { render, screen, within, act, fireEvent } from '@/__tests__/test-utils';
+import { render, screen, within, act, fireEvent } from "@/__tests__/test-utils";
 
-import App from '@/pages/dashboard/schedules';
-import { sampleSchedules } from '@/utils/apis/schedule/sample-data';
-import { sampleDoctors } from '@/utils/apis/user/sample-data';
-import axiosWithConfig from '@/utils/apis/axiosWithConfig';
-import { useAuthStore } from '@/utils/states';
+import App from "@/pages/dashboard/schedules";
+import { sampleSchedules } from "@/utils/apis/schedule/sample-data";
+import { sampleDoctors } from "@/utils/apis/user/sample-data";
+import axiosWithConfig from "@/utils/apis/axiosWithConfig";
+import { useAuthStore } from "@/utils/states";
 
-vi.mock('@/utils/apis/axiosWithConfig');
+vi.mock("@/utils/apis/axiosWithConfig");
 
 const mockedAxios = axiosWithConfig as Mocked<typeof axiosWithConfig>;
 const formInput = {
-  'input-doctor': { type: 'dropdown', value: 12 },
-  'input-day': { type: 'dropdown', value: 'Minggu' },
-  'input-address': { type: 'input', value: 'Test' },
-  'input-start': { type: 'input', value: '16:30' },
-  'input-end': { type: 'input', value: '17:30' },
+  "input-doctor": { type: "dropdown", value: 12 },
+  "input-day": { type: "dropdown", value: "Minggu" },
+  "input-address": { type: "input", value: "Test" },
+  "input-start": { type: "input", value: "16:30" },
+  "input-end": { type: "input", value: "17:30" },
 };
 
-describe('Schedules Dashboard Page', () => {
+describe("Schedules Dashboard Page", () => {
   beforeEach(async () => {
-    useAuthStore.setState({ role: 'superadmin' }, true);
+    useAuthStore.setState({ role: "admin" }, true);
   });
 
   afterEach(() => {
     vi.clearAllMocks();
   });
 
-  describe('Renders the page', () => {
-    it('should render the table row when fetch is resolve', async () => {
+  describe("Renders the page", () => {
+    it("should render the table row when fetch is resolve", async () => {
       await act(async () => {
         mockedAxios.get.mockResolvedValueOnce({
           data: {
             data: sampleSchedules,
-            messages: ['[success] read data'],
+            messages: ["[success] read data"],
             meta: {
-              code: '200-007-OK',
-              status: 'success',
+              code: "200-007-OK",
+              status: "success",
             },
             pagination: {
               limit: 10,
@@ -51,10 +51,10 @@ describe('Schedules Dashboard Page', () => {
         mockedAxios.get.mockResolvedValueOnce({
           data: {
             data: sampleSchedules,
-            messages: ['[success] read data'],
+            messages: ["[success] read data"],
             meta: {
-              code: '200-007-OK',
-              status: 'success',
+              code: "200-007-OK",
+              status: "success",
             },
             pagination: {
               limit: 10,
@@ -68,12 +68,12 @@ describe('Schedules Dashboard Page', () => {
         render(<App />);
       });
 
-      const dataTable = screen.getByTestId('data-table');
+      const dataTable = screen.getByTestId("data-table");
       expect(dataTable).toBeInTheDocument();
 
-      const tableBody = within(dataTable).getByTestId('data-table-body');
+      const tableBody = within(dataTable).getByTestId("data-table-body");
       expect(tableBody).toBeInTheDocument();
-      expect(within(tableBody).getAllByTestId('data-table-row')).toHaveLength(
+      expect(within(tableBody).getAllByTestId("data-table-row")).toHaveLength(
         sampleSchedules.length
       );
     });
@@ -82,19 +82,19 @@ describe('Schedules Dashboard Page', () => {
       await act(async () => {
         mockedAxios.get.mockRejectedValueOnce({
           data: {
-            messages: ['[failed] read data'],
+            messages: ["[failed] read data"],
             meta: {
-              code: '',
-              status: 'failed',
+              code: "",
+              status: "failed",
             },
           },
         });
         mockedAxios.get.mockRejectedValueOnce({
           data: {
-            messages: ['[failed] read data'],
+            messages: ["[failed] read data"],
             meta: {
-              code: '',
-              status: 'failed',
+              code: "",
+              status: "failed",
             },
           },
         });
@@ -102,25 +102,25 @@ describe('Schedules Dashboard Page', () => {
         render(<App />);
       });
 
-      const dataTable = screen.getByTestId('data-table');
+      const dataTable = screen.getByTestId("data-table");
       expect(dataTable).toBeInTheDocument();
 
-      const tableBody = within(dataTable).getByTestId('data-table-body');
+      const tableBody = within(dataTable).getByTestId("data-table-body");
       expect(tableBody).toBeInTheDocument();
-      expect(within(tableBody).getByText('Tidak ada data tersedia'));
+      expect(within(tableBody).getByText("Tidak ada data tersedia"));
     });
   });
 
-  describe('Actions on page', () => {
+  describe("Actions on page", () => {
     beforeEach(async () => {
       await act(async () => {
         mockedAxios.get.mockResolvedValueOnce({
           data: {
             data: sampleDoctors,
-            messages: ['[success] read data'],
+            messages: ["[success] read data"],
             meta: {
-              code: '200-007-OK',
-              status: 'success',
+              code: "200-007-OK",
+              status: "success",
             },
             pagination: {
               limit: 10,
@@ -133,10 +133,10 @@ describe('Schedules Dashboard Page', () => {
         mockedAxios.get.mockResolvedValueOnce({
           data: {
             data: sampleSchedules,
-            messages: ['[success] read data'],
+            messages: ["[success] read data"],
             meta: {
-              code: '200-007-OK',
-              status: 'success',
+              code: "200-007-OK",
+              status: "success",
             },
             pagination: {
               limit: 10,
@@ -151,33 +151,33 @@ describe('Schedules Dashboard Page', () => {
       });
     });
 
-    describe('Add', () => {
+    describe("Add", () => {
       beforeEach(async () => {
-        await userEvent.click(screen.getByTestId('btn-add-data'));
+        await userEvent.click(screen.getByTestId("btn-add-data"));
       });
 
-      it('should show modal for add new data', () => {
-        expect(screen.getByRole('dialog')).toBeInTheDocument();
+      it("should show modal for add new data", () => {
+        expect(screen.getByRole("dialog")).toBeInTheDocument();
       });
 
-      it('should display error message below input when all inputs have not been filled in', async () => {
+      it("should display error message below input when all inputs have not been filled in", async () => {
         await act(async () => {
-          fireEvent.click(screen.getByTestId('btn-submit'));
+          fireEvent.click(screen.getByTestId("btn-submit"));
         });
 
-        const form = screen.getByTestId('form-add-edit');
+        const form = screen.getByTestId("form-add-edit");
 
-        expect(within(form).getByText('Dokter wajib diisi')).toBeTruthy();
-        expect(within(form).getByText('Hari wajib diisi')).toBeTruthy();
+        expect(within(form).getByText("Dokter wajib diisi")).toBeTruthy();
+        expect(within(form).getByText("Hari wajib diisi")).toBeTruthy();
         expect(
-          within(form).getByText('Alamat praktek wajib diisi')
+          within(form).getByText("Alamat praktek wajib diisi")
         ).toBeTruthy();
-        expect(within(form).getByText('Jam mulai wajib diisi')).toBeTruthy();
-        expect(within(form).getByText('Jam selesai wajib diisi')).toBeTruthy();
+        expect(within(form).getByText("Jam mulai wajib diisi")).toBeTruthy();
+        expect(within(form).getByText("Jam selesai wajib diisi")).toBeTruthy();
       });
 
-      it('should not add new data when post is reject', async () => {
-        const form = screen.getByTestId('form-add-edit');
+      it("should not add new data when post is reject", async () => {
+        const form = screen.getByTestId("form-add-edit");
 
         let input: keyof typeof formInput;
         for (input in formInput) {
@@ -185,10 +185,10 @@ describe('Schedules Dashboard Page', () => {
           const inputValue = formInput[input].value;
           const inputType = formInput[input].type;
 
-          if (inputType === 'dropdown') {
+          if (inputType === "dropdown") {
             await userEvent.click(component);
             await userEvent.click(
-              within(screen.getByRole('presentation')).getByTestId(
+              within(screen.getByRole("presentation")).getByTestId(
                 `option-${inputValue}`
               )
             );
@@ -201,23 +201,23 @@ describe('Schedules Dashboard Page', () => {
 
         mockedAxios.post.mockRejectedValueOnce({
           data: {
-            messages: ['[failed]'],
+            messages: ["[failed]"],
             meta: {
-              code: '',
-              status: 'failed',
+              code: "",
+              status: "failed",
             },
           },
         });
 
-        await userEvent.click(screen.getByTestId('btn-submit'));
+        await userEvent.click(screen.getByTestId("btn-submit"));
 
         expect(
-          screen.getByText('Oops! Sesuatu telah terjadi')
+          screen.getByText("Oops! Sesuatu telah terjadi")
         ).toBeInTheDocument();
       });
 
-      it('should add new data when post is resolve', async () => {
-        const form = screen.getByTestId('form-add-edit');
+      it("should add new data when post is resolve", async () => {
+        const form = screen.getByTestId("form-add-edit");
 
         let input: keyof typeof formInput;
         for (input in formInput) {
@@ -225,10 +225,10 @@ describe('Schedules Dashboard Page', () => {
           const inputValue = formInput[input].value;
           const inputType = formInput[input].type;
 
-          if (inputType === 'dropdown') {
+          if (inputType === "dropdown") {
             await userEvent.click(component);
             await userEvent.click(
-              within(screen.getByRole('presentation')).getByTestId(
+              within(screen.getByRole("presentation")).getByTestId(
                 `option-${inputValue}`
               )
             );
@@ -242,20 +242,20 @@ describe('Schedules Dashboard Page', () => {
         mockedAxios.post.mockResolvedValueOnce({
           data: {
             data: null,
-            messages: ['[success] create data'],
+            messages: ["[success] create data"],
             meta: {
-              code: '201-006-OK',
-              status: 'success',
+              code: "201-006-OK",
+              status: "success",
             },
           },
         });
         mockedAxios.get.mockResolvedValueOnce({
           data: {
             data: sampleSchedules,
-            messages: ['[success] read data'],
+            messages: ["[success] read data"],
             meta: {
-              code: '200-007-OK',
-              status: 'success',
+              code: "200-007-OK",
+              status: "success",
             },
             pagination: {
               limit: 10,
@@ -266,29 +266,29 @@ describe('Schedules Dashboard Page', () => {
           },
         });
 
-        await userEvent.click(screen.getByTestId('btn-submit'));
+        await userEvent.click(screen.getByTestId("btn-submit"));
 
-        expect(screen.getByText('[success] create data')).toBeInTheDocument();
+        expect(screen.getByText("[success] create data")).toBeInTheDocument();
       });
     });
 
-    describe('Edit', () => {
+    describe("Edit", () => {
       beforeEach(async () => {
-        await userEvent.click(screen.getAllByTestId('table-action')[0]);
+        await userEvent.click(screen.getAllByTestId("table-action")[0]);
         await userEvent.click(
-          within(screen.getByRole('menu')).getByTestId('action-edit')
+          within(screen.getByRole("menu")).getByTestId("action-edit")
         );
       });
 
-      it('should show modal for edit data', () => {
-        expect(screen.getByRole('dialog')).toBeInTheDocument();
+      it("should show modal for edit data", () => {
+        expect(screen.getByRole("dialog")).toBeInTheDocument();
       });
 
-      it('should not edit data when edit is reject', async () => {
-        const form = screen.getByTestId('form-add-edit');
+      it("should not edit data when edit is reject", async () => {
+        const form = screen.getByTestId("form-add-edit");
         const dupeFormInput = {
           ...formInput,
-          'input-end': { type: 'input', value: '18:30' },
+          "input-end": { type: "input", value: "18:30" },
         };
 
         let input: keyof typeof dupeFormInput;
@@ -297,10 +297,10 @@ describe('Schedules Dashboard Page', () => {
           const inputValue = dupeFormInput[input].value;
           const inputType = dupeFormInput[input].type;
 
-          if (inputType === 'dropdown') {
+          if (inputType === "dropdown") {
             await userEvent.click(component);
             await userEvent.click(
-              within(screen.getByRole('presentation')).getByTestId(
+              within(screen.getByRole("presentation")).getByTestId(
                 `option-${inputValue}`
               )
             );
@@ -313,26 +313,26 @@ describe('Schedules Dashboard Page', () => {
 
         mockedAxios.put.mockRejectedValueOnce({
           data: {
-            messages: ['[failed]'],
+            messages: ["[failed]"],
             meta: {
-              code: '',
-              status: 'failed',
+              code: "",
+              status: "failed",
             },
           },
         });
 
-        await userEvent.click(screen.getByTestId('btn-submit'));
+        await userEvent.click(screen.getByTestId("btn-submit"));
 
         expect(
-          screen.getByText('Oops! Sesuatu telah terjadi')
+          screen.getByText("Oops! Sesuatu telah terjadi")
         ).toBeInTheDocument();
       });
 
-      it('should edit data when edit is resolve', async () => {
-        const form = screen.getByTestId('form-add-edit');
+      it("should edit data when edit is resolve", async () => {
+        const form = screen.getByTestId("form-add-edit");
         const dupeFormInput = {
           ...formInput,
-          'input-end': { type: 'input', value: '18:30' },
+          "input-end": { type: "input", value: "18:30" },
         };
 
         let input: keyof typeof dupeFormInput;
@@ -341,10 +341,10 @@ describe('Schedules Dashboard Page', () => {
           const inputValue = dupeFormInput[input].value;
           const inputType = dupeFormInput[input].type;
 
-          if (inputType === 'dropdown') {
+          if (inputType === "dropdown") {
             await userEvent.click(component);
             await userEvent.click(
-              within(screen.getByRole('presentation')).getByTestId(
+              within(screen.getByRole("presentation")).getByTestId(
                 `option-${inputValue}`
               )
             );
@@ -357,20 +357,20 @@ describe('Schedules Dashboard Page', () => {
 
         mockedAxios.put.mockResolvedValueOnce({
           data: {
-            messages: ['[success]'],
+            messages: ["[success]"],
             meta: {
-              code: '200-007-OK',
-              status: 'success',
+              code: "200-007-OK",
+              status: "success",
             },
           },
         });
         mockedAxios.get.mockResolvedValueOnce({
           data: {
             data: sampleSchedules,
-            messages: ['[success] read data'],
+            messages: ["[success] read data"],
             meta: {
-              code: '200-007-OK',
-              status: 'success',
+              code: "200-007-OK",
+              status: "success",
             },
             pagination: {
               limit: 10,
@@ -381,70 +381,70 @@ describe('Schedules Dashboard Page', () => {
           },
         });
 
-        await userEvent.click(screen.getByTestId('btn-submit'));
+        await userEvent.click(screen.getByTestId("btn-submit"));
 
-        expect(screen.getByText('[success]')).toBeInTheDocument();
+        expect(screen.getByText("[success]")).toBeInTheDocument();
       });
     });
 
-    describe('Delete', () => {
+    describe("Delete", () => {
       beforeEach(async () => {
-        await userEvent.click(screen.getAllByTestId('table-action')[0]);
+        await userEvent.click(screen.getAllByTestId("table-action")[0]);
         await userEvent.click(
-          within(screen.getByRole('menu')).getByTestId('action-delete')
+          within(screen.getByRole("menu")).getByTestId("action-delete")
         );
       });
 
-      it('should display alert dialog', () => {
-        expect(screen.getByRole('alertdialog')).toBeInTheDocument();
+      it("should display alert dialog", () => {
+        expect(screen.getByRole("alertdialog")).toBeInTheDocument();
       });
 
-      it('should remove alert dialog', async () => {
+      it("should remove alert dialog", async () => {
         await userEvent.click(
-          within(screen.getByRole('alertdialog')).getByTestId('alert-cancel')
+          within(screen.getByRole("alertdialog")).getByTestId("alert-cancel")
         );
 
-        expect(screen.queryByTestId('alertdialog')).not.toBeInTheDocument();
+        expect(screen.queryByTestId("alertdialog")).not.toBeInTheDocument();
       });
 
-      it('should not remove data when delete is reject', async () => {
+      it("should not remove data when delete is reject", async () => {
         mockedAxios.delete.mockRejectedValueOnce({
           data: {
-            messages: ['[failed]'],
+            messages: ["[failed]"],
             meta: {
-              code: '',
-              status: 'failed',
+              code: "",
+              status: "failed",
             },
           },
         });
 
         await userEvent.click(
-          within(screen.getByRole('alertdialog')).getByTestId('alert-yes')
+          within(screen.getByRole("alertdialog")).getByTestId("alert-yes")
         );
 
         expect(
-          screen.getByText('Oops! Sesuatu telah terjadi')
+          screen.getByText("Oops! Sesuatu telah terjadi")
         ).toBeInTheDocument();
       });
 
-      it('should remove data when delete is resolve', async () => {
+      it("should remove data when delete is resolve", async () => {
         mockedAxios.delete.mockResolvedValueOnce({
           data: {
             data: null,
-            messages: ['[success]'],
+            messages: ["[success]"],
             meta: {
-              code: '200-007-OK',
-              status: 'success',
+              code: "200-007-OK",
+              status: "success",
             },
           },
         });
         mockedAxios.get.mockResolvedValueOnce({
           data: {
             data: sampleSchedules,
-            messages: ['[success] read data'],
+            messages: ["[success] read data"],
             meta: {
-              code: '200-007-OK',
-              status: 'success',
+              code: "200-007-OK",
+              status: "success",
             },
             pagination: {
               limit: 10,
@@ -456,10 +456,10 @@ describe('Schedules Dashboard Page', () => {
         });
 
         await userEvent.click(
-          within(screen.getByRole('alertdialog')).getByTestId('alert-yes')
+          within(screen.getByRole("alertdialog")).getByTestId("alert-yes")
         );
 
-        expect(screen.getByText('[success]')).toBeInTheDocument();
+        expect(screen.getByText("[success]")).toBeInTheDocument();
       });
     });
   });

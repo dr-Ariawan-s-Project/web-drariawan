@@ -1,46 +1,45 @@
-import { userEvent } from '@testing-library/user-event';
-import { capitalize } from 'lodash';
-import { Mocked } from 'vitest';
+import { userEvent } from "@testing-library/user-event";
+import { capitalize } from "lodash";
+import { Mocked } from "vitest";
 
-import { render, screen, within, act, fireEvent } from '@/__tests__/test-utils';
+import { render, screen, within, act, fireEvent } from "@/__tests__/test-utils";
 
-import App from '@/pages/dashboard/settings';
-import { sampleProfile } from '@/utils/apis/user/sample-data';
-import axiosWithConfig from '@/utils/apis/axiosWithConfig';
-import { useAuthStore } from '@/utils/states';
+import App from "@/pages/dashboard/settings";
+import { sampleProfile } from "@/utils/apis/user/sample-data";
+import axiosWithConfig from "@/utils/apis/axiosWithConfig";
+import { useAuthStore } from "@/utils/states";
 
-vi.mock('@/utils/apis/axiosWithConfig');
+vi.mock("@/utils/apis/axiosWithConfig");
 
 const mockedAxios = axiosWithConfig as Mocked<typeof axiosWithConfig>;
 const formInput = {
-  'input-name': { type: 'input', value: 'dr. John Doe, Sp.OG' },
-  'input-email': { type: 'input', value: 'johndoe@mail.com' },
-  'input-phone-number': { type: 'input', value: '085646434719' },
-  'input-role': { type: 'dropdown', value: 'dokter' },
-  'input-password': { type: 'input', value: 'admin123' },
-  'input-specialization': {
-    type: 'input',
-    value: 'Dokter spesialis Obstetri dan Ginekologi',
+  "input-name": { type: "input", value: "dr. John Doe, Sp.OG" },
+  "input-email": { type: "input", value: "johndoe@mail.com" },
+  "input-phone-number": { type: "input", value: "085646434719" },
+  "input-password": { type: "input", value: "admin123" },
+  "input-specialization": {
+    type: "input",
+    value: "Dokter spesialis Obstetri dan Ginekologi",
   },
 };
 
-describe('Setting Dashboard Page', () => {
+describe("Setting Dashboard Page", () => {
   beforeEach(async () => {
     await act(async () => {
-      useAuthStore.setState({ role: 'dokter' }, true);
+      useAuthStore.setState({ role: "dokter" }, true);
     });
   });
 
-  describe('Renders the page', () => {
-    it('should render the page when get is resolve', async () => {
+  describe("Renders the page", () => {
+    it("should render the page when get is resolve", async () => {
       await act(async () => {
         mockedAxios.get.mockResolvedValueOnce({
           data: {
             data: sampleProfile,
-            messages: ['[success] read data'],
+            messages: ["[success] read data"],
             meta: {
-              code: '200-001-OK',
-              status: 'success',
+              code: "200-001-OK",
+              status: "success",
             },
           },
         });
@@ -48,38 +47,38 @@ describe('Setting Dashboard Page', () => {
         render(<App />);
       });
 
-      const form = screen.getByTestId('form-setting');
+      const form = screen.getByTestId("form-setting");
       expect(form).toBeInTheDocument();
 
       for (const key in formInput) {
         expect(within(form).getByTestId(key)).toBeInTheDocument();
       }
 
-      expect(within(form).getByTestId('input-name')).toHaveValue(
+      expect(within(form).getByTestId("input-name")).toHaveValue(
         sampleProfile.name
       );
-      expect(within(form).getByTestId('input-email')).toHaveValue(
+      expect(within(form).getByTestId("input-email")).toHaveValue(
         sampleProfile.email
       );
-      expect(within(form).getByTestId('input-phone-number')).toHaveValue(
+      expect(within(form).getByTestId("input-phone-number")).toHaveValue(
         sampleProfile.phone
       );
-      expect(within(form).getByTestId('input-role')).toHaveTextContent(
+      expect(within(form).getByTestId("input-role")).toHaveTextContent(
         capitalize(sampleProfile.role)
       );
-      expect(within(form).getByTestId('input-specialization')).toHaveValue(
+      expect(within(form).getByTestId("input-specialization")).toHaveValue(
         sampleProfile.specialization
       );
     });
 
-    it('should display failed toast when get is reject', async () => {
+    it("should display failed toast when get is reject", async () => {
       await act(async () => {
         mockedAxios.get.mockRejectedValueOnce({
           data: {
-            messages: ['[failed]'],
+            messages: ["[failed]"],
             meta: {
-              code: '',
-              status: 'failed',
+              code: "",
+              status: "failed",
             },
           },
         });
@@ -88,21 +87,21 @@ describe('Setting Dashboard Page', () => {
       });
 
       expect(
-        screen.getByText('Oops! Sesuatu telah terjadi')
+        screen.getByText("Oops! Sesuatu telah terjadi")
       ).toBeInTheDocument();
     });
   });
 
-  describe('Actions on page', () => {
+  describe("Actions on page", () => {
     beforeEach(async () => {
       await act(async () => {
         mockedAxios.get.mockResolvedValueOnce({
           data: {
             data: sampleProfile,
-            messages: ['[success] read data'],
+            messages: ["[success] read data"],
             meta: {
-              code: '200-001-OK',
-              status: 'success',
+              code: "200-001-OK",
+              status: "success",
             },
           },
         });
@@ -111,11 +110,11 @@ describe('Setting Dashboard Page', () => {
       });
     });
 
-    it('should not edit data when edit is reject', async () => {
-      const form = screen.getByTestId('form-setting');
+    it("should not edit data when edit is reject", async () => {
+      const form = screen.getByTestId("form-setting");
       const dupeFormInput = {
         ...formInput,
-        'input-phone-number': { type: 'input', value: '085646434718' },
+        "input-phone-number": { type: "input", value: "085646434718" },
       };
 
       let input: keyof typeof dupeFormInput;
@@ -124,10 +123,10 @@ describe('Setting Dashboard Page', () => {
         const inputValue = dupeFormInput[input].value;
         const inputType = dupeFormInput[input].type;
 
-        if (inputType === 'dropdown') {
+        if (inputType === "dropdown") {
           await userEvent.click(component);
           await userEvent.click(
-            within(screen.getByRole('presentation')).getByTestId(
+            within(screen.getByRole("presentation")).getByTestId(
               `option-${inputValue}`
             )
           );
@@ -140,26 +139,26 @@ describe('Setting Dashboard Page', () => {
 
       mockedAxios.put.mockRejectedValueOnce({
         data: {
-          messages: ['[failed]'],
+          messages: ["[failed]"],
           meta: {
-            code: '',
-            status: 'failed',
+            code: "",
+            status: "failed",
           },
         },
       });
 
-      await userEvent.click(screen.getByTestId('btn-submit'));
+      await userEvent.click(screen.getByTestId("btn-submit"));
 
       expect(
-        screen.getByText('Oops! Sesuatu telah terjadi')
+        screen.getByText("Oops! Sesuatu telah terjadi")
       ).toBeInTheDocument();
     });
 
-    it('should edit data when edit is resolve', async () => {
-      const form = screen.getByTestId('form-setting');
+    it("should edit data when edit is resolve", async () => {
+      const form = screen.getByTestId("form-setting");
       const dupeFormInput = {
         ...formInput,
-        'input-phone-number': { type: 'input', value: '085646434718' },
+        "input-phone-number": { type: "input", value: "085646434718" },
       };
 
       let input: keyof typeof dupeFormInput;
@@ -168,10 +167,10 @@ describe('Setting Dashboard Page', () => {
         const inputValue = dupeFormInput[input].value;
         const inputType = dupeFormInput[input].type;
 
-        if (inputType === 'dropdown') {
+        if (inputType === "dropdown") {
           await userEvent.click(component);
           await userEvent.click(
-            within(screen.getByRole('presentation')).getByTestId(
+            within(screen.getByRole("presentation")).getByTestId(
               `option-${inputValue}`
             )
           );
@@ -185,17 +184,17 @@ describe('Setting Dashboard Page', () => {
       mockedAxios.put.mockResolvedValueOnce({
         data: {
           data: null,
-          messages: ['[success] update data'],
+          messages: ["[success] update data"],
           meta: {
-            code: '200-006-OK',
-            status: 'success',
+            code: "200-006-OK",
+            status: "success",
           },
         },
       });
 
-      await userEvent.click(screen.getByTestId('btn-submit'));
+      await userEvent.click(screen.getByTestId("btn-submit"));
 
-      expect(screen.getByText('[success] update data')).toBeInTheDocument();
+      expect(screen.getByText("[success] update data")).toBeInTheDocument();
     });
   });
 });

@@ -1,22 +1,22 @@
-import { zodResolver } from '@hookform/resolvers/zod';
-import { getCountryDataList } from 'countries-list';
-import { useEffect, useMemo } from 'react';
-import { useForm } from 'react-hook-form';
-import { capitalize } from 'lodash';
+import { zodResolver } from "@hookform/resolvers/zod";
+import { getCountryDataList } from "countries-list";
+import { useEffect, useMemo } from "react";
+import { useForm } from "react-hook-form";
+import { capitalize } from "lodash";
 
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   CustomFormDatePicker,
   CustomFormField,
   CustomFormSelect,
-} from '@/components/custom-formfield';
-import { useToast } from '@/components/ui/use-toast';
-import { Input } from '@/components/ui/input';
-import { Layout } from '@/components/layout';
-import { Form } from '@/components/ui/form';
+} from "@/components/custom-formfield";
+import { useToast } from "@/components/ui/use-toast";
+import { Input } from "@/components/ui/input";
+import { Layout } from "@/components/layout";
+import { Form } from "@/components/ui/form";
 
-import { ProfileSchema, profileSchema } from '@/utils/apis/patient/types';
-import { getMyProfile } from '@/utils/apis/patient/api';
+import { ProfileSchema, profileSchema } from "@/utils/apis/patient/types";
+import { getMyProfile } from "@/utils/apis/patient/api";
 
 const Profile = () => {
   const { toast } = useToast();
@@ -31,13 +31,13 @@ const Profile = () => {
   const form = useForm<ProfileSchema>({
     resolver: zodResolver(profileSchema),
     defaultValues: {
-      name: '',
-      email: '',
-      dob: '',
-      phone: '',
-      gender: 'male',
-      marriage_status: 'not_married',
-      nationality: 'Indonesia',
+      name: "",
+      email: "",
+      dob: "",
+      phone: "",
+      gender: "male",
+      marriage_status: "not_married",
+      nationality: "Indonesia",
     },
   });
 
@@ -48,18 +48,19 @@ const Profile = () => {
   const fetchData = async () => {
     try {
       const { data } = await getMyProfile();
-      form.setValue('email', data.email);
-      form.setValue('name', data.name);
-      form.setValue('gender', data.gender);
-      form.setValue('marriage_status', data.marriage_status);
-      form.setValue('dob', data.dob);
-      form.setValue('phone', data.phone);
-      form.setValue('nationality', capitalize(data.nationality));
+
+      form.setValue("email", data.email);
+      form.setValue("name", data.name);
+      form.setValue("gender", data.gender);
+      form.setValue("marriage_status", data.marriage_status);
+      form.setValue("dob", data.dob);
+      form.setValue("phone", data.phone);
+      form.setValue("nationality", capitalize(data.nationality));
     } catch (error) {
       toast({
-        title: 'Oops! Sesuatu telah terjadi',
+        title: "Oops! Sesuatu telah terjadi",
         description: (error as Error).message,
-        variant: 'destructive',
+        variant: "destructive",
       });
     }
   };
@@ -72,7 +73,7 @@ const Profile = () => {
         </CardHeader>
         <CardContent>
           <Form {...form}>
-            <form data-testid="form-register" className="space-y-8 mt-10">
+            <form data-testid="form-profile" className="space-y-8 mt-10">
               <CustomFormField
                 control={form.control}
                 name="email"
@@ -118,12 +119,12 @@ const Profile = () => {
                   disabled
                   options={[
                     {
-                      label: 'Male',
-                      value: 'male',
+                      label: "Male",
+                      value: "male",
                     },
                     {
-                      label: 'Female',
-                      value: 'female',
+                      label: "Female",
+                      value: "female",
                     },
                   ]}
                 />
@@ -136,16 +137,16 @@ const Profile = () => {
                   disabled
                   options={[
                     {
-                      label: 'Menikah',
-                      value: 'married',
+                      label: "Menikah",
+                      value: "married",
                     },
                     {
-                      label: 'Belum menikah',
-                      value: 'not_married',
+                      label: "Belum menikah",
+                      value: "not_married",
                     },
                     {
-                      label: 'Cerai',
-                      value: 'divorce',
+                      label: "Cerai",
+                      value: "divorce",
                     },
                   ]}
                 />
