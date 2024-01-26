@@ -1,79 +1,124 @@
-import Cookies from 'js-cookie';
-import InformationCard from '../../components/InformationCard';
-import { useEffect } from 'react';
+import {
+  Bar,
+  BarChart,
+  ResponsiveContainer,
+  XAxis,
+  YAxis,
+  Tooltip,
+} from 'recharts';
+import { useState, useEffect } from 'react';
+import { startCase } from 'lodash';
 
-import { useDashboard } from '../../store/apiDashboard';
-import BarChart from '../../components/BarChart';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { useToast } from '@/components/ui/use-toast';
+import { Layout } from '@/components/layout';
+
+import { getDashboardData, getChartData } from '@/utils/apis/dashboard/api';
+import {
+  IDashboardData,
+  IQuestionnaireData,
+} from '@/utils/apis/dashboard/types';
 
 const Dashboard = () => {
-  const token = Cookies.get('token');
-  const { data, getDashboard, getChartData, error } = useDashboard();
-  const userRole = Cookies.get('userRole');
+  const { toast } = useToast();
+
+  const [data, setData] = useState<IDashboardData>();
+  const [charts, setCharts] = useState<IQuestionnaireData[]>([]);
+
   useEffect(() => {
-    if (token) {
-      getDashboard(token);
-      getChartData(token);
+    fetchData();
+    fetchChartData();
+  }, []);
+
+  const fetchData = async () => {
+    try {
+      const result = await getDashboardData();
+
+      setData(result.data);
+    } catch (error) {
+      toast({
+        title: 'Oops! Sesuatu telah terjadi',
+        description: (error as Error).message,
+        variant: 'destructive',
+      });
     }
-  }, [getChartData, getDashboard, token]);
-  if (error) {
-    return <p>Error: {error}</p>;
-  }
- 
+  };
+
+  const fetchChartData = async () => {
+    try {
+      const result = await getChartData();
+
+      setCharts(result.data);
+    } catch (error) {
+      toast({
+        title: 'Oops! Sesuatu telah terjadi',
+        description: (error as Error).message,
+        variant: 'destructive',
+      });
+    }
+  };
+
   return (
-    <div className="mt-20">
-      <div className="flex ">
-        <div className="flex flex-wrap -mx-3">
-          <InformationCard
-            title="Semua Pertanyaan"
-            value={data.questioner_all}
-            gradientColors="from-blue-500 to-violet-500"
-            iconClass="solar:chart-bold"
-          />
-
-          <InformationCard
-            title="Pertanyaan yang perlu di Asessmen"
-            value={data.questioner_need_assess}
-            gradientColors="from-red-600 to-orange-600"
-            iconClass="ic:baseline-medical-services"
-          />
-
-          <InformationCard
-            title="Pertanyaan Baru bulan ini"
-            value={data.questioner_this_month}
-            gradientColors="from-emerald-500 to-teal-400"
-            iconClass="ic:baseline-border-color"
-          />
-
-          <InformationCard
-            title="Patient baru bulan ini"
-            value={data.questioner_this_month}
-            gradientColors="from-orange-500 to-yellow-500"
-            iconClass="healthicons:default"
-          />
-        </div>
+    <Layout variant="admin">
+      <div
+        data-testid="card-group"
+        className="grid gap-4 md:grid-cols-2 lg:grid-cols-4"
+      >
+        {data &&
+          Object.keys(data).map((item) => (
+            <Card data-testid={`card-${item}`} key={item}>
+              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                <CardTitle className="text-sm font-medium">
+                  {startCase(
+                    item.replace(
+                      /[`~!@#$%^&*()_|+\-=?;:'",.<>\{\}\[\]\\\/]/gi,
+                      ' '
+                    )
+                  )}
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="text-2xl font-bold">
+                  {data[item as keyof typeof data]}
+                </div>
+              </CardContent>
+            </Card>
+          ))}
       </div>
-
-      <div className="flex flex-col md:flex-row gap-4 mt-20 dark:bg-slate-850 rounded-2xl bg-clip-border">
-      {(userRole === 'admin' || userRole === 'dokter' || userRole === 'suster') && (
-    <div className="md:max-w-full bg-white shadow-xl rounded-xl bg-clip-border p-4">
-      <BarChart
-        data={data.chartData}
-        label="Responden Tiap Bulan" 
-        backgroundColor="rgba(75, 192, 192, 0.2)" 
-        borderColor="rgba(75, 192, 192, 1)"  
-        borderWidth={1}  
-        yAxisLabel="Jumlah Responden"  
-        height={300}  
-        width={600}  
-      />
-          </div>
-        )}
-      </div>
-
-    </div>
+      <Card data-testid="card-chart">
+        <CardHeader>
+          <CardTitle>Kuesioner per Bulan</CardTitle>
+        </CardHeader>
+        <CardContent className="pl-2">
+          <ResponsiveContainer width="100%" height={350}>
+            <BarChart data={charts}>
+              <XAxis
+                dataKey="month"
+                stroke="#888888"
+                fontSize={12}
+                tickLine={false}
+                axisLine={false}
+              />
+              <YAxis
+                stroke="#888888"
+                fontSize={12}
+                tickLine={false}
+                axisLine={false}
+                tickFormatter={(value) => `${value}`}
+              />
+              <Tooltip />
+              <Bar
+                dataKey="count"
+                fill="currentColor"
+                radius={[4, 4, 0, 0]}
+                className="fill-primary"
+              />
+            </BarChart>
+          </ResponsiveContainer>
+        </CardContent>
+      </Card>
+    </Layout>
   );
 };
 
 export default Dashboard;
-
-
