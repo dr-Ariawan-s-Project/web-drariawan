@@ -31,22 +31,27 @@ const App = () => {
       children: [
         {
           path: "/",
+          loader: () => "Halaman Utama | Eterna Medica",
           element: <Main />,
         },
         {
           path: "/login",
+          loader: () => "Login | Eterna Medica",
           element: <Login />,
         },
         {
           path: "/register",
+          loader: () => "Register | Eterna Medica",
           element: <Register />,
         },
         {
           path: "/profile",
+          loader: () => "Profil | Eterna Medica",
           element: <Profile />,
         },
         {
           path: "/scheduling",
+          loader: () => "Daftar Jadwal | Eterna Medica",
           element: <Scheduling />,
         },
         {
@@ -63,6 +68,7 @@ const App = () => {
         },
         {
           path: "/questionnaire/form",
+          loader: () => "Form Kuesioner | Eterna Medica",
           element: <QuestionnaireForm />,
         },
         {
@@ -71,6 +77,7 @@ const App = () => {
         },
         {
           path: "/questionnaire/start",
+          loader: () => "Pengisian Kuesioner | Eterna Medica",
           element: <QuestionnaireStart />,
         },
         {
@@ -80,17 +87,20 @@ const App = () => {
         {
           path: "/dashboard",
           element: <Dashboard />,
+          loader: () => "Dashboard | Eterna Medica",
           handle: {
             crumb: "Dashboard",
           },
         },
         {
           path: "/dashboard/login",
+          loader: () => "Login | Eterna Medica",
           element: <DashboardLogin />,
         },
         {
           path: "/dashboard/patients",
           element: <DashboardPatients />,
+          loader: () => "Daftar Pasien | Eterna Medica",
           handle: {
             crumb: "Daftar Pasien",
           },
@@ -98,6 +108,7 @@ const App = () => {
         {
           path: "/dashboard/users",
           element: <DashboardUsers />,
+          loader: () => "Daftar Pengguna | Eterna Medica",
           handle: {
             crumb: "Daftar Pengguna",
           },
@@ -105,6 +116,7 @@ const App = () => {
         {
           path: "/dashboard/schedules",
           element: <DashboardSchedules />,
+          loader: () => "Daftar Jadwal | Eterna Medica",
           handle: {
             crumb: "Daftar Jadwal",
           },
@@ -112,6 +124,7 @@ const App = () => {
         {
           path: "/dashboard/books",
           element: <DashboardBooks />,
+          loader: () => "Daftar Booking | Eterna Medica",
           handle: {
             crumb: "Daftar Booking",
           },
@@ -119,6 +132,7 @@ const App = () => {
         {
           path: "/dashboard/questionnaires",
           element: <DashboardQuestionnaires />,
+          loader: () => "Daftar Kuesioner | Eterna Medica",
           handle: {
             crumb: "Daftar Kuesioner",
           },
@@ -126,6 +140,7 @@ const App = () => {
         {
           path: "/dashboard/questionnaires/:attempt_id",
           element: <DashboardAttempt />,
+          loader: () => "Detail Kuesioner | Eterna Medica",
           handle: {
             crumb: "Detail Jawaban Kuesioner",
           },
@@ -133,6 +148,7 @@ const App = () => {
         {
           path: "/dashboard/settings",
           element: <Setting />,
+          loader: () => "Pengaturan Akun | Eterna Medica",
           handle: {
             crumb: "Pengaturan Akun",
           },

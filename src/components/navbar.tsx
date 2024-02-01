@@ -72,7 +72,7 @@ const Navbar = (props: Props) => {
                   <DropdownMenuSeparator />
                   {role !== "patient" ? (
                     <DropdownMenuItem
-                      onClick={() => navigate("/admin/setting")}
+                      onClick={() => navigate("/dashboard/settings")}
                     >
                       Setting
                     </DropdownMenuItem>

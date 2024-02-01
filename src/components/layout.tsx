@@ -1,5 +1,5 @@
-import { Params, useMatches } from "react-router-dom";
-import { ReactNode } from "react";
+import { Params, useMatches, useLoaderData } from "react-router-dom";
+import { ReactNode, useEffect } from "react";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Sidebar } from "@/components/sidebar";
@@ -35,6 +35,11 @@ export const Layout = (props: Readonly<Props>) => {
     className,
   } = props;
   let matches: IMatches[] = useMatches();
+  const data = useLoaderData() as string;
+
+  useEffect(() => {
+    document.title = data || "Klinik Sehat";
+  }, [data]);
 
   let crumbs = matches
     .filter((match) =>
