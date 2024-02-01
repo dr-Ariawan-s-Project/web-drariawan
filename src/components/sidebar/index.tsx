@@ -34,14 +34,14 @@ export const Sidebar = () => {
           isSidebarOpen ? "w-72" : "w-0 md:w-20"
         )}
       >
-        <div className="flex h-24 w-full items-center justify-center p-4 space-x-3">
+        <div className="flex h-24 w-full items-center justify-center p-4">
           <img
             className="h-full w-full object-contain"
             src="/images/logo-blue.svg"
             alt="logo"
           />
           {isSidebarOpen ? (
-            <p className="text-nowrap text-2xl font-bold">Eterna Medica</p>
+            <p className="text-2xl font-bold text-center">Eterna Medica</p>
           ) : null}
         </div>
         <div className="flex w-full flex-grow flex-col">

@@ -66,6 +66,20 @@ export const getQuestionnaireAttempt = async (params?: Request) => {
   }
 };
 
+export const getAttempt = async (attempt_id: string) => {
+  try {
+    const response = await axiosWithConfig.get(
+      `/v1/questioner/attempts/${attempt_id}`
+    );
+
+    return response.data as Response<IAttempt>;
+  } catch (error: any) {
+    const { messages } = error.response.data;
+
+    throw Error(messages[0]);
+  }
+};
+
 export const getAttemptAnswers = async (attempt_id: string) => {
   try {
     const response = await axiosWithConfig.get(
