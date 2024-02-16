@@ -17,16 +17,17 @@ import { Button } from "@/components/ui/button";
 import { Layout } from "@/components/layout";
 
 import { getSchedules, postBookSchedule } from "@/utils/apis/schedule/api";
-import { ISchedule } from "@/utils/apis/schedule/types";
+import { ISchedule, IScheduling } from "@/utils/apis/schedule/types";
 import { getMyProfile } from "@/utils/apis/patient/api";
 import { MyProfile } from "@/utils/apis/patient/types";
 import { DAYS_OF_WEEK } from "@/utils/constants";
+import { formatScheduleByDay } from "@/utils/formatter";
 
 const Scheduling = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
 
-  const [reserve, setReserve] = useState<ISchedule[]>([]);
+  const [schedules, setSchedules] = useState<IScheduling[]>([]);
   const [patient, setPatient] = useState<MyProfile>();
   const [selectedDate, setSelectedDate] = useState<Date>();
   const [selectedSchedule, setSelectedSchedule] = useState<ISchedule>();
@@ -40,7 +41,20 @@ const Scheduling = () => {
   const getBookedSchedule = async () => {
     try {
       const result = await getSchedules();
-      setReserve(result.data);
+      setSchedules(formatScheduleByDay(result.data));
+    } catch (error) {
+      toast({
+        title: "Oops! Sesuatu telah terjadi",
+        description: (error as Error).message,
+        variant: "destructive",
+      });
+    }
+  };
+
+  const getProfile = async () => {
+    try {
+      const result = await getMyProfile();
+      setPatient(result.data);
     } catch (error) {
       toast({
         title: "Oops! Sesuatu telah terjadi",
@@ -78,32 +92,13 @@ const Scheduling = () => {
     }
   };
 
-  const getProfile = async () => {
-    try {
-      const result = await getMyProfile();
-      setPatient(result.data);
-    } catch (error) {
-      toast({
-        title: "Oops! Sesuatu telah terjadi",
-        description: (error as Error).message,
-        variant: "destructive",
-      });
-    }
-  };
-
-  const getDoctorScheduleForDay = (day: string) => {
-    return reserve
-      .filter((schedule) => schedule.day === day)
-      .sort((a, b) => a.time_start.localeCompare(b.time_start));
-  };
-
   function handleSelectSchedule(schedule: ISchedule) {
     setSelectedSchedule(schedule);
     setIsOpen(true);
   }
 
   return (
-    <Layout className="px-4 pt-4">
+    <Layout className="p-4">
       <div className="text-center flex flex-col space-y-4">
         <p className="font-semibold text-2xl tracking-wider">
           Pilih Jadwal Praktik Dokter
@@ -115,39 +110,36 @@ const Scheduling = () => {
       </div>
       <div
         data-testid="schedule-board"
-        className="w-full h-full grid grid-flow-col gap-4 mt-10 overflow-x-auto"
+        className="w-full h-full grid grid-cols-1 lg:grid-cols-7 gap-4 mt-10 overflow-x-auto"
       >
-        {DAYS_OF_WEEK.map((day) => (
+        {schedules.map((schedule) => (
           <div
-            data-testid={`column-${day}`}
-            key={day}
-            className="text-center space-y-4 w-64"
+            data-testid={`column-${schedule.day}`}
+            key={schedule.day}
+            className="text-center space-y-4"
           >
-            <p className="font-semibold">{day}</p>
-            {getDoctorScheduleForDay(day).map((doctorSchedule) => {
-              return (
-                <div
-                  data-testid="schedule-data"
-                  key={doctorSchedule.schedule_id}
-                  className="border rounded-md cursor-pointer text-left px-5 py-3 bg-white shadow-md"
-                  onClick={() => handleSelectSchedule(doctorSchedule)}
-                >
-                  <p className="text-md font-semibold">
-                    {doctorSchedule.user.name}
-                  </p>
-                  <p className="text-sm text-gray-500">
-                    {doctorSchedule.time_start} - {doctorSchedule.time_end}
-                  </p>
-                  <p className="mt-2 text-sm">
-                    {doctorSchedule.health_care_address}
-                  </p>
-                </div>
-              );
-            })}
-            {!getDoctorScheduleForDay(day).length && (
-              <div className="flex items-center justify-center h-20 cursor-not-allowed">
+            <p className="font-semibold text-lg">{schedule.day}</p>
+            {schedule.datas.length !== 0 ? (
+              schedule.datas.map((data) => {
+                return (
+                  <div
+                    data-testid="schedule-data"
+                    key={data.schedule_id}
+                    className="border rounded-md grid grid-cols-1 auto-rows-fr cursor-pointer text-left px-5 py-3 bg-white shadow-md"
+                    onClick={() => handleSelectSchedule(data)}
+                  >
+                    <p className="font-semibold">{data.user.name}</p>
+                    <p className="text-sm text-gray-500">
+                      {data.time_start} - {data.time_end}
+                    </p>
+                    <p className="mt-2 text-sm">{data.health_care_address}</p>
+                  </div>
+                );
+              })
+            ) : (
+              <p className="flex items-center justify-center h-20 cursor-not-allowed">
                 Tidak ada jadwal dokter yang tersedia untuk hari ini.
-              </div>
+              </p>
             )}
           </div>
         ))}

@@ -4,10 +4,10 @@ import {
   FieldValues,
   FieldPath,
   Path,
-} from 'react-hook-form';
-import { CalendarIcon } from 'lucide-react';
-import { ReactNode, useState } from 'react';
-import { format } from 'date-fns';
+} from "react-hook-form";
+import { CalendarIcon } from "lucide-react";
+import { ReactNode, useState } from "react";
+import { format } from "date-fns";
 
 import {
   FormField,
@@ -16,7 +16,7 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from '@/components/ui/form';
+} from "@/components/ui/form";
 import {
   Select,
   SelectContent,
@@ -25,18 +25,18 @@ import {
   SelectLabel,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select';
+} from "@/components/ui/select";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from '@/components/ui/popover';
-import { Checkbox } from '@/components/ui/checkbox';
-import { Calendar } from '@/components/ui/calendar';
-import { Button } from '@/components/ui/button';
+} from "@/components/ui/popover";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Calendar } from "@/components/ui/calendar";
+import { Button } from "@/components/ui/button";
 
-import { ISelect } from '@/utils/types/data';
-import { cn } from '@/lib/utils';
+import { ISelect } from "@/utils/types/data";
+import { cn } from "@/lib/utils";
 
 interface Props<T extends FieldValues> {
   name: FieldPath<T>;
@@ -45,7 +45,7 @@ interface Props<T extends FieldValues> {
   options?: ISelect[];
   description?: string;
   control: Control<T>;
-  'data-testid'?: string;
+  "data-testid"?: string;
   disabled?: boolean;
 }
 
@@ -119,7 +119,7 @@ export function CustomFormSelect<T extends FieldValues>(
           >
             <FormControl>
               <SelectTrigger
-                data-testid={props['data-testid']}
+                data-testid={props["data-testid"]}
                 className="w-full"
               >
                 <SelectValue placeholder={placeholder} />
@@ -127,11 +127,11 @@ export function CustomFormSelect<T extends FieldValues>(
             </FormControl>
             <SelectContent>
               <SelectGroup>
-                <SelectLabel>{label}</SelectLabel>
+                <SelectLabel>{placeholder}</SelectLabel>
                 {options?.map((option) => (
                   <SelectItem
                     data-testid={`option-${option.value}`}
-                    value={String(option.value)}
+                    value={option.value.toString()}
                     key={option.value}
                   >
                     {option.label}
@@ -164,20 +164,20 @@ export function CustomFormDatePicker<T extends FieldValues>(
           <FormLabel>{label}</FormLabel>
           <Popover open={isPopoverOpen} onOpenChange={setIsPopoverOpen}>
             <PopoverTrigger
-              data-testid={props['data-testid']}
+              data-testid={props["data-testid"]}
               asChild
               disabled={disabled}
             >
               <FormControl>
                 <Button
-                  variant={'outline'}
+                  variant={"outline"}
                   className={cn(
-                    'pl-3 text-left font-normal',
-                    !field.value && 'text-muted-foreground'
+                    "pl-3 text-left font-normal",
+                    !field.value && "text-muted-foreground"
                   )}
                 >
                   {field.value ? (
-                    format(field.value, 'dd MMMM yyyy')
+                    format(field.value, "dd MMMM yyyy")
                   ) : (
                     <span>{placeholder}</span>
                   )}
@@ -195,10 +195,10 @@ export function CustomFormDatePicker<T extends FieldValues>(
                   setIsPopoverOpen(false);
                 }}
                 disabled={(date) =>
-                  date > new Date() || date < new Date('1900-01-01')
+                  date > new Date() || date < new Date("1900-01-01")
                 }
                 captionLayout="dropdown-buttons"
-                fromDate={new Date('1900-01-01')}
+                fromDate={new Date("1900-01-01")}
                 toDate={new Date()}
                 initialFocus
               />

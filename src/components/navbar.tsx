@@ -54,11 +54,13 @@ const Navbar = (props: Props) => {
           )}
         </div>
         <div className="flex gap-4 items-center justify-end h-full w-full">
-          <Button variant="link" asChild>
-            <Link className="text-lg tracking-widest" to="/">
-              Kontak Kami
-            </Link>
-          </Button>
+          {role === "patient" ? (
+            <Button variant="link" asChild>
+              <Link className="text-lg tracking-widest" to="/">
+                Kontak Kami
+              </Link>
+            </Button>
+          ) : null}
           <DropdownMenu>
             <DropdownMenuTrigger>
               <Avatar>
