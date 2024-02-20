@@ -10,10 +10,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import {
-  CustomFormField,
-  CustomFormSelect,
-} from "@/components/custom-formfield";
+import { CustomFormField } from "@/components/custom-formfield";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Form } from "@/components/ui/form";
@@ -37,7 +34,6 @@ const ModalAttempt = (props: Props) => {
     defaultValues: {
       diagnosis: "",
       feedback: "",
-      status: "",
     },
   });
 
@@ -98,27 +94,6 @@ const ModalAttempt = (props: Props) => {
                 />
               )}
             </CustomFormField>
-            <CustomFormSelect
-              data-testid="input-status"
-              control={form.control}
-              name="status"
-              label="Status"
-              placeholder="Pilih status"
-              options={[
-                {
-                  label: "Waiting",
-                  value: "Waiting",
-                },
-                {
-                  label: "Submited",
-                  value: "Submited",
-                },
-                {
-                  label: "Done",
-                  value: "Done",
-                },
-              ]}
-            />
             <DialogFooter>
               <Button
                 data-testid="btn-submit"

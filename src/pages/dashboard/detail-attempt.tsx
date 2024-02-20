@@ -1,8 +1,9 @@
-import { useParams, useNavigate } from "react-router-dom";
+import { useSearchParams, useParams, useNavigate } from "react-router-dom";
 import { useEffect, useMemo, useState } from "react";
 import { ColumnDef } from "@tanstack/react-table";
 
 import { useToast } from "@/components/ui/use-toast";
+import Pagination from "@/components/pagination";
 import DataTable from "@/components/data-table";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -20,14 +21,17 @@ import {
   IAttemptAnswer,
 } from "@/utils/apis/questionnaire/types";
 import { useAuthStore } from "@/utils/states";
+import { IPagination } from "@/utils/types/api";
 
 const DetailAttempt = () => {
   const { attempt_id } = useParams() as { attempt_id: string };
   const role = useAuthStore((state) => state.role);
+  const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   const { toast } = useToast();
 
   const [data, setData] = useState<IAttempt>();
+  const [pagination, setPagination] = useState<IPagination>();
   const [answers, setAnswers] = useState<IAttemptAnswer[]>([]);
   const [showDialog, setShowDialog] = useState(false);
 
@@ -59,7 +63,7 @@ const DetailAttempt = () => {
         header: "Skor",
       },
     ],
-    []
+    [pagination]
   );
 
   useEffect(() => {
@@ -83,9 +87,14 @@ const DetailAttempt = () => {
 
   async function fetchAnswers() {
     try {
-      const result = await getAttemptAnswers(attempt_id);
+      const query = Object.fromEntries(
+        [...searchParams].filter((param) => param[0] !== "tab")
+      );
+
+      const result = await getAttemptAnswers(attempt_id, { ...query });
 
       setAnswers(result.data);
+      setPagination(result.pagination);
     } catch (error) {
       toast({
         title: "Oops! Sesuatu telah terjadi",
@@ -124,7 +133,9 @@ const DetailAttempt = () => {
               <p className="text-sm text-foreground font-light">
                 {data.patient.email}
               </p>
-              <Badge variant="default">{data.status}</Badge>
+              <Badge variant="default" className="capitalize">
+                {data.status}
+              </Badge>
             </div>
             <div className="grid grid-cols-2 gap-4">
               <div>
@@ -154,6 +165,8 @@ const DetailAttempt = () => {
           <Button
             data-testid="btn-add-data"
             onClick={() => setShowDialog(true)}
+            disabled={data?.status === "done"}
+            aria-disabled={data?.status === "done"}
           >
             Tambah Asesmen
           </Button>
@@ -170,6 +183,7 @@ const DetailAttempt = () => {
         onOpenChange={setShowDialog}
         onSubmit={(data) => onSubmitData(data)}
       />
+      <Pagination meta={pagination} />
     </Layout>
   );
 };

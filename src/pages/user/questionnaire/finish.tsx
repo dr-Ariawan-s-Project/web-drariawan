@@ -25,7 +25,8 @@ const Success = () => {
           <p className="text-left md:text-justify text-lg max-w-full md:max-w-2xl lg:max-w-3xl">
             Terima kasih telah bersedia meluangkan waktu untuk mengisi kuisioner
             ini. Jawaban dan informasi anda sangat dibutuhkan di dalam
-            penelitian ini.
+            penelitian ini. Hasil akan disampaikan via email setelah selesai
+            asesmen oleh dokter.
           </p>
           <div>
             <p className="font-lato_italic text-left text-health-blue-thin">
