@@ -23,6 +23,7 @@ import DashboardQuestionnaires from "@/pages/dashboard/questionnaires";
 import DashboardAttempt from "@/pages/dashboard/detail-attempt";
 import Setting from "@/pages/dashboard/settings";
 import Unauthorized from "@/pages/404";
+import ContactUs from "@/pages/contact-us";
 
 const App = () => {
   const router = createBrowserRouter([
@@ -33,6 +34,11 @@ const App = () => {
           path: "/",
           loader: () => "Halaman Utama | Eterna Medica",
           element: <Main />,
+        },
+        {
+          path: "/contact-us",
+          loader: () => "Kontak Kami | Eterna Medica",
+          element: <ContactUs />,
         },
         {
           path: "/login",

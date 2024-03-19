@@ -56,7 +56,7 @@ const Navbar = (props: Props) => {
         <div className="flex gap-4 items-center justify-end h-full w-full">
           {!role || role === "patient" ? (
             <Button variant="link" asChild>
-              <Link className="text-lg tracking-widest" to="/">
+              <Link className="text-lg tracking-widest" to="/contact-us">
                 Kontak Kami
               </Link>
             </Button>
