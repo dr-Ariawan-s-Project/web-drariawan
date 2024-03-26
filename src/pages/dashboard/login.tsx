@@ -1,32 +1,33 @@
-import { zodResolver } from '@hookform/resolvers/zod';
-import { useForm } from 'react-hook-form';
-import { Link } from 'react-router-dom';
-import { Loader2 } from 'lucide-react';
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Link, useNavigate } from "react-router-dom";
+import { useForm } from "react-hook-form";
+import { Loader2 } from "lucide-react";
 
 import {
   CustomFormField,
   CustomFormCheckbox,
-} from '@/components/custom-formfield';
-import { useToast } from '@/components/ui/use-toast';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Layout } from '@/components/layout';
-import { Form } from '@/components/ui/form';
+} from "@/components/custom-formfield";
+import { useToast } from "@/components/ui/use-toast";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Layout } from "@/components/layout";
+import { Form } from "@/components/ui/form";
 
-import { LoginSchema, loginSchema } from '@/utils/apis/auth/types';
-import { setAxiosConfig } from '@/utils/apis/axiosWithConfig';
-import { adminLogin } from '@/utils/apis/auth/api';
-import { useAuthStore } from '@/utils/states';
+import { LoginSchema, loginSchema } from "@/utils/apis/auth/types";
+import { setAxiosConfig } from "@/utils/apis/axiosWithConfig";
+import { adminLogin } from "@/utils/apis/auth/api";
+import { useAuthStore } from "@/utils/states";
 
 const AdminLogin = () => {
   const addAuth = useAuthStore((state) => state.addAuth);
+  const navigate = useNavigate();
   const { toast } = useToast();
 
   const form = useForm<LoginSchema>({
     resolver: zodResolver(loginSchema),
     defaultValues: {
-      email: '',
-      password: '',
+      email: "",
+      password: "",
       remember: false,
     },
   });
@@ -39,11 +40,12 @@ const AdminLogin = () => {
       });
       addAuth(result.data, data.remember);
       setAxiosConfig(result.data.token);
+      navigate("/dashboard");
     } catch (error) {
       toast({
-        title: 'Oops! Sesuatu telah terjadi',
+        title: "Oops! Sesuatu telah terjadi",
         description: (error as Error).message,
-        variant: 'destructive',
+        variant: "destructive",
       });
     }
   }
@@ -115,7 +117,7 @@ const AdminLogin = () => {
                   Please wait
                 </>
               ) : (
-                'Login'
+                "Login"
               )}
             </Button>
           </div>

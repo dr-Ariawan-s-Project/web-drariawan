@@ -6,7 +6,6 @@ import { useAuthStore } from "@/utils/states";
 
 const nonLoggedInAccess = [
   "/",
-  "/contact-us",
   "/login",
   "/register",
   "/dashboard/login",
@@ -23,7 +22,6 @@ const routeWhitelist: Record<string, string[]> = {
     "/dashboard/schedules",
     "/dashboard/books",
     "/dashboard/settings",
-    "/not-found",
   ],
   dokter: [
     "/dashboard",
@@ -31,7 +29,6 @@ const routeWhitelist: Record<string, string[]> = {
     "/dashboard/books",
     "/dashboard/questionnaires",
     "/dashboard/settings",
-    "/not-found",
   ],
   admin: [
     "/dashboard",
@@ -39,7 +36,6 @@ const routeWhitelist: Record<string, string[]> = {
     "/dashboard/schedules",
     "/dashboard/questionnaires",
     "/dashboard/settings",
-    "/not-found",
   ],
   superadmin: [
     "/dashboard",
@@ -48,7 +44,6 @@ const routeWhitelist: Record<string, string[]> = {
     "/dashboard/schedules",
     "/dashboard/questionnaires",
     "/dashboard/settings",
-    "/not-found",
   ],
   patient: [
     "/",
@@ -62,7 +57,6 @@ const routeWhitelist: Record<string, string[]> = {
     "/questionnaire/sent",
     "/questionnaire/start",
     "/questionnaire/finish",
-    "/not-found",
   ],
 };
 

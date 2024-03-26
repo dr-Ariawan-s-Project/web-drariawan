@@ -28,28 +28,55 @@ import ContactUs from "@/pages/contact-us";
 const App = () => {
   const router = createBrowserRouter([
     {
+      path: "/",
+      loader: () => "Halaman Utama | Eterna Medica",
+      element: <Main />,
+    },
+    {
+      path: "/contact-us",
+      loader: () => "Kontak Kami | Eterna Medica",
+      element: <ContactUs />,
+    },
+    {
+      path: "/login",
+      loader: () => "Login | Eterna Medica",
+      element: <Login />,
+    },
+    {
+      path: "/register",
+      loader: () => "Register | Eterna Medica",
+      element: <Register />,
+    },
+    {
+      path: "/dashboard/login",
+      loader: () => "Login | Eterna Medica",
+      element: <DashboardLogin />,
+    },
+    {
+      path: "/questionnaire",
+      element: <Questionnaire />,
+    },
+    {
+      path: "/questionnaire/form",
+      loader: () => "Form Kuesioner | Eterna Medica",
+      element: <QuestionnaireForm />,
+    },
+    {
+      path: "/questionnaire/sent",
+      element: <QuestionnaireSent />,
+    },
+    {
+      path: "/questionnaire/start",
+      loader: () => "Pengisian Kuesioner | Eterna Medica",
+      element: <QuestionnaireStart />,
+    },
+    {
+      path: "/questionnaire/finish",
+      element: <QuestionnaireFinish />,
+    },
+    {
       element: <ProtectedRoute />,
       children: [
-        {
-          path: "/",
-          loader: () => "Halaman Utama | Eterna Medica",
-          element: <Main />,
-        },
-        {
-          path: "/contact-us",
-          loader: () => "Kontak Kami | Eterna Medica",
-          element: <ContactUs />,
-        },
-        {
-          path: "/login",
-          loader: () => "Login | Eterna Medica",
-          element: <Login />,
-        },
-        {
-          path: "/register",
-          loader: () => "Register | Eterna Medica",
-          element: <Register />,
-        },
         {
           path: "/profile",
           loader: () => "Profil | Eterna Medica",
@@ -69,39 +96,12 @@ const App = () => {
           element: <PatientSchedule />,
         },
         {
-          path: "/questionnaire",
-          element: <Questionnaire />,
-        },
-        {
-          path: "/questionnaire/form",
-          loader: () => "Form Kuesioner | Eterna Medica",
-          element: <QuestionnaireForm />,
-        },
-        {
-          path: "/questionnaire/sent",
-          element: <QuestionnaireSent />,
-        },
-        {
-          path: "/questionnaire/start",
-          loader: () => "Pengisian Kuesioner | Eterna Medica",
-          element: <QuestionnaireStart />,
-        },
-        {
-          path: "/questionnaire/finish",
-          element: <QuestionnaireFinish />,
-        },
-        {
           path: "/dashboard",
           element: <Dashboard />,
           loader: () => "Dashboard | Eterna Medica",
           handle: {
             crumb: "Dashboard",
           },
-        },
-        {
-          path: "/dashboard/login",
-          loader: () => "Login | Eterna Medica",
-          element: <DashboardLogin />,
         },
         {
           path: "/dashboard/patients",
