@@ -1,5 +1,5 @@
-import { Params, useMatches } from "react-router-dom";
-import { ReactNode } from "react";
+import { Params, useMatches, useLoaderData } from "react-router-dom";
+import { ReactNode, useEffect } from "react";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Sidebar } from "@/components/sidebar";
@@ -35,6 +35,11 @@ export const Layout = (props: Readonly<Props>) => {
     className,
   } = props;
   let matches: IMatches[] = useMatches();
+  const data = useLoaderData() as string;
+
+  useEffect(() => {
+    document.title = data || "Klinik Sehat";
+  }, [data]);
 
   let crumbs = matches
     .filter((match) =>
@@ -48,39 +53,36 @@ export const Layout = (props: Readonly<Props>) => {
   return (
     <div
       className={cn(
-        "bg-white h-dvh w-full [&>*]:text-health-blue-dark flex bg-[url(/images/pattern.svg)] max-h-[100vh]",
+        "bg-white h-dvh w-full [&>*]:text-health-blue-dark flex bg-[url(/images/pattern.svg)]",
         variant === "default" && "overflow-auto"
       )}
     >
-      {variant === "admin" ? <Sidebar /> : null}
-      <div
-        className={cn(
-          "h-full flex flex-col",
-          variant === "admin" ? "w-full" : "w-full"
-        )}
-      >
-        <Navbar showMenu={variant === "admin"} />
-        {variant === "admin" ? (
-          <div className="w-full h-full p-5 overflow-auto">
-            <Card>
-              <CardHeader>
-                <CardTitle>{crumbs[0]}</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-5">{children}</CardContent>
-            </Card>
-          </div>
-        ) : (
-          <div
-            className={cn(
-              "container flex-grow flex flex-col relative",
-              centerY && "justify-center",
-              centerX && "items-center p-5",
-              className
-            )}
-          >
-            {children}
-          </div>
-        )}
+      <div className="container h-full flex">
+        {variant === "admin" ? <Sidebar /> : null}
+        <div className="w-full h-full overflow-auto flex flex-col">
+          <Navbar showMenu={variant === "admin"} />
+          {variant === "admin" ? (
+            <div className="w-full flex-1 p-5">
+              <Card>
+                <CardHeader>
+                  <CardTitle>{crumbs[0]}</CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-5">{children}</CardContent>
+              </Card>
+            </div>
+          ) : (
+            <div
+              className={cn(
+                "w-full flex-1 flex flex-col relative",
+                centerY && "justify-center",
+                centerX && "items-center p-5",
+                className
+              )}
+            >
+              {children}
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );

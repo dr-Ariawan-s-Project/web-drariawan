@@ -21,11 +21,21 @@ const Success = () => {
           />
         </div>
         <div className="flex flex-col w-full lg:w-3/5 h-full justify-center space-y-4">
-          <p className="text-4xl">Selesai!</p>
+          <p className="text-4xl">Terima kasih.</p>
           <p className="text-left md:text-justify text-lg max-w-full md:max-w-2xl lg:max-w-3xl">
-            Terima kasih telah bersedia meluangkan waktu untuk mengisi kuisioner
-            ini. Jawaban dan informasi anda sangat dibutuhkan di dalam
-            penelitian ini.
+            Kami ucapkan terima kasih atas kesediaan Anda meluangkan waktu untuk
+            mengisi kuesioner ini secara apa adanya. Bila memerlukan bantuan
+            lebih lanjut (konseling, bantuan pemeriksaan sperma analisis, saran
+            ke mana bisa mendapatkan informasi dokter spesialis yang tepat, dll)
+            dapat menghubungi kami dengan mengunjungi laman{" "}
+            <Link to="/contact-us" className="underline">
+              berikut
+            </Link>
+            .
+          </p>
+          <p className="text-left md:text-justify text-lg max-w-full md:max-w-2xl lg:max-w-3xl">
+            Kami dengan senang hati akan membantu dan melayani Anda selanjutnya.
+            Salam sehat dan sejahtera selalu.
           </p>
           <div>
             <p className="font-lato_italic text-left text-health-blue-thin">

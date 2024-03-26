@@ -1,34 +1,35 @@
-import { useState, useEffect, useMemo } from 'react';
-import { useSearchParams } from 'react-router-dom';
-import { ColumnDef } from '@tanstack/react-table';
-import { MoreHorizontal } from 'lucide-react';
-import { format, parseISO } from 'date-fns';
-import { capitalize } from 'lodash';
+import { useState, useEffect, useMemo } from "react";
+import { useSearchParams } from "react-router-dom";
+import { ColumnDef } from "@tanstack/react-table";
+import { MoreHorizontal } from "lucide-react";
+import { format, parseISO } from "date-fns";
+import { capitalize } from "lodash";
 
-import { useToast } from '@/components/ui/use-toast';
-import { Layout } from '@/components/layout';
-import Pagination from '@/components/pagination';
-import { Button } from '@/components/ui/button';
-import DataTable from '@/components/data-table';
-import { Badge } from '@/components/ui/badge';
-import Alert from '@/components/alert';
+import { useToast } from "@/components/ui/use-toast";
+import { Layout } from "@/components/layout";
+import Pagination from "@/components/pagination";
+import { Button } from "@/components/ui/button";
+import DataTable from "@/components/data-table";
+import { Badge } from "@/components/ui/badge";
+import Alert from "@/components/alert";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
-import ModalBooking from './module/modal-booking';
+} from "@/components/ui/dropdown-menu";
+import ModalBooking from "./module/modal-booking";
 
 import {
+  cancelBooking,
   deleteBooking,
   getBooking,
   postBooking,
   updateBooking,
-} from '@/utils/apis/books/api';
-import { BookingSchema, IBook } from '@/utils/apis/books/types';
-import { IPagination } from '@/utils/types/api';
-import { useAuthStore } from '@/utils/states';
+} from "@/utils/apis/books/api";
+import { BookingSchema, IBook } from "@/utils/apis/books/types";
+import { IPagination } from "@/utils/types/api";
+import { useAuthStore } from "@/utils/states";
 
 const DashboardBooks = () => {
   const [searchParams] = useSearchParams();
@@ -40,50 +41,51 @@ const DashboardBooks = () => {
   const [selectedData, setSelectedData] = useState<IBook>();
   const [showAddEditDialog, setShowAddEditDialog] = useState(false);
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
+  const [showCancelDialog, setShowCancelDialog] = useState(false);
 
   const checkRole = useMemo(() => {
-    return ['suster'].includes(role);
+    return ["suster"].includes(role);
   }, [role]);
 
   const columns = useMemo<ColumnDef<IBook>[]>(
     () => [
       {
-        accessorKey: '',
-        header: 'No',
+        accessorKey: "",
+        header: "No",
         cell: ({ row }) => {
           return (pagination?.page! - 1) * pagination?.limit! + row.index + 1;
         },
       },
       {
-        accessorKey: 'booking_code',
-        header: 'Kode Booking',
+        accessorKey: "booking_code",
+        header: "Kode Booking",
       },
       {
-        accessorKey: 'patient.name',
-        header: 'Nama Pasien',
+        accessorKey: "patient.name",
+        header: "Nama Pasien",
       },
       {
-        accessorKey: 'patient.email',
-        header: 'Email Pasien',
+        accessorKey: "patient.email",
+        header: "Email Pasien",
       },
       {
-        accessorKey: 'booking_date',
-        header: 'Tanggal Booking',
+        accessorKey: "booking_date",
+        header: "Tanggal Booking",
         cell: (info) => {
           const cellValue = info.row.original.booking_date;
 
           return cellValue
-            ? format(parseISO(cellValue), 'EEEE, dd MMMM yyyy')
-            : '-';
+            ? format(parseISO(cellValue), "EEEE, dd MMMM yyyy")
+            : "-";
         },
       },
       {
-        accessorKey: 'schedule.user.name',
-        header: 'Nama Dokter',
+        accessorKey: "schedule.user.name",
+        header: "Nama Dokter",
       },
       {
-        accessorKey: 'state',
-        header: 'Status',
+        accessorKey: "state",
+        header: "Status",
         cell: (info) => {
           const cellValue = info.row.original.state;
 
@@ -91,7 +93,7 @@ const DashboardBooks = () => {
             <Badge
               variant="outline"
               className={
-                cellValue === 'confirmed' ? 'bg-green-400' : 'bg-red-400'
+                cellValue === "confirmed" ? "bg-green-400" : "bg-red-400"
               }
             >
               {capitalize(cellValue)}
@@ -100,7 +102,7 @@ const DashboardBooks = () => {
         },
       },
       {
-        id: 'actions',
+        id: "actions",
         cell: ({ row }) => {
           return (
             <DropdownMenu>
@@ -120,6 +122,16 @@ const DashboardBooks = () => {
                   disabled={!checkRole}
                 >
                   Edit
+                </DropdownMenuItem>
+                <DropdownMenuItem
+                  data-testid="action-cancel"
+                  onClick={() => {
+                    setSelectedData(row.original);
+                    setShowCancelDialog(true);
+                  }}
+                  disabled={!checkRole}
+                >
+                  Batal
                 </DropdownMenuItem>
                 <DropdownMenuItem
                   data-testid="action-delete"
@@ -154,9 +166,9 @@ const DashboardBooks = () => {
       setPagination(result.pagination);
     } catch (error) {
       toast({
-        title: 'Oops! Sesuatu telah terjadi',
+        title: "Oops! Sesuatu telah terjadi",
         description: (error as Error).message,
-        variant: 'destructive',
+        variant: "destructive",
       });
     }
   };
@@ -176,9 +188,9 @@ const DashboardBooks = () => {
       setSelectedData(undefined);
     } catch (error) {
       toast({
-        title: 'Oops! Sesuatu telah terjadi',
+        title: "Oops! Sesuatu telah terjadi",
         description: (error as Error).message,
-        variant: 'destructive',
+        variant: "destructive",
       });
     }
   }
@@ -196,9 +208,29 @@ const DashboardBooks = () => {
       setShowDeleteDialog(false);
     } catch (error) {
       toast({
-        title: 'Oops! Sesuatu telah terjadi',
+        title: "Oops! Sesuatu telah terjadi",
         description: (error as Error).message,
-        variant: 'destructive',
+        variant: "destructive",
+      });
+    }
+  }
+
+  async function onCancelData(id_schedule: string) {
+    try {
+      const result = await cancelBooking(id_schedule);
+
+      toast({
+        description: result.messages[0],
+      });
+
+      fetchData();
+      setSelectedData(undefined);
+      setShowCancelDialog(false);
+    } catch (error) {
+      toast({
+        title: "Oops! Sesuatu telah terjadi",
+        description: (error as Error).message,
+        variant: "destructive",
       });
     }
   }
@@ -222,13 +254,21 @@ const DashboardBooks = () => {
       />
       <Pagination meta={pagination} />
       <Alert
-        open={showDeleteDialog}
+        open={showDeleteDialog || showCancelDialog}
         title="Peringatan"
-        description={`Apakah anda yakin ingin menghapus booking "${selectedData?.booking_code}"?`}
-        onAction={() => onDeleteData(selectedData?.id!)}
+        description={`Apakah anda yakin ingin ${
+          showDeleteDialog ? "menghapus" : "membatalkan"
+        } booking "${selectedData?.booking_code}"?`}
+        onAction={() =>
+          showDeleteDialog
+            ? onDeleteData(selectedData?.id!)
+            : onCancelData(selectedData?.id!)
+        }
         onCancel={() => {
           setSelectedData(undefined);
-          setShowDeleteDialog(false);
+          showDeleteDialog
+            ? setShowDeleteDialog(false)
+            : setShowCancelDialog(false);
         }}
       />
       <ModalBooking

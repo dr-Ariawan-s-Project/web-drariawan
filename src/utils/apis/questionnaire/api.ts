@@ -66,13 +66,33 @@ export const getQuestionnaireAttempt = async (params?: Request) => {
   }
 };
 
-export const getAttemptAnswers = async (attempt_id: string) => {
+export const getAttempt = async (attempt_id: string) => {
   try {
     const response = await axiosWithConfig.get(
-      `/v1/questioner/attempts/${attempt_id}/answers`
+      `/v1/questioner/attempts/${attempt_id}`
     );
 
-    return response.data as Response<IAttemptAnswer[]>;
+    return response.data as Response<IAttempt>;
+  } catch (error: any) {
+    const { messages } = error.response.data;
+
+    throw Error(messages[0]);
+  }
+};
+
+export const getAttemptAnswers = async (
+  attempt_id: string,
+  params?: Request
+) => {
+  try {
+    const query = buildQueryString(params);
+    const url = query
+      ? `/v1/questioner/attempts/${attempt_id}/answers${query}&limit=10`
+      : `/v1/questioner/attempts/${attempt_id}/answers`;
+
+    const response = await axiosWithConfig.get(url);
+
+    return response.data as ResponsePagination<IAttemptAnswer[]>;
   } catch (error: any) {
     const { messages } = error.response.data;
 
@@ -90,7 +110,7 @@ export const postAttemptAssessments = async (
       body
     );
 
-    return response.data as Response;
+    return response.data as Response<null>;
   } catch (error: any) {
     const { messages } = error.response.data;
 

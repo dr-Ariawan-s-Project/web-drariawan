@@ -12,6 +12,7 @@ import SpeechRecognition, {
   useSpeechRecognition,
 } from "react-speech-recognition";
 
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import AudioRecorder from "@/components/audio-recorder";
 import { useToast } from "@/components/ui/use-toast";
@@ -258,6 +259,14 @@ const StartPage = (props: IStartProps) => {
       <p className="text-center text-lg">
         Silahkan klik tombol dibawah untuk memulai mengisi kuesioner!
       </p>
+      <Alert className="w-full sm:w-4/5 md:w-3/4 lg:w-1/2">
+        <Info className="h-4 w-4" />
+        <AlertTitle>Peringatan</AlertTitle>
+        <AlertDescription>
+          Agar dapat memaksimalkan penggunaan aplikasi ini, anda disarankan
+          untuk menggunakan Google Chrome.
+        </AlertDescription>
+      </Alert>
       <Button
         data-testid="btn-start"
         onClick={handleClick}
@@ -313,11 +322,11 @@ const QuestionPage = (props: IQuestionProps) => {
               </PopoverTrigger>
               <PopoverContent className="pl-8">
                 <ol className="list-decimal">
-                  <li>Silahkan simak video hingga selesai</li>
-                  <li>Checklist pada pilihan jawaban anda</li>
+                  <li>Simak video hingga selesai</li>
                   <li>
-                    Anda juga bisa menggunakan fitur rekam suara untuk memilih
-                    jawaban
+                    Silakan tekan tombol mikrofon untuk merekam suara, jawaban
+                    anda secara otomatis ditampilkan didalam kolom jawaban. Atau
+                    langsung tekan pada pilihan jawaban dibawah
                   </li>
                   <li>
                     Tekan tombol selanjutnya untuk mengakses pertanyaan

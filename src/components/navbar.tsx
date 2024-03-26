@@ -1,5 +1,5 @@
-import { Link, useNavigate } from 'react-router-dom';
-import { MenuIcon } from 'lucide-react';
+import { Link, useNavigate } from "react-router-dom";
+import { MenuIcon } from "lucide-react";
 
 import {
   DropdownMenu,
@@ -8,12 +8,12 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
-import { Avatar, AvatarFallback } from '@/components/ui/avatar';
-import { useSidebarStore } from '@/components/sidebar';
-import { useToast } from '@/components/ui/use-toast';
-import { Button } from '@/components/ui/button';
-import { useAuthStore } from '@/utils/states';
+} from "@/components/ui/dropdown-menu";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { useSidebarStore } from "@/components/sidebar";
+import { useToast } from "@/components/ui/use-toast";
+import { Button } from "@/components/ui/button";
+import { useAuthStore } from "@/utils/states";
 
 interface Props {
   showMenu?: boolean;
@@ -28,10 +28,10 @@ const Navbar = (props: Props) => {
 
   function handleLogout() {
     toast({
-      description: 'Logout Successfully',
+      description: "Logout Successfully",
     });
     resetAuth();
-    role === 'patient' ? navigate('/login') : navigate('/dashboard/login');
+    role === "patient" ? navigate("/login") : navigate("/dashboard/login");
   }
 
   return (
@@ -54,11 +54,13 @@ const Navbar = (props: Props) => {
           )}
         </div>
         <div className="flex gap-4 items-center justify-end h-full w-full">
-          <Button variant="link" asChild>
-            <Link className="text-lg tracking-widest" to="/">
-              Kontak Kami
-            </Link>
-          </Button>
+          {!role || role === "patient" ? (
+            <Button variant="link" asChild>
+              <Link className="text-lg tracking-widest" to="/contact-us">
+                Kontak Kami
+              </Link>
+            </Button>
+          ) : null}
           <DropdownMenu>
             <DropdownMenuTrigger>
               <Avatar>
@@ -70,19 +72,19 @@ const Navbar = (props: Props) => {
                 <>
                   <DropdownMenuLabel>Halo, {name}!</DropdownMenuLabel>
                   <DropdownMenuSeparator />
-                  {role !== 'patient' ? (
+                  {role !== "patient" ? (
                     <DropdownMenuItem
-                      onClick={() => navigate('/admin/setting')}
+                      onClick={() => navigate("/dashboard/settings")}
                     >
                       Setting
                     </DropdownMenuItem>
                   ) : (
                     <>
-                      <DropdownMenuItem onClick={() => navigate('/profile')}>
+                      <DropdownMenuItem onClick={() => navigate("/profile")}>
                         Profile
                       </DropdownMenuItem>
                       <DropdownMenuItem
-                        onClick={() => navigate('/scheduling/my-list')}
+                        onClick={() => navigate("/scheduling/my-list")}
                       >
                         Jadwal Saya
                       </DropdownMenuItem>
@@ -93,7 +95,7 @@ const Navbar = (props: Props) => {
                   </DropdownMenuItem>
                 </>
               ) : (
-                <DropdownMenuItem onClick={() => navigate('/login')}>
+                <DropdownMenuItem onClick={() => navigate("/login")}>
                   Login Sebagai Pasien
                 </DropdownMenuItem>
               )}

@@ -1,4 +1,6 @@
-import { Request } from '@/utils/types/api';
+import { ISchedule, IScheduling } from "@/utils/apis/schedule/types";
+import { Request } from "@/utils/types/api";
+import { DAYS_OF_WEEK } from "@/utils/constants";
 
 export const generatePagesToDisplay = (
   currentPage: number,
@@ -10,11 +12,11 @@ export const generatePagesToDisplay = (
   if (totalPages <= maxPagesToShow) {
     pagesToDisplay = [...Array(totalPages).keys()].map((page) => page + 1);
   } else if (currentPage <= 3) {
-    pagesToDisplay = [1, 2, 3, 4, '...', totalPages];
+    pagesToDisplay = [1, 2, 3, 4, "...", totalPages];
   } else if (currentPage >= totalPages - 2) {
     pagesToDisplay = [
       1,
-      '...',
+      "...",
       totalPages - 3,
       totalPages - 2,
       totalPages - 1,
@@ -23,11 +25,11 @@ export const generatePagesToDisplay = (
   } else {
     pagesToDisplay = [
       1,
-      '...',
+      "...",
       currentPage - 1,
       currentPage,
       currentPage + 1,
-      '...',
+      "...",
       totalPages,
     ];
   }
@@ -37,7 +39,7 @@ export const generatePagesToDisplay = (
 
 export const buildQueryString = (params?: Request): string => {
   if (!params) {
-    return '';
+    return "";
   }
 
   const queryParams: string[] = [];
@@ -47,5 +49,22 @@ export const buildQueryString = (params?: Request): string => {
     queryParams.push(`${key}=${params[key]}`);
   }
 
-  return queryParams.length > 0 ? `?${queryParams.join('&')}` : '';
+  return queryParams.length > 0 ? `?${queryParams.join("&")}` : "";
+};
+
+export const formatScheduleByDay = (data: ISchedule[]) => {
+  let result: IScheduling[] = [];
+
+  for (const day of DAYS_OF_WEEK) {
+    const temp: IScheduling = {
+      day: day,
+      datas: data
+        .filter((schedule) => schedule.day === day)
+        .sort((a, b) => a.time_start.localeCompare(b.time_start)),
+    };
+
+    result.push(temp);
+  }
+
+  return result;
 };

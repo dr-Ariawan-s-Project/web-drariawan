@@ -1,18 +1,18 @@
-import * as z from 'zod';
+import * as z from "zod";
 
 export const scheduleSchema = z.object({
   user_id: z.coerce
     .number({
-      required_error: 'Dokter wajib diisi',
-      invalid_type_error: 'Dokter wajib diisi',
+      required_error: "Dokter wajib diisi",
+      invalid_type_error: "Dokter wajib diisi",
     })
-    .min(1, { message: 'Dokter wajib diisi' }),
+    .min(1, { message: "Dokter wajib diisi" }),
   health_care_address: z
     .string()
-    .min(1, { message: 'Alamat praktek wajib diisi' }),
-  day: z.string().min(1, { message: 'Hari wajib diisi' }),
-  time_start: z.string().min(1, { message: 'Jam mulai wajib diisi' }),
-  time_end: z.string().min(1, { message: 'Jam selesai wajib diisi' }),
+    .min(1, { message: "Alamat praktek wajib diisi" }),
+  day: z.string().min(1, { message: "Hari wajib diisi" }),
+  time_start: z.string().min(1, { message: "Jam mulai wajib diisi" }),
+  time_end: z.string().min(1, { message: "Jam selesai wajib diisi" }),
 });
 
 export type ScheduleSchema = z.infer<typeof scheduleSchema>;
@@ -21,6 +21,11 @@ export interface IBookPayload {
   patient_id: string;
   schedule_id: number;
   booking_date: string;
+}
+
+export interface IScheduling {
+  day: string;
+  datas: ISchedule[];
 }
 
 export interface ISchedule {

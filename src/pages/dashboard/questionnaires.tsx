@@ -3,6 +3,7 @@ import { useState, useEffect, useMemo } from "react";
 import { ColumnDef } from "@tanstack/react-table";
 import { MoreHorizontal } from "lucide-react";
 import { format, parseISO } from "date-fns";
+import { capitalize } from "lodash";
 
 import { useToast } from "@/components/ui/use-toast";
 import { Layout } from "@/components/layout";
@@ -80,7 +81,7 @@ const ListKuisioner = () => {
         cell: ({ row }) => {
           const cellValue = row.original.status;
 
-          return cellValue ? cellValue : "-";
+          return capitalize(cellValue ? cellValue : "-");
         },
       },
       {

@@ -1,48 +1,39 @@
-import * as z from 'zod';
+import * as z from "zod";
 
 const baseSchema = z.object({
   email: z
     .string()
-    .min(1, { message: 'Email wajib diisi' })
-    .email('Email tidak valid'),
-  phone: z.string().min(1, { message: 'Nomor telepon wajib diisi' }),
+    .min(1, { message: "Email wajib diisi" })
+    .email("Email tidak valid"),
+  phone: z.string().min(1, { message: "Nomor telepon wajib diisi" }),
 });
 
 const selfSchema = z
   .object({
-    as: z.literal('myself'),
-    partner_email: z.string().default(''),
+    as: z.literal("myself"),
+    partner_email: z.string().default(""),
   })
   .merge(baseSchema);
 
 const partnerSchema = z
   .object({
-    as: z.literal('partner'),
+    as: z.literal("partner"),
     partner_email: z
       .string()
-      .min(1, { message: 'Email partner wajib diisi' })
-      .email('Email partner tidak valid'),
+      .min(1, { message: "Email partner wajib diisi" })
+      .email("Email partner tidak valid"),
   })
   .merge(baseSchema);
 
-export const questionnaireSchema = z.discriminatedUnion('as', [
+export const questionnaireSchema = z.discriminatedUnion("as", [
   selfSchema,
   partnerSchema,
 ]);
 
 export const assessmentSchema = z.object({
-  diagnosis: z
-    .string()
-    .min(1, { message: 'Diagnosis wajib diisi' })
-    .email('Diagnosis tidak valid'),
-  feedback: z
-    .string()
-    .min(1, { message: 'Feedback wajib diisi' })
-    .email('Feedback tidak valid'),
-  status: z
-    .string()
-    .min(1, { message: 'Status wajib diisi' })
-    .email('Status tidak valid'),
+  diagnosis: z.string().min(1, { message: "Diagnosis wajib diisi" }),
+  feedback: z.string().min(1, { message: "Feedback wajib diisi" }),
+  status: z.string().default("done"),
 });
 
 export type QuestionnaireSchema = z.infer<typeof questionnaireSchema>;
@@ -55,7 +46,7 @@ export interface IQuestionnaire {
   id: number;
   question: string;
   section: string;
-  type: 'choices' | 'text';
+  type: "choices" | "text";
   url_video: string;
 }
 

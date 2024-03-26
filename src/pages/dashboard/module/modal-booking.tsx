@@ -1,7 +1,7 @@
-import { zodResolver } from '@hookform/resolvers/zod';
-import { useEffect, useState } from 'react';
-import { useForm } from 'react-hook-form';
-import { Loader2 } from 'lucide-react';
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
+import { Loader2 } from "lucide-react";
 
 import {
   Dialog,
@@ -9,19 +9,19 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from '@/components/ui/dialog';
+} from "@/components/ui/dialog";
 import {
   CustomFormDatePicker,
   CustomFormSelect,
-} from '@/components/custom-formfield';
-import { useToast } from '@/components/ui/use-toast';
-import { Button } from '@/components/ui/button';
-import { Form } from '@/components/ui/form';
+} from "@/components/custom-formfield";
+import { useToast } from "@/components/ui/use-toast";
+import { Button } from "@/components/ui/button";
+import { Form } from "@/components/ui/form";
 
-import { BookingSchema, IBook, bookingSchema } from '@/utils/apis/books/types';
-import { getSchedules } from '@/utils/apis/schedule/api';
-import { getPatients } from '@/utils/apis/patient/api';
-import { ISelect } from '@/utils/types/data';
+import { BookingSchema, IBook, bookingSchema } from "@/utils/apis/books/types";
+import { getSchedules } from "@/utils/apis/schedule/api";
+import { getPatients } from "@/utils/apis/patient/api";
+import { ISelect } from "@/utils/types/data";
 
 interface Props {
   open: boolean;
@@ -40,9 +40,9 @@ const ModalBooking = (props: Props) => {
   const form = useForm<BookingSchema>({
     resolver: zodResolver(bookingSchema),
     defaultValues: {
-      patient_id: '',
-      schedule_id: 0,
-      booking_date: '',
+      patient_id: "",
+      schedule_id: "",
+      booking_date: "",
     },
   });
 
@@ -55,16 +55,16 @@ const ModalBooking = (props: Props) => {
     try {
       const result = await getPatients();
       const newData = result.data.map((patient) => ({
-        label: patient.name ?? '-',
+        label: patient.name ?? "-",
         value: patient.id,
       }));
 
       setPatients(newData);
     } catch (error) {
       toast({
-        title: 'Oops! Sesuatu telah terjadi',
+        title: "Oops! Sesuatu telah terjadi",
         description: (error as Error).message,
-        variant: 'destructive',
+        variant: "destructive",
       });
     }
   };
@@ -80,9 +80,9 @@ const ModalBooking = (props: Props) => {
       setSchedules(newData);
     } catch (error) {
       toast({
-        title: 'Oops! Sesuatu telah terjadi',
+        title: "Oops! Sesuatu telah terjadi",
         description: (error as Error).message,
-        variant: 'destructive',
+        variant: "destructive",
       });
     }
   };
@@ -100,9 +100,9 @@ const ModalBooking = (props: Props) => {
 
   function setEditData() {
     if (editData) {
-      form.setValue('patient_id', editData.patient_id);
-      form.setValue('schedule_id', editData.schedule_id);
-      form.setValue('booking_date', editData.booking_date);
+      form.setValue("patient_id", editData.patient_id);
+      form.setValue("schedule_id", editData.schedule_id.toString());
+      form.setValue("booking_date", editData.booking_date);
     }
   }
 
@@ -117,7 +117,7 @@ const ModalBooking = (props: Props) => {
       <DialogContent className="w-full md:w-1/2 lg:w-2/3">
         <DialogHeader>
           <DialogTitle>
-            {editData ? 'Update booking' : 'Tambah booking'}
+            {editData ? "Update booking" : "Tambah booking"}
           </DialogTitle>
         </DialogHeader>
         <Form {...form}>
@@ -162,7 +162,7 @@ const ModalBooking = (props: Props) => {
                     Please wait
                   </>
                 ) : (
-                  'Simpan'
+                  "Simpan"
                 )}
               </Button>
             </DialogFooter>

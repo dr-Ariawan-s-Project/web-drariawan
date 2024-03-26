@@ -1,7 +1,7 @@
-import { zodResolver } from '@hookform/resolvers/zod';
-import { useForm } from 'react-hook-form';
-import { Loader2 } from 'lucide-react';
-import { useEffect } from 'react';
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import { Loader2 } from "lucide-react";
+import { useEffect } from "react";
 
 import {
   Dialog,
@@ -9,16 +9,16 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from '@/components/ui/dialog';
-import { CustomFormField } from '@/components/custom-formfield';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Form } from '@/components/ui/form';
+} from "@/components/ui/dialog";
+import { CustomFormField } from "@/components/custom-formfield";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Form } from "@/components/ui/form";
 
 import {
   AssessmentSchema,
   assessmentSchema,
-} from '@/utils/apis/questionnaire/types';
+} from "@/utils/apis/questionnaire/types";
 
 interface Props {
   open: boolean;
@@ -32,9 +32,8 @@ const ModalAttempt = (props: Props) => {
   const form = useForm<AssessmentSchema>({
     resolver: zodResolver(assessmentSchema),
     defaultValues: {
-      diagnosis: '',
-      feedback: '',
-      status: '',
+      diagnosis: "",
+      feedback: "",
     },
   });
 
@@ -95,22 +94,6 @@ const ModalAttempt = (props: Props) => {
                 />
               )}
             </CustomFormField>
-            <CustomFormField
-              control={form.control}
-              name="status"
-              label="Status"
-            >
-              {(field) => (
-                <Input
-                  {...field}
-                  data-testid="input-status"
-                  placeholder="Status"
-                  disabled={form.formState.isSubmitting}
-                  aria-disabled={form.formState.isSubmitting}
-                  value={field.value as string}
-                />
-              )}
-            </CustomFormField>
             <DialogFooter>
               <Button
                 data-testid="btn-submit"
@@ -124,7 +107,7 @@ const ModalAttempt = (props: Props) => {
                     Please wait
                   </>
                 ) : (
-                  'Simpan'
+                  "Simpan"
                 )}
               </Button>
             </DialogFooter>
