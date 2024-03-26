@@ -31,14 +31,9 @@ export const questionnaireSchema = z.discriminatedUnion("as", [
 ]);
 
 export const assessmentSchema = z.object({
-  diagnosis: z
-    .string()
-    .min(1, { message: "Diagnosis wajib diisi" })
-    .email("Diagnosis tidak valid"),
-  feedback: z
-    .string()
-    .min(1, { message: "Feedback wajib diisi" })
-    .email("Feedback tidak valid"),
+  diagnosis: z.string().min(1, { message: "Diagnosis wajib diisi" }),
+  feedback: z.string().min(1, { message: "Feedback wajib diisi" }),
+  status: z.string().default("done"),
 });
 
 export type QuestionnaireSchema = z.infer<typeof questionnaireSchema>;

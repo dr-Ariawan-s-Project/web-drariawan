@@ -110,7 +110,7 @@ export const postAttemptAssessments = async (
       body
     );
 
-    return response.data as Response;
+    return response.data as Response<null>;
   } catch (error: any) {
     const { messages } = error.response.data;
 

@@ -1,4 +1,4 @@
-import { useSearchParams, useParams, useNavigate } from "react-router-dom";
+import { useSearchParams, useParams } from "react-router-dom";
 import { useEffect, useMemo, useState } from "react";
 import { ColumnDef } from "@tanstack/react-table";
 
@@ -27,7 +27,6 @@ const DetailAttempt = () => {
   const { attempt_id } = useParams() as { attempt_id: string };
   const role = useAuthStore((state) => state.role);
   const [searchParams] = useSearchParams();
-  const navigate = useNavigate();
   const { toast } = useToast();
 
   const [data, setData] = useState<IAttempt>();
@@ -111,7 +110,7 @@ const DetailAttempt = () => {
       toast({
         description: result.messages[0],
       });
-      navigate("/dashboard/questionnaires");
+      fetchData();
     } catch (error) {
       toast({
         title: "Oops! Sesuatu telah terjadi",
